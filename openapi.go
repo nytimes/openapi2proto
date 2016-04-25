@@ -172,7 +172,7 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 	switch i.Type {
 	case "object":
 		i.Model.Name = strings.Title(name)
-		msgStr := i.Model.ProtoType(i.Model.Name, depth+1)
+		msgStr := i.Model.ProtoMessage(i.Model.Name, depth+1)
 		return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), i.Model.Name, name, index)
 	case "array":
 		if i.Items != nil {
@@ -194,7 +194,7 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 			} else {
 				i.Items.Model.Name = strings.Title(name)
 			}
-			msgStr := i.Items.Model.ProtoType(i.Items.Model.Name, depth+1)
+			msgStr := i.Items.Model.ProtoMessage(i.Items.Model.Name, depth+1)
 			return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), i.Items.Model.Name, name, index)
 		}
 

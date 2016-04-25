@@ -27,11 +27,11 @@ package {{ cleanTitle .Info.Title }};
 {{ $model.ProtoMessage $modelName 0 }}
 {{ end }}`
 
-const protoMsgTmplStr = `{{ $i := counter }}{{ $depth := .Depth }}message {{ .Name }} { {{ range $propName, $prop := .Properties }} 
+const protoMsgTmplStr = `{{ $i := counter }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
 {{ indent $depth }}    {{ $prop.ProtoMessage $propName $i $depth }};{{ end }}
 {{ indent $depth }}}`
 
-const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name}}enum {{ .Name }} { {{ range $index, $pName := .Enum }} 
+const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name}}enum {{ .Name }} {{"{"}}{{ range $index, $pName := .Enum }}
 {{ indent $depth }}    {{ toEnum $name $pName }} = {{ inc $i }};{{ end }}
 {{ indent $depth }}}`
 
