@@ -5,6 +5,7 @@ import (
 	"flag"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/NYTimes/openapi2proto"
 
@@ -31,5 +32,13 @@ func main() {
 		log.Fatal("unable to parse spec file: ", err)
 	}
 
-	openapi2proto.GenerateProto(api)
+	out, err := openapi2proto.GenerateProto(api)
+	if err != nil {
+		log.Fatal("unable to generate protobuf: ", err)
+	}
+
+	_, err = os.Stdout.Write(out)
+	if err != nil {
+		log.Fatal("unable to write output to stdout: ", err)
+	}
 }
