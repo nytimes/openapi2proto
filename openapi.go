@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+// APIDefinition is the base struct for containing OpenAPI spec
+// declarations.
 type APIDefinition struct {
 	Swagger string `yaml:"swagger" json:"swagger"`
 	Info    struct {
@@ -15,14 +17,15 @@ type APIDefinition struct {
 		Description string `yaml:"description" json:"description"`
 		Version     string `yaml:"version" json:"version"`
 	} `yaml:"info" json:"info"`
-	Host        string           `yaml:"host" json:"host"`
-	Schemes     []string         `yaml:"schemes" json:"schemes"`
-	BasePath    string           `yaml:"basePath" json:"basePath"`
-	Produces    []string         `yaml:"produces" json:"produces"`
-	Paths       map[string]Path  `yaml:"paths" json:"paths"`
-	Definitions map[string]Model `yaml:"definitions" json:"definitions"`
+	Host        string            `yaml:"host" json:"host"`
+	Schemes     []string          `yaml:"schemes" json:"schemes"`
+	BasePath    string            `yaml:"basePath" json:"basePath"`
+	Produces    []string          `yaml:"produces" json:"produces"`
+	Paths       map[string]*Path  `yaml:"paths" json:"paths"`
+	Definitions map[string]*Model `yaml:"definitions" json:"definitions"`
 }
 
+// Path represents a single path in an OpenAPI spec.
 type Path struct {
 	Get        Endpoint
 	Post       Endpoint
@@ -31,6 +34,7 @@ type Path struct {
 	Parameters interface{}
 }
 
+// Parameter represents a single parameter in an OpenAPI request.
 type Parameter struct {
 	Name        string      `yaml:"name" json:"name"`
 	In          string      `yaml:"in" json:"in"`
@@ -42,6 +46,7 @@ type Parameter struct {
 	Enum        []string    `yaml:"enum" json:"enum"`
 }
 
+// Response represents the response object in an OpenAPI spec.
 type Response struct {
 	Description string `yaml:"description" json:"description"`
 	Schema      struct {
@@ -50,20 +55,23 @@ type Response struct {
 	} `yaml:"schema" json:"schema"`
 }
 
+// Endpoint represents an endpoint for a path in an OpenAPI spec.
 type Endpoint struct {
-	Summary     string      `yaml:"summary" json:"summary"`
-	Description string      `yaml:"description" json:"description"`
-	Parameters  []Parameter `yaml:"parameters" json:"parameters"`
-	Tags        []string    `yaml:"tags" json:"tags"`
-	Responses   map[string]Response
+	Summary     string       `yaml:"summary" json:"summary"`
+	Description string       `yaml:"description" json:"description"`
+	Parameters  []*Parameter `yaml:"parameters" json:"parameters"`
+	Tags        []string     `yaml:"tags" json:"tags"`
+	Responses   map[string]*Response
 }
 
+// Model represents a model definition from an OpenAPI spec.
 type Model struct {
-	Properties map[string]Items `yaml:"properties" json:"properties"`
+	Properties map[string]*Items `yaml:"properties" json:"properties"`
 	Name       string
 	Depth      int
 }
 
+// Items represent Model properties in an OpenAPI spec.
 type Items struct {
 	// scalar
 	Type   interface{} `yaml:"type" json:"type"`
@@ -88,7 +96,7 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) (string, erro
 
 	switch typ.(type) {
 	case string:
-		return scalarType(name, typ.(string), format, indx)
+		return simpleScalarType(name, typ.(string), format, indx)
 	case []interface{}:
 		types := typ.([]interface{})
 		hasNull := false
@@ -131,7 +139,7 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) (string, erro
 	return "", errors.New("not scalar type")
 }
 
-func scalarType(name, typ, format string, indx int) (string, error) {
+func simpleScalarType(name, typ, format string, indx int) (string, error) {
 	switch typ {
 	case "string":
 		return fmt.Sprintf("string %s = %d", name, indx), nil
@@ -149,7 +157,9 @@ func scalarType(name, typ, format string, indx int) (string, error) {
 	}
 }
 
-func (i Items) ProtoType(name string, indx *int, depth int) string {
+// ProtoMessage will generate a set of fields for a protobuf v3 schema given the
+// current Items and information.
+func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 	*indx++
 	index := *indx
 	name = strings.Replace(name, "-", "_", -1)
@@ -197,7 +207,7 @@ func (i Items) ProtoType(name string, indx *int, depth int) string {
 			} else {
 				eName = strings.Title(name)
 			}
-			msgStr := protoEnum(eName, i.Enum, depth+1)
+			msgStr := ProtoEnum(eName, i.Enum, depth+1)
 			return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), eName, name, index)
 		}
 	}
@@ -211,7 +221,9 @@ func (i Items) ProtoType(name string, indx *int, depth int) string {
 	return ""
 }
 
-func protoEnum(name string, enums []string, depth int) string {
+// ProtoEnum will generate a protobuf v3 enum declaration from
+// the given info.
+func ProtoEnum(name string, enums []string, depth int) string {
 	s := struct {
 		Name  string
 		Enum  []string
@@ -227,7 +239,9 @@ func protoEnum(name string, enums []string, depth int) string {
 	return b.String()
 }
 
-func (m Model) ProtoType(name string, depth int) string {
+// ProtoMessage will return a protobuf v3 message that represents
+// the current Model.
+func (m *Model) ProtoMessage(name string, depth int) string {
 	var b bytes.Buffer
 	m.Name = name
 	m.Depth = depth

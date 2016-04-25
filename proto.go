@@ -2,22 +2,33 @@ package openapi2proto
 
 import (
 	"bytes"
+	"fmt"
 	"log"
-	"os"
 	"regexp"
 	"strings"
 	"text/template"
 )
 
+// GenerateProto will attempt to generate an protobuf version 3
+// schema from the given OpenAPI definition.
+func GenerateProto(api *APIDefinition) ([]byte, error) {
+	var out bytes.Buffer
+	err := protoFileTmpl.Execute(&out, api)
+	if err != nil {
+		return nil, fmt.Errorf("unable to generate protobuf schema: %s", err)
+	}
+	return addImports(out.Bytes()), nil
+}
+
 const protoFileTmplStr = `syntax = "proto3";
 
 package {{ cleanTitle .Info.Title }};
 {{ range $modelName, $model := .Definitions }}
-{{ $model.ProtoType $modelName 0 }}
+{{ $model.ProtoMessage $modelName 0 }}
 {{ end }}`
 
 const protoMsgTmplStr = `{{ $i := counter }}{{ $depth := .Depth }}message {{ .Name }} { {{ range $propName, $prop := .Properties }} 
-{{ indent $depth }}    {{ $prop.ProtoType $propName $i $depth }};{{ end }}
+{{ indent $depth }}    {{ $prop.ProtoMessage $propName $i $depth }};{{ end }}
 {{ indent $depth }}}`
 
 const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name}}enum {{ .Name }} { {{ range $index, $pName := .Enum }} 
@@ -75,14 +86,7 @@ var (
 	protoEnumTmpl = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
 )
 
-func GenerateProto(api *APIDefinition) {
-	var out bytes.Buffer
-	err := protoFileTmpl.Execute(&out, api)
-	if err != nil {
-		log.Fatal("unable to protobuf swagger spec: ", err)
-	}
-	output := out.Bytes()
-
+func addImports(output []byte) []byte {
 	if bytes.Contains(output, []byte("google.protobuf.Any")) {
 		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
 import "google/protobuf/any.proto";`), 1)
@@ -96,5 +100,5 @@ import "google/protobuf/any.proto";`), 1)
 import "google/protobuf/wrappers.proto";`), 1)
 	}
 
-	os.Stdout.Write(output)
+	return output
 }
