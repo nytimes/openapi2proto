@@ -1,0 +1,611 @@
+
+{
+    "swagger": "2.0",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "basePath": "/svc/mostpopular/v2",
+    "host": "api.nytimes.com",
+    "info": {
+        "version": "2.0.0",
+        "title": "The Most Popular API",
+        "description": "## Welcome\n\nThis is a place to put general notes and extra information, for internal use.\n\nTo get started designing/documenting this API, select a version on the left."
+    },
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/mostshared/{section}/{time-period}.json": {
+            "parameters": [
+                {
+                    "name": "section",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "time-period",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "summary": "Most Shared by Section & Time Period",
+                "description": "",
+                "operationId": "GET_mostshared-section-time-period-json",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "api-key",
+                        "in": "query",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of Articles",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                },
+                                "copyright": {
+                                    "type": "string"
+                                },
+                                "num_results": {
+                                    "type": "integer"
+                                },
+                                "results": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Article"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": "OK",
+                                "copyright": "Copyright (c) 2016 The New York Times Company.  All Rights Reserved.",
+                                "results": [
+                                    {
+                                        "url": "http://www.nytimes.com/2016/02/18/technology/apple-timothy-cook-fbi-san-bernardino.html",
+                                        "column": "",
+                                        "section": "Technology",
+                                        "byline": "By ERIC LICHTBLAU and KATIE BENNER",
+                                        "title": "Apple Fights Order to Unlock San Bernardino Gunman’s iPhone",
+                                        "abstract": "Timothy D. Cook, Apple’s chief, said the government’s request to bypass security on the phone used by Syed Rizwan Farook had “chilling” implications.",
+                                        "published_date": "2016-02-18",
+                                        "source": "The New York Times",
+                                        "asset_id": 100000004214575,
+                                        "total_shares": 1,
+                                        "des_facet": [
+                                            "IPHONE"
+                                        ],
+                                        "org_facet": [
+                                            "APPLE INC"
+                                        ],
+                                        "per_facet": [
+                                            "COOK, TIMOTHY D"
+                                        ],
+                                        "geo_facet": "",
+                                        "media": [
+                                            {
+                                                "type": "image",
+                                                "subtype": "photo",
+                                                "caption": "Timothy D. Cook, the chief executive of Apple, released a letter to customers several hours after a California judge ordered the company to unlock an iPhone used by one of the shooters in a recent attack that killed 14 people in San Bernardino.",
+                                                "copyright": "Jeff Chiu/Associated Press",
+                                                "media-metadata": [
+                                                    {
+                                                        "url": "http://static01.nyt.com/images/2016/02/18/world/18Appleletter-web/18Appleletter-web-thumbStandard.jpg",
+                                                        "format": "Standard Thumbnail",
+                                                        "height": 75,
+                                                        "width": 75
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "num_results": 24
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                },
+                                "copyright": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "results": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": "ERROR",
+                                "copyright": "Copyright (c) 2016 The New York Times Company.  All Rights Reserved.",
+                                "errors": [
+                                    "Please specify a supported period, options are: 1,7,30"
+                                ],
+                                "results": []
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        },
+        "/mostemailed/{section}/{time-period}.json": {
+            "parameters": [
+                {
+                    "name": "section",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "time-period",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "summary": "Most Emailed by Section & Time Period",
+                "description": "",
+                "operationId": "GET_mostemailed-section-time-period-json",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "api-key",
+                        "in": "query",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of Articles",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                },
+                                "copyright": {
+                                    "type": "string"
+                                },
+                                "num_results": {
+                                    "type": "integer"
+                                },
+                                "results": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ArticleWithCountType"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                },
+                                "copyright": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "results": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": "ERROR",
+                                "copyright": "Copyright (c) 2016 The New York Times Company.  All Rights Reserved.",
+                                "errors": [
+                                    "Param 'period' is invalid."
+                                ],
+                                "results": []
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "type": "object"
+                        },
+                        "examples": {
+                            "application/xml": "<h1>Developer Over Qps</h1>"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        },
+        "/mostviewed/{section}/{time-period}.json": {
+            "parameters": [],
+            "get": {
+                "summary": "Most Viewed by Section & Time Period",
+                "description": "",
+                "operationId": "GET_mostviewed-section-time-period-json",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of Articles",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                },
+                                "copyright": {
+                                    "type": "string"
+                                },
+                                "num_results": {
+                                    "type": "integer"
+                                },
+                                "results": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Article"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": "OK",
+                                "copyright": "Copyright (c) 2016 The New York Times Company.  All Rights Reserved.",
+                                "num_results": 121,
+                                "results": [
+                                    {
+                                        "url": "http://www.nytimes.com/2016/02/25/opinion/senate-republicans-lose-their-minds-on-a-supreme-court-seat.html",
+                                        "adx_keywords": "Supreme Court (US);McConnell, Mitch;Scalia, Antonin;Obama, Barack;Kirk, Mark Steven;Republican Party;Senate;Cornyn, John;Collins, Susan M",
+                                        "column": "Editorial",
+                                        "section": "Opinion",
+                                        "byline": "By THE EDITORIAL BOARD",
+                                        "type": "Article",
+                                        "title": "Senate Republicans Lose Their Minds on a Supreme Court Seat",
+                                        "abstract": "Republicans have parked themselves so far to the right for so many years that it’s not clear if they can hear how deranged they sound.",
+                                        "published_date": "2016-02-25",
+                                        "source": "The New York Times",
+                                        "id": 100000004229487,
+                                        "asset_id": 100000004229487,
+                                        "views": 1,
+                                        "des_facet": "",
+                                        "org_facet": [
+                                            "SUPREME COURT (US)"
+                                        ],
+                                        "per_facet": [
+                                            "MCCONNELL, MITCH"
+                                        ],
+                                        "geo_facet": "",
+                                        "media": ""
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "GeoFacet": {
+            "type": [
+                "array",
+                "null",
+                "string"
+            ],
+            "enum": [
+                ""
+            ],
+            "items": {}
+        },
+        "PerFacet": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "items": {}
+        },
+        "OrgFacet": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {}
+        },
+        "DesFacet": {
+            "type": [
+                "array",
+                "string"
+            ],
+            "items": {}
+        },
+        "TimePeriod": {
+            "in": "path",
+            "description": "Number of days `1 | 7 | 30 ` corresponds to a day, a week, or a month of content.",
+            "type": "string",
+            "enum": [
+                "1",
+                "7",
+                "30"
+            ]
+        },
+        "SharedTypes": {
+            "in": "query",
+            "description": "Limits the results by the method used to share the items only works on mostshared requests.",
+            "type": "string",
+            "enum": [
+                "digg",
+                "email",
+                "facebook",
+                "mixx",
+                "myspace",
+                "permalink",
+                "timespeople",
+                "twitter",
+                "yahoobuzz"
+            ]
+        },
+        "Article": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "column": {
+                    "type": "string"
+                },
+                "section": {
+                    "type": "string"
+                },
+                "byline": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "abstract": {
+                    "type": "string"
+                },
+                "published_date": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "des_facet": {
+                    "$ref": "#/definitions/DesFacet"
+                },
+                "org_facet": {
+                    "$ref": "#/definitions/OrgFacet"
+                },
+                "per_facet": {
+                    "$ref": "#/definitions/PerFacet"
+                },
+                "geo_facet": {
+                    "$ref": "#/definitions/GeoFacet"
+                },
+                "media": {
+                    "type": [
+                        "array",
+                        "string"
+                    ],
+                    "items": {}
+                }
+            }
+        },
+        "ArticleWithCountType": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "count_type": {
+                    "type": "string"
+                },
+                "column": {
+                    "type": "string"
+                },
+                "section": {
+                    "type": "string"
+                },
+                "byline": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "abstract": {
+                    "type": "string"
+                },
+                "published_date": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "des_facet": {
+                    "$ref": "#/definitions/DesFacet"
+                },
+                "org_facet": {
+                    "$ref": "#/definitions/OrgFacet"
+                },
+                "per_facet": {
+                    "$ref": "#/definitions/PerFacet"
+                },
+                "geo_facet": {
+                    "$ref": "#/definitions/GeoFacet"
+                },
+                "media": {
+                    "type": "array",
+                    "x-runscope/nullable": true,
+                    "x-runscope/nullable/value": "''",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "subtype": {
+                                "type": "string"
+                            },
+                            "caption": {
+                                "type": "string"
+                            },
+                            "copyright": {
+                                "type": "string"
+                            },
+                            "media-metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "url": {
+                                        "type": "string"
+                                    },
+                                    "format": {
+                                        "type": "string"
+                                    },
+                                    "height": {
+                                        "type": "integer"
+                                    },
+                                    "width": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "Section": {
+            "in": "path",
+            "description": "Limits the results by one or more sections. You can use\n`all-sections` or one or more section names seperated by semicolons. See `viewed/sections.json` call to get a list of sections. \n",
+            "type": "string",
+            "enum": [
+                "Arts",
+                "Automobiles",
+                "Blogs",
+                "Books",
+                "Business Day",
+                "Education",
+                "Fashion & Style",
+                "Food",
+                "Health",
+                "Job Market",
+                "Magazine",
+                "membercenter",
+                "Movies",
+                "Multimedia",
+                "N.Y.%20%2F%20Region",
+                "NYT Now",
+                "Obituaries",
+                "Open",
+                "Opinion",
+                "Public Editor",
+                "Real Estate",
+                "Science",
+                "Sports",
+                "Style",
+                "Sunday Review",
+                "T Magazine",
+                "Technology",
+                "The Upshot",
+                "Theater",
+                "Times Insider",
+                "Today’s Paper",
+                "Travel",
+                "U.S.",
+                "World",
+                "Your Money",
+                "all-sections"
+            ]
+        },
+        "OffSet": {
+            "in": "query",
+            "description": "Positive integer in a multiple of 20",
+            "type": "integer",
+            "default": 20
+        }
+    },
+    "securityDefinitions": {
+        "api-key": {
+            "name": "api-key",
+            "type": "apiKey",
+            "in": "query"
+        }
+    }
+}
