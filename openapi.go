@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 )
 
@@ -25,43 +26,32 @@ type APIDefinition struct {
 	Definitions map[string]*Model `yaml:"definitions" json:"definitions"`
 }
 
-// Path represents a single path in an OpenAPI spec.
+// Path represents all of the endpoints and parameters available for a single
+// path.
 type Path struct {
-	Get        Endpoint
-	Post       Endpoint
-	Put        Endpoint
-	Delete     Endpoint
-	Parameters interface{}
+	Get        *Endpoint  `yaml:"get" json:"get"`
+	Put        *Endpoint  `yaml:"put" json:"put"`
+	Post       *Endpoint  `yaml:"post" json:"post"`
+	Delete     *Endpoint  `yaml:"delete" json:"delete"`
+	Parameters Parameters `yaml:"parameters" json:"parameters"`
 }
 
-// Parameter represents a single parameter in an OpenAPI request.
-type Parameter struct {
-	Name        string      `yaml:"name" json:"name"`
-	In          string      `yaml:"in" json:"in"`
-	Description string      `yaml:"description" json:"description"`
-	Required    bool        `yaml:"required" json:"required"`
-	Type        string      `yaml:"type" json:"type"`
-	Format      string      `yaml:"format" json:"format"`
-	Default     interface{} `yaml:"default" json:"default"`
-	Enum        []string    `yaml:"enum" json:"enum"`
-}
+// Parameters is a slice of request parameters for a single endpoint.
+type Parameters []*Items
 
 // Response represents the response object in an OpenAPI spec.
 type Response struct {
 	Description string `yaml:"description" json:"description"`
-	Schema      struct {
-		Type  string            `yaml:"type" json:"type"`
-		Items map[string]string `yaml:"items,omitempty" json:"items,omitempty"`
-	} `yaml:"schema" json:"schema"`
+	Schema      *Items `yaml:"schema" json:"schema"`
 }
 
 // Endpoint represents an endpoint for a path in an OpenAPI spec.
 type Endpoint struct {
-	Summary     string       `yaml:"summary" json:"summary"`
-	Description string       `yaml:"description" json:"description"`
-	Parameters  []*Parameter `yaml:"parameters" json:"parameters"`
-	Tags        []string     `yaml:"tags" json:"tags"`
-	Responses   map[string]*Response
+	Summary     string               `yaml:"summary" json:"summary"`
+	Description string               `yaml:"description" json:"description"`
+	Parameters  Parameters           `yaml:"parameters" json:"parameters"`
+	Tags        []string             `yaml:"tags" json:"tags"`
+	Responses   map[string]*Response `yaml:"responses" json:"responses"`
 }
 
 // Model represents a model definition from an OpenAPI spec.
@@ -235,6 +225,175 @@ func ProtoEnum(name string, enums []string, depth int) string {
 	err := protoEnumTmpl.Execute(&b, s)
 	if err != nil {
 		log.Fatal("unable to protobuf model: ", err)
+	}
+	return b.String()
+}
+
+func pathMethodToName(path, method string) string {
+	var name string
+	path = strings.TrimSuffix(path, ".json")
+	path = strings.Replace(path, "-", " ", -1)
+	path = strings.Replace(path, "/", " ", -1)
+	re := regexp.MustCompile(`[\{\}\[\]()/\.]`)
+	path = re.ReplaceAllString(path, "")
+	for _, nme := range strings.Fields(path) {
+		name += strings.Title(nme)
+	}
+	return name + strings.Title(method)
+}
+
+func (r *Response) ProtoMessage(endpointName string) string {
+	name := endpointName + "Response"
+	switch r.Schema.Type {
+	case "object":
+		return r.Schema.Model.ProtoMessage(name, 0)
+	case "array":
+		model := &Model{Properties: map[string]*Items{"items": r.Schema}}
+		return model.ProtoMessage(name, 0)
+	default:
+		return ""
+	}
+}
+
+func (r *Response) ResponseName(endpointName string) string {
+	switch r.Schema.Type {
+	case "object", "array":
+		return endpointName + "Response"
+	default:
+		switch r.Schema.Ref {
+		case "":
+			return "google.protobuf.Empty"
+		default:
+			return strings.TrimLeft(r.Schema.Ref, "#/definitions/")
+		}
+	}
+}
+
+func (e *Endpoint) ProtoEndpoint(parentParams Parameters, endpointName string) string {
+	reqName := "google.protobuf.Empty"
+	if len(parentParams)+len(e.Parameters) > 0 {
+		reqName = endpointName + "Request"
+	}
+
+	respName := "google.protobuf.Empty"
+	if resp, ok := e.Responses["200"]; ok {
+		respName = resp.ResponseName(endpointName)
+	} else if resp, ok := e.Responses["201"]; ok {
+		respName = resp.ResponseName(endpointName)
+	}
+
+	return fmt.Sprintf("    rpc %s(%s) returns (%s);",
+		endpointName, reqName, respName,
+	)
+}
+
+func (e *Endpoint) ProtoMessages(parentParams Parameters, endpointName string) string {
+	var out bytes.Buffer
+	msg := e.Parameters.ProtoMessage(parentParams, endpointName)
+	if msg != "" {
+		out.WriteString(msg + "\n\n")
+	}
+
+	if resp, ok := e.Responses["200"]; ok {
+		msg := resp.ProtoMessage(endpointName)
+		if msg != "" {
+			out.WriteString(msg + "\n\n")
+		}
+	} else if resp, ok := e.Responses["201"]; ok {
+		msg := resp.ProtoMessage(endpointName)
+		if msg != "" {
+			out.WriteString(msg + "\n\n")
+		}
+	}
+	return out.String()
+}
+
+// ProtoMessage will return any protobuf v3 endpoints for gRPC
+// service declarations.
+func (p *Path) ProtoEndpoints(path string) string {
+	var out bytes.Buffer
+	if p.Get != nil {
+		endpointName := pathMethodToName(path, "get")
+		msg := p.Get.ProtoEndpoint(p.Parameters, endpointName)
+		out.WriteString(msg)
+	}
+	if p.Put != nil {
+		endpointName := pathMethodToName(path, "put")
+		msg := p.Put.ProtoEndpoint(p.Parameters, endpointName)
+		out.WriteString(msg)
+	}
+	if p.Post != nil {
+		endpointName := pathMethodToName(path, "post")
+		msg := p.Post.ProtoEndpoint(p.Parameters, endpointName)
+		out.WriteString(msg)
+	}
+	if p.Delete != nil {
+		endpointName := pathMethodToName(path, "delete")
+		msg := p.Delete.ProtoEndpoint(p.Parameters, endpointName)
+		out.WriteString(msg)
+	}
+
+	return strings.TrimSuffix(out.String(), "\n")
+}
+
+// ProtoMessage will return a protobuf v3 message that represents
+// the request Parameters of the endpoints within this path declaration.
+func (p *Path) ProtoMessages(path string) string {
+	var out bytes.Buffer
+	if p.Get != nil {
+		endpointName := pathMethodToName(path, "get")
+		msg := p.Get.ProtoMessages(p.Parameters, endpointName)
+		if msg != "" {
+			out.WriteString(msg)
+		}
+	}
+	if p.Put != nil {
+		endpointName := pathMethodToName(path, "put")
+		msg := p.Put.ProtoMessages(p.Parameters, endpointName)
+		if msg != "" {
+			out.WriteString(msg)
+		}
+	}
+	if p.Post != nil {
+		endpointName := pathMethodToName(path, "post")
+		msg := p.Post.ProtoMessages(p.Parameters, endpointName)
+		if msg != "" {
+			out.WriteString(msg)
+		}
+	}
+	if p.Delete != nil {
+		endpointName := pathMethodToName(path, "delete")
+		msg := p.Delete.ProtoMessages(p.Parameters, endpointName)
+		if msg != "" {
+			out.WriteString(msg)
+		}
+	}
+
+	return strings.TrimSuffix(out.String(), "\n")
+}
+
+// ProtoMessage will return a protobuf v3 message that represents
+// the request Parameters.
+func (p Parameters) ProtoMessage(parent Parameters, endpointName string) string {
+	m := &Model{Properties: map[string]*Items{}}
+	for _, item := range p {
+		m.Properties[item.Name] = item
+	}
+	for _, item := range parent {
+		m.Properties[item.Name] = item
+	}
+
+	// do nothing, no props and should be a google.protobuf.Empty
+	if len(m.Properties) == 0 {
+		return ""
+	}
+
+	var b bytes.Buffer
+	m.Name = endpointName + "Request"
+	m.Depth = 0
+	err := protoMsgTmpl.Execute(&b, m)
+	if err != nil {
+		log.Fatal("unable to protobuf parameters: ", err)
 	}
 	return b.String()
 }

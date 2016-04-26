@@ -419,8 +419,45 @@
         },
         "concept_updated": {
           "type": "string"
+        },
+        "class": {
+			"type": "string",
+			"enum": [
+			  "nytd_geo",
+			  "nytd_per",
+			  "nytd_org",
+			  "nytd_des"
+			]
         }
       }
+    },
+    "TestModel": {
+      "type": "object",
+      "properties": {
+        "category": {
+			"type": "string",
+			"enum": [
+			  "nytd_geo",
+			  "nytd_per",
+			  "nytd_org",
+			  "nytd_des"
+			]
+        },
+		"class": {
+			"type": "array",
+			"items": {
+			"type":"object",
+			  "properties": {
+				"something": {
+					"type": "string"
+				}
+			  }
+			}
+        },
+		"test_bool": {
+			"type": "boolean"
+        }
+     }
     }
   },
   "securityDefinitions": {
