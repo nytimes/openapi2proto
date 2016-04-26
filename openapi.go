@@ -239,7 +239,7 @@ func pathMethodToName(path, method string) string {
 	for _, nme := range strings.Fields(path) {
 		name += strings.Title(nme)
 	}
-	return name + strings.Title(method)
+	return strings.Title(method) + name
 }
 
 func (r *Response) ProtoMessage(endpointName string) string {

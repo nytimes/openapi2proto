@@ -68,14 +68,52 @@ func TestGenerateProto(t *testing.T) {
 		}
 
 		if test.wantProto != string(protoResult) {
-			t.Errorf("testYaml expected:\n%q\nGOT:\n%s", test.wantProto, []byte(protoResult))
+			t.Errorf("testYaml expected:\n%q\nGOT:\n%q", test.wantProto, []byte(protoResult))
 		}
 	}
 }
 
 const testUberProtoWant = `syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 package uberapi;
+
+message GetEstimatesPriceRequest {
+    double end_latitude = 1;
+    double end_longitude = 2;
+    double start_latitude = 3;
+    double start_longitude = 4;
+}
+
+message GetEstimatesPriceResponse {
+    repeated PriceEstimate items = 1;
+}
+
+message GetEstimatesTimeRequest {
+    string customer_uuid = 1;
+    string product_id = 2;
+    double start_latitude = 3;
+    double start_longitude = 4;
+}
+
+message GetEstimatesTimeResponse {
+    repeated Product items = 1;
+}
+
+message GetHistoryRequest {
+    int32 limit = 1;
+    int32 offset = 2;
+}
+
+message GetProductsRequest {
+    double latitude = 1;
+    double longitude = 2;
+}
+
+message GetProductsResponse {
+    repeated Product items = 1;
+}
 
 message Activities {
     int32 count = 1;
@@ -119,12 +157,59 @@ message Profile {
     string picture = 4;
     string promo_code = 5;
 }
+
+service UberAPIService {
+    rpc GetEstimatesPrice(GetEstimatesPriceRequest) returns (GetEstimatesPriceResponse);
+    rpc GetEstimatesTime(GetEstimatesTimeRequest) returns (GetEstimatesTimeResponse);
+    rpc GetHistory(GetHistoryRequest) returns (Activities);
+    rpc GetMe(google.protobuf.Empty) returns (Profile);
+    rpc GetProducts(GetProductsRequest) returns (GetProductsResponse);
+}
 `
 
 const testMostPopWant = `syntax = "proto3";
+
 import "google/protobuf/any.proto";
 
 package themostpopularapi;
+
+message GetMostemailedSectionTimePeriodRequest {
+    string Accept = 1;
+    string api_key = 2;
+    string section = 3;
+    string time_period = 4;
+}
+
+message GetMostemailedSectionTimePeriodResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated ArticleWithCountType results = 3;
+    string status = 4;
+}
+
+message GetMostsharedSectionTimePeriodRequest {
+    string api_key = 1;
+    string section = 2;
+    string time_period = 3;
+}
+
+message GetMostsharedSectionTimePeriodResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated Article results = 3;
+    string status = 4;
+}
+
+message GetMostviewedSectionTimePeriodRequest {
+    string Accept = 1;
+}
+
+message GetMostviewedSectionTimePeriodResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated Article results = 3;
+    string status = 4;
+}
 
 message Article {
     string abstract = 1;
@@ -195,10 +280,74 @@ message SharedTypes {
 
 message TimePeriod {
 }
+
+service TheMostPopularAPIService {
+    rpc GetMostemailedSectionTimePeriod(GetMostemailedSectionTimePeriodRequest) returns (GetMostemailedSectionTimePeriodResponse);
+    rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse);
+    rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse);
+}
 `
+
 const testSemanticWant = `syntax = "proto3";
 
 package thesemanticapi;
+
+message GetConceptSearchRequest {
+    enum Field {
+        FIELD_ALL = 0;
+        FIELD_PAGES = 1;
+        FIELD_TICKER_SYMBOL = 2;
+        FIELD_LINKS = 3;
+        FIELD_TAXONOMY = 4;
+        FIELD_COMBINATIONS = 5;
+        FIELD_GEOCODES = 6;
+        FIELD_ARTICLE_LIST = 7;
+        FIELD_SCOPE_NOTES = 8;
+        FIELD_SEARCH_API_QUERY = 9;
+    }
+    Field fields = 1;
+    int32 offset = 2;
+    string query = 3;
+}
+
+message GetConceptSearchResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated ConceptRelation results = 3;
+    string status = 4;
+}
+
+message GetNameConceptTypeSpecificConceptRequest {
+    enum Concept_type {
+        CONCEPT_TYPE_NYTD_GEO = 0;
+        CONCEPT_TYPE_NYTD_PER = 1;
+        CONCEPT_TYPE_NYTD_ORG = 2;
+        CONCEPT_TYPE_NYTD_DES = 3;
+    }
+    Concept_type concept_type = 1;
+    enum Field {
+        FIELD_ALL = 0;
+        FIELD_PAGES = 1;
+        FIELD_TICKER_SYMBOL = 2;
+        FIELD_LINKS = 3;
+        FIELD_TAXONOMY = 4;
+        FIELD_COMBINATIONS = 5;
+        FIELD_GEOCODES = 6;
+        FIELD_ARTICLE_LIST = 7;
+        FIELD_SCOPE_NOTES = 8;
+        FIELD_SEARCH_API_QUERY = 9;
+    }
+    Field fields = 2;
+    string query = 3;
+    string specific_concept = 4;
+}
+
+message GetNameConceptTypeSpecificConceptResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated Concept results = 3;
+    string status = 4;
+}
 
 message Concept {
     repeated ConceptRelation ancestors = 1;
@@ -307,5 +456,10 @@ message TestModel {
     }
     repeated Class class = 2;
     bool test_bool = 3;
+}
+
+service TheSemanticAPIService {
+    rpc GetConceptSearch(GetConceptSearchRequest) returns (GetConceptSearchResponse);
+    rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse);
 }
 `
