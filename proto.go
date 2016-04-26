@@ -104,8 +104,10 @@ var (
 )
 
 func cleanSpacing(output []byte) []byte {
-	re := regexp.MustCompile(`}\n*message`)
-	return re.ReplaceAll(output, []byte("}\n\nmessage"))
+	re := regexp.MustCompile(`}\n*message `)
+	output = re.ReplaceAll(output, []byte("}\n\nmessage "))
+	re = regexp.MustCompile(`}\n*service `)
+	return re.ReplaceAll(output, []byte("}\n\nservice "))
 }
 
 func addImports(output []byte) []byte {
@@ -121,9 +123,15 @@ import "google/protobuf/any.proto";`), 1)
 import "google/protobuf/empty.proto";`), 1)
 	}
 
-	match, err := regexp.Match("google.protobuf.*Value", output)
+	if bytes.Contains(output, []byte("google.protobuf.NullValue")) {
+		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
+
+import "google/protobuf/struct.proto";`), 1)
+	}
+
+	match, err := regexp.Match("google.protobuf.(String|Bytes|Int.*|UInt.*|Float|Double)Value", output)
 	if err != nil {
-		log.Fatal("bad regex, please blame JP for: ", err)
+		log.Fatal("unable to find wrapper values: ", err)
 	}
 	if match {
 		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";

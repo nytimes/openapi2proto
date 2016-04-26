@@ -142,6 +142,8 @@ func simpleScalarType(name, typ, format string, indx int) (string, error) {
 		return fmt.Sprintf("%s %s = %d", format, name, indx), nil
 	case "boolean":
 		return fmt.Sprintf("bool %s = %d", name, indx), nil
+	case "null":
+		return fmt.Sprintf("google.protobuf.NullValue %s = %d", name, indx), nil
 	default:
 		return "", errors.New("invalid type")
 	}
