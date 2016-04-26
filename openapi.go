@@ -242,6 +242,10 @@ func pathMethodToName(path, method string) string {
 	return strings.Title(method) + name
 }
 
+// ProtoMessage will return a protobuf message declaration
+// based on the response scehma. If the response is an array
+// type, it will get wrapped in a generic message with a single
+// 'items' field to contain the array.
 func (r *Response) ProtoMessage(endpointName string) string {
 	name := endpointName + "Response"
 	switch r.Schema.Type {
@@ -255,7 +259,7 @@ func (r *Response) ProtoMessage(endpointName string) string {
 	}
 }
 
-func (r *Response) ResponseName(endpointName string) string {
+func (r *Response) responseName(endpointName string) string {
 	switch r.Schema.Type {
 	case "object", "array":
 		return endpointName + "Response"
@@ -269,7 +273,7 @@ func (r *Response) ResponseName(endpointName string) string {
 	}
 }
 
-func (e *Endpoint) ProtoEndpoint(parentParams Parameters, endpointName string) string {
+func (e *Endpoint) protoEndpoint(parentParams Parameters, endpointName string) string {
 	reqName := "google.protobuf.Empty"
 	if len(parentParams)+len(e.Parameters) > 0 {
 		reqName = endpointName + "Request"
@@ -277,9 +281,9 @@ func (e *Endpoint) ProtoEndpoint(parentParams Parameters, endpointName string) s
 
 	respName := "google.protobuf.Empty"
 	if resp, ok := e.Responses["200"]; ok {
-		respName = resp.ResponseName(endpointName)
+		respName = resp.responseName(endpointName)
 	} else if resp, ok := e.Responses["201"]; ok {
-		respName = resp.ResponseName(endpointName)
+		respName = resp.responseName(endpointName)
 	}
 
 	return fmt.Sprintf("    rpc %s(%s) returns (%s);",
@@ -287,7 +291,7 @@ func (e *Endpoint) ProtoEndpoint(parentParams Parameters, endpointName string) s
 	)
 }
 
-func (e *Endpoint) ProtoMessages(parentParams Parameters, endpointName string) string {
+func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string) string {
 	var out bytes.Buffer
 	msg := e.Parameters.ProtoMessage(parentParams, endpointName)
 	if msg != "" {
@@ -308,62 +312,63 @@ func (e *Endpoint) ProtoMessages(parentParams Parameters, endpointName string) s
 	return out.String()
 }
 
-// ProtoMessage will return any protobuf v3 endpoints for gRPC
+// ProtoEndpoints will return any protobuf v3 endpoints for gRPC
 // service declarations.
 func (p *Path) ProtoEndpoints(path string) string {
 	var out bytes.Buffer
 	if p.Get != nil {
 		endpointName := pathMethodToName(path, "get")
-		msg := p.Get.ProtoEndpoint(p.Parameters, endpointName)
+		msg := p.Get.protoEndpoint(p.Parameters, endpointName)
 		out.WriteString(msg)
 	}
 	if p.Put != nil {
 		endpointName := pathMethodToName(path, "put")
-		msg := p.Put.ProtoEndpoint(p.Parameters, endpointName)
+		msg := p.Put.protoEndpoint(p.Parameters, endpointName)
 		out.WriteString(msg)
 	}
 	if p.Post != nil {
 		endpointName := pathMethodToName(path, "post")
-		msg := p.Post.ProtoEndpoint(p.Parameters, endpointName)
+		msg := p.Post.protoEndpoint(p.Parameters, endpointName)
 		out.WriteString(msg)
 	}
 	if p.Delete != nil {
 		endpointName := pathMethodToName(path, "delete")
-		msg := p.Delete.ProtoEndpoint(p.Parameters, endpointName)
+		msg := p.Delete.protoEndpoint(p.Parameters, endpointName)
 		out.WriteString(msg)
 	}
 
 	return strings.TrimSuffix(out.String(), "\n")
 }
 
-// ProtoMessage will return a protobuf v3 message that represents
-// the request Parameters of the endpoints within this path declaration.
+// ProtoMessages will return protobuf v3 messages that represents
+// the request Parameters of the endpoints within this path declaration
+// and any custom response messages not listed in the definitions.
 func (p *Path) ProtoMessages(path string) string {
 	var out bytes.Buffer
 	if p.Get != nil {
 		endpointName := pathMethodToName(path, "get")
-		msg := p.Get.ProtoMessages(p.Parameters, endpointName)
+		msg := p.Get.protoMessages(p.Parameters, endpointName)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Put != nil {
 		endpointName := pathMethodToName(path, "put")
-		msg := p.Put.ProtoMessages(p.Parameters, endpointName)
+		msg := p.Put.protoMessages(p.Parameters, endpointName)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Post != nil {
 		endpointName := pathMethodToName(path, "post")
-		msg := p.Post.ProtoMessages(p.Parameters, endpointName)
+		msg := p.Post.protoMessages(p.Parameters, endpointName)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Delete != nil {
 		endpointName := pathMethodToName(path, "delete")
-		msg := p.Delete.ProtoMessages(p.Parameters, endpointName)
+		msg := p.Delete.protoMessages(p.Parameters, endpointName)
 		if msg != "" {
 			out.WriteString(msg)
 		}

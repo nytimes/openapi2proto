@@ -45,26 +45,26 @@ func TestGenerateProto(t *testing.T) {
 
 		testSpec, err := ioutil.ReadFile(test.givenFixturePath)
 		if err != nil {
-			t.Fatalf("unable to open test fixture: ", err)
+			t.Fatal("unable to open test fixture: ", err)
 		}
 
 		var testAPI APIDefinition
 		if test.yaml {
 			err = yaml.Unmarshal(testSpec, &testAPI)
 			if err != nil {
-				t.Fatalf("unable to unmarshal text fixture into APIDefinition: ", err)
+				t.Fatal("unable to unmarshal text fixture into APIDefinition: ", err)
 			}
 		} else {
 			err = json.Unmarshal(testSpec, &testAPI)
 			if err != nil {
-				t.Fatalf("unable to unmarshal text fixture into APIDefinition: ", err)
+				t.Fatal("unable to unmarshal text fixture into APIDefinition: ", err)
 			}
 
 		}
 
 		protoResult, err := GenerateProto(&testAPI)
 		if err != nil {
-			t.Fatalf("unable to generate protobuf from APIDefinition: ", err)
+			t.Fatal("unable to generate protobuf from APIDefinition: ", err)
 		}
 
 		if test.wantProto != string(protoResult) {
