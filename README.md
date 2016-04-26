@@ -22,7 +22,7 @@ There are 2 CLI flags for using the tool:
 * Endpoints that respond with an array will be wrapped with a message type that has a single field, 'items', that contains the array.
 * Only "200" and "201" responses are inspected for determining the expected return value for RPC endpoints.
 
-## Example:
+## Example
 ```
 ╰─ openapi2proto -spec books.json -yaml=false
 syntax = "proto3";
