@@ -2,7 +2,6 @@ package openapi2proto
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"log"
 	"regexp"
@@ -23,7 +22,7 @@ type APIDefinition struct {
 	BasePath    string            `yaml:"basePath" json:"basePath"`
 	Produces    []string          `yaml:"produces" json:"produces"`
 	Paths       map[string]*Path  `yaml:"paths" json:"paths"`
-	Definitions map[string]*Model `yaml:"definitions" json:"definitions"`
+	Definitions map[string]*Items `yaml:"definitions" json:"definitions"`
 }
 
 // Path represents all of the endpoints and parameters available for a single
@@ -78,75 +77,28 @@ type Items struct {
 	Model `yaml:",inline"`
 }
 
-func protoScalarType(name string, typ, frmt interface{}, indx int) (string, error) {
-	format := ""
-	if frmt != nil {
-		format = frmt.(string)
-	}
-
+func protoScalarType(name string, typ, frmt interface{}, indx int) string {
+	frmat := format(frmt)
 	switch typ.(type) {
 	case string:
-		return simpleScalarType(name, typ.(string), format, indx)
-	case []interface{}:
-		types := typ.([]interface{})
-		hasNull := false
-		var otherType string
-		for _, itp := range types {
-			tp := itp.(string)
-			if strings.ToLower(tp) == "null" {
-				hasNull = true
-				break
-			}
-			otherType = tp
-		}
-		if !hasNull {
-			//log.Fatal("found multi-type property that is not nullable: ", name)
-			return fmt.Sprintf("google.protobuf.Any %s = %d", name, indx), nil
-		}
-		switch otherType {
+		switch typ.(string) {
 		case "string":
-			return fmt.Sprintf("google.protobuf.StringValue %s = %d", name, indx), nil
-		case "number", "integer":
-			if format == "" {
-				format = "Int32"
-			}
-			format = strings.Title(format)
-			// unsigned ints :\
-			if strings.HasPrefix(format, "Ui") {
-				format = strings.TrimPrefix(format, "Ui")
-				format = "UI" + format
-			}
-			return fmt.Sprintf("google.protobuf.%sValue %s = %d", format, name, indx), nil
+			return fmt.Sprintf("string %s = %d", name, indx)
 		case "bytes":
-			return fmt.Sprintf("google.protobuf.BytesValue %s = %d", name, indx), nil
+			return fmt.Sprintf("bytes %s = %d", name, indx)
+		case "number", "integer":
+			if frmat == "" {
+				frmat = "int32"
+			}
+			return fmt.Sprintf("%s %s = %d", frmat, name, indx)
 		case "boolean":
-			return fmt.Sprintf("google.protobuf.BoolValue %s = %d", name, indx), nil
-		default:
-			return "", errors.New("invalid type")
+			return fmt.Sprintf("bool %s = %d", name, indx)
+		case "null":
+			return fmt.Sprintf("google.protobuf.NullValue %s = %d", name, indx)
 		}
 	}
 
-	return "", errors.New("not scalar type")
-}
-
-func simpleScalarType(name, typ, format string, indx int) (string, error) {
-	switch typ {
-	case "string":
-		return fmt.Sprintf("string %s = %d", name, indx), nil
-	case "bytes":
-		return fmt.Sprintf("bytes %s = %d", name, indx), nil
-	case "number", "integer":
-		if format == "" {
-			format = "int32"
-		}
-		return fmt.Sprintf("%s %s = %d", format, name, indx), nil
-	case "boolean":
-		return fmt.Sprintf("bool %s = %d", name, indx), nil
-	case "null":
-		return fmt.Sprintf("google.protobuf.NullValue %s = %d", name, indx), nil
-	default:
-		return "", errors.New("invalid type")
-	}
+	return ""
 }
 
 // ProtoMessage will generate a set of fields for a protobuf v3 schema given the
@@ -161,23 +113,91 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 		return fmt.Sprintf("%s %s = %d", itemType, name, index)
 	}
 
-	switch i.Type {
+	switch i.Type.(type) {
+	case string:
+		return protoComplex(i, i.Type.(string), name, indx, depth)
+	case []interface{}:
+		types := i.Type.([]interface{})
+		/*		if len(types) > 2 {
+					m := &Model{Name: name}
+					return m.ProtoModel(name, depth+1)
+				}
+		*/
+		hasNull := false
+		var otherTypes []string
+		for _, itp := range types {
+			tp := itp.(string)
+			if strings.ToLower(tp) == "null" {
+				hasNull = true
+				continue
+			}
+			otherTypes = append(otherTypes, tp)
+		}
+		// non-nullable fields with multiple types? Make it an Any.
+		if !hasNull || len(otherTypes) > 1 {
+			if depth >= 0 {
+				return fmt.Sprintf("google.protobuf.Any %s = %d", name, *indx)
+			}
+			return ""
+		}
+
+		if depth < 0 {
+			return ""
+		}
+
+		switch otherTypes[0] {
+		case "string":
+			return fmt.Sprintf("google.protobuf.StringValue %s = %d", name, *indx)
+		case "number", "integer":
+			frmat := format(i.Format)
+			if frmat == "" {
+				frmat = "Int32"
+			}
+			frmat = strings.Title(frmat)
+			// unsigned ints :\
+			if strings.HasPrefix(frmat, "Ui") {
+				frmat = strings.TrimPrefix(frmat, "Ui")
+				frmat = "UI" + frmat
+			}
+			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, name, *indx)
+		case "bytes":
+			return fmt.Sprintf("google.protobuf.BytesValue %s = %d", name, *indx)
+		case "boolean":
+			return fmt.Sprintf("google.protobuf.BoolValue %s = %d", name, *indx)
+		default:
+			if depth >= 0 {
+				return fmt.Sprintf("google.protobuf.Any %s = %d", name, *indx)
+			}
+		}
+	}
+
+	if depth >= 0 {
+		return protoScalarType(name, i.Type, i.Format, index)
+	}
+	return ""
+}
+
+func protoComplex(i *Items, typ, name string, index *int, depth int) string {
+	switch typ {
 	case "object":
 		i.Model.Name = strings.Title(name)
-		msgStr := i.Model.ProtoMessage(i.Model.Name, depth+1)
-		return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), i.Model.Name, name, index)
+		msgStr := i.Model.ProtoModel(i.Model.Name, depth+1)
+		if depth <= 0 {
+			return msgStr
+		}
+		return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), i.Model.Name, name, *index)
 	case "array":
 		if i.Items != nil {
 			// CHECK FOR SCALAR
-			pt, err := protoScalarType(name, i.Items.Type, i.Items.Format, index)
-			if err == nil {
+			pt := protoScalarType(name, i.Items.Type, i.Items.Format, *index)
+			if pt != "" {
 				return fmt.Sprintf("repeated %s", pt)
 			}
 
 			// CHECK FOR REF
 			if i.Items.Ref != "" {
 				itemType := strings.TrimLeft(i.Items.Ref, "#/definitions/")
-				return fmt.Sprintf("repeated %s %s = %d", itemType, name, index)
+				return fmt.Sprintf("repeated %s %s = %d", itemType, name, *index)
 			}
 
 			// breaks on 'Class' :\
@@ -186,8 +206,8 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 			} else {
 				i.Items.Model.Name = strings.Title(name)
 			}
-			msgStr := i.Items.Model.ProtoMessage(i.Items.Model.Name, depth+1)
-			return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), i.Items.Model.Name, name, index)
+			msgStr := i.Items.Model.ProtoModel(i.Items.Model.Name, depth+1)
+			return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), i.Items.Model.Name, name, *index)
 		}
 
 	case "string":
@@ -200,16 +220,19 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 				eName = strings.Title(name)
 			}
 			msgStr := ProtoEnum(eName, i.Enum, depth+1)
-			return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), eName, name, index)
+			if depth < 0 {
+				return msgStr
+			}
+			return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), eName, name, *index)
+		}
+		if depth >= 0 {
+			return protoScalarType(name, i.Type, i.Format, *index)
+		}
+	default:
+		if depth >= 0 {
+			return protoScalarType(name, i.Type, i.Format, *index)
 		}
 	}
-
-	pt, err := protoScalarType(name, i.Type, i.Format, index)
-	if err == nil {
-		return pt
-	}
-
-	log.Fatalf("UNEXPECTED TYPE! (%s) %s:%#v", err, name, i)
 	return ""
 }
 
@@ -252,12 +275,13 @@ func (r *Response) ProtoMessage(endpointName string) string {
 	name := endpointName + "Response"
 	switch r.Schema.Type {
 	case "object":
-		return r.Schema.Model.ProtoMessage(name, 0)
+		return r.Schema.Model.ProtoModel(name, 0)
 	case "array":
 		model := &Model{Properties: map[string]*Items{"items": r.Schema}}
-		return model.ProtoMessage(name, 0)
+		return model.ProtoModel(name, 0)
 	default:
 		return ""
+		//		return protoScalarType(name, r.Schema.Type, r.Schema.Format, 0)
 	}
 }
 
@@ -407,7 +431,7 @@ func (p Parameters) ProtoMessage(parent Parameters, endpointName string) string 
 
 // ProtoMessage will return a protobuf v3 message that represents
 // the current Model.
-func (m *Model) ProtoMessage(name string, depth int) string {
+func (m *Model) ProtoModel(name string, depth int) string {
 	var b bytes.Buffer
 	m.Name = name
 	m.Depth = depth
@@ -416,4 +440,13 @@ func (m *Model) ProtoMessage(name string, depth int) string {
 		log.Fatal("unable to protobuf model: ", err)
 	}
 	return b.String()
+}
+
+func format(fmt interface{}) string {
+	format := ""
+	if fmt != nil {
+		format = fmt.(string)
+	}
+	return format
+
 }

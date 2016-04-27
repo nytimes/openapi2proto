@@ -1,0 +1,155 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package themostpopularapi;
+
+message GetMostemailedSectionTimePeriodRequest {
+    string Accept = 1;
+    string api_key = 2;
+    string section = 3;
+    string time_period = 4;
+}
+
+message GetMostemailedSectionTimePeriodResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated ArticleWithCountType results = 3;
+    string status = 4;
+}
+
+message GetMostsharedSectionTimePeriodRequest {
+    string api_key = 1;
+    string section = 2;
+    string time_period = 3;
+}
+
+message GetMostsharedSectionTimePeriodResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated Article results = 3;
+    string status = 4;
+}
+
+message GetMostviewedSectionTimePeriodRequest {
+    string Accept = 1;
+}
+
+message GetMostviewedSectionTimePeriodResponse {
+    string copyright = 1;
+    int32 num_results = 2;
+    repeated Article results = 3;
+    string status = 4;
+}
+
+message Article {
+    string abstract = 1;
+    string byline = 2;
+    string column = 3;
+    DesFacet des_facet = 4;
+    GeoFacet geo_facet = 5;
+    google.protobuf.Any media = 6;
+    OrgFacet org_facet = 7;
+    PerFacet per_facet = 8;
+    string published_date = 9;
+    string section = 10;
+    string source = 11;
+    string title = 12;
+    string url = 13;
+}
+
+message ArticleWithCountType {
+    string abstract = 1;
+    string byline = 2;
+    string column = 3;
+    string count_type = 4;
+    DesFacet des_facet = 5;
+    GeoFacet geo_facet = 6;
+    message Media {
+        string caption = 1;
+        string copyright = 2;
+        message Media_metadata {
+            string format = 1;
+            int32 height = 2;
+            string url = 3;
+            int32 width = 4;
+        }
+        Media_metadata media_metadata = 3;
+        string subtype = 4;
+        string type = 5;
+    }
+    repeated Media media = 7;
+    OrgFacet org_facet = 8;
+    PerFacet per_facet = 9;
+    string published_date = 10;
+    string section = 11;
+    string source = 12;
+    string title = 13;
+    string url = 14;
+}
+
+message GeoFacet {
+}
+
+enum Section {
+    ARTS = 0;
+    AUTOMOBILES = 1;
+    BLOGS = 2;
+    BOOKS = 3;
+    BUSINESS_DAY = 4;
+    EDUCATION = 5;
+    FASHION_AND_STYLE = 6;
+    FOOD = 7;
+    HEALTH = 8;
+    JOB_MARKET = 9;
+    MAGAZINE = 10;
+    MEMBERCENTER = 11;
+    MOVIES = 12;
+    MULTIMEDIA = 13;
+    NY202F20REGION = 14;
+    NYT_NOW = 15;
+    OBITUARIES = 16;
+    OPEN = 17;
+    OPINION = 18;
+    PUBLIC_EDITOR = 19;
+    REAL_ESTATE = 20;
+    SCIENCE = 21;
+    SPORTS = 22;
+    STYLE = 23;
+    SUNDAY_REVIEW = 24;
+    T_MAGAZINE = 25;
+    TECHNOLOGY = 26;
+    THE_UPSHOT = 27;
+    THEATER = 28;
+    TIMES_INSIDER = 29;
+    TODAYS_PAPER = 30;
+    TRAVEL = 31;
+    US = 32;
+    WORLD = 33;
+    YOUR_MONEY = 34;
+    ALLSECTIONS = 35;
+}
+
+enum SharedType {
+    DIGG = 0;
+    EMAIL = 1;
+    FACEBOOK = 2;
+    MIXX = 3;
+    MYSPACE = 4;
+    PERMALINK = 5;
+    TIMESPEOPLE = 6;
+    TWITTER = 7;
+    YAHOOBUZZ = 8;
+}
+
+enum TimePeriod {
+    TIMEPERIOD_1 = 0;
+    TIMEPERIOD_7 = 1;
+    TIMEPERIOD_30 = 2;
+}
+
+service TheMostPopularAPIService {
+    rpc GetMostemailedSectionTimePeriod(GetMostemailedSectionTimePeriodRequest) returns (GetMostemailedSectionTimePeriodResponse);
+    rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse);
+    rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse);
+}

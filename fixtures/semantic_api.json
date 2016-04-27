@@ -456,6 +456,28 @@
         },
 		"test_bool": {
 			"type": "boolean"
+        },
+        "test_bool_value": {
+			"type": ["null", "boolean"]
+        },
+        "test_num_value": {
+			"type": ["null", "number"],
+            "format": "double"
+        },
+        "test_numer_value": {
+			"type": ["null", "number"]
+        },
+        "test_float_value": {
+			"type": ["null", "float"]
+        },
+        "test_string_value": {
+			"type": ["null", "string"]
+        },
+        "test_bytes_value": {
+			"type": ["null", "bytes"]
+        },
+        "test_any_value": {
+			"type": ["null", "string", "object"]
         }
      }
     }

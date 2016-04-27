@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 )
@@ -27,7 +28,7 @@ package {{ packageName .Info.Title }};
 {{ $endpoint.ProtoMessages $path }}
 {{ end }}
 {{ range $modelName, $model := .Definitions }}
-{{ $model.ProtoMessage $modelName 0 }}
+{{ $model.ProtoMessage $modelName counter -1 }}
 {{ end }}
 service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths }}
 {{ $endpoint.ProtoEndpoints $path }}{{ end }}
@@ -39,7 +40,7 @@ const protoMsgTmplStr = `{{ $i := counter }}{{ $depth := .Depth }}message {{ .Na
 {{ indent $depth }}}`
 
 const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name}}enum {{ .Name }} {{"{"}}{{ range $index, $pName := .Enum }}
-{{ indent $depth }}    {{ toEnum $name $pName }} = {{ inc $i }};{{ end }}
+{{ indent $depth }}    {{ toEnum $name $pName $depth }} = {{ inc $i }};{{ end }}
 {{ indent $depth }}}`
 
 var funcMap = template.FuncMap{
@@ -87,14 +88,19 @@ func indent(depth int) string {
 	return out
 }
 
-func toEnum(name, enum string) string {
+func toEnum(name, enum string, depth int) string {
 	if strings.TrimSpace(enum) == "" {
-		enum = "EMPTY"
+		enum = "empty"
 	}
-	e := name + "_" + enum
+	e := enum
+	if _, err := strconv.Atoi(enum); err == nil || depth > 0 {
+		e = name + "_" + enum
+	}
 	e = strings.Replace(e, " ", "_", -1)
+	re := regexp.MustCompile(`[%\{\}\[\]()/\.'’-]`)
+	e = re.ReplaceAllString(e, "")
 	e = strings.Replace(e, "&", "and", -1)
-	return strings.ToUpper(e)
+	return e
 }
 
 var (
@@ -106,6 +112,8 @@ var (
 func cleanSpacing(output []byte) []byte {
 	re := regexp.MustCompile(`}\n*message `)
 	output = re.ReplaceAll(output, []byte("}\n\nmessage "))
+	re = regexp.MustCompile(`}\n*enum `)
+	output = re.ReplaceAll(output, []byte("}\n\nenum "))
 	re = regexp.MustCompile(`}\n*service `)
 	return re.ReplaceAll(output, []byte("}\n\nservice "))
 }

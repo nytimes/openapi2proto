@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package uberapi;
+
+message GetEstimatesPriceRequest {
+    double end_latitude = 1;
+    double end_longitude = 2;
+    double start_latitude = 3;
+    double start_longitude = 4;
+}
+
+message GetEstimatesPriceResponse {
+    repeated PriceEstimate items = 1;
+}
+
+message GetEstimatesTimeRequest {
+    string customer_uuid = 1;
+    string product_id = 2;
+    double start_latitude = 3;
+    double start_longitude = 4;
+}
+
+message GetEstimatesTimeResponse {
+    repeated Product items = 1;
+}
+
+message GetHistoryRequest {
+    int32 limit = 1;
+    int32 offset = 2;
+}
+
+message GetProductsRequest {
+    double latitude = 1;
+    double longitude = 2;
+}
+
+message GetProductsResponse {
+    repeated Product items = 1;
+}
+
+message Activities {
+    int32 count = 1;
+    repeated Activity history = 2;
+    int32 limit = 3;
+    int32 offset = 4;
+}
+
+message Activity {
+    string uuid = 1;
+}
+
+message Error {
+    int32 code = 1;
+    string fields = 2;
+    string message = 3;
+}
+
+message PriceEstimate {
+    string currency_code = 1;
+    string display_name = 2;
+    string estimate = 3;
+    int32 high_estimate = 4;
+    int32 low_estimate = 5;
+    string product_id = 6;
+    int32 surge_multiplier = 7;
+}
+
+message Product {
+    string capacity = 1;
+    string description = 2;
+    string display_name = 3;
+    string image = 4;
+    string product_id = 5;
+}
+
+message Profile {
+    string email = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string picture = 4;
+    string promo_code = 5;
+}
+
+service UberAPIService {
+    rpc GetEstimatesPrice(GetEstimatesPriceRequest) returns (GetEstimatesPriceResponse);
+    rpc GetEstimatesTime(GetEstimatesTimeRequest) returns (GetEstimatesTimeResponse);
+    rpc GetHistory(GetHistoryRequest) returns (Activities);
+    rpc GetMe(google.protobuf.Empty) returns (Profile);
+    rpc GetProducts(GetProductsRequest) returns (GetProductsResponse);
+}
