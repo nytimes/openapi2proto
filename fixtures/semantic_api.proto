@@ -83,7 +83,8 @@ message Concept {
         }
         repeated Result results = 1;
         int32 total = 2;
-    };
+    }
+    Article_list article_list = 2;
     message Combination {
         string combination_note = 1;
         int32 combination_source_concept_id = 2;

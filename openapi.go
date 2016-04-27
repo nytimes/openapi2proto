@@ -182,7 +182,7 @@ func protoComplex(i *Items, typ, name string, index *int, depth int) string {
 	case "object":
 		i.Model.Name = strings.Title(name)
 		msgStr := i.Model.ProtoModel(i.Model.Name, depth+1)
-		if depth <= 0 {
+		if depth < 0 {
 			return msgStr
 		}
 		return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), i.Model.Name, name, *index)

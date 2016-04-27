@@ -24,7 +24,7 @@ There are 2 CLI flags for using the tool:
 
 ## Example
 ```
-╰─ openapi2proto -spec books.json -yaml=false
+╰─ openapi2proto -spec books.json -yaml=false                                                                                      1 ↵
 syntax = "proto3";
 
 import "google/protobuf/struct.proto";
@@ -35,8 +35,8 @@ message GetListsformatRequest {
     string bestsellers_date = 1;
     string date = 2;
     enum Format {
-        FORMAT_JSON = 0;
-        FORMAT_JSONP = 1;
+        Format_json = 0;
+        Format_jsonp = 1;
     }
     Format format = 3;
     string isbn = 4;
@@ -46,8 +46,8 @@ message GetListsformatRequest {
     int32 rank = 8;
     int32 rank_last_week = 9;
     enum Sort_order {
-        SORT_ORDER_ASC = 0;
-        SORT_ORDER_DESC = 1;
+        Sort_order_ASC = 0;
+        Sort_order_DESC = 1;
     }
     Sort_order sort_order = 10;
     int32 weeks_on_list = 11;
@@ -154,8 +154,8 @@ message GetListsBestSellersHistoryResponse {
 message GetListsNamesformatRequest {
     string api_key = 1;
     enum Format {
-        FORMAT_JSON = 0;
-        FORMAT_JSONP = 1;
+        Format_json = 0;
+        Format_jsonp = 1;
     }
     Format format = 2;
 }
@@ -178,8 +178,8 @@ message GetListsNamesformatResponse {
 message GetListsOverviewformatRequest {
     string api_key = 1;
     enum Format {
-        FORMAT_JSON = 0;
-        FORMAT_JSONP = 1;
+        Format_json = 0;
+        Format_jsonp = 1;
     }
     Format format = 2;
     string published_date = 3;
@@ -231,8 +231,8 @@ message GetListsDateListRequest {
     string rank = 8;
     int32 rank_last_week = 9;
     enum Sort_order {
-        SORT_ORDER_ASC = 0;
-        SORT_ORDER_DESC = 1;
+        Sort_order_ASC = 0;
+        Sort_order_DESC = 1;
     }
     Sort_order sort_order = 10;
     int32 weeks_on_list = 11;
@@ -290,8 +290,8 @@ message GetReviewsformatRequest {
     string api_key = 1;
     string author = 2;
     enum Format {
-        FORMAT_JSON = 0;
-        FORMAT_JSONP = 1;
+        Format_json = 0;
+        Format_jsonp = 1;
     }
     Format format = 3;
     int32 isbn = 4;
