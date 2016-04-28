@@ -67,6 +67,9 @@ type Items struct {
 	Format interface{} `yaml:"format,omitempty" json:"format,omitempty"`
 	Enum   []string    `yaml:"enum,omitempty" json:"enum,omitempty"`
 
+	// Map type
+	AdditionalProperties *Items `yaml:"additionalProperties" json:"additionalProperties"`
+
 	// ref another Model
 	Ref string `yaml:"$ref"json:"$ref"`
 
@@ -118,11 +121,6 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 		return protoComplex(i, i.Type.(string), name, indx, depth)
 	case []interface{}:
 		types := i.Type.([]interface{})
-		/*		if len(types) > 2 {
-					m := &Model{Name: name}
-					return m.ProtoModel(name, depth+1)
-				}
-		*/
 		hasNull := false
 		var otherTypes []string
 		for _, itp := range types {
@@ -180,6 +178,19 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 func protoComplex(i *Items, typ, name string, index *int, depth int) string {
 	switch typ {
 	case "object":
+		// check for map declaration
+		if i.AdditionalProperties != nil {
+			var itemType string
+			switch {
+			case i.AdditionalProperties.Ref != "":
+				itemType = strings.TrimLeft(i.AdditionalProperties.Ref, "#/definitions/")
+			case i.AdditionalProperties.Type != nil:
+				itemType = i.AdditionalProperties.Type.(string)
+			}
+			return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
+		}
+
+		// otherwise, normal object model
 		i.Model.Name = strings.Title(name)
 		msgStr := i.Model.ProtoModel(i.Model.Name, depth+1)
 		if depth < 0 {

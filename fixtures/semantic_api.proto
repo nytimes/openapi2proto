@@ -174,9 +174,11 @@ message TestModel {
     google.protobuf.BoolValue test_bool_value = 5;
     google.protobuf.BytesValue test_bytes_value = 6;
     google.protobuf.Any test_float_value = 7;
-    google.protobuf.DoubleValue test_num_value = 8;
-    google.protobuf.Int32Value test_numer_value = 9;
-    google.protobuf.StringValue test_string_value = 10;
+    map<string, TestModel> test_map_object = 8;
+    map<string, string> test_map_scalar = 9;
+    google.protobuf.DoubleValue test_num_value = 10;
+    google.protobuf.Int32Value test_numer_value = 11;
+    google.protobuf.StringValue test_string_value = 12;
 }
 
 service TheSemanticAPIService {

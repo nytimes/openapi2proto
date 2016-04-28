@@ -478,6 +478,18 @@
         },
         "test_any_value": {
 			"type": ["null", "string", "object"]
+        },
+        "test_map_object": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/TestModel"
+            }
+        },
+        "test_map_scalar": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
         }
      }
     }
