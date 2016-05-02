@@ -130,6 +130,8 @@ func cleanSpacing(output []byte) []byte {
 	output = re.ReplaceAll(output, []byte("}\n\nmessage "))
 	re = regexp.MustCompile(`}\n*enum `)
 	output = re.ReplaceAll(output, []byte("}\n\nenum "))
+	re = regexp.MustCompile(`;\n*message `)
+	output = re.ReplaceAll(output, []byte(";\n\nmessage "))
 	re = regexp.MustCompile(`}\n*service `)
 	return re.ReplaceAll(output, []byte("}\n\nservice "))
 }
