@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
+import "google/api/annotations.proto";
+
 package uberapi;
 
 message GetEstimatesPriceRequest {
@@ -88,10 +90,35 @@ message Profile {
 }
 
 service UberAPIService {
-    rpc GetEstimatesPrice(GetEstimatesPriceRequest) returns (GetEstimatesPriceResponse) {}
-    rpc GetEstimatesTime(GetEstimatesTimeRequest) returns (GetEstimatesTimeResponse) {}
-    rpc GetHistory(GetHistoryRequest) returns (Activities) {}
-    rpc GetMe(google.protobuf.Empty) returns (Profile) {}
-    rpc PutMe(PutMeRequest) returns (Profile) {}
-    rpc GetProducts(GetProductsRequest) returns (GetProductsResponse) {}
+    rpc GetEstimatesPrice(GetEstimatesPriceRequest) returns (GetEstimatesPriceResponse) {
+      option (google.api.http) = {
+        get: "/v1/estimates/price"
+      };
+    }
+    rpc GetEstimatesTime(GetEstimatesTimeRequest) returns (GetEstimatesTimeResponse) {
+      option (google.api.http) = {
+        get: "/v1/estimates/time"
+      };
+    }
+    rpc GetHistory(GetHistoryRequest) returns (Activities) {
+      option (google.api.http) = {
+        get: "/v1/history"
+      };
+    }
+    rpc GetMe(google.protobuf.Empty) returns (Profile) {
+      option (google.api.http) = {
+        get: "/v1/me"
+      };
+    }
+    rpc PutMe(PutMeRequest) returns (Profile) {
+      option (google.api.http) = {
+        put: "/v1/me"
+        body: "profile"
+      };
+    }
+    rpc GetProducts(GetProductsRequest) returns (GetProductsResponse) {
+      option (google.api.http) = {
+        get: "/v1/products"
+      };
+    }
 }

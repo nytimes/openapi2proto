@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "google/protobuf/any.proto";
 
+import "google/api/annotations.proto";
+
 package themostpopularapi;
 
 message GetMostemailedSectionTimePeriodRequest {
@@ -146,7 +148,19 @@ enum TimePeriod {
 }
 
 service TheMostPopularAPIService {
-    rpc GetMostemailedSectionTimePeriod(GetMostemailedSectionTimePeriodRequest) returns (GetMostemailedSectionTimePeriodResponse) {}
-    rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse) {}
-    rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse) {}
+    rpc GetMostemailedSectionTimePeriod(GetMostemailedSectionTimePeriodRequest) returns (GetMostemailedSectionTimePeriodResponse) {
+      option (google.api.http) = {
+        get: "/svc/mostpopular/v2/mostemailed/{section}/{time-period}.json"
+      };
+    }
+    rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse) {
+      option (google.api.http) = {
+        get: "/svc/mostpopular/v2/mostshared/{section}/{time-period}.json"
+      };
+    }
+    rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse) {
+      option (google.api.http) = {
+        get: "/svc/mostpopular/v2/mostviewed/{section}/{time-period}.json"
+      };
+    }
 }

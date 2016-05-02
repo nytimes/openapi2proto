@@ -196,6 +196,36 @@
             }
           }
         }
+      },
+      "put": {
+        "summary": "Save User Profile",
+        "description": "The User Profile endpoint returns information about the Uber user that has authorized with the application.",
+		"parameters": [
+			{
+			 "name": "profile",
+			 "in": "body",
+			 "schema": {
+				"$ref": "#/definitions/Profile"
+			 }
+			}
+		],
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile information for a user",
+            "schema": {
+              "$ref": "#/definitions/Profile"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
       }
     },
     "/history": {

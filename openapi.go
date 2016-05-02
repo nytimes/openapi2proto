@@ -76,6 +76,10 @@ type Items struct {
 	// is an array
 	Items *Items `yaml:"items" json:"items"`
 
+	// for request parameters
+	In     string `yaml:"in" json:"in"`
+	Schema *Items `yaml:"schema" json:"schema"`
+
 	// is an other Model
 	Model `yaml:",inline"`
 }
@@ -113,6 +117,12 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 
 	if i.Ref != "" {
 		itemType := strings.TrimLeft(i.Ref, "#/definitions/")
+		return fmt.Sprintf("%s %s = %d", itemType, name, index)
+	}
+
+	// for parameters
+	if i.Schema != nil && i.Schema.Ref != "" {
+		itemType := strings.TrimLeft(i.Schema.Ref, "#/definitions/")
 		return fmt.Sprintf("%s %s = %d", itemType, name, index)
 	}
 
@@ -188,6 +198,13 @@ func protoComplex(i *Items, typ, name string, index *int, depth int) string {
 				itemType = i.AdditionalProperties.Type.(string)
 			}
 			return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
+		}
+
+		// check for referenced schema object (parameters/fields)
+		if i.Schema != nil {
+			if i.Schema.Ref != "" {
+				return fmt.Sprintf("%s%s %s = %d", indent(depth+1), strings.TrimLeft(i.Schema.Ref, "#/definitions/"), name, *index)
+			}
 		}
 
 		// otherwise, normal object model
@@ -292,7 +309,6 @@ func (r *Response) ProtoMessage(endpointName string) string {
 		return model.ProtoModel(name, 0)
 	default:
 		return ""
-		//		return protoScalarType(name, r.Schema.Type, r.Schema.Format, 0)
 	}
 }
 
@@ -310,9 +326,24 @@ func (r *Response) responseName(endpointName string) string {
 	}
 }
 
-func (e *Endpoint) protoEndpoint(parentParams Parameters, endpointName string) string {
+func includeBody(parent, child Parameters) string {
+	params := append(parent, child...)
+	for _, param := range params {
+		if param.In == "body" {
+			return param.Name
+		}
+	}
+	return ""
+}
+
+func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, path, method string) string {
 	reqName := "google.protobuf.Empty"
+	endpointName := pathMethodToName(path, method)
+	path = base + path
+
+	var bodyAttr string
 	if len(parentParams)+len(e.Parameters) > 0 {
+		bodyAttr = includeBody(parentParams, e.Parameters)
 		reqName = endpointName + "Request"
 	}
 
@@ -323,9 +354,32 @@ func (e *Endpoint) protoEndpoint(parentParams Parameters, endpointName string) s
 		respName = resp.responseName(endpointName)
 	}
 
-	return fmt.Sprintf("    rpc %s(%s) returns (%s);",
-		endpointName, reqName, respName,
-	)
+	tData := struct {
+		Annotate     bool
+		Method       string
+		Name         string
+		RequestName  string
+		ResponseName string
+		Path         string
+		IncludeBody  bool
+		BodyAttr     string
+	}{
+		annotate,
+		method,
+		endpointName,
+		reqName,
+		respName,
+		path,
+		(bodyAttr != ""),
+		bodyAttr,
+	}
+
+	var b bytes.Buffer
+	err := protoEndpointTmpl.Execute(&b, tData)
+	if err != nil {
+		log.Fatal("unable to protobuf model: ", err)
+	}
+	return b.String()
 }
 
 func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string) string {
@@ -351,27 +405,24 @@ func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string) s
 
 // ProtoEndpoints will return any protobuf v3 endpoints for gRPC
 // service declarations.
-func (p *Path) ProtoEndpoints(path string) string {
+func (p *Path) ProtoEndpoints(annotate bool, base, path string) string {
+
 	var out bytes.Buffer
 	if p.Get != nil {
-		endpointName := pathMethodToName(path, "get")
-		msg := p.Get.protoEndpoint(p.Parameters, endpointName)
-		out.WriteString(msg)
+		msg := p.Get.protoEndpoint(annotate, p.Parameters, base, path, "get")
+		out.WriteString(msg + "\n")
 	}
 	if p.Put != nil {
-		endpointName := pathMethodToName(path, "put")
-		msg := p.Put.protoEndpoint(p.Parameters, endpointName)
-		out.WriteString(msg)
+		msg := p.Put.protoEndpoint(annotate, p.Parameters, base, path, "put")
+		out.WriteString(msg + "\n")
 	}
 	if p.Post != nil {
-		endpointName := pathMethodToName(path, "post")
-		msg := p.Post.protoEndpoint(p.Parameters, endpointName)
-		out.WriteString(msg)
+		msg := p.Post.protoEndpoint(annotate, p.Parameters, base, path, "post")
+		out.WriteString(msg + "\n")
 	}
 	if p.Delete != nil {
-		endpointName := pathMethodToName(path, "delete")
-		msg := p.Delete.protoEndpoint(p.Parameters, endpointName)
-		out.WriteString(msg)
+		msg := p.Delete.protoEndpoint(annotate, p.Parameters, base, path, "delete")
+		out.WriteString(msg + "\n")
 	}
 
 	return strings.TrimSuffix(out.String(), "\n")

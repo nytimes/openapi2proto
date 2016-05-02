@@ -4,6 +4,8 @@ import "google/protobuf/wrappers.proto";
 
 import "google/protobuf/any.proto";
 
+import "google/api/annotations.proto";
+
 package thesemanticapi;
 
 message GetConceptSearchRequest {
@@ -182,6 +184,14 @@ message TestModel {
 }
 
 service TheSemanticAPIService {
-    rpc GetConceptSearch(GetConceptSearchRequest) returns (GetConceptSearchResponse) {}
-    rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse) {}
+    rpc GetConceptSearch(GetConceptSearchRequest) returns (GetConceptSearchResponse) {
+      option (google.api.http) = {
+        get: "/svc/semantic/v2/concept/concept/search.json"
+      };
+    }
+    rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse) {
+      option (google.api.http) = {
+        get: "/svc/semantic/v2/concept/name/{concept-type}/{specific-concept}.json"
+      };
+    }
 }

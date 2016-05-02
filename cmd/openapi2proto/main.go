@@ -15,6 +15,7 @@ import (
 func main() {
 	specPath := flag.String("spec", "../../spec.yaml", "location of the swagger spec file")
 	isYaml := flag.Bool("yaml", true, "parse JSON or YAML? (yaml is on by default)")
+	annotate := flag.Bool("options", false, "include (google.api.http) options for grpc-gateway")
 	flag.Parse()
 
 	b, err := ioutil.ReadFile(*specPath)
@@ -32,7 +33,7 @@ func main() {
 		log.Fatal("unable to parse spec file: ", err)
 	}
 
-	out, err := openapi2proto.GenerateProto(api)
+	out, err := openapi2proto.GenerateProto(api, *annotate)
 	if err != nil {
 		log.Fatal("unable to generate protobuf: ", err)
 	}

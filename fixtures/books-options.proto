@@ -1,34 +1,8 @@
-# openapi2proto [![Build Status](https://travis-ci.org/NYTimes/openapi2proto.svg?branch=master)](https://travis-ci.org/NYTimes/openapi2proto)
-
-This tool will accept an OpenAPI/Swagger definition (yaml or JSON) and generate a Protobuf v3 schema and gRPC service definition from it.
-
-## Install
-
-To install, have Go installed with `$GOPATH/bin` on your `$PATH` and then:
-```
-go get -u github.com/NYTimes/openapi2proto/cmd/openapi2proto
-```
-
-## Run
-
-There are 2 CLI flags for using the tool: 
-* `-spec` to point to the appropriate OpenAPI spec file
-* `-yaml` to specify the OpenAPI spec file format. (`-yaml=false` for JSON)
-* `-options` to include google.api.http options for [grpc-gateway](https://github.com/gengo/grpc-gateway) users. This is disabled by default.
-
-## Caveats
-
-* Fields with scalar types that can also be "null" will get wrapped with one of the `google.protobuf.*Value` types.
-* Fields with that have more than 1 type and the second type is not "null" will be replaced with the `google.protobuf.Any` type. 
-* Endpoints that respond with an array will be wrapped with a message type that has a single field, 'items', that contains the array.
-* Only "200" and "201" responses are inspected for determining the expected return value for RPC endpoints.
-
-## Example
-```
-╰─ openapi2proto -spec books.json -yaml=false                                                                                      1 ↵
 syntax = "proto3";
 
 import "google/protobuf/struct.proto";
+
+import "google/api/annotations.proto";
 
 package booksapi;
 
@@ -316,11 +290,34 @@ message GetReviewsformatResponse {
 }
 
 service BooksAPIService {
-    rpc GetListsformat(GetListsformatRequest) returns (GetListsformatResponse);
-    rpc GetListsBestSellersHistory(GetListsBestSellersHistoryRequest) returns (GetListsBestSellersHistoryResponse);
-    rpc GetListsNamesformat(GetListsNamesformatRequest) returns (GetListsNamesformatResponse);
-    rpc GetListsOverviewformat(GetListsOverviewformatRequest) returns (GetListsOverviewformatResponse);
-    rpc GetListsDateList(GetListsDateListRequest) returns (GetListsDateListResponse);
-    rpc GetReviewsformat(GetReviewsformatRequest) returns (GetReviewsformatResponse);
+    rpc GetListsformat(GetListsformatRequest) returns (GetListsformatResponse) {
+      option (google.api.http) = {
+        get: "/svc/books/v3/lists.{format}"
+      };
+    }
+    rpc GetListsBestSellersHistory(GetListsBestSellersHistoryRequest) returns (GetListsBestSellersHistoryResponse) {
+      option (google.api.http) = {
+        get: "/svc/books/v3/lists/best-sellers/history.json"
+      };
+    }
+    rpc GetListsNamesformat(GetListsNamesformatRequest) returns (GetListsNamesformatResponse) {
+      option (google.api.http) = {
+        get: "/svc/books/v3/lists/names.{format}"
+      };
+    }
+    rpc GetListsOverviewformat(GetListsOverviewformatRequest) returns (GetListsOverviewformatResponse) {
+      option (google.api.http) = {
+        get: "/svc/books/v3/lists/overview.{format}"
+      };
+    }
+    rpc GetListsDateList(GetListsDateListRequest) returns (GetListsDateListResponse) {
+      option (google.api.http) = {
+        get: "/svc/books/v3/lists/{date}/{list}.json"
+      };
+    }
+    rpc GetReviewsformat(GetReviewsformatRequest) returns (GetReviewsformatResponse) {
+      option (google.api.http) = {
+        get: "/svc/books/v3/reviews.{format}"
+      };
+    }
 }
-```

@@ -12,9 +12,15 @@ import (
 
 // GenerateProto will attempt to generate an protobuf version 3
 // schema from the given OpenAPI definition.
-func GenerateProto(api *APIDefinition) ([]byte, error) {
+func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	var out bytes.Buffer
-	err := protoFileTmpl.Execute(&out, api)
+	data := struct {
+		*APIDefinition
+		Annotate bool
+	}{
+		api, annotate,
+	}
+	err := protoFileTmpl.Execute(&out, data)
 	if err != nil {
 		return nil, fmt.Errorf("unable to generate protobuf schema: %s", err)
 	}
@@ -22,18 +28,27 @@ func GenerateProto(api *APIDefinition) ([]byte, error) {
 }
 
 const protoFileTmplStr = `syntax = "proto3";
-
+{{ $annotate := .Annotate }}{{ if $annotate }}
+import "google/api/annotations.proto";
+{{ end }}
 package {{ packageName .Info.Title }};
 {{ range $path, $endpoint := .Paths }}
 {{ $endpoint.ProtoMessages $path }}
 {{ end }}
 {{ range $modelName, $model := .Definitions }}
 {{ $model.ProtoMessage $modelName counter -1 }}
-{{ end }}
+{{ end }}{{ $basePath := .BasePath }}
 service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths }}
-{{ $endpoint.ProtoEndpoints $path }}{{ end }}
+{{ $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
 }
 `
+
+const protoEndpointTmplStr = `    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ if .Annotate }}
+      option (google.api.http) = {
+        {{ .Method }}: "{{ .Path }}"{{ if .IncludeBody }}
+        body: "{{ .BodyAttr }}"{{ end }}
+      };
+    {{ end }}{{"}"}}`
 
 const protoMsgTmplStr = `{{ $i := counter }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
 {{ indent $depth }}    {{ $prop.ProtoMessage $propName $i $depth }};{{ end }}
@@ -104,9 +119,10 @@ func toEnum(name, enum string, depth int) string {
 }
 
 var (
-	protoFileTmpl = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileTmplStr))
-	protoMsgTmpl  = template.Must(template.New("protoMsg").Funcs(funcMap).Parse(protoMsgTmplStr))
-	protoEnumTmpl = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
+	protoFileTmpl     = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileTmplStr))
+	protoMsgTmpl      = template.Must(template.New("protoMsg").Funcs(funcMap).Parse(protoMsgTmplStr))
+	protoEndpointTmpl = template.Must(template.New("protoEndpoint").Funcs(funcMap).Parse(protoEndpointTmplStr))
+	protoEnumTmpl     = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
 )
 
 func cleanSpacing(output []byte) []byte {

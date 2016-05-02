@@ -288,10 +288,10 @@ message GetReviewsformatResponse {
 }
 
 service BooksAPIService {
-    rpc GetListsformat(GetListsformatRequest) returns (GetListsformatResponse);
-    rpc GetListsBestSellersHistory(GetListsBestSellersHistoryRequest) returns (GetListsBestSellersHistoryResponse);
-    rpc GetListsNamesformat(GetListsNamesformatRequest) returns (GetListsNamesformatResponse);
-    rpc GetListsOverviewformat(GetListsOverviewformatRequest) returns (GetListsOverviewformatResponse);
-    rpc GetListsDateList(GetListsDateListRequest) returns (GetListsDateListResponse);
-    rpc GetReviewsformat(GetReviewsformatRequest) returns (GetReviewsformatResponse);
+    rpc GetListsformat(GetListsformatRequest) returns (GetListsformatResponse) {}
+    rpc GetListsBestSellersHistory(GetListsBestSellersHistoryRequest) returns (GetListsBestSellersHistoryResponse) {}
+    rpc GetListsNamesformat(GetListsNamesformatRequest) returns (GetListsNamesformatResponse) {}
+    rpc GetListsOverviewformat(GetListsOverviewformatRequest) returns (GetListsOverviewformatResponse) {}
+    rpc GetListsDateList(GetListsDateListRequest) returns (GetListsDateListResponse) {}
+    rpc GetReviewsformat(GetReviewsformatRequest) returns (GetReviewsformatResponse) {}
 }

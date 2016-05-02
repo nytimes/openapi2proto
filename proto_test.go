@@ -11,11 +11,13 @@ import (
 func TestGenerateProto(t *testing.T) {
 	tests := []struct {
 		yaml             bool
+		options          bool
 		givenFixturePath string
 
 		wantProto string
 	}{
 		{
+			false,
 			false,
 			"fixtures/semantic_api.json",
 
@@ -23,21 +25,52 @@ func TestGenerateProto(t *testing.T) {
 		},
 		{
 			false,
+			false,
 			"fixtures/most_popular.json",
 
 			"fixtures/most_popular.proto",
 		},
 		{
 			true,
+			false,
 			"fixtures/spec.yaml",
 
 			"fixtures/spec.proto",
 		},
 		{
 			false,
+			false,
 			"fixtures/spec.json",
 
 			"fixtures/spec.proto",
+		},
+		{
+			false,
+			true,
+			"fixtures/semantic_api.json",
+
+			"fixtures/semantic_api-options.proto",
+		},
+		{
+			false,
+			true,
+			"fixtures/most_popular.json",
+
+			"fixtures/most_popular-options.proto",
+		},
+		{
+			true,
+			true,
+			"fixtures/spec.yaml",
+
+			"fixtures/spec-options.proto",
+		},
+		{
+			false,
+			true,
+			"fixtures/spec.json",
+
+			"fixtures/spec-options.proto",
 		},
 	}
 
@@ -62,7 +95,7 @@ func TestGenerateProto(t *testing.T) {
 
 		}
 
-		protoResult, err := GenerateProto(&testAPI)
+		protoResult, err := GenerateProto(&testAPI, test.options)
 		if err != nil {
 			t.Fatal("unable to generate protobuf from APIDefinition: ", err)
 		}
@@ -73,7 +106,7 @@ func TestGenerateProto(t *testing.T) {
 		}
 
 		if string(want) != string(protoResult) {
-			t.Errorf("testYaml expected:\n%q\nGOT:\n%s", test.wantProto, []byte(protoResult))
+			t.Errorf("testYaml expected:\n%s\nGOT:\n%s", want, protoResult)
 		}
 	}
 }
