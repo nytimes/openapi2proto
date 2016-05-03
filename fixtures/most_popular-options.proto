@@ -90,6 +90,22 @@ message ArticleWithCountType {
     string url = 14;
 }
 
+message DesFacet {
+    string type = 1;
+}
+
+message GeoFacet {
+    string type = 1;
+}
+
+message OrgFacet {
+    string type = 1;
+}
+
+message PerFacet {
+    string type = 1;
+}
+
 enum Section {
     Arts = 0;
     Automobiles = 1;

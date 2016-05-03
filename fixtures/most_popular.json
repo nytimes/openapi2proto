@@ -363,36 +363,36 @@
     },
     "definitions": {
         "GeoFacet": {
-            "type": [
-                "array",
-                "null",
-                "string"
-            ],
-            "enum": [
-                ""
-            ],
-            "items": {}
+            "type": "object",
+            "properties":{
+                "type":{
+                    "type":"string"
+                }
+            }
         },
         "PerFacet": {
-            "type": [
-                "string",
-                "null"
-            ],
-            "items": {}
+            "type": "object",
+            "properties":{
+                "type":{
+                    "type":"string"
+                }
+            }
         },
         "OrgFacet": {
-            "type": [
-                "array",
-                "null"
-            ],
-            "items": {}
+            "type": "object",
+            "properties":{
+                "type":{
+                    "type":"string"
+                }
+            }
         },
         "DesFacet": {
-            "type": [
-                "array",
-                "string"
-            ],
-            "items": {}
+            "type": "object",
+            "properties":{
+                "type":{
+                    "type":"string"
+                }
+            }
         },
         "TimePeriod": {
             "in": "path",
