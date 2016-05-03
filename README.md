@@ -22,6 +22,7 @@ There are 2 CLI flags for using the tool:
 * Fields with that have more than 1 type and the second type is not "null" will be replaced with the `google.protobuf.Any` type. 
 * Endpoints that respond with an array will be wrapped with a message type that has a single field, 'items', that contains the array.
 * Only "200" and "201" responses are inspected for determining the expected return value for RPC endpoints.
+* To prevent enum collisions and to match language conventions, enum values will be upper-cased and nested enum values and will have their parent types prepended.
 
 ## Example
 ```

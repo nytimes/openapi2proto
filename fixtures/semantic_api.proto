@@ -7,19 +7,19 @@ import "google/protobuf/any.proto";
 package thesemanticapi;
 
 message GetConceptSearchRequest {
-    enum Field {
-        Field_all = 0;
-        Field_pages = 1;
-        Field_ticker_symbol = 2;
-        Field_links = 3;
-        Field_taxonomy = 4;
-        Field_combinations = 5;
-        Field_geocodes = 6;
-        Field_article_list = 7;
-        Field_scope_notes = 8;
-        Field_search_api_query = 9;
+    enum GetConceptSearchRequest_field {
+        GETCONCEPTSEARCHREQUEST_FIELD_ALL = 0;
+        GETCONCEPTSEARCHREQUEST_FIELD_PAGES = 1;
+        GETCONCEPTSEARCHREQUEST_FIELD_TICKER_SYMBOL = 2;
+        GETCONCEPTSEARCHREQUEST_FIELD_LINKS = 3;
+        GETCONCEPTSEARCHREQUEST_FIELD_TAXONOMY = 4;
+        GETCONCEPTSEARCHREQUEST_FIELD_COMBINATIONS = 5;
+        GETCONCEPTSEARCHREQUEST_FIELD_GEOCODES = 6;
+        GETCONCEPTSEARCHREQUEST_FIELD_ARTICLE_LIST = 7;
+        GETCONCEPTSEARCHREQUEST_FIELD_SCOPE_NOTES = 8;
+        GETCONCEPTSEARCHREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
-    Field fields = 1;
+    GetConceptSearchRequest_field fields = 1;
     int32 offset = 2;
     string query = 3;
 }
@@ -32,26 +32,26 @@ message GetConceptSearchResponse {
 }
 
 message GetNameConceptTypeSpecificConceptRequest {
-    enum Concept_type {
-        Concept_type_nytd_geo = 0;
-        Concept_type_nytd_per = 1;
-        Concept_type_nytd_org = 2;
-        Concept_type_nytd_des = 3;
+    enum GetNameConceptTypeSpecificConceptRequest_concept_type {
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_GEO = 0;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_PER = 1;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_ORG = 2;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_DES = 3;
     }
-    Concept_type concept_type = 1;
-    enum Field {
-        Field_all = 0;
-        Field_pages = 1;
-        Field_ticker_symbol = 2;
-        Field_links = 3;
-        Field_taxonomy = 4;
-        Field_combinations = 5;
-        Field_geocodes = 6;
-        Field_article_list = 7;
-        Field_scope_notes = 8;
-        Field_search_api_query = 9;
+    GetNameConceptTypeSpecificConceptRequest_concept_type concept_type = 1;
+    enum GetNameConceptTypeSpecificConceptRequest_field {
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_ALL = 0;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_PAGES = 1;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_TICKER_SYMBOL = 2;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_LINKS = 3;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_TAXONOMY = 4;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_COMBINATIONS = 5;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_GEOCODES = 6;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_ARTICLE_LIST = 7;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_SCOPE_NOTES = 8;
+        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
-    Field fields = 2;
+    GetNameConceptTypeSpecificConceptRequest_field fields = 2;
     string query = 3;
     string specific_concept = 4;
 }
@@ -140,13 +140,13 @@ message Concept {
 }
 
 message ConceptRelation {
-    enum Class {
-        Class_nytd_geo = 0;
-        Class_nytd_per = 1;
-        Class_nytd_org = 2;
-        Class_nytd_des = 3;
+    enum ConceptRelation_class {
+        CONCEPTRELATION_CLASS_NYTD_GEO = 0;
+        CONCEPTRELATION_CLASS_NYTD_PER = 1;
+        CONCEPTRELATION_CLASS_NYTD_ORG = 2;
+        CONCEPTRELATION_CLASS_NYTD_DES = 3;
     }
-    Class class = 1;
+    ConceptRelation_class class = 1;
     string concept_created = 2;
     int32 concept_id = 3;
     string concept_name = 4;
@@ -158,13 +158,13 @@ message ConceptRelation {
 }
 
 message TestModel {
-    enum Category {
-        Category_nytd_geo = 0;
-        Category_nytd_per = 1;
-        Category_nytd_org = 2;
-        Category_nytd_des = 3;
+    enum TestModel_category {
+        TESTMODEL_CATEGORY_NYTD_GEO = 0;
+        TESTMODEL_CATEGORY_NYTD_PER = 1;
+        TESTMODEL_CATEGORY_NYTD_ORG = 2;
+        TESTMODEL_CATEGORY_NYTD_DES = 3;
     }
-    Category category = 1;
+    TestModel_category category = 1;
     message Class {
         string something = 1;
     }

@@ -110,7 +110,7 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 
 // ProtoMessage will generate a set of fields for a protobuf v3 schema given the
 // current Items and information.
-func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
+func (i *Items) ProtoMessage(msgName, name string, indx *int, depth int) string {
 	*indx++
 	index := *indx
 	name = strings.Replace(name, "-", "_", -1)
@@ -128,7 +128,7 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 
 	switch i.Type.(type) {
 	case string:
-		return protoComplex(i, i.Type.(string), name, indx, depth)
+		return protoComplex(i, i.Type.(string), msgName, name, indx, depth)
 	case []interface{}:
 		types := i.Type.([]interface{})
 		hasNull := false
@@ -185,7 +185,7 @@ func (i *Items) ProtoMessage(name string, indx *int, depth int) string {
 	return ""
 }
 
-func protoComplex(i *Items, typ, name string, index *int, depth int) string {
+func protoComplex(i *Items, typ, msgName, name string, index *int, depth int) string {
 	switch typ {
 	case "object":
 		// check for map declaration
@@ -243,10 +243,15 @@ func protoComplex(i *Items, typ, name string, index *int, depth int) string {
 			var eName string
 			// breaks on 'Class' :\
 			if !strings.HasSuffix(name, "ss") {
-				eName = strings.Title(strings.TrimSuffix(name, "s"))
+				eName = strings.TrimSuffix(name, "s")
 			} else {
-				eName = strings.Title(name)
+				eName = name
 			}
+
+			if msgName != "" {
+				eName = msgName + "_" + eName
+			}
+
 			msgStr := ProtoEnum(eName, i.Enum, depth+1)
 			if depth < 0 {
 				return msgStr

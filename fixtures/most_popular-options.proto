@@ -107,60 +107,60 @@ message PerFacet {
 }
 
 enum Section {
-    Arts = 0;
-    Automobiles = 1;
-    Blogs = 2;
-    Books = 3;
-    Business_Day = 4;
-    Education = 5;
-    Fashion_and_Style = 6;
-    Food = 7;
-    Health = 8;
-    Job_Market = 9;
-    Magazine = 10;
-    membercenter = 11;
-    Movies = 12;
-    Multimedia = 13;
-    NY202F20Region = 14;
-    NYT_Now = 15;
-    Obituaries = 16;
-    Open = 17;
-    Opinion = 18;
-    Public_Editor = 19;
-    Real_Estate = 20;
-    Science = 21;
-    Sports = 22;
-    Style = 23;
-    Sunday_Review = 24;
-    T_Magazine = 25;
-    Technology = 26;
-    The_Upshot = 27;
-    Theater = 28;
-    Times_Insider = 29;
-    Todays_Paper = 30;
-    Travel = 31;
+    ARTS = 0;
+    AUTOMOBILES = 1;
+    BLOGS = 2;
+    BOOKS = 3;
+    BUSINESS_DAY = 4;
+    EDUCATION = 5;
+    FASHION_AND_STYLE = 6;
+    FOOD = 7;
+    HEALTH = 8;
+    JOB_MARKET = 9;
+    MAGAZINE = 10;
+    MEMBERCENTER = 11;
+    MOVIES = 12;
+    MULTIMEDIA = 13;
+    NY202F20REGION = 14;
+    NYT_NOW = 15;
+    OBITUARIES = 16;
+    OPEN = 17;
+    OPINION = 18;
+    PUBLIC_EDITOR = 19;
+    REAL_ESTATE = 20;
+    SCIENCE = 21;
+    SPORTS = 22;
+    STYLE = 23;
+    SUNDAY_REVIEW = 24;
+    T_MAGAZINE = 25;
+    TECHNOLOGY = 26;
+    THE_UPSHOT = 27;
+    THEATER = 28;
+    TIMES_INSIDER = 29;
+    TODAYS_PAPER = 30;
+    TRAVEL = 31;
     US = 32;
-    World = 33;
-    Your_Money = 34;
-    allsections = 35;
+    WORLD = 33;
+    YOUR_MONEY = 34;
+    ALLSECTIONS = 35;
 }
 
 enum SharedType {
-    digg = 0;
-    email = 1;
-    facebook = 2;
-    mixx = 3;
-    myspace = 4;
-    permalink = 5;
-    timespeople = 6;
-    twitter = 7;
-    yahoobuzz = 8;
+    DIGG = 0;
+    EMAIL = 1;
+    FACEBOOK = 2;
+    MIXX = 3;
+    MYSPACE = 4;
+    PERMALINK = 5;
+    TIMESPEOPLE = 6;
+    TWITTER = 7;
+    YAHOOBUZZ = 8;
 }
 
 enum TimePeriod {
-    TimePeriod_1 = 0;
-    TimePeriod_7 = 1;
-    TimePeriod_30 = 2;
+    TIMEPERIOD_1 = 0;
+    TIMEPERIOD_7 = 1;
+    TIMEPERIOD_30 = 2;
 }
 
 service TheMostPopularAPIService {

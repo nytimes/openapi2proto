@@ -36,7 +36,7 @@ package {{ packageName .Info.Title }};
 {{ $endpoint.ProtoMessages $path }}
 {{ end }}
 {{ range $modelName, $model := .Definitions }}
-{{ $model.ProtoMessage $modelName counter -1 }}
+{{ $model.ProtoMessage "" $modelName counter -1 }}
 {{ end }}{{ $basePath := .BasePath }}
 service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths }}
 {{ $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
@@ -50,11 +50,11 @@ const protoEndpointTmplStr = `    rpc {{ .Name }}({{ .RequestName }}) returns ({
       };
     {{ end }}{{"}"}}`
 
-const protoMsgTmplStr = `{{ $i := counter }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
-{{ indent $depth }}    {{ $prop.ProtoMessage $propName $i $depth }};{{ end }}
+const protoMsgTmplStr = `{{ $i := counter }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
+{{ indent $depth }}    {{ $prop.ProtoMessage $msgName $propName $i $depth }};{{ end }}
 {{ indent $depth }}}`
 
-const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name}}enum {{ .Name }} {{"{"}}{{ range $index, $pName := .Enum }}
+const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name }}enum {{ .Name }} {{"{"}}{{ range $index, $pName := .Enum }}
 {{ indent $depth }}    {{ toEnum $name $pName $depth }} = {{ inc $i }};{{ end }}
 {{ indent $depth }}}`
 
@@ -111,11 +111,12 @@ func toEnum(name, enum string, depth int) string {
 	if _, err := strconv.Atoi(enum); err == nil || depth > 0 {
 		e = name + "_" + enum
 	}
+	e = strings.Replace(e, " & ", " AND ", -1)
+	e = strings.Replace(e, "&", "_AND_", -1)
 	e = strings.Replace(e, " ", "_", -1)
 	re := regexp.MustCompile(`[%\{\}\[\]()/\.'’-]`)
 	e = re.ReplaceAllString(e, "")
-	e = strings.Replace(e, "&", "and", -1)
-	return e
+	return strings.ToUpper(e)
 }
 
 var (
