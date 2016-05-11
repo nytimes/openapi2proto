@@ -26,7 +26,7 @@ There are 2 CLI flags for using the tool:
 
 ## Example
 ```
-╰─ openapi2proto -spec books.json -yaml=false                                                                                      1 ↵
+╰─ openapi2proto -spec books.json -yaml=false
 syntax = "proto3";
 
 import "google/protobuf/struct.proto";
@@ -36,22 +36,22 @@ package booksapi;
 message GetListsformatRequest {
     string bestsellers_date = 1;
     string date = 2;
-    enum Format {
-        Format_json = 0;
-        Format_jsonp = 1;
+    enum GetListsformatRequest_Format {
+        GETLISTSFORMATREQUEST_FORMAT_JSON = 0;
+        GETLISTSFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    Format format = 3;
+    GetListsformatRequest_Format format = 3;
     string isbn = 4;
     string list = 5;
     int32 offset = 6;
     string published_date = 7;
     int32 rank = 8;
     int32 rank_last_week = 9;
-    enum Sort_order {
-        Sort_order_ASC = 0;
-        Sort_order_DESC = 1;
+    enum GetListsformatRequest_Sort_order {
+        GETLISTSFORMATREQUEST_SORT_ORDER_ASC = 0;
+        GETLISTSFORMATREQUEST_SORT_ORDER_DESC = 1;
     }
-    Sort_order sort_order = 10;
+    GetListsformatRequest_Sort_order sort_order = 10;
     int32 weeks_on_list = 11;
 }
 
@@ -155,11 +155,11 @@ message GetListsBestSellersHistoryResponse {
 
 message GetListsNamesformatRequest {
     string api_key = 1;
-    enum Format {
-        Format_json = 0;
-        Format_jsonp = 1;
+    enum GetListsNamesformatRequest_Format {
+        GETLISTSNAMESFORMATREQUEST_FORMAT_JSON = 0;
+        GETLISTSNAMESFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    Format format = 2;
+    GetListsNamesformatRequest_Format format = 2;
 }
 
 message GetListsNamesformatResponse {
@@ -179,11 +179,11 @@ message GetListsNamesformatResponse {
 
 message GetListsOverviewformatRequest {
     string api_key = 1;
-    enum Format {
-        Format_json = 0;
-        Format_jsonp = 1;
+    enum GetListsOverviewformatRequest_Format {
+        GETLISTSOVERVIEWFORMATREQUEST_FORMAT_JSON = 0;
+        GETLISTSOVERVIEWFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    Format format = 2;
+    GetListsOverviewformatRequest_Format format = 2;
     string published_date = 3;
 }
 
@@ -232,11 +232,11 @@ message GetListsDateListRequest {
     string published_date = 7;
     string rank = 8;
     int32 rank_last_week = 9;
-    enum Sort_order {
-        Sort_order_ASC = 0;
-        Sort_order_DESC = 1;
+    enum GetListsDateListRequest_Sort_order {
+        GETLISTSDATELISTREQUEST_SORT_ORDER_ASC = 0;
+        GETLISTSDATELISTREQUEST_SORT_ORDER_DESC = 1;
     }
-    Sort_order sort_order = 10;
+    GetListsDateListRequest_Sort_order sort_order = 10;
     int32 weeks_on_list = 11;
 }
 
@@ -291,11 +291,11 @@ message GetListsDateListResponse {
 message GetReviewsformatRequest {
     string api_key = 1;
     string author = 2;
-    enum Format {
-        Format_json = 0;
-        Format_jsonp = 1;
+    enum GetReviewsformatRequest_Format {
+        GETREVIEWSFORMATREQUEST_FORMAT_JSON = 0;
+        GETREVIEWSFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    Format format = 3;
+    GetReviewsformatRequest_Format format = 3;
     int32 isbn = 4;
     string title = 5;
 }
@@ -317,11 +317,11 @@ message GetReviewsformatResponse {
 }
 
 service BooksAPIService {
-    rpc GetListsformat(GetListsformatRequest) returns (GetListsformatResponse);
-    rpc GetListsBestSellersHistory(GetListsBestSellersHistoryRequest) returns (GetListsBestSellersHistoryResponse);
-    rpc GetListsNamesformat(GetListsNamesformatRequest) returns (GetListsNamesformatResponse);
-    rpc GetListsOverviewformat(GetListsOverviewformatRequest) returns (GetListsOverviewformatResponse);
-    rpc GetListsDateList(GetListsDateListRequest) returns (GetListsDateListResponse);
-    rpc GetReviewsformat(GetReviewsformatRequest) returns (GetReviewsformatResponse);
+    rpc GetListsformat(GetListsformatRequest) returns (GetListsformatResponse) {}
+    rpc GetListsBestSellersHistory(GetListsBestSellersHistoryRequest) returns (GetListsBestSellersHistoryResponse) {}
+    rpc GetListsNamesformat(GetListsNamesformatRequest) returns (GetListsNamesformatResponse) {}
+    rpc GetListsOverviewformat(GetListsOverviewformatRequest) returns (GetListsOverviewformatResponse) {}
+    rpc GetListsDateList(GetListsDateListRequest) returns (GetListsDateListResponse) {}
+    rpc GetReviewsformat(GetReviewsformatRequest) returns (GetReviewsformatResponse) {}
 }
 ```
