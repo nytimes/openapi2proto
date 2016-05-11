@@ -418,7 +418,7 @@
           "type": "string"
         },
         "concept_updated": {
-          "type": "string"
+          "$ref": "#/definitions/TestStringRef"
         },
         "class": {
 			"type": "string",
@@ -430,6 +430,10 @@
 			]
         }
       }
+    },
+    "TestStringRef": {
+      "type": "string",
+      "minLength": 3
     },
     "TestModel": {
       "type": "object",

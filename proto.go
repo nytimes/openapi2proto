@@ -28,15 +28,15 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 }
 
 const protoFileTmplStr = `syntax = "proto3";
-{{ $annotate := .Annotate }}{{ if $annotate }}
+{{ $defs := .Definitions }}{{ $annotate := .Annotate }}{{ if $annotate }}
 import "google/api/annotations.proto";
 {{ end }}
 package {{ packageName .Info.Title }};
 {{ range $path, $endpoint := .Paths }}
-{{ $endpoint.ProtoMessages $path }}
+{{ $endpoint.ProtoMessages $path $defs }}
 {{ end }}
-{{ range $modelName, $model := .Definitions }}
-{{ $model.ProtoMessage "" $modelName counter -1 }}
+{{ range $modelName, $model := $defs }}
+{{ $model.ProtoMessage "" $modelName $defs counter -1 }}
 {{ end }}{{ $basePath := .BasePath }}
 service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths }}
 {{ $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
@@ -50,8 +50,8 @@ const protoEndpointTmplStr = `    rpc {{ .Name }}({{ .RequestName }}) returns ({
       };
     {{ end }}{{"}"}}`
 
-const protoMsgTmplStr = `{{ $i := counter }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
-{{ indent $depth }}    {{ $prop.ProtoMessage $msgName $propName $i $depth }};{{ end }}
+const protoMsgTmplStr = `{{ $i := counter }}{{ $defs := .Defs }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
+{{ indent $depth }}    {{ $prop.ProtoMessage $msgName $propName $defs $i $depth }};{{ end }}
 {{ indent $depth }}}`
 
 const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name }}enum {{ .Name }} {{"{"}}{{ range $index, $pName := .Enum }}

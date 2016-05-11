@@ -108,27 +108,44 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 	return ""
 }
 
+func refType(name, ref string, defs map[string]*Items) string {
+	itemType := strings.TrimLeft(ref, "#/definitions/")
+	if i, ok := defs[itemType]; ok {
+		if i.Type != "object" {
+			typ, ok := i.Type.(string)
+			if !ok {
+				log.Fatalf("invalid $ref object referenced with a type of %s", i.Type)
+			}
+			itemType = typ
+		}
+	}
+	return itemType
+}
+
+func refDef(name, ref string, index int, defs map[string]*Items) string {
+	itemType := refType(name, ref, defs)
+	return fmt.Sprintf("%s %s = %d", itemType, name, index)
+}
+
 // ProtoMessage will generate a set of fields for a protobuf v3 schema given the
 // current Items and information.
-func (i *Items) ProtoMessage(msgName, name string, indx *int, depth int) string {
+func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx *int, depth int) string {
 	*indx++
 	index := *indx
 	name = strings.Replace(name, "-", "_", -1)
 
 	if i.Ref != "" {
-		itemType := strings.TrimLeft(i.Ref, "#/definitions/")
-		return fmt.Sprintf("%s %s = %d", itemType, name, index)
+		return refDef(name, i.Ref, index, defs)
 	}
 
 	// for parameters
 	if i.Schema != nil && i.Schema.Ref != "" {
-		itemType := strings.TrimLeft(i.Schema.Ref, "#/definitions/")
-		return fmt.Sprintf("%s %s = %d", itemType, name, index)
+		return refDef(name, i.Schema.Ref, index, defs)
 	}
 
 	switch i.Type.(type) {
 	case string:
-		return protoComplex(i, i.Type.(string), msgName, name, indx, depth)
+		return protoComplex(i, i.Type.(string), msgName, name, defs, indx, depth)
 	case []interface{}:
 		types := i.Type.([]interface{})
 		hasNull := false
@@ -185,7 +202,7 @@ func (i *Items) ProtoMessage(msgName, name string, indx *int, depth int) string 
 	return ""
 }
 
-func protoComplex(i *Items, typ, msgName, name string, index *int, depth int) string {
+func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, index *int, depth int) string {
 	switch typ {
 	case "object":
 		// check for map declaration
@@ -193,7 +210,7 @@ func protoComplex(i *Items, typ, msgName, name string, index *int, depth int) st
 			var itemType string
 			switch {
 			case i.AdditionalProperties.Ref != "":
-				itemType = strings.TrimLeft(i.AdditionalProperties.Ref, "#/definitions/")
+				itemType = refType(name, i.AdditionalProperties.Ref, defs)
 			case i.AdditionalProperties.Type != nil:
 				itemType = i.AdditionalProperties.Type.(string)
 			}
@@ -203,13 +220,13 @@ func protoComplex(i *Items, typ, msgName, name string, index *int, depth int) st
 		// check for referenced schema object (parameters/fields)
 		if i.Schema != nil {
 			if i.Schema.Ref != "" {
-				return fmt.Sprintf("%s%s %s = %d", indent(depth+1), strings.TrimLeft(i.Schema.Ref, "#/definitions/"), name, *index)
+				return refDef(indent(depth+1)+name, i.Schema.Ref, *index, defs)
 			}
 		}
 
 		// otherwise, normal object model
 		i.Model.Name = strings.Title(name)
-		msgStr := i.Model.ProtoModel(i.Model.Name, depth+1)
+		msgStr := i.Model.ProtoModel(i.Model.Name, depth+1, defs)
 		if depth < 0 {
 			return msgStr
 		}
@@ -224,8 +241,7 @@ func protoComplex(i *Items, typ, msgName, name string, index *int, depth int) st
 
 			// CHECK FOR REF
 			if i.Items.Ref != "" {
-				itemType := strings.TrimLeft(i.Items.Ref, "#/definitions/")
-				return fmt.Sprintf("repeated %s %s = %d", itemType, name, *index)
+				return "repeated " + refDef(name, i.Items.Ref, *index, defs)
 			}
 
 			// breaks on 'Class' :\
@@ -234,7 +250,7 @@ func protoComplex(i *Items, typ, msgName, name string, index *int, depth int) st
 			} else {
 				i.Items.Model.Name = strings.Title(name)
 			}
-			msgStr := i.Items.Model.ProtoModel(i.Items.Model.Name, depth+1)
+			msgStr := i.Items.Model.ProtoModel(i.Items.Model.Name, depth+1, defs)
 			return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), i.Items.Model.Name, name, *index)
 		}
 
@@ -306,14 +322,14 @@ func pathMethodToName(path, method string) string {
 // based on the response scehma. If the response is an array
 // type, it will get wrapped in a generic message with a single
 // 'items' field to contain the array.
-func (r *Response) ProtoMessage(endpointName string) string {
+func (r *Response) ProtoMessage(endpointName string, defs map[string]*Items) string {
 	name := endpointName + "Response"
 	switch r.Schema.Type {
 	case "object":
-		return r.Schema.Model.ProtoModel(name, 0)
+		return r.Schema.Model.ProtoModel(name, 0, defs)
 	case "array":
 		model := &Model{Properties: map[string]*Items{"items": r.Schema}}
-		return model.ProtoModel(name, 0)
+		return model.ProtoModel(name, 0, defs)
 	default:
 		return ""
 	}
@@ -389,20 +405,20 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 	return b.String()
 }
 
-func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string) string {
+func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string, defs map[string]*Items) string {
 	var out bytes.Buffer
-	msg := e.Parameters.ProtoMessage(parentParams, endpointName)
+	msg := e.Parameters.ProtoMessage(parentParams, endpointName, defs)
 	if msg != "" {
 		out.WriteString(msg + "\n\n")
 	}
 
 	if resp, ok := e.Responses["200"]; ok {
-		msg := resp.ProtoMessage(endpointName)
+		msg := resp.ProtoMessage(endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg + "\n\n")
 		}
 	} else if resp, ok := e.Responses["201"]; ok {
-		msg := resp.ProtoMessage(endpointName)
+		msg := resp.ProtoMessage(endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg + "\n\n")
 		}
@@ -438,32 +454,32 @@ func (p *Path) ProtoEndpoints(annotate bool, base, path string) string {
 // ProtoMessages will return protobuf v3 messages that represents
 // the request Parameters of the endpoints within this path declaration
 // and any custom response messages not listed in the definitions.
-func (p *Path) ProtoMessages(path string) string {
+func (p *Path) ProtoMessages(path string, defs map[string]*Items) string {
 	var out bytes.Buffer
 	if p.Get != nil {
 		endpointName := pathMethodToName(path, "get")
-		msg := p.Get.protoMessages(p.Parameters, endpointName)
+		msg := p.Get.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Put != nil {
 		endpointName := pathMethodToName(path, "put")
-		msg := p.Put.protoMessages(p.Parameters, endpointName)
+		msg := p.Put.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Post != nil {
 		endpointName := pathMethodToName(path, "post")
-		msg := p.Post.protoMessages(p.Parameters, endpointName)
+		msg := p.Post.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Delete != nil {
 		endpointName := pathMethodToName(path, "delete")
-		msg := p.Delete.protoMessages(p.Parameters, endpointName)
+		msg := p.Delete.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
@@ -474,7 +490,7 @@ func (p *Path) ProtoMessages(path string) string {
 
 // ProtoMessage will return a protobuf v3 message that represents
 // the request Parameters.
-func (p Parameters) ProtoMessage(parent Parameters, endpointName string) string {
+func (p Parameters) ProtoMessage(parent Parameters, endpointName string, defs map[string]*Items) string {
 	m := &Model{Properties: map[string]*Items{}}
 	for _, item := range p {
 		m.Properties[item.Name] = item
@@ -491,7 +507,12 @@ func (p Parameters) ProtoMessage(parent Parameters, endpointName string) string 
 	var b bytes.Buffer
 	m.Name = endpointName + "Request"
 	m.Depth = 0
-	err := protoMsgTmpl.Execute(&b, m)
+
+	s := struct {
+		*Model
+		Defs map[string]*Items
+	}{m, defs}
+	err := protoMsgTmpl.Execute(&b, s)
 	if err != nil {
 		log.Fatal("unable to protobuf parameters: ", err)
 	}
@@ -500,11 +521,15 @@ func (p Parameters) ProtoMessage(parent Parameters, endpointName string) string 
 
 // ProtoMessage will return a protobuf v3 message that represents
 // the current Model.
-func (m *Model) ProtoModel(name string, depth int) string {
+func (m *Model) ProtoModel(name string, depth int, defs map[string]*Items) string {
 	var b bytes.Buffer
 	m.Name = name
 	m.Depth = depth
-	err := protoMsgTmpl.Execute(&b, m)
+	s := struct {
+		*Model
+		Defs map[string]*Items
+	}{m, defs}
+	err := protoMsgTmpl.Execute(&b, s)
 	if err != nil {
 		log.Fatal("unable to protobuf model: ", err)
 	}
