@@ -248,8 +248,10 @@ func protoComplex(i *Items, typ, msgName, name string, index *int, depth int) st
 				eName = name
 			}
 
+			eName = strings.Title(eName)
+
 			if msgName != "" {
-				eName = msgName + "_" + eName
+				eName = strings.Title(msgName) + "_" + eName
 			}
 
 			msgStr := ProtoEnum(eName, i.Enum, depth+1)

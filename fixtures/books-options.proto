@@ -9,22 +9,22 @@ package booksapi;
 message GetListsformatRequest {
     string bestsellers_date = 1;
     string date = 2;
-    enum GetListsformatRequest_format {
+    enum GetListsformatRequest_Format {
         GETLISTSFORMATREQUEST_FORMAT_JSON = 0;
         GETLISTSFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    GetListsformatRequest_format format = 3;
+    GetListsformatRequest_Format format = 3;
     string isbn = 4;
     string list = 5;
     int32 offset = 6;
     string published_date = 7;
     int32 rank = 8;
     int32 rank_last_week = 9;
-    enum GetListsformatRequest_sort_order {
+    enum GetListsformatRequest_Sort_order {
         GETLISTSFORMATREQUEST_SORT_ORDER_ASC = 0;
         GETLISTSFORMATREQUEST_SORT_ORDER_DESC = 1;
     }
-    GetListsformatRequest_sort_order sort_order = 10;
+    GetListsformatRequest_Sort_order sort_order = 10;
     int32 weeks_on_list = 11;
 }
 
@@ -128,11 +128,11 @@ message GetListsBestSellersHistoryResponse {
 
 message GetListsNamesformatRequest {
     string api_key = 1;
-    enum GetListsNamesformatRequest_format {
+    enum GetListsNamesformatRequest_Format {
         GETLISTSNAMESFORMATREQUEST_FORMAT_JSON = 0;
         GETLISTSNAMESFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    GetListsNamesformatRequest_format format = 2;
+    GetListsNamesformatRequest_Format format = 2;
 }
 
 message GetListsNamesformatResponse {
@@ -152,11 +152,11 @@ message GetListsNamesformatResponse {
 
 message GetListsOverviewformatRequest {
     string api_key = 1;
-    enum GetListsOverviewformatRequest_format {
+    enum GetListsOverviewformatRequest_Format {
         GETLISTSOVERVIEWFORMATREQUEST_FORMAT_JSON = 0;
         GETLISTSOVERVIEWFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    GetListsOverviewformatRequest_format format = 2;
+    GetListsOverviewformatRequest_Format format = 2;
     string published_date = 3;
 }
 
@@ -205,11 +205,11 @@ message GetListsDateListRequest {
     string published_date = 7;
     string rank = 8;
     int32 rank_last_week = 9;
-    enum GetListsDateListRequest_sort_order {
+    enum GetListsDateListRequest_Sort_order {
         GETLISTSDATELISTREQUEST_SORT_ORDER_ASC = 0;
         GETLISTSDATELISTREQUEST_SORT_ORDER_DESC = 1;
     }
-    GetListsDateListRequest_sort_order sort_order = 10;
+    GetListsDateListRequest_Sort_order sort_order = 10;
     int32 weeks_on_list = 11;
 }
 
@@ -264,11 +264,11 @@ message GetListsDateListResponse {
 message GetReviewsformatRequest {
     string api_key = 1;
     string author = 2;
-    enum GetReviewsformatRequest_format {
+    enum GetReviewsformatRequest_Format {
         GETREVIEWSFORMATREQUEST_FORMAT_JSON = 0;
         GETREVIEWSFORMATREQUEST_FORMAT_JSONP = 1;
     }
-    GetReviewsformatRequest_format format = 3;
+    GetReviewsformatRequest_Format format = 3;
     int32 isbn = 4;
     string title = 5;
 }

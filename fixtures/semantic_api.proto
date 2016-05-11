@@ -7,7 +7,7 @@ import "google/protobuf/any.proto";
 package thesemanticapi;
 
 message GetConceptSearchRequest {
-    enum GetConceptSearchRequest_field {
+    enum GetConceptSearchRequest_Field {
         GETCONCEPTSEARCHREQUEST_FIELD_ALL = 0;
         GETCONCEPTSEARCHREQUEST_FIELD_PAGES = 1;
         GETCONCEPTSEARCHREQUEST_FIELD_TICKER_SYMBOL = 2;
@@ -19,7 +19,7 @@ message GetConceptSearchRequest {
         GETCONCEPTSEARCHREQUEST_FIELD_SCOPE_NOTES = 8;
         GETCONCEPTSEARCHREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
-    GetConceptSearchRequest_field fields = 1;
+    GetConceptSearchRequest_Field fields = 1;
     int32 offset = 2;
     string query = 3;
 }
@@ -32,14 +32,14 @@ message GetConceptSearchResponse {
 }
 
 message GetNameConceptTypeSpecificConceptRequest {
-    enum GetNameConceptTypeSpecificConceptRequest_concept_type {
+    enum GetNameConceptTypeSpecificConceptRequest_Concept_type {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_GEO = 0;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_PER = 1;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_ORG = 2;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_DES = 3;
     }
-    GetNameConceptTypeSpecificConceptRequest_concept_type concept_type = 1;
-    enum GetNameConceptTypeSpecificConceptRequest_field {
+    GetNameConceptTypeSpecificConceptRequest_Concept_type concept_type = 1;
+    enum GetNameConceptTypeSpecificConceptRequest_Field {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_ALL = 0;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_PAGES = 1;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_TICKER_SYMBOL = 2;
@@ -51,7 +51,7 @@ message GetNameConceptTypeSpecificConceptRequest {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_SCOPE_NOTES = 8;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
-    GetNameConceptTypeSpecificConceptRequest_field fields = 2;
+    GetNameConceptTypeSpecificConceptRequest_Field fields = 2;
     string query = 3;
     string specific_concept = 4;
 }
@@ -140,13 +140,13 @@ message Concept {
 }
 
 message ConceptRelation {
-    enum ConceptRelation_class {
+    enum ConceptRelation_Class {
         CONCEPTRELATION_CLASS_NYTD_GEO = 0;
         CONCEPTRELATION_CLASS_NYTD_PER = 1;
         CONCEPTRELATION_CLASS_NYTD_ORG = 2;
         CONCEPTRELATION_CLASS_NYTD_DES = 3;
     }
-    ConceptRelation_class class = 1;
+    ConceptRelation_Class class = 1;
     string concept_created = 2;
     int32 concept_id = 3;
     string concept_name = 4;
@@ -158,13 +158,13 @@ message ConceptRelation {
 }
 
 message TestModel {
-    enum TestModel_category {
+    enum TestModel_Category {
         TESTMODEL_CATEGORY_NYTD_GEO = 0;
         TESTMODEL_CATEGORY_NYTD_PER = 1;
         TESTMODEL_CATEGORY_NYTD_ORG = 2;
         TESTMODEL_CATEGORY_NYTD_DES = 3;
     }
-    TestModel_category category = 1;
+    TestModel_Category category = 1;
     message Class {
         string something = 1;
     }
