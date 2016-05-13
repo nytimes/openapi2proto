@@ -512,7 +512,7 @@ func findRefName(i *Items, defs map[string]*Items) string {
 	item, ok := defs[itemType]
 
 	if !ok {
-		log.Fatal("unable to find referenced type for parameter: %#v ", i)
+		log.Fatalf("unable to find referenced type for parameter: %#v", i)
 	}
 
 	return item.Name
@@ -543,7 +543,7 @@ func (p Parameters) ProtoMessage(parent Parameters, endpointName string, defs ma
 	return b.String()
 }
 
-// ProtoMessage will return a protobuf v3 message that represents
+// ProtoModel will return a protobuf v3 message that represents
 // the current Model.
 func (m *Model) ProtoModel(name string, depth int, defs map[string]*Items) string {
 	var b bytes.Buffer
