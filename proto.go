@@ -13,6 +13,10 @@ import (
 // GenerateProto will attempt to generate an protobuf version 3
 // schema from the given OpenAPI definition.
 func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
+	// jam all the parameters into the normal 'definitions' for easier reference.
+	for name, param := range api.Parameters {
+		api.Definitions[name] = param
+	}
 	var out bytes.Buffer
 	data := struct {
 		*APIDefinition

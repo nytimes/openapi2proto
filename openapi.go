@@ -23,6 +23,7 @@ type APIDefinition struct {
 	Produces    []string          `yaml:"produces" json:"produces"`
 	Paths       map[string]*Path  `yaml:"paths" json:"paths"`
 	Definitions map[string]*Items `yaml:"definitions" json:"definitions"`
+	Parameters  map[string]*Items `yaml:"parameters" json:"parameters"`
 }
 
 // Path represents all of the endpoints and parameters available for a single
@@ -110,8 +111,10 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 
 func refType(name, ref string, defs map[string]*Items) string {
 	itemType := strings.TrimLeft(ref, "#/definitions/")
+	// in case it's a param reference
+	itemType = strings.TrimLeft(itemType, "#/parameters/")
 	if i, ok := defs[itemType]; ok {
-		if i.Type != "object" {
+		if i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
 			typ, ok := i.Type.(string)
 			if !ok {
 				log.Fatalf("invalid $ref object referenced with a type of %s", i.Type)
@@ -488,16 +491,37 @@ func (p *Path) ProtoMessages(path string, defs map[string]*Items) string {
 	return strings.TrimSuffix(out.String(), "\n")
 }
 
+func paramsToProps(parent, child Parameters, defs map[string]*Items) map[string]*Items {
+	props := map[string]*Items{}
+	// combine all parameters for endpoint
+	for _, item := range child {
+		props[findRefName(item, defs)] = item
+	}
+	for _, item := range parent {
+		props[findRefName(item, defs)] = item
+	}
+	return props
+}
+
+func findRefName(i *Items, defs map[string]*Items) string {
+	if i.Name != "" {
+		return i.Name
+	}
+
+	itemType := strings.TrimLeft(i.Ref, "#/parameters/")
+	item, ok := defs[itemType]
+
+	if !ok {
+		log.Fatal("unable to find referenced type for parameter: %#v ", i)
+	}
+
+	return item.Name
+}
+
 // ProtoMessage will return a protobuf v3 message that represents
 // the request Parameters.
 func (p Parameters) ProtoMessage(parent Parameters, endpointName string, defs map[string]*Items) string {
-	m := &Model{Properties: map[string]*Items{}}
-	for _, item := range p {
-		m.Properties[item.Name] = item
-	}
-	for _, item := range parent {
-		m.Properties[item.Name] = item
-	}
+	m := &Model{Properties: paramsToProps(parent, p, defs)}
 
 	// do nothing, no props and should be a google.protobuf.Empty
 	if len(m.Properties) == 0 {

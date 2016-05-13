@@ -32,13 +32,7 @@ message GetConceptSearchResponse {
 }
 
 message GetNameConceptTypeSpecificConceptRequest {
-    enum GetNameConceptTypeSpecificConceptRequest_Concept_type {
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_GEO = 0;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_PER = 1;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_ORG = 2;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_CONCEPT_TYPE_NYTD_DES = 3;
-    }
-    GetNameConceptTypeSpecificConceptRequest_Concept_type concept_type = 1;
+    ConceptTypeParam concept_type = 1;
     enum GetNameConceptTypeSpecificConceptRequest_Field {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_ALL = 0;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_PAGES = 1;
@@ -155,6 +149,13 @@ message ConceptRelation {
     string concept_updated = 7;
     int32 is_times_tag = 8;
     string vernacular = 9;
+}
+
+enum ConceptTypeParam {
+    NYTD_GEO = 0;
+    NYTD_PER = 1;
+    NYTD_ORG = 2;
+    NYTD_DES = 3;
 }
 
 message TestModel {
