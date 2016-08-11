@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"net/url"
+	"path"
 	"regexp"
 	"strings"
 )
@@ -109,10 +111,60 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 	return ""
 }
 
+// $ref should be in the format of:
+// {import path}#/{definitions|parameters}/{typeName}
+// this will produce
 func refType(name, ref string, defs map[string]*Items) string {
-	itemType := strings.TrimLeft(ref, "#/definitions/")
+	var (
+		rawPkg   string
+		pkg      string
+		itemType string
+	)
+
+	// split on '#/'
+	refDatas := strings.SplitN(ref, "#/", 2)
+
+	// check for references outside of this spec
+	var rawImport string
+	if len(refDatas) > 1 {
+		rawPkg = refDatas[0]
+		itemType = refDatas[1]
+	}
+
+	if rawPkg != "" {
+		// if URL, parse it
+		if strings.HasPrefix(rawPkg, "http") {
+			u, err := url.Parse(rawPkg)
+			if err != nil {
+				log.Fatalf("invalid external reference URL: %s: %s", ref, err)
+			}
+
+			pkg = u.Path
+		} else {
+			// otherwise, parse file path
+			path.Clean(rawPkg)
+		}
+
+	}
+
+	// this is a remote reference directly to a file
+	if !strings.Contains(ref, "#/") && len(refDatas) == 1 {
+
+	}
+
+	// use file name as type
+	// if there is a #/ ref, use that instead
+
+	itemType := strings.TrimLeft(ref, "definitions/")
 	// in case it's a param reference
-	itemType = strings.TrimLeft(itemType, "#/parameters/")
+	itemType = strings.TrimLeft(itemType, "parameters/")
+	// or a response ref
+	itemType = strings.TrimLeft(itemType, "responses/")
+
+	if rawImport != "" {
+		// dont check def, just return with import
+	}
+
 	if i, ok := defs[itemType]; ok {
 		if i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
 			typ, ok := i.Type.(string)
