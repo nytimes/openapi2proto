@@ -86,6 +86,16 @@
         }
       }
     },
+    "\/something\/blah.json": {
+        "get": {
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description":"this is an empty response"
+                }
+            }
+        }
+    },
     "\/concept\/search.json": {
       "get": {
         "parameters": [

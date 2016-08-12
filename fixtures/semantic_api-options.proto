@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "google/protobuf/wrappers.proto";
 
+import "google/protobuf/empty.proto";
+
 import "google/protobuf/any.proto";
 
 import "google/api/annotations.proto";
@@ -200,6 +202,11 @@ service TheSemanticAPIService {
     rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/name/{concept-type}/{specific-concept}.json"
+      };
+    }
+    rpc GetSomethingBlah(google.protobuf.Empty) returns (google.protobuf.Empty) {
+      option (google.api.http) = {
+        get: "/svc/semantic/v2/concept/something/blah.json"
       };
     }
 }

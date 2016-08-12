@@ -374,11 +374,14 @@ func pathMethodToName(path, method string) string {
 }
 
 // ProtoMessage will return a protobuf message declaration
-// based on the response scehma. If the response is an array
+// based on the response schema. If the response is an array
 // type, it will get wrapped in a generic message with a single
 // 'items' field to contain the array.
 func (r *Response) ProtoMessage(endpointName string, defs map[string]*Items) string {
 	name := endpointName + "Response"
+	if r.Schema == nil {
+		return ""
+	}
 	switch r.Schema.Type {
 	case "object":
 		return r.Schema.Model.ProtoModel(name, 0, defs)
@@ -391,6 +394,9 @@ func (r *Response) ProtoMessage(endpointName string, defs map[string]*Items) str
 }
 
 func (r *Response) responseName(endpointName string) string {
+	if r.Schema == nil {
+		return "google.protobuf.Empty"
+	}
 	switch r.Schema.Type {
 	case "object", "array":
 		return endpointName + "Response"

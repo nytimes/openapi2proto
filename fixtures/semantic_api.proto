@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "google/protobuf/wrappers.proto";
 
+import "google/protobuf/empty.proto";
+
 import "google/protobuf/any.proto";
 
 import "blah/thing.proto";
@@ -192,4 +194,5 @@ message TestModel {
 service TheSemanticAPIService {
     rpc GetConceptSearch(GetConceptSearchRequest) returns (GetConceptSearchResponse) {}
     rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse) {}
+    rpc GetSomethingBlah(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
