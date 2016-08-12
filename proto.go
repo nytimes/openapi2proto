@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"text/template"
@@ -13,16 +14,25 @@ import (
 // GenerateProto will attempt to generate an protobuf version 3
 // schema from the given OpenAPI definition.
 func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
+	var imports []string
 	// jam all the parameters into the normal 'definitions' for easier reference.
 	for name, param := range api.Parameters {
 		api.Definitions[name] = param
 	}
+
+	// determine external imports by traversing struct, looking for $refs
+	for _, def := range api.Definitions {
+		imports = append(imports, traverseItemsForImports(def, api.Definitions)...)
+	}
+	sort.Strings(imports)
+
 	var out bytes.Buffer
 	data := struct {
 		*APIDefinition
 		Annotate bool
+		Imports  []string
 	}{
-		api, annotate,
+		api, annotate, imports,
 	}
 	err := protoFileTmpl.Execute(&out, data)
 	if err != nil {
@@ -31,9 +41,41 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	return cleanSpacing(addImports(out.Bytes())), nil
 }
 
+func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
+	imports := map[string]struct{}{}
+	if item.Ref != "" {
+		_, pkg := refType(item.Ref, defs)
+		if pkg != "" {
+			imports[pkg] = struct{}{}
+		}
+	}
+	for _, itm := range item.Model.Properties {
+		for _, impt := range traverseItemsForImports(itm, defs) {
+			imports[impt] = struct{}{}
+		}
+	}
+	if item.Items != nil {
+		for _, impt := range traverseItemsForImports(item.Items, defs) {
+			imports[impt] = struct{}{}
+		}
+	}
+	if item.AdditionalProperties != nil {
+		for _, impt := range traverseItemsForImports(item.AdditionalProperties, defs) {
+			imports[impt] = struct{}{}
+		}
+	}
+	var out []string
+	for impt, _ := range imports {
+		out = append(out, impt)
+	}
+	return out
+}
+
 const protoFileTmplStr = `syntax = "proto3";
 {{ $defs := .Definitions }}{{ $annotate := .Annotate }}{{ if $annotate }}
 import "google/api/annotations.proto";
+{{ end }}{{ range $import := .Imports }}
+import "{{ $import }}";
 {{ end }}
 package {{ packageName .Info.Title }};
 {{ range $path, $endpoint := .Paths }}

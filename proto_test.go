@@ -10,15 +10,16 @@ import (
 
 func TestRefType(t *testing.T) {
 	tests := []struct {
-		name string
-		ref  string
-		defs map[string]*Items
+		tName string
+		ref   string
+		defs  map[string]*Items
 
 		want    string
 		wantPkg string
 	}{
 		{
-			"name",
+			"Simple ref",
+
 			"#/definitions/Name",
 			map[string]*Items{
 				"Name": &Items{
@@ -29,42 +30,66 @@ func TestRefType(t *testing.T) {
 			"",
 		},
 		{
-			"name",
+			"URL nested ref",
+
 			"http://something.com/commons/name.json#/definitions/Name",
 			nil,
 			"commons.name.Name",
 			"commons/name.proto",
 		},
 		{
-			"name",
+			"URL no ref",
+
 			"http://something.com/commons/name.json",
 			nil,
 			"commons.Name",
 			"commons/name.proto",
 		},
 		{
-			"name",
+			"relative no ref",
+
 			"commons/names/Name.json",
 			nil,
 			"commons.names.Name",
 			"commons/names/name.proto",
 		},
 		{
-			"name",
+			"relative nested ref",
+
 			"commons/names/Name.json#/definitions/Name",
 			nil,
 			"commons.names.name.Name",
 			"commons/names/name.proto",
 		},
 		{
-			"name",
+			"relative nested ref",
+
+			"something.json#/definitions/RelativeRef",
+			nil,
+			"something.RelativeRef",
+			"something.proto",
+		},
+
+		{
+			"relative nested ref",
+
+			"names.json#/definitions/Name",
+			nil,
+			"names.Name",
+			"names.proto",
+		},
+
+		{
+			"relative ref, back one dir",
+
 			"../commons/names/Name.json",
 			nil,
 			"commons.names.Name",
 			"commons/names/name.proto",
 		},
 		{
-			"name",
+			"relative nested ref, back two dir",
+
 			"../../commons/names/Name.json#/definitions/Name",
 			nil,
 			"commons.names.name.Name",
@@ -73,13 +98,13 @@ func TestRefType(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		got, gotPkg := refType(test.name, test.ref, test.defs)
+		got, gotPkg := refType(test.ref, test.defs)
 		if got != test.want {
-			t.Errorf("expected %q got %q", test.want, got)
+			t.Errorf("[%s] expected %q got %q", test.tName, test.want, got)
 		}
 
 		if gotPkg != test.wantPkg {
-			t.Errorf("expected package %q got %q", test.wantPkg, gotPkg)
+			t.Errorf("[%s] expected package %q got %q", test.tName, test.wantPkg, gotPkg)
 		}
 	}
 }
