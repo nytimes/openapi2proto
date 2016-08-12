@@ -415,9 +415,6 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 }
 
 func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string, defs map[string]*Items) string {
-	if parentParams == nil {
-		parentParams = Parameters([]*Items{})
-	}
 	var out bytes.Buffer
 	msg := e.Parameters.ProtoMessage(parentParams, endpointName, defs)
 	if msg != "" {
