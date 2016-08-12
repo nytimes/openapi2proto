@@ -512,6 +512,15 @@
             "additionalProperties": {
                 "type": "string"
             }
+        },
+        "test_relative_ref": {
+            "$ref": "something.json#/definitions/RelativeRef"
+        },
+        "test_relative_backdir_ref": {
+            "$ref": "../something.json#/definitions/RelativeBackRef"
+        },
+        "test_external_ref": {
+            "$ref": "http://blah.com/blah/thing.json"
         }
      }
     }
