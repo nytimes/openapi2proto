@@ -8,6 +8,107 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+func TestRefType(t *testing.T) {
+	tests := []struct {
+		tName string
+		ref   string
+		defs  map[string]*Items
+
+		want    string
+		wantPkg string
+	}{
+		{
+			"Simple ref",
+
+			"#/definitions/Name",
+			map[string]*Items{
+				"Name": &Items{
+					Type: "object",
+				},
+			},
+			"Name",
+			"",
+		},
+		{
+			"URL nested ref",
+
+			"http://something.com/commons/name.json#/definitions/Name",
+			nil,
+			"commons.name.Name",
+			"commons/name.proto",
+		},
+		{
+			"URL no ref",
+
+			"http://something.com/commons/name.json",
+			nil,
+			"commons.Name",
+			"commons/name.proto",
+		},
+		{
+			"relative no ref",
+
+			"commons/names/Name.json",
+			nil,
+			"commons.names.Name",
+			"commons/names/name.proto",
+		},
+		{
+			"relative nested ref",
+
+			"commons/names/Name.json#/definitions/Name",
+			nil,
+			"commons.names.name.Name",
+			"commons/names/name.proto",
+		},
+		{
+			"relative nested ref",
+
+			"something.json#/definitions/RelativeRef",
+			nil,
+			"something.RelativeRef",
+			"something.proto",
+		},
+
+		{
+			"relative nested ref",
+
+			"names.json#/definitions/Name",
+			nil,
+			"names.Name",
+			"names.proto",
+		},
+
+		{
+			"relative ref, back one dir",
+
+			"../commons/names/Name.json",
+			nil,
+			"commons.names.Name",
+			"commons/names/name.proto",
+		},
+		{
+			"relative nested ref, back two dir",
+
+			"../../commons/names/Name.json#/definitions/Name",
+			nil,
+			"commons.names.name.Name",
+			"commons/names/name.proto",
+		},
+	}
+
+	for _, test := range tests {
+		got, gotPkg := refType(test.ref, test.defs)
+		if got != test.want {
+			t.Errorf("[%s] expected %q got %q", test.tName, test.want, got)
+		}
+
+		if gotPkg != test.wantPkg {
+			t.Errorf("[%s] expected package %q got %q", test.tName, test.wantPkg, gotPkg)
+		}
+	}
+}
+
 func TestGenerateProto(t *testing.T) {
 	tests := []struct {
 		yaml             bool
