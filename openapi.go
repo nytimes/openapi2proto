@@ -114,7 +114,7 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 // $ref should be in the format of:
 // {import path}#/{definitions|parameters}/{typeName}
 // this will produce
-func refType(name, ref string, defs map[string]*Items) string {
+func refType(name, ref string, defs map[string]*Items) (string, string) {
 	var (
 		rawPkg   string
 		pkg      string
@@ -131,7 +131,9 @@ func refType(name, ref string, defs map[string]*Items) string {
 		itemType = refDatas[1]
 	}
 
-	if rawPkg != "" {
+	if rawPkg != "" ||
+		strings.HasSuffix(ref, ".json") ||
+		strings.HasSuffix(ref, ".yaml") {
 		// if URL, parse it
 		if strings.HasPrefix(rawPkg, "http") {
 			u, err := url.Parse(rawPkg)
@@ -139,32 +141,27 @@ func refType(name, ref string, defs map[string]*Items) string {
 				log.Fatalf("invalid external reference URL: %s: %s", ref, err)
 			}
 
-			pkg = u.Path
-		} else {
-			// otherwise, parse file path
-			path.Clean(rawPkg)
+			rawPkg = u.Path
 		}
 
-	}
-
-	// this is a remote reference directly to a file
-	if !strings.Contains(ref, "#/") && len(refDatas) == 1 {
-
+		rawPkg = path.Clean(rawPkg)
+		rawPkg = strings.TrimPrefix(rawPkg, "/")
+		rawPkg = strings.ToLower(rawPkg)
+		// take out possible file types
+		rawPkg = strings.TrimSuffix(rawPkg, ".json")
+		rawPkg = strings.TrimSuffix(rawPkg, ".yaml")
 	}
 
 	// use file name as type
 	// if there is a #/ ref, use that instead
-
-	itemType := strings.TrimLeft(ref, "definitions/")
-	// in case it's a param reference
-	itemType = strings.TrimLeft(itemType, "parameters/")
-	// or a response ref
-	itemType = strings.TrimLeft(itemType, "responses/")
-
 	if rawImport != "" {
 		// dont check def, just return with import
 	}
 
+	itemType = strings.TrimLeft(itemType, "definitions/")
+	// in case it's a param reference
+	itemType = strings.TrimLeft(itemType, "parameters/")
+	itemType = strings.TrimLeft(itemType, "responses/")
 	if i, ok := defs[itemType]; ok {
 		if i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
 			typ, ok := i.Type.(string)
@@ -174,11 +171,16 @@ func refType(name, ref string, defs map[string]*Items) string {
 			itemType = typ
 		}
 	}
-	return itemType
+	if pkg != "" {
+		log.Print("ending: ", pkg, " and the type is: ", itemType)
+		itemType = strings.Replace(pkg, "/", ".", -1) + "." + itemType
+		pkg += ".proto"
+	}
+	return itemType, pkg
 }
 
 func refDef(name, ref string, index int, defs map[string]*Items) string {
-	itemType := refType(name, ref, defs)
+	itemType, _ := refType(name, ref, defs)
 	return fmt.Sprintf("%s %s = %d", itemType, name, index)
 }
 
@@ -265,7 +267,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			var itemType string
 			switch {
 			case i.AdditionalProperties.Ref != "":
-				itemType = refType(name, i.AdditionalProperties.Ref, defs)
+				itemType, _ = refType(name, i.AdditionalProperties.Ref, defs)
 			case i.AdditionalProperties.Type != nil:
 				itemType = i.AdditionalProperties.Type.(string)
 			}

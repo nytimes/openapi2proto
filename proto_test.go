@@ -8,6 +8,82 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+func TestRefType(t *testing.T) {
+	tests := []struct {
+		name string
+		ref  string
+		defs map[string]*Items
+
+		want    string
+		wantPkg string
+	}{
+		{
+			"name",
+			"#/definitions/Name",
+			map[string]*Items{
+				"Name": &Items{
+					Type: "object",
+				},
+			},
+			"Name",
+			"",
+		},
+		{
+			"name",
+			"http://something.com/commons/name.json#/definitions/Name",
+			nil,
+			"commons.name.Name",
+			"commons/name.proto",
+		},
+		{
+			"name",
+			"http://something.com/commons/name.json",
+			nil,
+			"commons.Name",
+			"commons/name.proto",
+		},
+		{
+			"name",
+			"commons/names/Name.json",
+			nil,
+			"commons.names.Name",
+			"commons/names/name.proto",
+		},
+		{
+			"name",
+			"commons/names/Name.json#/definitions/Name",
+			nil,
+			"commons.names.name.Name",
+			"commons/names/name.proto",
+		},
+		{
+			"name",
+			"../commons/names/Name.json",
+			nil,
+			"commons.names.Name",
+			"commons/names/name.proto",
+		},
+		{
+			"name",
+			"../../commons/names/Name.json#/definitions/Name",
+			nil,
+			"commons.names.name.Name",
+			"commons/names/name.proto",
+		},
+	}
+
+	for _, test := range tests {
+		got, gotPkg := refType(test.name, test.ref, test.defs)
+		if got != test.want {
+			t.Errorf("expected %q got %q", test.want, got)
+		}
+
+		if gotPkg != test.wantPkg {
+			t.Errorf("expected package %q got %q", test.wantPkg, gotPkg)
+		}
+	}
+}
+
 func TestGenerateProto(t *testing.T) {
 	tests := []struct {
 		yaml             bool
