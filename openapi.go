@@ -158,10 +158,10 @@ func refType(name, ref string, defs map[string]*Items) (string, string) {
 		// dont check def, just return with import
 	}
 
-	itemType = strings.TrimLeft(itemType, "definitions/")
+	itemType = strings.TrimPrefix(itemType, "definitions/")
 	// in case it's a param reference
-	itemType = strings.TrimLeft(itemType, "parameters/")
-	itemType = strings.TrimLeft(itemType, "responses/")
+	itemType = strings.TrimPrefix(itemType, "parameters/")
+	itemType = strings.TrimPrefix(itemType, "responses/")
 	if i, ok := defs[itemType]; ok {
 		if i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
 			typ, ok := i.Type.(string)
