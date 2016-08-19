@@ -184,19 +184,22 @@ func cleanSpacing(output []byte) []byte {
 }
 
 func addImports(output []byte) []byte {
-	if bytes.Contains(output, []byte("google.protobuf.Any")) {
+	if bytes.Contains(output, []byte("google.protobuf.Any")) &&
+		!bytes.Contains(output, []byte("import \"google/protobuf/any.proto")) {
 		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
 
 import "google/protobuf/any.proto";`), 1)
 	}
 
-	if bytes.Contains(output, []byte("google.protobuf.Empty")) {
+	if bytes.Contains(output, []byte("google.protobuf.Empty")) &&
+		!bytes.Contains(output, []byte("import \"google/protobuf/empty.proto")) {
 		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
 
 import "google/protobuf/empty.proto";`), 1)
 	}
 
-	if bytes.Contains(output, []byte("google.protobuf.NullValue")) {
+	if bytes.Contains(output, []byte("google.protobuf.NullValue")) &&
+		!bytes.Contains(output, []byte("import \"google/protobuf/struct.proto")) {
 		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
 
 import "google/protobuf/struct.proto";`), 1)
@@ -206,7 +209,8 @@ import "google/protobuf/struct.proto";`), 1)
 	if err != nil {
 		log.Fatal("unable to find wrapper values: ", err)
 	}
-	if match {
+	if match &&
+		!bytes.Contains(output, []byte("import \"google/protobuf/wrappers.proto")) {
 		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
 
 import "google/protobuf/wrappers.proto";`), 1)

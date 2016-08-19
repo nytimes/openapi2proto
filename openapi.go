@@ -132,6 +132,7 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 
 	if rawPkg != "" ||
 		strings.HasSuffix(ref, ".json") ||
+		strings.HasSuffix(ref, ".proto") ||
 		strings.HasSuffix(ref, ".yaml") {
 		if rawPkg == "" {
 			rawPkg = ref
