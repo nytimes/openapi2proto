@@ -521,6 +521,9 @@
         },
         "test_external_ref": {
             "$ref": "http://blah.com/blah/thing.json"
+        },
+        "test_any_ref": {
+            "$ref": "google/protobuf/any.proto"
         }
      }
     }
