@@ -70,6 +70,8 @@ type Items struct {
 	Format interface{} `yaml:"format,omitempty" json:"format,omitempty"`
 	Enum   []string    `yaml:"enum,omitempty" json:"enum,omitempty"`
 
+	ProtoTag int `yaml:"x-proto-tag" json:"x-proto-tag"`
+
 	// Map type
 	AdditionalProperties *Items `yaml:"additionalProperties" json:"additionalProperties"`
 
@@ -186,6 +188,9 @@ func refDef(name, ref string, index int, defs map[string]*Items) string {
 // current Items and information.
 func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx *int, depth int) string {
 	*indx++
+	if i.ProtoTag != 0 {
+		*indx = i.ProtoTag
+	}
 	index := *indx
 	name = strings.Replace(name, "-", "_", -1)
 

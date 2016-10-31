@@ -445,88 +445,103 @@
 			  "nytd_per",
 			  "nytd_org",
 			  "nytd_des"
-			]
+            ]
         }
       }
     },
     "TestStringRef": {
-      "type": "string",
-      "minLength": 3
+        "type": "string",
+        "minLength": 3
     },
     "TestModel": {
-      "type": "object",
-      "properties": {
-        "category": {
-			"type": "string",
-			"enum": [
-			  "nytd_geo",
-			  "nytd_per",
-			  "nytd_org",
-			  "nytd_des"
-			]
-        },
-		"class": {
-			"type": "array",
-			"items": {
-			"type":"object",
-			  "properties": {
-				"something": {
-					"type": "string"
-				}
-			  }
-			}
-        },
-		"test_bool": {
-			"type": "boolean"
-        },
-        "test_bool_value": {
-			"type": ["null", "boolean"]
-        },
-        "test_num_value": {
-			"type": ["null", "number"],
-            "format": "double"
-        },
-        "test_numer_value": {
-			"type": ["null", "number"]
-        },
-        "test_float_value": {
-			"type": ["null", "float"]
-        },
-        "test_string_value": {
-			"type": ["null", "string"]
-        },
-        "test_bytes_value": {
-			"type": ["null", "bytes"]
-        },
-        "test_any_value": {
-			"type": ["null", "string", "object"]
-        },
-        "test_map_object": {
-            "type": "object",
-            "additionalProperties": {
-                "$ref": "#/definitions/TestModel"
+        "type": "object",
+        "properties": {
+            "category": {
+                "type": "string",
+                "enum": [
+                    "nytd_geo",
+                    "nytd_per",
+                    "nytd_org",
+                    "nytd_des"
+                ],
+                "x-proto-tag": 1
+            },
+            "class": {
+                "type": "array",
+                "items": {
+                    "type":"object",
+                    "properties": {
+                        "something": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "x-proto-tag": 2
+            },
+            "test_bool": {
+                "type": "boolean",
+                "x-proto-tag": 3
+            },
+            "test_bool_value": {
+                "type": ["null", "boolean"],
+                "x-proto-tag": 4
+            },
+            "test_num_value": {
+                "type": ["null", "number"],
+                "format": "double",
+                "x-proto-tag": 5
+            },
+            "test_numer_value": {
+                "type": ["null", "number"],
+                "x-proto-tag": 6
+            },
+            "test_float_value": {
+                "type": ["null", "float"],
+                "x-proto-tag": 7
+            },
+            "test_string_value": {
+                "type": ["null", "string"],
+                "x-proto-tag": 8
+            },
+            "test_bytes_value": {
+                "type": ["null", "bytes"],
+                "x-proto-tag": 9
+            },
+            "test_any_value": {
+                "type": ["null", "string", "object"],
+                "x-proto-tag": 10
+            },
+            "test_map_object": {
+                "type": "object",
+                "additionalProperties": {
+                    "$ref": "#/definitions/TestModel"
+                },
+                "x-proto-tag": 11
+            },
+            "test_map_scalar": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "string"
+                },
+                "x-proto-tag": 12
+            },
+            "test_relative_ref": {
+                "$ref": "something.json#/definitions/RelativeRef",
+                "x-proto-tag": 13
+            },
+            "test_relative_backdir_ref": {
+                "$ref": "../something.json#/definitions/RelativeBackRef",
+                "x-proto-tag": 14
+            },
+            "test_external_ref": {
+                "$ref": "http://blah.com/blah/thing.json",
+                "x-proto-tag": 15
             }
-        },
-        "test_map_scalar": {
-            "type": "object",
-            "additionalProperties": {
-                "type": "string"
-            }
-        },
-        "test_relative_ref": {
-            "$ref": "something.json#/definitions/RelativeRef"
-        },
-        "test_relative_backdir_ref": {
-            "$ref": "../something.json#/definitions/RelativeBackRef"
-        },
-        "test_external_ref": {
-            "$ref": "http://blah.com/blah/thing.json"
         }
-     }
     }
   },
   "securityDefinitions": {
-    "apikey": {
+      "apikey": {
       "type": "apiKey",
       "name": "api-key",
       "in": "query"
