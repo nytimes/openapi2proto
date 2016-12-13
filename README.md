@@ -23,6 +23,7 @@ There are 2 CLI flags for using the tool:
 * Endpoints that respond with an array will be wrapped with a message type that has a single field, 'items', that contains the array.
 * Only "200" and "201" responses are inspected for determining the expected return value for RPC endpoints.
 * To prevent enum collisions and to match the [protobuf style guide](https://developers.google.com/protocol-buffers/docs/style#enums), enum values will be `CAPITALS_WITH_UNDERSCORES` and nested enum values and will have their parent types prepended.
+* To allow for more control over how your protobuf schema evolves, all parameters and property definitions will accept an optional extension parameter, `x-proto-tag`, that will overide the generated tag with the value supplied.
 
 ## Example
 ```

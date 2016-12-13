@@ -207,7 +207,7 @@ func TestGenerateProto(t *testing.T) {
 		}
 
 		if string(want) != string(protoResult) {
-			t.Errorf("testYaml expected:\n%s\nGOT:\n%s", want, protoResult)
+			t.Errorf("testYaml expected:\n%q\nGOT:\n%q", want, protoResult)
 		}
 	}
 }
