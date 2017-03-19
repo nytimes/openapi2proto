@@ -162,7 +162,10 @@ enum TimePeriod {
 }
 
 service TheMostPopularAPIService {
+    // Most Emailed by Section & Time Period
     rpc GetMostemailedSectionTimePeriod(GetMostemailedSectionTimePeriodRequest) returns (GetMostemailedSectionTimePeriodResponse) {}
+    // Most Shared by Section & Time Period
     rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse) {}
+    // Most Viewed by Section & Time Period
     rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse) {}
 }

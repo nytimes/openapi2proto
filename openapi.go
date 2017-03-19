@@ -65,6 +65,7 @@ type Model struct {
 
 // Items represent Model properties in an OpenAPI spec.
 type Items struct {
+	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 	// scalar
 	Type   interface{} `yaml:"type" json:"type"`
 	Format interface{} `yaml:"format,omitempty" json:"format,omitempty"`
@@ -87,6 +88,14 @@ type Items struct {
 
 	// is an other Model
 	Model `yaml:",inline"`
+}
+
+func (i Items) Comment() string {
+	return prepComment(i.Description, "    ")
+}
+
+func (i Items) HasComment() bool {
+	return i.Description != ""
 }
 
 func protoScalarType(name string, typ, frmt interface{}, indx int) string {
@@ -425,6 +434,22 @@ func includeBody(parent, child Parameters) string {
 	return ""
 }
 
+var lineStart = regexp.MustCompile(`^`)
+var newLine = regexp.MustCompile(`\n`)
+
+func prepComment(comment, space string) string {
+	if comment == "" {
+		return ""
+	}
+	comment = lineStart.ReplaceAllString(comment, space+"// ")
+	comment = newLine.ReplaceAllString(comment, "\n"+space+"// ")
+	comment = strings.TrimRight(comment, "/ ")
+	if !strings.HasSuffix(comment, "\n") {
+		comment += "\n"
+	}
+	return comment
+}
+
 func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, path, method string) string {
 	reqName := "google.protobuf.Empty"
 	endpointName := pathMethodToName(path, method)
@@ -443,6 +468,20 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 		respName = resp.responseName(endpointName)
 	}
 
+	comment := e.Summary
+	if comment != "" && e.Description != "" {
+		if !strings.HasSuffix(comment, "\n") {
+			comment += "\n"
+		}
+		comment += "\n"
+	}
+
+	if e.Description != "" {
+		comment += e.Description
+	}
+
+	comment = prepComment(comment, "    ")
+
 	tData := struct {
 		Annotate     bool
 		Method       string
@@ -452,6 +491,8 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 		Path         string
 		IncludeBody  bool
 		BodyAttr     string
+		Comment      string
+		HasComment   bool
 	}{
 		annotate,
 		method,
@@ -461,6 +502,8 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 		path,
 		(bodyAttr != ""),
 		bodyAttr,
+		comment,
+		(comment != ""),
 	}
 
 	var b bytes.Buffer

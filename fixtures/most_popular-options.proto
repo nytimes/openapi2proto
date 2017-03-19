@@ -164,16 +164,19 @@ enum TimePeriod {
 }
 
 service TheMostPopularAPIService {
+    // Most Emailed by Section & Time Period
     rpc GetMostemailedSectionTimePeriod(GetMostemailedSectionTimePeriodRequest) returns (GetMostemailedSectionTimePeriodResponse) {
       option (google.api.http) = {
         get: "/svc/mostpopular/v2/mostemailed/{section}/{time-period}.json"
       };
     }
+    // Most Shared by Section & Time Period
     rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse) {
       option (google.api.http) = {
         get: "/svc/mostpopular/v2/mostshared/{section}/{time-period}.json"
       };
     }
+    // Most Viewed by Section & Time Period
     rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse) {
       option (google.api.http) = {
         get: "/svc/mostpopular/v2/mostviewed/{section}/{time-period}.json"

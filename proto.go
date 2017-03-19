@@ -89,7 +89,7 @@ service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths
 }
 `
 
-const protoEndpointTmplStr = `    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ if .Annotate }}
+const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ if .Annotate }}
       option (google.api.http) = {
         {{ .Method }}: "{{ .Path }}"{{ if .IncludeBody }}
         body: "{{ .BodyAttr }}"{{ end }}
@@ -97,7 +97,7 @@ const protoEndpointTmplStr = `    rpc {{ .Name }}({{ .RequestName }}) returns ({
     {{ end }}{{"}"}}`
 
 const protoMsgTmplStr = `{{ $i := counter }}{{ $defs := .Defs }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
-{{ indent $depth }}    {{ $prop.ProtoMessage $msgName $propName $defs $i $depth }};{{ end }}
+{{ indent $depth }}{{ if $prop.HasComment }}{{ indent $depth }}{{ $prop.Comment }}{{ end }}    {{ $prop.ProtoMessage $msgName $propName $defs $i $depth }};{{ end }}
 {{ indent $depth }}}`
 
 const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name }}enum {{ .Name }} {{"{"}}{{ range $index, $pName := .Enum }}

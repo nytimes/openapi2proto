@@ -13,6 +13,19 @@ import "something.proto";
 package thesemanticapi;
 
 message GetConceptSearchRequest {
+    // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
+    // 
+    // Optional fields are returned in result_set. They are briefly explained here:
+    // 
+    // pages: A list of topic pages associated with a specific concept.
+    // ticker_symbol: If this concept is a publicly traded company, this field contains the ticker symbol.
+    // links: A list of links from this concept to external data resources.
+    // taxonomy: For descriptor concepts, this field returns a list of taxonomic relations to other concepts.
+    // combinations: For descriptor concepts, this field returns a list of the specific meanings tis concept takes on when combined with other concepts.
+    // geocodes: For geographic concepts, the full GIS record from geonames.
+    // article_list: A list of up to 10 articles associated with this concept.
+    // scope_notes: Scope notes contains clarifications and meaning definitions that explicate the relationship between the concept and an article.
+    // search_api_query: Returns the request one would need to submit to the Article Search API to obtain a list of articles annotated with this concept.
     enum GetConceptSearchRequest_Field {
         GETCONCEPTSEARCHREQUEST_FIELD_ALL = 0;
         GETCONCEPTSEARCHREQUEST_FIELD_PAGES = 1;
@@ -26,7 +39,9 @@ message GetConceptSearchRequest {
         GETCONCEPTSEARCHREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
     GetConceptSearchRequest_Field fields = 1;
+    // Integer value for the index count from the first concept to the last concept, sorted alphabetically. Used in a Search Query. A Search Query will return up to 10 concepts in its results.
     int32 offset = 2;
+    // Precedes the search term string. Used in a Search Query. Except for <specific_concept_name>, Search Query will take the required parameters listed above (<concept_type>, <concept_uri>, <article_uri>) as an optional_parameter in addition to the query=<query_term>.
     string query = 3;
 }
 
@@ -39,6 +54,19 @@ message GetConceptSearchResponse {
 
 message GetNameConceptTypeSpecificConceptRequest {
     ConceptTypeParam concept_type = 1;
+    // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
+    // 
+    // Optional fields are returned in result_set. They are briefly explained here:
+    // 
+    // pages: A list of topic pages associated with a specific concept.
+    // ticker_symbol: If this concept is a publicly traded company, this field contains the ticker symbol.
+    // links: A list of links from this concept to external data resources.
+    // taxonomy: For descriptor concepts, this field returns a list of taxonomic relations to other concepts.
+    // combinations: For descriptor concepts, this field returns a list of the specific meanings tis concept takes on when combined with other concepts.
+    // geocodes: For geographic concepts, the full GIS record from geonames.
+    // article_list: A list of up to 10 articles associated with this concept.
+    // scope_notes: Scope notes contains clarifications and meaning definitions that explicate the relationship between the concept and an article.
+    // search_api_query: Returns the request one would need to submit to the Article Search API to obtain a list of articles annotated with this concept.
     enum GetNameConceptTypeSpecificConceptRequest_Field {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_ALL = 0;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_PAGES = 1;
@@ -52,6 +80,7 @@ message GetNameConceptTypeSpecificConceptRequest {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
     GetNameConceptTypeSpecificConceptRequest_Field fields = 2;
+    // Precedes the search term string. Used in a Search Query. Except for <specific_concept_name>, Search Query will take the required parameters listed above (<concept_type>, <concept_uri>, <article_uri>) as an optional_parameter in addition to the query=<query_term>.
     string query = 3;
     string specific_concept = 4;
 }
