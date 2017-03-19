@@ -438,6 +438,9 @@ var lineStart = regexp.MustCompile(`^`)
 var newLine = regexp.MustCompile(`\n`)
 
 func prepComment(comment, space string) string {
+	if comment == "" {
+		return ""
+	}
 	comment = lineStart.ReplaceAllString(comment, space+"// ")
 	comment = newLine.ReplaceAllString(comment, "\n"+space+"// ")
 	comment = strings.TrimRight(comment, "/ ")

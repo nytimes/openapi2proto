@@ -223,19 +223,16 @@ message TestModel {
 }
 
 service TheSemanticAPIService {
-
     rpc GetConceptSearch(GetConceptSearchRequest) returns (GetConceptSearchResponse) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/concept/search.json"
       };
     }
-
     rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/name/{concept-type}/{specific-concept}.json"
       };
     }
-
     rpc GetSomethingBlah(google.protobuf.Empty) returns (google.protobuf.Empty) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/something/blah.json"
