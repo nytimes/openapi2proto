@@ -378,6 +378,7 @@ func pathMethodToName(path, method string) string {
 	var name string
 	path = strings.TrimSuffix(path, ".json")
 	path = strings.Replace(path, "-", " ", -1)
+	path = strings.Replace(path, ".", " ", -1)
 	path = strings.Replace(path, "/", " ", -1)
 	re := regexp.MustCompile(`[\{\}\[\]()/\.]`)
 	path = re.ReplaceAllString(path, "")
