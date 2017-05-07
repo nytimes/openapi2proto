@@ -59,7 +59,7 @@ paths:
           schema: 
             type: array
             items:
-              $ref: '#/definitions/Cats'
+              $ref: '#/definitions/Cat'
       responses:
         201:
           description: Successful cat save
@@ -99,13 +99,6 @@ paths:
             $ref: '#/definitions/Error'
             
 definitions:
-  Cats:
-    type: object
-    properties:
-      cats:
-        type: array
-        items:
-          $ref: '#/definitions/Cat'
   Cat:
     type: object
     properties:

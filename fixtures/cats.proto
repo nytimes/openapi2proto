@@ -20,7 +20,7 @@ message GetCatsProtojsonRequest {
 
 message PutCatsProtojsonRequest {
     // A batch of cats to save to the db.
-    repeated Cats cats = 1;
+    repeated Cat cats = 1;
     // The transport to respond with (Protobuf or JSON)
     string protojson = 2;
 }
@@ -29,10 +29,6 @@ message Cat {
     string breed = 1;
     int64 id = 2;
     string name = 3;
-}
-
-message Cats {
-    repeated Cat cats = 1;
 }
 
 message Error {
