@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package cats;
+
+message GetCatIdProtoJSONRequest {
+    // The transport to respond with (Protobuf or JSON)
+    string ProtoJSON = 1;
+    // The Cat ID to get
+    int64 id = 2;
+}
+
+message GetCatsProtojsonRequest {
+    // Limiting the number of cats
+    int64 limit = 1;
+    // The transport to respond with (Protobuf or JSON)
+    string protojson = 2;
+}
+
+message PutCatsProtojsonRequest {
+    // A batch of cats to save to the db.
+    repeated Cats cats = 1;
+    // The transport to respond with (Protobuf or JSON)
+    string protojson = 2;
+}
+
+message Cat {
+    string breed = 1;
+    int64 id = 2;
+    string name = 3;
+}
+
+message Cats {
+    repeated Cat cats = 1;
+}
+
+message Error {
+    string Message = 1;
+}
+
+service CatsService {
+    // View a single `Cat` from the database via JSON or Protobuf
+    rpc GetCatIdProtoJSON(GetCatIdProtoJSONRequest) returns (Cat) {}
+    // Lists `Cats` as JSON
+    rpc GetCatsProtojson(GetCatsProtojsonRequest) returns (Cats) {}
+    // Saves a list of `Cats` via JSON or Protobuf
+    rpc PutCatsProtojson(PutCatsProtojsonRequest) returns (google.protobuf.Empty) {}
+}
