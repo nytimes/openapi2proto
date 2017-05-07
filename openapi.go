@@ -615,7 +615,7 @@ func findRefName(i *Items, defs map[string]*Items) string {
 		return i.Name
 	}
 
-	itemType := strings.TrimLeft(i.Ref, "#/parameters/")
+	itemType := strings.TrimPrefix(i.Ref, "#/parameters/")
 	item, ok := defs[itemType]
 
 	if !ok {
