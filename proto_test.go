@@ -118,6 +118,13 @@ func TestGenerateProto(t *testing.T) {
 		wantProto string
 	}{
 		{
+			true,
+			false,
+			"fixtures/cats.yaml",
+
+			"fixtures/cats.proto",
+		},
+		{
 			false,
 			false,
 			"fixtures/semantic_api.json",

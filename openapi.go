@@ -208,8 +208,11 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 	}
 
 	// for parameters
-	if i.Schema != nil && i.Schema.Ref != "" {
-		return refDef(name, i.Schema.Ref, index, defs)
+	if i.Schema != nil {
+		if i.Schema.Ref != "" {
+			return refDef(name, i.Schema.Ref, index, defs)
+		}
+		return protoComplex(i.Schema, i.Schema.Type.(string), msgName, name, defs, indx, depth)
 	}
 
 	switch i.Type.(type) {
