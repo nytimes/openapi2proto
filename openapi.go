@@ -423,7 +423,7 @@ func (r *Response) responseName(endpointName string) string {
 		case "":
 			return "google.protobuf.Empty"
 		default:
-			return strings.TrimLeft(r.Schema.Ref, "#/definitions/")
+			return strings.TrimPrefix(r.Schema.Ref, "#/definitions/")
 		}
 	}
 }
