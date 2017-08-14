@@ -183,7 +183,9 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 			rawPkg = rawPkg + "/" + itemType
 		}
 		dir, name := path.Split(rawPkg)
-		itemType = strings.Replace(dir, "/", ".", -1) + strings.Title(name)
+		if !strings.Contains(name, ".") {
+			itemType = strings.Replace(dir, "/", ".", -1) + strings.Title(name)
+		}
 	}
 	return itemType, pkg
 }
