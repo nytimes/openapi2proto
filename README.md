@@ -32,4 +32,52 @@ There are 2 CLI flags for using the tool:
 * To prevent enum collisions and to match the [protobuf style guide](https://developers.google.com/protocol-buffers/docs/style#enums), enum values will be `CAPITALS_WITH_UNDERSCORES` and nested enum values and will have their parent types prepended.
 
 
-## Example:
+## Example
+
+```
+╰─➤  openapi2proto -spec swagger.yaml
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package swaggerpetstore;
+
+message GetPetsRequest {
+    // maximum number of results to return
+    int32 limit = 1;
+    // tags to filter by
+    repeated string tags = 2;
+}
+
+message PostPetsRequest {
+    // Pet to add to the store
+    Pet pet = 1;
+}
+
+message GetPetsIdRequest {
+    // ID of pet to fetch
+    int64 id = 1;
+}
+
+message DeletePetsIdRequest {
+    // ID of pet to delete
+    int64 id = 1;
+}
+
+message Pet {
+    int64 id = 1;
+    string name = 2;
+    string tag = 3;
+}
+
+service SwaggerPetstoreService {
+    // Returns all pets from the system that the user has access to
+    rpc GetPets(GetPetsRequest) returns (Pets) {}
+    // Creates a new pet in the store.  Duplicates are allowed
+    rpc PostPets(PostPetsRequest) returns (Pet) {}
+    // Returns a user based on a single ID, if the user does not have access to the pet
+    rpc GetPetsId(GetPetsIdRequest) returns (Pet) {}
+    // deletes a single pet based on the ID supplied
+    rpc DeletePetsId(DeletePetsIdRequest) returns (google.protobuf.Empty) {}
+}
+```
