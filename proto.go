@@ -82,7 +82,6 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 			log.Print("unable to get remote definition: ", string(b))
 			os.Exit(1)
 		}
-		log.Print("got data from http: ", string(b))
 	} else {
 		b, err = ioutil.ReadFile(pth)
 		if err != nil {
@@ -287,7 +286,8 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	imports := map[string]struct{}{}
 	if item.Ref != "" {
 		_, pkg := refType(item.Ref, defs)
-		pext := path.Ext(pkg)
+		impt, _ := refDatas(item.Ref)
+		pext := path.Ext(impt)
 		if (pkg != "" && (path.Ext(item.Ref) == "")) || pext == ".proto" {
 			imports[pkg] = struct{}{}
 		}

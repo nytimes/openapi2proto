@@ -433,8 +433,8 @@ func (r *Response) responseName(endpointName string) string {
 			return "google.protobuf.Empty"
 		default:
 			return strings.TrimSuffix(
-				strings.TrimPrefix(r.Schema.Ref, "#/definitions/"),
-				".yaml",
+				path.Base(r.Schema.Ref),
+				path.Ext(r.Schema.Ref),
 			)
 		}
 	}
