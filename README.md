@@ -36,7 +36,7 @@ There are 2 CLI flags for using the tool:
 
 ```
 ╰─➤  openapi2proto -spec swagger.yaml -options
-syntax = "proto3";
+\syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
@@ -70,6 +70,10 @@ message Pet {
     int64 id = 1;
     string name = 2;
     string tag = 3;
+}
+
+message Pets {
+    repeated Pet pets = 1;
 }
 
 service SwaggerPetstoreService {
