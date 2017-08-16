@@ -6,10 +6,6 @@ import "google/protobuf/empty.proto";
 
 import "google/protobuf/any.proto";
 
-import "blah/thing.proto";
-
-import "something.proto";
-
 package thesemanticapi;
 
 message GetConceptSearchRequest {
@@ -209,14 +205,11 @@ message TestModel {
     bool test_bool = 3;
     google.protobuf.BoolValue test_bool_value = 4;
     google.protobuf.BytesValue test_bytes_value = 9;
-    blah.Thing test_external_ref = 15;
     google.protobuf.Any test_float_value = 7;
     map<string, TestModel> test_map_object = 11;
     map<string, string> test_map_scalar = 12;
     google.protobuf.DoubleValue test_num_value = 5;
     google.protobuf.Int32Value test_numer_value = 6;
-    something.RelativeBackRef test_relative_backdir_ref = 14;
-    something.RelativeRef test_relative_ref = 13;
     google.protobuf.StringValue test_string_value = 8;
 }
 

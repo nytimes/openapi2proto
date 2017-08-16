@@ -524,18 +524,6 @@
                     "type": "string"
                 },
                 "x-proto-tag": 12
-            },
-            "test_relative_ref": {
-                "$ref": "something.json#/definitions/RelativeRef",
-                "x-proto-tag": 13
-            },
-            "test_relative_backdir_ref": {
-                "$ref": "../something.json#/definitions/RelativeBackRef",
-                "x-proto-tag": 14
-            },
-            "test_external_ref": {
-                "$ref": "http://blah.com/blah/thing.json",
-                "x-proto-tag": 15
             }
         }
     }

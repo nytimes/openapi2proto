@@ -3,6 +3,8 @@ package openapi2proto
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
+	"path"
 	"testing"
 
 	"gopkg.in/yaml.v2"
@@ -98,14 +100,16 @@ func TestRefType(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		got, gotPkg := refType(test.ref, test.defs)
-		if got != test.want {
-			t.Errorf("[%s] expected %q got %q", test.tName, test.want, got)
-		}
+		t.Run(test.tName, func(t *testing.T) {
+			got, gotPkg := refType(test.ref, test.defs)
+			if got != test.want {
+				t.Errorf("[%s] expected %q got %q", test.tName, test.want, got)
+			}
 
-		if gotPkg != test.wantPkg {
-			t.Errorf("[%s] expected package %q got %q", test.tName, test.wantPkg, gotPkg)
-		}
+			if gotPkg != test.wantPkg {
+				t.Errorf("[%s] expected package %q got %q", test.tName, test.wantPkg, gotPkg)
+			}
+		})
 	}
 }
 
@@ -180,42 +184,56 @@ func TestGenerateProto(t *testing.T) {
 
 			"fixtures/spec-options.proto",
 		},
+		{
+			true,
+			false,
+			"fixtures/petstore/swagger.yaml",
+
+			"fixtures/petstore/swagger.proto",
+		},
 	}
 
+	origin, _ := os.Getwd()
 	for _, test := range tests {
-
-		testSpec, err := ioutil.ReadFile(test.givenFixturePath)
-		if err != nil {
-			t.Fatal("unable to open test fixture: ", err)
-		}
-
-		var testAPI APIDefinition
-		if test.yaml {
-			err = yaml.Unmarshal(testSpec, &testAPI)
+		t.Run(test.givenFixturePath, func(t *testing.T) {
+			os.Chdir(origin)
+			testSpec, err := ioutil.ReadFile(test.givenFixturePath)
 			if err != nil {
-				t.Fatal("unable to unmarshal text fixture into APIDefinition: ", err)
-			}
-		} else {
-			err = json.Unmarshal(testSpec, &testAPI)
-			if err != nil {
-				t.Fatal("unable to unmarshal text fixture into APIDefinition: ", err)
+				t.Fatal("unable to open test fixture: ", err)
 			}
 
-		}
+			os.Chdir(path.Dir(test.givenFixturePath))
+			var testAPI APIDefinition
+			if test.yaml {
+				err = yaml.Unmarshal(testSpec, &testAPI)
+				if err != nil {
+					t.Fatalf("unable to unmarshal text fixture into APIDefinition: %s - %s ",
+						test.givenFixturePath, err)
+				}
+			} else {
+				err = json.Unmarshal(testSpec, &testAPI)
+				if err != nil {
+					t.Fatal("unable to unmarshal text fixture into APIDefinition: %s - %s",
+						test.givenFixturePath, err)
+				}
 
-		protoResult, err := GenerateProto(&testAPI, test.options)
-		if err != nil {
-			t.Fatal("unable to generate protobuf from APIDefinition: ", err)
-		}
+			}
 
-		want, err := ioutil.ReadFile(test.wantProto)
-		if err != nil {
-			t.Fatal("unable to open test fixture: ", err)
-		}
+			protoResult, err := GenerateProto(&testAPI, test.options)
+			if err != nil {
+				t.Fatal("unable to generate protobuf from APIDefinition: ", err)
+			}
 
-		if string(want) != string(protoResult) {
-			t.Errorf("testYaml (%s) expected:\n%s\nGOT:\n%s",
-				test.givenFixturePath, want, protoResult)
-		}
+			os.Chdir(origin)
+			want, err := ioutil.ReadFile(test.wantProto)
+			if err != nil {
+				t.Fatal("unable to open test fixture: ", err)
+			}
+
+			if string(want) != string(protoResult) {
+				t.Errorf("testYaml (%s) expected:\n%s\nGOT:\n%s",
+					test.givenFixturePath, want, protoResult)
+			}
+		})
 	}
 }

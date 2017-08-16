@@ -13,8 +13,9 @@ import (
 // APIDefinition is the base struct for containing OpenAPI spec
 // declarations.
 type APIDefinition struct {
-	Swagger string `yaml:"swagger" json:"swagger"`
-	Info    struct {
+	FileName string // internal use to pass file path
+	Swagger  string `yaml:"swagger" json:"swagger"`
+	Info     struct {
 		Title       string `yaml:"title" json:"title"`
 		Description string `yaml:"description" json:"description"`
 		Version     string `yaml:"version" json:"version"`
@@ -122,6 +123,16 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 	return ""
 }
 
+func refDatas(ref string) (string, string) {
+	// split on '#/'
+	refDatas := strings.SplitN(ref, "#/", 2)
+	// check for references outside of this spec
+	if len(refDatas) > 1 {
+		return refDatas[0], refDatas[1]
+	}
+	return ref, ""
+}
+
 // $ref should be in the format of:
 // {import path}#/{definitions|parameters}/{typeName}
 // this will produce
@@ -132,14 +143,7 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 		itemType string
 	)
 
-	// split on '#/'
-	refDatas := strings.SplitN(ref, "#/", 2)
-
-	// check for references outside of this spec
-	if len(refDatas) > 1 {
-		rawPkg = refDatas[0]
-		itemType = refDatas[1]
-	}
+	rawPkg, itemType = refDatas(ref)
 
 	if rawPkg != "" ||
 		strings.HasSuffix(ref, ".json") ||
@@ -168,6 +172,9 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 	itemType = strings.TrimPrefix(itemType, "definitions/")
 	itemType = strings.TrimPrefix(itemType, "parameters/")
 	itemType = strings.TrimPrefix(itemType, "responses/")
+	itemType = strings.TrimSuffix(itemType, ".yaml")
+	itemType = strings.TrimSuffix(itemType, ".json")
+	itemType = strings.TrimSuffix(itemType, ".proto")
 	if i, ok := defs[itemType]; ok {
 		if i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
 			typ, ok := i.Type.(string)
@@ -425,7 +432,10 @@ func (r *Response) responseName(endpointName string) string {
 		case "":
 			return "google.protobuf.Empty"
 		default:
-			return strings.TrimPrefix(r.Schema.Ref, "#/definitions/")
+			return strings.TrimSuffix(
+				strings.TrimPrefix(r.Schema.Ref, "#/definitions/"),
+				".yaml",
+			)
 		}
 	}
 }
@@ -624,7 +634,7 @@ func findRefName(i *Items, defs map[string]*Items) string {
 	item, ok := defs[itemType]
 
 	if !ok {
-		log.Fatalf("unable to find referenced type for parameter: %#v", i)
+		return path.Base(itemType)
 	}
 
 	return item.Name

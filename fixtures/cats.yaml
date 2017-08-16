@@ -99,6 +99,13 @@ paths:
             $ref: '#/definitions/Error'
             
 definitions:
+  Cats:
+    type: object
+    properties:
+      cats:
+        type: array
+        items:
+          $ref: '#/definitions/Cats'
   Cat:
     type: object
     properties:
@@ -109,6 +116,8 @@ definitions:
         type: string
       breed:
         type: string
+      dateOfBirth:
+        $ref: 'google/protobuf/timestamp.proto#/google.protobuf.Timestamp'
   Error:
     type: object
     properties:
