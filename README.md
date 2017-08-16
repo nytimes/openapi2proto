@@ -35,10 +35,12 @@ There are 2 CLI flags for using the tool:
 ## Example
 
 ```
-╰─➤  openapi2proto -spec swagger.yaml
+╰─➤  openapi2proto -spec swagger.yaml -options
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+
+import "google/api/annotations.proto";
 
 package swaggerpetstore;
 
@@ -72,12 +74,29 @@ message Pet {
 
 service SwaggerPetstoreService {
     // Returns all pets from the system that the user has access to
-    rpc GetPets(GetPetsRequest) returns (Pets) {}
+    rpc GetPets(GetPetsRequest) returns (Pets) {
+      option (google.api.http) = {
+        get: "/api/pets"
+      };
+    }
     // Creates a new pet in the store.  Duplicates are allowed
-    rpc PostPets(PostPetsRequest) returns (Pet) {}
+    rpc PostPets(PostPetsRequest) returns (Pet) {
+      option (google.api.http) = {
+        post: "/api/pets"
+        body: "pet"
+      };
+    }
     // Returns a user based on a single ID, if the user does not have access to the pet
-    rpc GetPetsId(GetPetsIdRequest) returns (Pet) {}
+    rpc GetPetsId(GetPetsIdRequest) returns (Pet) {
+      option (google.api.http) = {
+        get: "/api/pets/{id}"
+      };
+    }
     // deletes a single pet based on the ID supplied
-    rpc DeletePetsId(DeletePetsIdRequest) returns (google.protobuf.Empty) {}
+    rpc DeletePetsId(DeletePetsIdRequest) returns (google.protobuf.Empty) {
+      option (google.api.http) = {
+        delete: "/api/pets/{id}"
+      };
+    }
 }
 ```
