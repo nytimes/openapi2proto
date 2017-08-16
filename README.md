@@ -36,7 +36,7 @@ There are 2 CLI flags for using the tool:
 
 ```
 ╰─➤  openapi2proto -spec swagger.yaml -options
-\syntax = "proto3";
+syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
