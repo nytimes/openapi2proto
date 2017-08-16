@@ -32,6 +32,10 @@ message Pet {
     string tag = 3;
 }
 
+message Pets {
+    repeated Pet pets = 1;
+}
+
 service SwaggerPetstoreService {
     // Returns all pets from the system that the user has access to
     rpc GetPets(GetPetsRequest) returns (Pets) {}

@@ -129,7 +129,7 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, "unable to load referenced item")
 		}
-		api.Definitions = map[string]*Items{strings.TrimSuffix(pth, path.Ext(pth)): &item}
+		api.Definitions = map[string]*Items{strings.TrimSuffix(path.Base(pth), path.Ext(pth)): &item}
 	}
 
 	api.FileName = pth
@@ -230,6 +230,9 @@ func replaceExternalRefs(item *Items) (map[string]*Items, error) {
 					for nam, v := range def.Definitions {
 						if name == nam {
 							*item = *v
+						}
+						if v.Type == "object" {
+							defs[nam] = v
 						}
 					}
 				}
