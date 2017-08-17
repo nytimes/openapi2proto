@@ -21,7 +21,7 @@ There are 2 CLI flags for using the tool:
 ## External Files
 * Any externally referenced Open API spec will be fetched and inlined.
 * Any externally referenced Protobuf files will be added as imports.
-  * Example usage: `$ref: "google/protobuf/timestamp.proto#/google.protobuf.Timestamp'`
+  * Example usage: `$ref: "google/protobuf/timestamp.proto#/google.protobuf.Timestamp"`
 
 ## Caveats
 
