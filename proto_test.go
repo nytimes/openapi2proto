@@ -185,6 +185,13 @@ func TestGenerateProto(t *testing.T) {
 			"fixtures/spec-options.proto",
 		},
 		{
+			false,
+			false,
+			"fixtures/includes_query.json",
+
+			"fixtures/includes_query.proto",
+		},
+		{
 			true,
 			false,
 			"fixtures/petstore/swagger.yaml",

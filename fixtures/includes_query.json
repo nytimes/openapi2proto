@@ -1,0 +1,49 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Bad API",
+    "description": "Bad API using query parameters",
+    "version": "1.0.0"
+  },
+  "host": "api.badness.com",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/v1",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/bad/path/with/query?badness={badness}": {
+      "get": {
+        "summary": "Bad Call",
+        "description": "Call which includes a query in its path.",
+        "parameters": [
+          {
+            "name": "badness",
+            "in": "query",
+            "description": "Bad parameter.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of strings",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Item"
+              }
+            }
+          }
+        }
+      }
+    }
+	},
+	"definitions": {
+		"Item": {
+			"type": "string"
+		}
+	}
+}

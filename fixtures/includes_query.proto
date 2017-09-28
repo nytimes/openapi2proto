@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package badapi;
+
+message GetBadPathWithQueryRequest {
+    // Bad parameter.
+    string badness = 1;
+}
+
+message GetBadPathWithQueryResponse {
+    repeated string items = 1;
+}
+
+service BadAPIService {
+    // Bad Call
+    // 
+    // Call which includes a query in its path.
+    rpc GetBadPathWithQuery(GetBadPathWithQueryRequest) returns (GetBadPathWithQueryResponse) {}
+}
