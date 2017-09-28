@@ -392,7 +392,9 @@ func pathMethodToName(path, method string) string {
 	path = strings.Replace(path, "-", " ", -1)
 	path = strings.Replace(path, ".", " ", -1)
 	path = strings.Replace(path, "/", " ", -1)
-	re := regexp.MustCompile(`[\{\}\[\]()/\.]`)
+	// Strip out illegal-for-identifier characters in the path, including any query string.
+	// Note that query strings are illegal in swagger paths, but some tooling seems to tolerate them.
+	re := regexp.MustCompile(`[\{\}\[\]()/\.]|\?.*`)
 	path = re.ReplaceAllString(path, "")
 	for _, nme := range strings.Fields(path) {
 		name += strings.Title(nme)
