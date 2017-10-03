@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package lowercaseapi;
+
+message Item {
+}
+
+service LowercaseAPIService {
+    // Lowercase Response
+    // 
+    // This doesn't use camel-casing.
+    rpc GetLowercaseDef(google.protobuf.Empty) returns (Item) {}
+}

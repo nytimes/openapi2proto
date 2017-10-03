@@ -1,0 +1,38 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Lowercase API",
+    "description": "Lowercase ref in return",
+    "version": "1.0.0"
+  },
+  "host": "api.lowercase.com",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/v1",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/lowercase/def": {
+      "get": {
+        "summary": "Lowercase Response",
+        "description": "This doesn't use camel-casing.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "An array of strings",
+            "schema": {
+              "$ref": "#/definitions/item"
+            }
+          }
+        }
+      }
+    }
+	},
+	"definitions": {
+		"item": {
+			"type": "object"
+		}
+	}
+}
