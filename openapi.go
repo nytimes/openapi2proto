@@ -434,10 +434,11 @@ func (r *Response) responseName(endpointName string) string {
 		case "":
 			return "google.protobuf.Empty"
 		default:
-			return strings.TrimSuffix(
-				path.Base(r.Schema.Ref),
-				path.Ext(r.Schema.Ref),
-			)
+			return strings.Title(
+				strings.TrimSuffix(
+					path.Base(r.Schema.Ref),
+					path.Ext(r.Schema.Ref),
+				))
 		}
 	}
 }
