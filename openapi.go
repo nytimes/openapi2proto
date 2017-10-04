@@ -108,7 +108,12 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 			return fmt.Sprintf("string %s = %d", name, indx)
 		case "bytes":
 			return fmt.Sprintf("bytes %s = %d", name, indx)
-		case "number", "integer":
+		case "number":
+			if frmat == "" {
+				frmat = "double"
+			}
+			return fmt.Sprintf("%s %s = %d", frmat, name, indx)
+		case "integer":
 			if frmat == "" {
 				frmat = "int32"
 			}
@@ -254,7 +259,15 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 		switch otherTypes[0] {
 		case "string":
 			return fmt.Sprintf("google.protobuf.StringValue %s = %d", name, *indx)
-		case "number", "integer":
+		case "number":
+			frmat := format(i.Format)
+			if frmat == "" {
+				frmat = "Double"
+			} else {
+				frmat = strings.Title(frmat)
+			}
+			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, name, *indx)
+		case "integer":
 			frmat := format(i.Format)
 			if frmat == "" {
 				frmat = "Int32"

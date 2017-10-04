@@ -87,13 +87,13 @@ message PriceEstimate {
     // Formatted string of estimate in local currency of the start location. Estimate could be a range, a single number (flat rate) or "Metered" for TAXI.
     string estimate = 3;
     // Upper bound of the estimated price.
-    int32 high_estimate = 4;
+    double high_estimate = 4;
     // Lower bound of the estimated price.
-    int32 low_estimate = 5;
+    double low_estimate = 5;
     // Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles
     string product_id = 6;
     // Expected surge multipflier. Surge is active if surge_multiplier is greater than 1. Price estimate already factors in the surge multiplier.
-    int32 surge_multiplier = 7;
+    double surge_multiplier = 7;
 }
 
 message Product {
