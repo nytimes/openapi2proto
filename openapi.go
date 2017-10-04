@@ -386,7 +386,7 @@ func ProtoEnum(name string, enums []string, depth int) string {
 	return b.String()
 }
 
-func pathMethodToName(path, method string) string {
+func PathMethodToName(path, method string) string {
 	var name string
 	path = strings.TrimSuffix(path, ".json")
 	path = strings.Replace(path, "-", " ", -1)
@@ -471,7 +471,7 @@ func prepComment(comment, space string) string {
 
 func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, path, method string) string {
 	reqName := "google.protobuf.Empty"
-	endpointName := pathMethodToName(path, method)
+	endpointName := PathMethodToName(path, method)
 	path = base + path
 
 	var bodyAttr string
@@ -585,28 +585,28 @@ func (p *Path) ProtoEndpoints(annotate bool, base, path string) string {
 func (p *Path) ProtoMessages(path string, defs map[string]*Items) string {
 	var out bytes.Buffer
 	if p.Get != nil {
-		endpointName := pathMethodToName(path, "get")
+		endpointName := PathMethodToName(path, "get")
 		msg := p.Get.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Put != nil {
-		endpointName := pathMethodToName(path, "put")
+		endpointName := PathMethodToName(path, "put")
 		msg := p.Put.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Post != nil {
-		endpointName := pathMethodToName(path, "post")
+		endpointName := PathMethodToName(path, "post")
 		msg := p.Post.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
 	}
 	if p.Delete != nil {
-		endpointName := pathMethodToName(path, "delete")
+		endpointName := PathMethodToName(path, "delete")
 		msg := p.Delete.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)

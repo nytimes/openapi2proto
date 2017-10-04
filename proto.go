@@ -358,7 +358,7 @@ var funcMap = template.FuncMap{
 	"toEnum":           toEnum,
 	"packageName":      packageName,
 	"serviceName":      serviceName,
-	"pathMethodToName": pathMethodToName,
+	"PathMethodToName": PathMethodToName,
 }
 
 func packageName(t string) string {
