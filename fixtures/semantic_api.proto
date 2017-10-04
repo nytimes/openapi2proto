@@ -209,7 +209,7 @@ message TestModel {
     map<string, TestModel> test_map_object = 11;
     map<string, string> test_map_scalar = 12;
     google.protobuf.DoubleValue test_num_value = 5;
-    google.protobuf.Int32Value test_numer_value = 6;
+    google.protobuf.DoubleValue test_numer_value = 6;
     google.protobuf.StringValue test_string_value = 8;
 }
 
