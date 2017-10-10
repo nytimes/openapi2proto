@@ -212,7 +212,7 @@ func importsAndRefs(api *APIDefinition) ([]string, error) {
 		}
 		last = i
 	}
-	return imports, nil
+	return impts, nil
 }
 
 func replaceExternalRefs(item *Items) (map[string]*Items, error) {
