@@ -204,6 +204,15 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 
 func refDef(name, ref string, index int, defs map[string]*Items) string {
 	itemType, _ := refType(ref, defs)
+	// check if this is an array, parameter types can be setup differently and
+	// this may not have been caught earlier
+	def, ok := defs[path.Base(ref)]
+	if ok {
+		// if it is an array type, protocomplex indstead of just using the referenced type
+		if def.Type == "array" {
+			return protoComplex(def, def.Type.(string), "", name, defs, &index, 0)
+		}
+	}
 	return fmt.Sprintf("%s %s = %d", itemType, name, index)
 }
 
@@ -327,6 +336,9 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 		return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), i.Model.Name, name, *index)
 	case "array":
 		if i.Items != nil {
+			if depth < 0 {
+				return ""
+			}
 			// CHECK FOR SCALAR
 			pt := protoScalarType(name, i.Items.Type, i.Items.Format, *index)
 			if pt != "" {
@@ -347,7 +359,6 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			msgStr := i.Items.Model.ProtoModel(i.Items.Model.Name, depth+1, defs)
 			return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), i.Items.Model.Name, name, *index)
 		}
-
 	case "string":
 		if len(i.Enum) > 0 {
 			var eName string

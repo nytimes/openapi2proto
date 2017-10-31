@@ -16,6 +16,12 @@ message PostPetsRequest {
     Pet pet = 1;
 }
 
+message GetPetsIdsRequest {
+    repeated string ids = 1;
+    // maximum number of results to return
+    int32 limit = 2;
+}
+
 message GetPetsIdRequest {
     // ID of pet to fetch
     int64 id = 1;
@@ -41,6 +47,8 @@ service SwaggerPetstoreService {
     rpc GetPets(GetPetsRequest) returns (Pets) {}
     // Creates a new pet in the store.  Duplicates are allowed
     rpc PostPets(PostPetsRequest) returns (Pet) {}
+    // Returns all pets from the system that the user has access to
+    rpc GetPetsIds(GetPetsIdsRequest) returns (Pets) {}
     // Returns a user based on a single ID, if the user does not have access to the pet
     rpc GetPetsId(GetPetsIdRequest) returns (Pet) {}
     // deletes a single pet based on the ID supplied
