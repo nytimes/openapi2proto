@@ -20,6 +20,23 @@ consumes:
 produces:
   - application/json
 paths:
+  /pets/{ids}:
+    get:
+      description: |
+        Returns all pets from the system that the user has access to
+      operationId: findPets
+      parameters:
+        - $ref: '#/parameters/idsParam'
+        - $ref: 'parameters.yaml#/limitsParam'
+      responses:
+        "200":
+          description: pet response
+          schema:
+            $ref: 'Pets.yaml'
+        default:
+          description: unexpected error
+          schema:
+            $ref: 'Error.yaml'
   /pets:
     get:
       description: |
@@ -93,3 +110,15 @@ paths:
           description: unexpected error
           schema:
             $ref: 'Error.yaml'
+
+parameters:
+  idsParam:
+    name: ids
+    in: path
+    description: ids to filter by
+    required: false
+    type: array
+    collectionFormat: csv
+    items:
+      type: string
+
