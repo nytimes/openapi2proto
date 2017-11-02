@@ -89,6 +89,9 @@ type Items struct {
 
 	// is an other Model
 	Model `yaml:",inline"`
+
+	// required items
+	Required interface{} `yaml:"required,omitempty" json:"required,omitempty"`
 }
 
 func (i Items) Comment() string {
