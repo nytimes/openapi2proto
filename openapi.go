@@ -92,6 +92,9 @@ type Items struct {
 
 	// required items
 	Required interface{} `yaml:"required,omitempty" json:"required,omitempty"`
+
+	// pattern validation
+	Pattern string `yaml:"pattern,omitempty" json:"pattern,omitempty"`
 }
 
 func (i Items) Comment() string {
