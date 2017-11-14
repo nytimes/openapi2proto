@@ -227,7 +227,7 @@ func TestGenerateProto(t *testing.T) {
 			} else {
 				err = json.Unmarshal(testSpec, &testAPI)
 				if err != nil {
-					t.Fatal("unable to unmarshal text fixture into APIDefinition: %s - %s",
+					t.Fatalf("unable to unmarshal text fixture into APIDefinition: %s - %s",
 						test.givenFixturePath, err)
 				}
 
