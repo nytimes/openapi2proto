@@ -93,8 +93,10 @@ type Items struct {
 	// required items
 	Required interface{} `yaml:"required,omitempty" json:"required,omitempty"`
 
-	// pattern validation
-	Pattern string `yaml:"pattern,omitempty" json:"pattern,omitempty"`
+	// validation (regex pattern, max/min length)
+	Pattern   string `yaml:"pattern,omitempty" json:"pattern,omitempty"`
+	MaxLength int    `yaml:"maxLength,omitempty" json:"max_length,omitempty"`
+	MinLength int    `yaml:"minLength,omitempty" json:"min_length,omitempty"`
 }
 
 func (i Items) Comment() string {
