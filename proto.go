@@ -88,7 +88,6 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 			log.Print("unable to read spec file: ", err)
 			os.Exit(1)
 		}
-
 	}
 
 	var api *APIDefinition
