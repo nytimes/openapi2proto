@@ -247,7 +247,9 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 		if i.Schema.Ref != "" {
 			return refDef(name, i.Schema.Ref, index, defs)
 		}
-		if _, ok := i.Schema.Type.(string); !ok {
+		if i.In == "body" && i.Schema.Type == nil {
+			i.Schema.Type = "object"
+		} else if _, ok := i.Schema.Type.(string); !ok {
 			fmt.Printf("encountered a non-string schema 'type' value within %#v, which is not supported by this tool. Field: %q, Type: %v",
 				msgName, name, i.Schema.Type)
 			os.Exit(1)
