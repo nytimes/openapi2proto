@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"os"
 	"path"
 	"regexp"
 	"strings"
@@ -245,6 +246,11 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 	if i.Schema != nil {
 		if i.Schema.Ref != "" {
 			return refDef(name, i.Schema.Ref, index, defs)
+		}
+		if _, ok := i.Schema.Type.(string); !ok {
+			fmt.Printf("encountered a non-string schema 'type' value within %#v, which is not supported by this tool. Field: %q, Type: %v",
+				msgName, name, i.Schema.Type)
+			os.Exit(1)
 		}
 		return protoComplex(i.Schema, i.Schema.Type.(string), msgName, name, defs, indx, depth)
 	}
