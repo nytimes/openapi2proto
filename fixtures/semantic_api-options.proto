@@ -51,13 +51,7 @@ message GetConceptSearchResponse {
 }
 
 message GetNameConceptTypeSpecificConceptRequest {
-    enum Concept_type {
-        CONCEPT_TYPE_NYTD_GEO = 0;
-        CONCEPT_TYPE_NYTD_PER = 1;
-        CONCEPT_TYPE_NYTD_ORG = 2;
-        CONCEPT_TYPE_NYTD_DES = 3;
-    }
-    Concept_type concept_type = 1;
+    ConceptTypeParam concept_type = 1;
     // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
     // 
     // Optional fields are returned in result_set. They are briefly explained here:

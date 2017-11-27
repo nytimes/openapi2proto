@@ -218,7 +218,7 @@ func refDef(name, ref string, index int, defs map[string]*Items) string {
 	def, ok := defs[path.Base(ref)]
 	if ok {
 		// if it is an array type, protocomplex indstead of just using the referenced type
-		if def.Type == "array" || def.Type == "string" {
+		if def.Type == "array" {
 			return protoComplex(def, def.Type.(string), "", name, defs, &index, 0)
 		}
 		if def.Type == "number" || def.Type == "integer" {
