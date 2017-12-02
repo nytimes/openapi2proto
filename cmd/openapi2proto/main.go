@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/NYTimes/openapi2proto"
+	"github.com/infotech-group/openapi2proto"
 )
 
 func main() {

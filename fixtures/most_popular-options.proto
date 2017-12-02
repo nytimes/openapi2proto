@@ -3,6 +3,7 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 
 import "google/api/annotations.proto";
+import "options/auth.proto";
 
 package themostpopularapi;
 
@@ -169,17 +170,20 @@ service TheMostPopularAPIService {
       option (google.api.http) = {
         get: "/svc/mostpopular/v2/mostemailed/{section}/{time-period}.json"
       };
+      option (grpc.gateway.is_auth_required) = true;
     }
     // Most Shared by Section & Time Period
     rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse) {
       option (google.api.http) = {
         get: "/svc/mostpopular/v2/mostshared/{section}/{time-period}.json"
       };
+      option (grpc.gateway.is_auth_required) = true;
     }
     // Most Viewed by Section & Time Period
     rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse) {
       option (google.api.http) = {
         get: "/svc/mostpopular/v2/mostviewed/{section}/{time-period}.json"
       };
+      option (grpc.gateway.is_auth_required) = true;
     }
 }

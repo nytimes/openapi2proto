@@ -319,6 +319,7 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 const protoFileTmplStr = `syntax = "proto3";
 {{ $defs := .Definitions }}{{ $annotate := .Annotate }}{{ if $annotate }}
 import "google/api/annotations.proto";
+import "options/auth.proto";
 {{ end }}{{ range $import := .Imports }}
 import "{{ $import }}";
 {{ end }}
@@ -339,6 +340,7 @@ const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc
         {{ .Method }}: "{{ .Path }}"{{ if .IncludeBody }}
         body: "{{ .BodyAttr }}"{{ end }}
       };
+      option (grpc.gateway.is_auth_required) = {{ .IsAuthRequired }};
     {{ end }}{{"}"}}`
 
 const protoMsgTmplStr = `{{ $i := counter }}{{ $defs := .Defs }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}

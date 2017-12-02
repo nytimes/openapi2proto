@@ -3,6 +3,7 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 
 import "google/api/annotations.proto";
+import "options/auth.proto";
 
 package uberapi;
 
@@ -137,6 +138,7 @@ service UberAPIService {
       option (google.api.http) = {
         get: "/v1/estimates/price"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
     // Time Estimates
     // 
@@ -145,6 +147,7 @@ service UberAPIService {
       option (google.api.http) = {
         get: "/v1/estimates/time"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
     // User Activity
     // 
@@ -153,6 +156,7 @@ service UberAPIService {
       option (google.api.http) = {
         get: "/v1/history"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
     // User Profile
     // 
@@ -161,6 +165,7 @@ service UberAPIService {
       option (google.api.http) = {
         get: "/v1/me"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
     // Save User Profile
     // 
@@ -170,6 +175,7 @@ service UberAPIService {
         put: "/v1/me"
         body: "profile"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
     // Product Types
     // 
@@ -181,5 +187,6 @@ service UberAPIService {
       option (google.api.http) = {
         get: "/v1/products"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
 }

@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/any.proto";
 
 import "google/api/annotations.proto";
+import "options/auth.proto";
 
 package thesemanticapi;
 
@@ -220,15 +221,18 @@ service TheSemanticAPIService {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/concept/search.json"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
     rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/name/{concept-type}/{specific-concept}.json"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
     rpc GetSomethingBlah(google.protobuf.Empty) returns (google.protobuf.Empty) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/something/blah.json"
       };
+      option (grpc.gateway.is_auth_required) = false;
     }
 }
