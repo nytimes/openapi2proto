@@ -172,7 +172,7 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to generate protobuf schema: %s", err)
 	}
-	return cleanSpacing(addImports(out.Bytes())), nil
+	return cleanSpacing(addImports(api.Info.Title, out.Bytes())), nil
 }
 
 func importsAndRefs(api *APIDefinition) ([]string, error) {
@@ -316,13 +316,15 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	return out
 }
 
-const protoFileTmplStr = `syntax = "proto3";
-{{ $defs := .Definitions }}{{ $annotate := .Annotate }}{{ if $annotate }}
+const protoFileTmplStr = `
+{{- $defs := .Definitions }}
+{{- $annotate := .Annotate }}
+{{- if $annotate }}
 import "google/api/annotations.proto";
-{{ end }}{{ range $import := .Imports }}
+{{- end }}
+{{- range $import := .Imports }}
 import "{{ $import }}";
-{{ end }}
-package {{ packageName .Info.Title }};
+{{- end }}
 {{ range $path, $endpoint := .Paths }}
 {{ $endpoint.ProtoMessages $path $defs }}
 {{ end }}
@@ -333,7 +335,13 @@ package {{ packageName .Info.Title }};
 {{ $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
 }{{ end }}
 `
+const protoFileMainTmplStr = `syntax = "proto3";
 
+package {{ packageName .Title }};
+{{range $import := .Imports }}
+import "{{ $import }}";
+{{- end }}
+`
 const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ if .Annotate }}
       option (google.api.http) = {
         {{ .Method }}: "{{ .Path }}"{{ if .IncludeBody }}
@@ -412,6 +420,7 @@ func toEnum(name, enum string, depth int) string {
 
 var (
 	protoFileTmpl     = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileTmplStr))
+	protoMainFileTmpl = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileMainTmplStr))
 	protoMsgTmpl      = template.Must(template.New("protoMsg").Funcs(funcMap).Parse(protoMsgTmplStr))
 	protoEndpointTmpl = template.Must(template.New("protoEndpoint").Funcs(funcMap).Parse(protoEndpointTmplStr))
 	protoEnumTmpl     = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
@@ -428,34 +437,40 @@ func cleanSpacing(output []byte) []byte {
 	return re.ReplaceAll(output, []byte("}\n\nservice "))
 }
 
-func addImports(output []byte) []byte {
-	if bytes.Contains(output, []byte("google.protobuf.Any")) {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
+func addImports(title string, body []byte) []byte {
+	imports := make([]string, 0)
 
-import "google/protobuf/any.proto";`), 1)
+	if bytes.Contains(body, []byte("google.protobuf.Any")) {
+		imports = append(imports, "google/protobuf/any.proto")
 	}
 
-	if bytes.Contains(output, []byte("google.protobuf.Empty")) {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
-
-import "google/protobuf/empty.proto";`), 1)
+	if bytes.Contains(body, []byte("google.protobuf.Empty")) {
+		imports = append(imports, "google/protobuf/empty.proto")
 	}
 
-	if bytes.Contains(output, []byte("google.protobuf.NullValue")) {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
-
-import "google/protobuf/struct.proto";`), 1)
+	if bytes.Contains(body, []byte("google.protobuf.NullValue")) {
+		imports = append(imports, "google/protobuf/struct.proto")
 	}
 
-	match, err := regexp.Match("google.protobuf.(String|Bytes|Int.*|UInt.*|Float|Double)Value", output)
+	match, err := regexp.Match("google.protobuf.(String|Bytes|Int.*|UInt.*|Float|Double)Value", body)
 	if err != nil {
 		log.Fatal("unable to find wrapper values: ", err)
 	}
 	if match {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
-
-import "google/protobuf/wrappers.proto";`), 1)
+		imports = append(imports, "google/protobuf/wrappers.proto")
 	}
 
-	return output
+	var header bytes.Buffer
+	data := struct {
+		Title   string
+		Imports []string
+	}{
+		title, imports,
+	}
+
+	err = protoMainFileTmpl.Execute(&header, data)
+	if err != nil {
+		log.Fatal("unable to generate protobuf schema: %s", err)
+	}
+	return append(header.Bytes(), body...)
 }

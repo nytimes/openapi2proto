@@ -1,14 +1,12 @@
 syntax = "proto3";
 
-import "google/protobuf/wrappers.proto";
-
-import "google/protobuf/empty.proto";
+package thesemanticapi;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
 import "google/api/annotations.proto";
-
-package thesemanticapi;
 
 message GetConceptSearchRequest {
     // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
