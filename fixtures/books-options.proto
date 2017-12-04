@@ -1,10 +1,10 @@
 syntax = "proto3";
 
+package booksapi;
+
 import "google/protobuf/struct.proto";
 
 import "google/api/annotations.proto";
-
-package booksapi;
 
 message GetListsformatRequest {
     // YYYY-MM-DD
