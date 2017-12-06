@@ -56,6 +56,7 @@ type Endpoint struct {
 	Parameters  Parameters           `yaml:"parameters" json:"parameters"`
 	Tags        []string             `yaml:"tags" json:"tags"`
 	Responses   map[string]*Response `yaml:"responses" json:"responses"`
+	Security    []interface{}        `yaml:"security" json:"security"`
 }
 
 // Model represents a model definition from an OpenAPI spec.
@@ -518,6 +519,9 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 	path = base + path
 
 	var bodyAttr string
+
+	isAuthRequired := (len(e.Security) > 0)
+
 	if len(parentParams)+len(e.Parameters) > 0 {
 		bodyAttr = includeBody(parentParams, e.Parameters)
 		reqName = endpointName + "Request"
@@ -545,16 +549,17 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 	comment = prepComment(comment, "    ")
 
 	tData := struct {
-		Annotate     bool
-		Method       string
-		Name         string
-		RequestName  string
-		ResponseName string
-		Path         string
-		IncludeBody  bool
-		BodyAttr     string
-		Comment      string
-		HasComment   bool
+		Annotate       bool
+		Method         string
+		Name           string
+		RequestName    string
+		ResponseName   string
+		Path           string
+		IncludeBody    bool
+		BodyAttr       string
+		Comment        string
+		HasComment     bool
+		IsAuthRequired bool
 	}{
 		annotate,
 		method,
@@ -566,6 +571,7 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 		bodyAttr,
 		comment,
 		(comment != ""),
+		isAuthRequired,
 	}
 
 	var b bytes.Buffer
