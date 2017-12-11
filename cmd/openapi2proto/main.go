@@ -31,7 +31,7 @@ func main() {
 	if *outfile != "" {
 		f, err := os.Create(*outfile)
 		if err != nil {
-			log.Fatal("Can't open output file (%v): %v", outfile, err)
+			log.Fatalf("Can't open output file (%v): %v", outfile, err)
 		}
 		defer f.Close()
 		writer = f
