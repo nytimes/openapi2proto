@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-import "google/protobuf/struct.proto";
-
 package booksapi;
+
+import "google/protobuf/struct.proto";
 
 message GetListsformatRequest {
     // YYYY-MM-DD
