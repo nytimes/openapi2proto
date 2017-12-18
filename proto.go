@@ -34,6 +34,9 @@ func getPathItems(p *Path) []*Items {
 	if p.Delete != nil {
 		items = append(items, getEndpointItems(p.Delete)...)
 	}
+	if p.Patch != nil {
+		items = append(items, getEndpointItems(p.Patch)...)
+	}
 	return items
 }
 

@@ -37,6 +37,7 @@ type Path struct {
 	Put        *Endpoint  `yaml:"put" json:"put"`
 	Post       *Endpoint  `yaml:"post" json:"post"`
 	Delete     *Endpoint  `yaml:"delete" json:"delete"`
+	Patch      *Endpoint  `yaml:"patch" json:"patch"`
 	Parameters Parameters `yaml:"parameters" json:"parameters"`
 }
 
@@ -625,6 +626,11 @@ func (p *Path) ProtoEndpoints(annotate bool, base, path string) string {
 		out.WriteString(msg + "\n")
 	}
 
+	if p.Patch != nil {
+		msg := p.Patch.protoEndpoint(annotate, p.Parameters, base, path, "patch")
+		out.WriteString(msg + "\n")
+	}
+
 	return strings.TrimSuffix(out.String(), "\n")
 }
 
@@ -657,6 +663,14 @@ func (p *Path) ProtoMessages(path string, defs map[string]*Items) string {
 	if p.Delete != nil {
 		endpointName := PathMethodToName(path, "delete")
 		msg := p.Delete.protoMessages(p.Parameters, endpointName, defs)
+		if msg != "" {
+			out.WriteString(msg)
+		}
+	}
+
+	if p.Patch != nil {
+		endpointName := PathMethodToName(path, "patch")
+		msg := p.Patch.protoMessages(p.Parameters, endpointName, defs)
 		if msg != "" {
 			out.WriteString(msg)
 		}
