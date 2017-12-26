@@ -24,7 +24,7 @@ paths:
     get:
       description: |
         Returns all pets from the system that the user has access to
-      operationId: findPets
+      operationId: findPetsByIds
       parameters:
         - $ref: '#/parameters/idsParam'
         - $ref: 'parameters.yaml#/limitsParam'
