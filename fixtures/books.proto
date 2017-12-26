@@ -4,7 +4,7 @@ import "google/protobuf/struct.proto";
 
 package booksapi;
 
-message GetListsformatRequest {
+message GETListsFormatRequest {
     // YYYY-MM-DD
     // 
     // The week-ending date for the sales reflected on list-name. Times best-seller lists are compiled using available book sale data. The bestsellers-date may be significantly earlier than published-date. For additional information, see the explanation at the bottom of any best-seller list page on NYTimes.com (example: Hardcover Fiction, published Dec. 5 but reflecting sales to Nov. 29).
@@ -42,7 +42,7 @@ message GetListsformatRequest {
     int32 weeks_on_list = 11;
 }
 
-message GetListsformatResponse {
+message GETListsFormatResponse {
     string copyright = 1;
     string last_modified = 2;
     int32 num_results = 3;
@@ -87,7 +87,7 @@ message GetListsformatResponse {
     string status = 5;
 }
 
-message GetListsBestSellersHistoryRequest {
+message GETListsBestSellersHistoryRequest {
     // The target age group for the best seller.
     string age_group = 1;
     // The author of the best seller. The author field does not include additional contributors (see Data Structure for more details about the author and contributor fields).
@@ -116,7 +116,7 @@ message GetListsBestSellersHistoryRequest {
     string title = 7;
 }
 
-message GetListsBestSellersHistoryResponse {
+message GETListsBestSellersHistoryResponse {
     string copyright = 1;
     int32 num_results = 2;
     message Result {
@@ -159,7 +159,7 @@ message GetListsBestSellersHistoryResponse {
     string status = 4;
 }
 
-message GetListsNamesformatRequest {
+message GETListsNamesFormatRequest {
     string api_key = 1;
     enum GetListsNamesformatRequest_Format {
         GETLISTSNAMESFORMATREQUEST_FORMAT_JSON = 0;
@@ -168,7 +168,7 @@ message GetListsNamesformatRequest {
     GetListsNamesformatRequest_Format format = 2;
 }
 
-message GetListsNamesformatResponse {
+message GETListsNamesFormatResponse {
     string copyright = 1;
     int32 num_results = 2;
     message Result {
@@ -183,7 +183,7 @@ message GetListsNamesformatResponse {
     string status = 4;
 }
 
-message GetListsOverviewformatRequest {
+message GETListsOverviewFormatRequest {
     string api_key = 1;
     enum GetListsOverviewformatRequest_Format {
         GETLISTSOVERVIEWFORMATREQUEST_FORMAT_JSON = 0;
@@ -198,7 +198,7 @@ message GetListsOverviewformatRequest {
     string published_date = 3;
 }
 
-message GetListsOverviewformatResponse {
+message GETListsOverviewFormatResponse {
     string copyright = 1;
     int32 num_results = 2;
     message Results {
@@ -233,7 +233,7 @@ message GetListsOverviewformatResponse {
     string status = 4;
 }
 
-message GetListsDateListRequest {
+message GETListsDateListRequest {
     // YYYY-MM-DD
     // 
     // The week-ending date for the sales reflected on list-name. Times best-seller lists are compiled using available book sale data. The bestsellers-date may be significantly earlier than published-date. For additional information, see the explanation at the bottom of any best-seller list page on NYTimes.com (example: Hardcover Fiction, published Dec. 5 but reflecting sales to Nov. 29).
@@ -267,7 +267,7 @@ message GetListsDateListRequest {
     int32 weeks_on_list = 11;
 }
 
-message GetListsDateListResponse {
+message GETListsDateListResponse {
     string copyright = 1;
     string last_modified = 2;
     int32 num_results = 3;
@@ -348,15 +348,15 @@ message GetReviewsformatResponse {
 
 service BooksAPIService {
     // Best Seller List
-    rpc GetListsformat(GetListsformatRequest) returns (GetListsformatResponse) {}
+    rpc GETListsFormat(GETListsFormatRequest) returns (GETListsFormatResponse) {}
     // Best Seller History List
-    rpc GetListsBestSellersHistory(GetListsBestSellersHistoryRequest) returns (GetListsBestSellersHistoryResponse) {}
+    rpc GETListsBestSellersHistory(GETListsBestSellersHistoryRequest) returns (GETListsBestSellersHistoryResponse) {}
     // Best Seller List Names
-    rpc GetListsNamesformat(GetListsNamesformatRequest) returns (GetListsNamesformatResponse) {}
+    rpc GETListsNamesFormat(GETListsNamesFormatRequest) returns (GETListsNamesFormatResponse) {}
     // Best Seller List Overview
-    rpc GetListsOverviewformat(GetListsOverviewformatRequest) returns (GetListsOverviewformatResponse) {}
+    rpc GETListsOverviewFormat(GETListsOverviewFormatRequest) returns (GETListsOverviewFormatResponse) {}
     // Best Seller List by Date
-    rpc GetListsDateList(GetListsDateListRequest) returns (GetListsDateListResponse) {}
+    rpc GETListsDateList(GETListsDateListRequest) returns (GETListsDateListResponse) {}
     // Reviews
-    rpc GetReviewsformat(GetReviewsformatRequest) returns (GetReviewsformatResponse) {}
+    rpc GETReviewsformat(GETReviewsFormatRequest) returns (GETReviewsFormatResponse) {}
 }
