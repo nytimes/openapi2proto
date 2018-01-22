@@ -457,6 +457,10 @@ func addImports(title string, body []byte) []byte {
 		imports = append(imports, "google/protobuf/struct.proto")
 	}
 
+	if bytes.Contains(body, []byte("validator.field)")) {
+		imports = append(imports, "github.com/mwitkow/go-proto-validators/validator.proto")
+	}
+
 	match, err := regexp.Match("google.protobuf.(String|Bytes|Int.*|UInt.*|Float|Double)Value", body)
 	if err != nil {
 		log.Fatal("unable to find wrapper values: ", err)

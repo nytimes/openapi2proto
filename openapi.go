@@ -97,9 +97,13 @@ type Items struct {
 	Required interface{} `yaml:"required,omitempty" json:"required,omitempty"`
 
 	// validation (regex pattern, max/min length)
-	Pattern   string `yaml:"pattern,omitempty" json:"pattern,omitempty"`
-	MaxLength int    `yaml:"maxLength,omitempty" json:"max_length,omitempty"`
-	MinLength int    `yaml:"minLength,omitempty" json:"min_length,omitempty"`
+	Pattern          *string `yaml:"pattern,omitempty" json:"pattern,omitempty"`
+	MaxLength        *int    `yaml:"maxLength,omitempty" json:"maxLength,omitempty"`
+	MinLength        *int    `yaml:"minLength,omitempty" json:"minLength,omitempty"`
+	Minimum          *int    `yaml:"minimum,omitempty" json:"minimum,omitempty"`
+	Maximum          *int    `yaml:"maximum,omitempty" json:"maximum,omitempty"`
+	ExclusiveMinimum bool    `yaml:"exclusiveMinimum,omitempty" json:"exclusiveMinimum,omitempty"`
+	ExclusiveMaximum bool    `yaml:"exclusiveMaximum,omitempty" json:"exclusiveMaximum,omitempty"`
 }
 
 func (i Items) Comment() string {
@@ -110,33 +114,41 @@ func (i Items) HasComment() bool {
 	return i.Description != ""
 }
 
-func protoScalarType(name string, typ, frmt interface{}, indx int) string {
-	frmat := format(frmt)
+func protoScalarType(name string, items *Items, indx int) string {
+	frmat := format(items.Format)
+	result := ""
+
+	typ := items.Type
+
 	switch typ.(type) {
 	case string:
 		switch typ.(string) {
 		case "string":
-			return fmt.Sprintf("string %s = %d", name, indx)
+			result = fmt.Sprintf("string %s = %d", name, indx)
 		case "bytes":
-			return fmt.Sprintf("bytes %s = %d", name, indx)
+			result = fmt.Sprintf("bytes %s = %d", name, indx)
 		case "number":
 			if frmat == "" {
 				frmat = "double"
 			}
-			return fmt.Sprintf("%s %s = %d", frmat, name, indx)
+			result = fmt.Sprintf("%s %s = %d", frmat, name, indx)
 		case "integer":
 			if frmat == "" {
 				frmat = "int32"
 			}
-			return fmt.Sprintf("%s %s = %d", frmat, name, indx)
+			result = fmt.Sprintf("%s %s = %d", frmat, name, indx)
 		case "boolean":
-			return fmt.Sprintf("bool %s = %d", name, indx)
+			result = fmt.Sprintf("bool %s = %d", name, indx)
 		case "null":
-			return fmt.Sprintf("google.protobuf.NullValue %s = %d", name, indx)
+			result = fmt.Sprintf("google.protobuf.NullValue %s = %d", name, indx)
 		}
 	}
+	validationRules := validationRules(items)
+	if validationRules != "" {
+		result += validationRules
+	}
 
-	return ""
+	return result
 }
 
 func refDatas(ref string) (string, string) {
@@ -224,7 +236,7 @@ func refDef(name, ref string, index int, defs map[string]*Items) string {
 			return protoComplex(def, def.Type.(string), "", name, defs, &index, 0)
 		}
 		if def.Type == "number" || def.Type == "integer" {
-			return protoScalarType(name, def.Type, def.Format, index)
+			return protoScalarType(name, def, index)
 		}
 	}
 	return fmt.Sprintf("%s %s = %d", itemType, name, index)
@@ -321,7 +333,7 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 	}
 
 	if depth >= 0 {
-		return protoScalarType(name, i.Type, i.Format, index)
+		return protoScalarType(name, i, index)
 	}
 	return ""
 }
@@ -361,7 +373,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 				return ""
 			}
 			// CHECK FOR SCALAR
-			pt := protoScalarType(name, i.Items.Type, i.Items.Format, *index)
+			pt := protoScalarType(name, i.Items, *index)
 			if pt != "" {
 				return fmt.Sprintf("repeated %s", pt)
 			}
@@ -403,11 +415,11 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), eName, name, *index)
 		}
 		if depth >= 0 {
-			return protoScalarType(name, i.Type, i.Format, *index)
+			return protoScalarType(name, i, *index)
 		}
 	default:
 		if depth >= 0 {
-			return protoScalarType(name, i.Type, i.Format, *index)
+			return protoScalarType(name, i, *index)
 		}
 	}
 	return ""
