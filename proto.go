@@ -91,7 +91,7 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 	}
 
 	var api *APIDefinition
-	pathExt = path.Ext(pth)
+	pathExt := path.Ext(pth)
 	
 	isYaml := pathExt == ".yaml" || pathExt == ".yml"
 	if isYaml {
