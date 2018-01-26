@@ -100,7 +100,7 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 		err = json.Unmarshal(b, &api)
 	}
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to parse referened file")
+		return nil, errors.Wrap(err, "unable to parse referenced file")
 	}
 
 	// no paths or defs declared?
