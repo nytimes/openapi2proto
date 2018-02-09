@@ -1,0 +1,125 @@
+swagger: '2.0'
+
+info:
+  version: "0.0.0"
+  title: "Cats & Dogs"
+  description: You want some cats? We got em. You got cats? We'll take em.
+
+paths:
+  /cat/{id}.{ProtoJSON}:
+    get:
+      description: |
+        View a single `Cat` from the database via JSON or Protobuf
+      produces:
+        - application/json
+        - application/octet-stream
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The Cat ID to get
+          type: number
+          format: int64
+        - name: ProtoJSON
+          in: path
+          required: true
+          description: The transport to respond with (Protobuf or JSON)
+          pattern: (proto|json)
+          type: string
+      responses:
+        200:
+          description: Successful cat retrieval
+          schema:
+            $ref: '#/definitions/Cat'
+        404:
+          description: We know not of this cat you speak
+          schema:
+            $ref: '#/definitions/Error'
+
+  /cats.{protojson}:
+    put:
+      description: |
+        Saves a list of `Cats` via JSON or Protobuf
+      consumes:
+        - application/json
+        - application/octet-stream
+      produces:
+        - application/json
+        - application/octet-stream
+      parameters:
+        - name: protojson
+          in: path
+          required: true
+          description: The transport to respond with (Protobuf or JSON)
+          pattern: (proto|json)
+          type: string
+        - name: cats
+          in: body
+          description: A batch of cats to save to the db.
+          schema: 
+            type: array
+            items:
+              $ref: '#/definitions/Cat'
+      responses:
+        201:
+          description: Successful cat save
+        400:
+          description: You gave us some bad Cats
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server Error
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      description: |
+        Lists `Cats` as JSON
+      produces:
+        - application/json
+      parameters:
+        - name: protojson
+          in: path
+          required: true
+          description: The transport to respond with (Protobuf or JSON)
+          pattern: (proto|json)
+          type: string      
+        - name: limit
+          in: query
+          description: Limiting the number of cats
+          type: number
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Cats'
+        500:
+          description: Server Error
+          schema:
+            $ref: '#/definitions/Error'
+            
+definitions:
+  Cats:
+    type: object
+    properties:
+      cats:
+        type: array
+        items:
+          $ref: '#/definitions/Cats'
+  Cat:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      breed:
+        type: string
+      dateOfBirth:
+        $ref: 'google/protobuf/timestamp.proto#/google.protobuf.Timestamp'
+  Error:
+    type: object
+    properties:
+      Message:
+        type: string

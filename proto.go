@@ -92,7 +92,7 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 
 	var api *APIDefinition
 	pathExt := path.Ext(pth)
-	
+
 	isYaml := pathExt == ".yaml" || pathExt == ".yml"
 	if isYaml {
 		err = yaml.Unmarshal(b, &api)
@@ -363,7 +363,7 @@ var funcMap = template.FuncMap{
 }
 
 func packageName(t string) string {
-	return strings.ToLower(strings.Join(strings.Fields(t), ""))
+	return cleanCharacters(strings.ToLower(strings.Join(strings.Fields(t), "")))
 }
 
 func serviceName(t string) string {
@@ -371,7 +371,7 @@ func serviceName(t string) string {
 	for _, nme := range strings.Fields(t) {
 		name += strings.Title(nme)
 	}
-	return name + "Service"
+	return cleanCharacters(name) + "Service"
 }
 
 func counter() *int {
@@ -418,6 +418,13 @@ var (
 	protoEndpointTmpl = template.Must(template.New("protoEndpoint").Funcs(funcMap).Parse(protoEndpointTmplStr))
 	protoEnumTmpl     = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
 )
+
+func cleanCharacters(input string) string {
+	re := regexp.MustCompile(`[^a-zA-Z0-9]+`)
+	output := re.ReplaceAllString(input, "_")
+	fmt.Println(output)
+	return output
+}
 
 func cleanSpacing(output []byte) []byte {
 	re := regexp.MustCompile(`}\n*message `)

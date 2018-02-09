@@ -131,6 +131,13 @@ func TestGenerateProto(t *testing.T) {
 			"fixtures/cats.proto",
 		},
 		{
+			true,
+			false,
+			"fixtures/catsanddogs.yaml",
+
+			"fixtures/catsanddogs.proto",
+		},
+		{
 			false,
 			false,
 			"fixtures/semantic_api.json",
