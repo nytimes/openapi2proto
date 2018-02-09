@@ -422,7 +422,6 @@ var (
 func cleanCharacters(input string) string {
 	re := regexp.MustCompile(`[^a-zA-Z0-9]+`)
 	output := re.ReplaceAllString(input, "_")
-	fmt.Println(output)
 	return output
 }
 
