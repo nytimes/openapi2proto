@@ -197,7 +197,7 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 		if i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
 			typ, ok := i.Type.(string)
 			if !ok {
-				log.Fatalf("invalid $ref object referenced with a type of %s", i.Type)
+				log.Fatalf("invalid $ref object or type referenced: %#v", i)
 			}
 			itemType = typ
 		}
