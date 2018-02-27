@@ -1,0 +1,36 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Missing Type API",
+    "description": "Missing type in definition",
+    "version": "1.0.0"
+  },
+  "host": "api.missing-type.com",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/v1",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/missing/type": {
+      "get": {
+        "summary": "Missing Type",
+        "description": "This definition is missing a type.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "An array of strings",
+            "schema": {
+              "$ref": "#/definitions/item"
+            }
+          }
+        }
+      }
+    }
+	},
+	"definitions": {
+		"item": { }
+	}
+}

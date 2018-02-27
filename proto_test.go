@@ -214,6 +214,13 @@ func TestGenerateProto(t *testing.T) {
 
 			"fixtures/petstore/swagger.proto",
 		},
+		{
+			false,
+			false,
+			"fixtures/missing_type.json",
+
+			"fixtures/missing_type.proto",
+		},
 	}
 
 	origin, _ := os.Getwd()
