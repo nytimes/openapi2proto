@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package missingtypeapi;
+
+message Item {
+}
+
+service MissingTypeAPIService {
+    // Missing Type
+    // 
+    // This definition is missing a type.
+    rpc GetMissingType(google.protobuf.Empty) returns (Item) {}
+}

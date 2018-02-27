@@ -194,7 +194,7 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 	itemType = strings.TrimSuffix(itemType, ".json")
 	itemType = strings.TrimSuffix(itemType, ".proto")
 	if i, ok := defs[itemType]; ok {
-		if i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
+		if i.Type != nil && i.Type != "object" && !(i.Type == "string" && len(i.Enum) > 0) {
 			typ, ok := i.Type.(string)
 			if !ok {
 				log.Fatalf("invalid $ref object referenced with a type of %s", i.Type)
@@ -221,7 +221,7 @@ func refDef(name, ref string, index int, defs map[string]*Items) string {
 	// this may not have been caught earlier
 	def, ok := defs[path.Base(ref)]
 	if ok {
-		// if it is an array type, protocomplex indstead of just using the referenced type
+		// if it is an array type, protocomplex instead of just using the referenced type
 		if def.Type == "array" {
 			return protoComplex(def, def.Type.(string), "", name, defs, &index, 0)
 		}
@@ -262,6 +262,8 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 	}
 
 	switch i.Type.(type) {
+    case nil:
+        return protoComplex(i, "object", msgName, name, defs, indx, depth)
 	case string:
 		return protoComplex(i, i.Type.(string), msgName, name, defs, indx, depth)
 	case []interface{}:
