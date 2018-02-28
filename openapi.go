@@ -231,7 +231,7 @@ func refDef(name, ref string, index int, defs map[string]*Items) string {
 			return protoScalarType(name, def.Type, def.Format, index)
 		}
 	}
-	return fmt.Sprintf("%s %s = %d", itemType, name, index)
+	return fmt.Sprintf("%s %s = %d", itemType, cleanCharacters(name), index)
 }
 
 // ProtoMessage will generate a set of fields for a protobuf v3 schema given the
