@@ -201,8 +201,8 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 			}
 			itemType = typ
 		} else {
-            itemType = cleanAndTitle(itemType) 
-        }
+			itemType = cleanAndTitle(itemType)
+		}
 	}
 	if rawPkg != "" {
 		pkg = rawPkg + ".proto"
@@ -244,10 +244,10 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 	index := *indx
 
 	if i.Ref != "" {
-        // Handle top-level definitions that are just a reference.
-        if depth == -1 {
-            return "" 
-        }
+		// Handle top-level definitions that are just a reference.
+		if depth == -1 {
+			return ""
+		}
 		return refDef(name, i.Ref, index, defs)
 	}
 
@@ -267,8 +267,8 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 	}
 
 	switch i.Type.(type) {
-    case nil:
-        return protoComplex(i, "object", msgName, cleanAndTitle(name), defs, indx, depth)
+	case nil:
+		return protoComplex(i, "object", msgName, cleanAndTitle(name), defs, indx, depth)
 	case string:
 		return protoComplex(i, i.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
 	case []interface{}:
@@ -347,7 +347,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			case i.AdditionalProperties.Type != nil:
 				itemType = i.AdditionalProperties.Type.(string)
 			}
-            // Note: Map of arrays is not currently supported.
+			// Note: Map of arrays is not currently supported.
 			return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
 		}
 
@@ -786,5 +786,5 @@ func format(fmt interface{}) string {
 }
 
 func cleanAndTitle(s string) string {
-    return cleanCharacters(strings.Title(s))
+	return cleanCharacters(strings.Title(s))
 }
