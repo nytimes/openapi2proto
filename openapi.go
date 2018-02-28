@@ -200,7 +200,9 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 				log.Fatalf("invalid $ref object or type referenced: %#v", i)
 			}
 			itemType = typ
-		}
+		} else {
+            itemType = cleanAndTitle(itemType) 
+        }
 	}
 	if rawPkg != "" {
 		pkg = rawPkg + ".proto"
@@ -209,7 +211,7 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 		}
 		dir, name := path.Split(rawPkg)
 		if !strings.Contains(name, ".") {
-			itemType = strings.Replace(dir, "/", ".", -1) + strings.Title(name)
+			itemType = strings.Replace(dir, "/", ".", -1) + cleanAndTitle(name)
 		}
 	}
 	return itemType, pkg
@@ -240,9 +242,12 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 		*indx = i.ProtoTag
 	}
 	index := *indx
-	name = strings.Replace(name, "-", "_", -1)
 
 	if i.Ref != "" {
+        // Handle top-level definitions that are just a reference.
+        if depth == -1 {
+            return "" 
+        }
 		return refDef(name, i.Ref, index, defs)
 	}
 
@@ -258,14 +263,14 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 				msgName, name, i.Schema.Type)
 			os.Exit(1)
 		}
-		return protoComplex(i.Schema, i.Schema.Type.(string), msgName, name, defs, indx, depth)
+		return protoComplex(i.Schema, i.Schema.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
 	}
 
 	switch i.Type.(type) {
     case nil:
-        return protoComplex(i, "object", msgName, name, defs, indx, depth)
+        return protoComplex(i, "object", msgName, cleanAndTitle(name), defs, indx, depth)
 	case string:
-		return protoComplex(i, i.Type.(string), msgName, name, defs, indx, depth)
+		return protoComplex(i, i.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
 	case []interface{}:
 		types := i.Type.([]interface{})
 		hasNull := false
@@ -281,7 +286,7 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 		// non-nullable fields with multiple types? Make it an Any.
 		if !hasNull || len(otherTypes) > 1 {
 			if depth >= 0 {
-				return fmt.Sprintf("google.protobuf.Any %s = %d", name, *indx)
+				return fmt.Sprintf("google.protobuf.Any %s = %d", cleanCharacters(name), *indx)
 			}
 			return ""
 		}
@@ -292,34 +297,34 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 
 		switch otherTypes[0] {
 		case "string":
-			return fmt.Sprintf("google.protobuf.StringValue %s = %d", name, *indx)
+			return fmt.Sprintf("google.protobuf.StringValue %s = %d", cleanCharacters(name), *indx)
 		case "number":
 			frmat := format(i.Format)
 			if frmat == "" {
 				frmat = "Double"
 			} else {
-				frmat = strings.Title(frmat)
+				frmat = cleanAndTitle(frmat)
 			}
-			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, name, *indx)
+			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, cleanCharacters(name), *indx)
 		case "integer":
 			frmat := format(i.Format)
 			if frmat == "" {
 				frmat = "Int32"
 			}
-			frmat = strings.Title(frmat)
+			frmat = cleanAndTitle(frmat)
 			// unsigned ints :\
 			if strings.HasPrefix(frmat, "Ui") {
 				frmat = strings.TrimPrefix(frmat, "Ui")
 				frmat = "UI" + frmat
 			}
-			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, name, *indx)
+			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, cleanCharacters(name), *indx)
 		case "bytes":
-			return fmt.Sprintf("google.protobuf.BytesValue %s = %d", name, *indx)
+			return fmt.Sprintf("google.protobuf.BytesValue %s = %d", cleanCharacters(name), *indx)
 		case "boolean":
-			return fmt.Sprintf("google.protobuf.BoolValue %s = %d", name, *indx)
+			return fmt.Sprintf("google.protobuf.BoolValue %s = %d", cleanCharacters(name), *indx)
 		default:
 			if depth >= 0 {
-				return fmt.Sprintf("google.protobuf.Any %s = %d", name, *indx)
+				return fmt.Sprintf("google.protobuf.Any %s = %d", cleanCharacters(name), *indx)
 			}
 		}
 	}
@@ -342,6 +347,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			case i.AdditionalProperties.Type != nil:
 				itemType = i.AdditionalProperties.Type.(string)
 			}
+            // Note: Map of arrays is not currently supported.
 			return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
 		}
 
@@ -353,7 +359,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 		}
 
 		// otherwise, normal object model
-		i.Model.Name = strings.Title(name)
+		i.Model.Name = cleanAndTitle(name)
 		msgStr := i.Model.ProtoModel(i.Model.Name, depth+1, defs)
 		if depth < 0 {
 			return msgStr
@@ -377,9 +383,9 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 
 			// breaks on 'Class' :\
 			if !strings.HasSuffix(name, "ss") {
-				i.Items.Model.Name = strings.Title(strings.TrimSuffix(name, "s"))
+				i.Items.Model.Name = cleanAndTitle(strings.TrimSuffix(name, "s"))
 			} else {
-				i.Items.Model.Name = strings.Title(name)
+				i.Items.Model.Name = cleanAndTitle(name)
 			}
 			msgStr := i.Items.Model.ProtoModel(i.Items.Model.Name, depth+1, defs)
 			return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), i.Items.Model.Name, name, *index)
@@ -394,10 +400,10 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 				eName = name
 			}
 
-			eName = strings.Title(eName)
+			eName = cleanAndTitle(eName)
 
 			if msgName != "" {
-				eName = strings.Title(msgName) + "_" + eName
+				eName = cleanAndTitle(msgName) + "_" + eName
 			}
 
 			msgStr := ProtoEnum(eName, i.Enum, depth+1)
@@ -450,9 +456,9 @@ func PathMethodToName(path, method, operationID string) string {
 	re := regexp.MustCompile(`[\{\}\[\]()/\.]|\?.*`)
 	path = re.ReplaceAllString(path, "")
 	for _, nme := range strings.Fields(path) {
-		name += strings.Title(nme)
+		name += cleanAndTitle(nme)
 	}
-	return strings.Title(method) + name
+	return cleanAndTitle(method) + name
 }
 
 func OperationIDToName(operationID string) string {
@@ -474,7 +480,7 @@ func OperationIDToName(operationID string) string {
 			n = strings.ToLower(n)
 		}
 
-		name += strings.Title(n)
+		name += cleanAndTitle(n)
 	}
 
 	return name
@@ -512,7 +518,7 @@ func (r *Response) responseName(endpointName string) string {
 		case "":
 			return "google.protobuf.Empty"
 		default:
-			return strings.Title(
+			return cleanAndTitle(
 				strings.TrimSuffix(
 					path.Base(r.Schema.Ref),
 					path.Ext(r.Schema.Ref),
@@ -757,7 +763,7 @@ func (p Parameters) ProtoMessage(parent Parameters, endpointName string, defs ma
 // the current Model.
 func (m *Model) ProtoModel(name string, depth int, defs map[string]*Items) string {
 	var b bytes.Buffer
-	m.Name = name
+	m.Name = cleanAndTitle(name)
 	m.Depth = depth
 	s := struct {
 		*Model
@@ -777,4 +783,8 @@ func format(fmt interface{}) string {
 	}
 	return format
 
+}
+
+func cleanAndTitle(s string) string {
+    return cleanCharacters(strings.Title(s))
 }
