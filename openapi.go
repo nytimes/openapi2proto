@@ -379,7 +379,6 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			if len(i.Items.Enum) > 0 {
 				eName := cleanAndTitle(name)
 				msgStr := ProtoEnum(eName, i.Items.Enum, depth)
-
 				return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth), eName, name, *index)
 			}
 
