@@ -363,7 +363,7 @@ const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc
     {{ end }}{{"}"}}`
 
 const protoMsgTmplStr = `{{ $i := counter }}{{ $defs := .Defs }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
-{{ indent $depth }}{{ if $prop.HasComment }}{{ indent $depth }}{{ $prop.Comment }}{{ end }}    {{ $prop.ProtoMessage $msgName $propName $defs $i $depth }};{{ end }}
+{{ indent $depth }}{{ if $prop.HasComment }}{{ $prop.Comment }}{{ end }}    {{ $prop.ProtoMessage $msgName $propName $defs $i $depth }};{{ end }}
 {{ indent $depth }}}`
 
 const protoEnumTmplStr = `{{ $i := zcounter }}{{ $depth := .Depth }}{{ $name := .Name }}enum {{ .Name }} {{"{"}}{{ range $index, $pName := .Enum }}

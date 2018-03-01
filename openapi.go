@@ -378,8 +378,8 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			// check for enum!
 			if len(i.Items.Enum) > 0 {
 				eName := cleanAndTitle(name)
-				msgStr := ProtoEnum(eName, i.Items.Enum, depth)
-				return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth), eName, name, *index)
+				msgStr := ProtoEnum(eName, i.Items.Enum, depth+1)
+				return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), eName, name, *index)
 			}
 
 			// CHECK FOR SCALAR
@@ -418,7 +418,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 				eName = cleanAndTitle(msgName) + "_" + eName
 			}
 
-			msgStr := ProtoEnum(eName, i.Enum, depth)
+			msgStr := ProtoEnum(eName, i.Enum, depth+1)
 			if depth < 0 {
 				return msgStr
 			}
