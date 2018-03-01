@@ -1,0 +1,830 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package accountinformationapis;
+
+message CreateAccountRequestRequest {
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 1;
+    // Create an Account Request
+    AccountRequest body = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+    // Header containig a detached JWS signature of the body of the payload.
+    string x_jws_signature = 7;
+}
+
+message GetAccountRequestRequest {
+    // Unique identification as assigned by the ASPSP to uniquely identify the account request resource.
+    string AccountRequestId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+}
+
+message DeleteAccountRequestRequest {
+    // Unique identification as assigned by the ASPSP to uniquely identify the account request resource.
+    string AccountRequestId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 3;
+}
+
+message GetAccountsRequest {
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 1;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 2;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 3;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 4;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 5;
+}
+
+message GetAccountRequest {
+    // A unique identifier used to identify the account resource.
+    string AccountId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+}
+
+message GetAccountBalancesRequest {
+    // A unique identifier used to identify the account resource.
+    string AccountId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+}
+
+message GetAccountBeneficiariesRequest {
+    // A unique identifier used to identify the account resource.
+    string AccountId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+}
+
+message GetAccountDirectDebitsRequest {
+    // A unique identifier used to identify the account resource.
+    string AccountId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+}
+
+message GetAccountProductRequest {
+    // A unique identifier used to identify the account resource.
+    string AccountId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+}
+
+message GetAccountStandingOrdersRequest {
+    // A unique identifier used to identify the account resource.
+    string AccountId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 3;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 4;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 5;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 6;
+}
+
+message GetAccountTransactionsRequest {
+    // A unique identifier used to identify the account resource.
+    string AccountId = 1;
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 2;
+    // The UTC ISO 8601 Date Time to filter transactions FROM - NB Time component is optional - set to 00:00:00 for just Date
+    string fromBookingDateTime = 3;
+    // The UTC ISO 8601 Date Time to filter transactions TO - NB Time component is optional - set to 00:00:00 for just Date
+    string toBookingDateTime = 4;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 5;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 6;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 7;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 8;
+}
+
+message GetBalancesRequest {
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 1;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 2;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 3;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 4;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 5;
+}
+
+message GetBeneficiariesRequest {
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 1;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 2;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 3;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 4;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 5;
+}
+
+message GetDirectDebitsRequest {
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 1;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 2;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 3;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 4;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 5;
+}
+
+message GetStandingOrdersRequest {
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 1;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 2;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 3;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 4;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 5;
+}
+
+message GetTransactionsRequest {
+    // An Authorisation Token as per https://tools.ietf.org/html/rfc6750
+    string Authorization = 1;
+    // The UTC ISO 8601 Date Time to filter transactions FROM - NB Time component is optional - set to 00:00:00 for just Date
+    string fromBookingDateTime = 2;
+    // The UTC ISO 8601 Date Time to filter transactions TO - NB Time component is optional - set to 00:00:00 for just Date
+    string toBookingDateTime = 3;
+    // The PSU's IP address if the PSU is currently logged in with the TPP.
+    string x_fapi_customer_ip_address = 4;
+    // The time when the PSU last logged in with the TPP.
+    string x_fapi_customer_last_logged_time = 5;
+    // The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+    string x_fapi_financial_id = 6;
+    // An RFC4122 UID used as a correlation id.
+    string x_fapi_interaction_id = 7;
+}
+
+message AccountBalance {
+    message Data {
+            // A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+    string AccountId = 1;
+            // Amount of money of the cash balance.
+    message Amount {
+            string Amount = 1;
+                    // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+        }
+        Amount Amount = 2;
+            // Indicates whether the balance is a credit or a debit balance. Usage: A zero balance is considered to be a credit balance.
+    enum Data_CreditDebitIndicator {
+        DATA_CREDITDEBITINDICATOR_CREDIT = 0;
+        DATA_CREDITDEBITINDICATOR_DEBIT = 1;
+    }
+        Data_CreditDebitIndicator CreditDebitIndicator = 3;
+        message CreditLine {
+                    // Active Or Historic Currency Code and Amount
+    message Amount {
+                string Amount = 1;
+                            // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+            }
+            Amount Amount = 1;
+                    // Indicates whether or not the credit line is included in the balance of the account. Usage: If not present, credit line is not included in the balance amount of the account.
+    bool Included = 2;
+                    // Limit type, in a coded form.
+    enum CreditLine_Type {
+            CREDITLINE_TYPE_PREAGREED = 0;
+            CREDITLINE_TYPE_EMERGENCY = 1;
+            CREDITLINE_TYPE_TEMPORARY = 2;
+        }
+            CreditLine_Type Type = 3;
+        }
+        CreditLine CreditLine = 4;
+            // Indicates the date (and time) of the balance.
+    string DateTime = 5;
+            // Balance type, in a coded form.
+    enum Data_Type {
+        DATA_TYPE_CLOSINGAVAILABLE = 0;
+        DATA_TYPE_CLOSINGBOOKED = 1;
+        DATA_TYPE_EXPECTED = 2;
+        DATA_TYPE_FORWARDAVAILABLE = 3;
+        DATA_TYPE_INFORMATION = 4;
+        DATA_TYPE_INTERIMAVAILABLE = 5;
+        DATA_TYPE_INTERIMBOOKED = 6;
+        DATA_TYPE_OPENINGAVAILABLE = 7;
+        DATA_TYPE_OPENINGBOOKED = 8;
+        DATA_TYPE_PREVIOUSLYCLOSEDBOOKED = 9;
+    }
+        Data_Type Type = 6;
+    }
+    repeated Data Data = 1;
+    // Links relevant to the payload
+    message Links {
+        string first = 1;
+        string last = 2;
+        string next = 3;
+        string prev = 4;
+        string self = 5;
+    }
+    Links Links = 2;
+    // Meta Data relevant to the payload
+    message Meta {
+        int32 total_pages = 1;
+    }
+    Meta Meta = 3;
+}
+
+message AccountBeneficiaries {
+    message Data {
+            // A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+    string AccountId = 1;
+            // A unique and immutable identifier used to identify the beneficiary resource. This identifier has no meaning to the account owner.
+    string BeneficiaryId = 2;
+            // Provides the details to identify the beneficiary account.
+    message CreditorAccount {
+                    // Identification assigned by an institution to identify an account. This identification is known by the account owner.
+    string Identification = 1;
+                    // Name of the account, as assigned by the account servicing institution, in agreement with the account owner in order to provide an additional means of identification of the account. Usage: The account name is different from the account owner name. The account name is used in certain user communities to provide a means of identifying the account, in addition to the account owner's identity and the account number.
+    string Name = 2;
+                    // Name of the identification scheme, in a coded form as published in an external list.
+    enum CreditorAccount_SchemeName {
+            CREDITORACCOUNT_SCHEMENAME_BBAN = 0;
+            CREDITORACCOUNT_SCHEMENAME_IBAN = 1;
+        }
+            CreditorAccount_SchemeName SchemeName = 3;
+                    // This is secondary identification of the account, as assigned by the account servicing institution.  This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).
+    string SecondaryIdentification = 4;
+        }
+        CreditorAccount CreditorAccount = 3;
+            // Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction. Usage: If available, the initiating party should provide this reference in the structured remittance information, to enable reconciliation by the creditor upon receipt of the amount of money. If the business context requires the use of a creditor reference or a payment remit identification, and only one identifier can be passed through the end-to-end chain, the creditor's reference or payment remittance identification should be quoted in the end-to-end transaction identification.
+    string Reference = 4;
+            // Party that manages the account on behalf of the account owner, that is manages the registration and booking of entries on the account, calculates balances on the account and provides information about the account. This is the servicer of the beneficiary account.
+    message Servicer {
+                    // Unique and unambiguous identification of the servicing institution.
+    string Identification = 1;
+                    // Name of the identification scheme, in a coded form as published in an external list.
+    enum Servicer_SchemeName {
+            SERVICER_SCHEMENAME_BICFI = 0;
+            SERVICER_SCHEMENAME_UKSORTCODE = 1;
+        }
+            Servicer_SchemeName SchemeName = 2;
+        }
+        Servicer Servicer = 5;
+    }
+    repeated Data Data = 1;
+    // Links relevant to the payload
+    message Links {
+        string first = 1;
+        string last = 2;
+        string next = 3;
+        string prev = 4;
+        string self = 5;
+    }
+    Links Links = 2;
+    // Meta Data relevant to the payload
+    message Meta {
+        int32 total_pages = 1;
+    }
+    Meta Meta = 3;
+}
+
+message AccountDirectDebits {
+    message Data {
+            // A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+    string AccountId = 1;
+            // A unique and immutable identifier used to identify the direct debit resource. This identifier has no meaning to the account owner.
+    string DirectDebitId = 2;
+            // Specifies the status of the direct debit in code form.
+    enum Data_DirectDebitStatusCode {
+        DATA_DIRECTDEBITSTATUSCODE_ACTIVE = 0;
+        DATA_DIRECTDEBITSTATUSCODE_INACTIVE = 1;
+    }
+        Data_DirectDebitStatusCode DirectDebitStatusCode = 3;
+            // Direct Debit reference. For AUDDIS service users provide Core Reference. For non AUDDIS service users provide Core reference if possible or last used reference.
+    string MandateIdentification = 4;
+            // Name of Service User
+    string Name = 5;
+            // The amount of the most recent direct debit collection.
+    message PreviousPaymentAmount {
+            string Amount = 1;
+                    // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+        }
+        PreviousPaymentAmount PreviousPaymentAmount = 6;
+            // Date of most recent direct debit collection.
+    string PreviousPaymentDateTime = 7;
+    }
+    repeated Data Data = 1;
+    // Links relevant to the payload
+    message Links {
+        string first = 1;
+        string last = 2;
+        string next = 3;
+        string prev = 4;
+        string self = 5;
+    }
+    Links Links = 2;
+    // Meta Data relevant to the payload
+    message Meta {
+        int32 total_pages = 1;
+    }
+    Meta Meta = 3;
+}
+
+message AccountInfo {
+    message Data {
+            // Provides the details to identify an account.
+    message Account {
+                    // Identification assigned by an institution to identify an account. This identification is known by the account owner.
+    string Identification = 1;
+                    // Name of the account, as assigned by the account servicing institution, in agreement with the account owner in order to provide an additional means of identification of the account. Usage: The account name is different from the account owner name. The account name is used in certain user communities to provide a means of identifying the account, in addition to the account owner's identity and the account number.
+    string Name = 2;
+                    // Name of the identification scheme, in a coded form as published in an external list.
+    enum Account_SchemeName {
+            ACCOUNT_SCHEMENAME_BBAN = 0;
+            ACCOUNT_SCHEMENAME_IBAN = 1;
+        }
+            Account_SchemeName SchemeName = 3;
+                    // This is secondary identification of the account, as assigned by the account servicing institution.  This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).
+    string SecondaryIdentification = 4;
+        }
+        Account Account = 1;
+            // A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+    string AccountId = 2;
+            // Identification of the currency in which the account is held.  Usage: Currency should only be used in case one and the same account number covers several currencies and the initiating party needs to identify which currency needs to be used for settlement on the account.
+    string Currency = 3;
+            // The nickname of the account, assigned by the account owner in order to provide an additional means of identification of the account.
+    string Nickname = 4;
+            // Party that manages the account on behalf of the account owner, that is manages the registration and booking of entries on the account, calculates balances on the account and provides information about the account.
+    message Servicer {
+                    // Unique and unambiguous identification of the servicing institution.
+    string Identification = 1;
+                    // Name of the identification scheme, in a coded form as published in an external list.
+    enum Servicer_SchemeName {
+            SERVICER_SCHEMENAME_BICFI = 0;
+            SERVICER_SCHEMENAME_UKSORTCODE = 1;
+        }
+            Servicer_SchemeName SchemeName = 2;
+        }
+        Servicer Servicer = 5;
+    }
+    repeated Data Data = 1;
+    // Links relevant to the payload
+    message Links {
+        string first = 1;
+        string last = 2;
+        string next = 3;
+        string prev = 4;
+        string self = 5;
+    }
+    Links Links = 2;
+    // Meta Data relevant to the payload
+    message Meta {
+        int32 total_pages = 1;
+    }
+    Meta Meta = 3;
+}
+
+message AccountProduct {
+    message Data {
+            // A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+    string AccountId = 1;
+            // Identifier within the parent organisation for the product. Must be unique in the organisation.
+    string ProductIdentifier = 2;
+            // The name of the product used for marketing purposes from a customer perspective. I.e. what the customer would recognise.
+    string ProductName = 3;
+            // Descriptive code for the product category.
+    enum Data_ProductType {
+        DATA_PRODUCTTYPE_BCA = 0;
+        DATA_PRODUCTTYPE_PCA = 1;
+    }
+        Data_ProductType ProductType = 4;
+            // Identifier within the parent organisation for the product. Must be unique in the organisation.
+    string SecondaryProductIdentifier = 5;
+    }
+    repeated Data Data = 1;
+    // Links relevant to the payload
+    message Links {
+        string first = 1;
+        string last = 2;
+        string next = 3;
+        string prev = 4;
+        string self = 5;
+    }
+    Links Links = 2;
+    // Meta Data relevant to the payload
+    message Meta {
+        int32 total_pages = 1;
+    }
+    Meta Meta = 3;
+}
+
+message AccountRequest {
+    // Allows setup of an account access request
+    message Data {
+            // Specified date and time the permissions will expire. If this is not populated, the permissions will be open ended.
+    string ExpirationDateTime = 1;
+            // Specifies the Open Banking account request types. This is a list of the data clusters being consented by the PSU, and requested for authorisation with the ASPSP.
+    enum Permissions {
+        PERMISSIONS_READACCOUNTSBASIC = 0;
+        PERMISSIONS_READACCOUNTSDETAIL = 1;
+        PERMISSIONS_READBALANCES = 2;
+        PERMISSIONS_READBENEFICIARIESBASIC = 3;
+        PERMISSIONS_READBENEFICIARIESDETAIL = 4;
+        PERMISSIONS_READDIRECTDEBITS = 5;
+        PERMISSIONS_READPRODUCTS = 6;
+        PERMISSIONS_READSTANDINGORDERSBASIC = 7;
+        PERMISSIONS_READSTANDINGORDERSDETAIL = 8;
+        PERMISSIONS_READTRANSACTIONSBASIC = 9;
+        PERMISSIONS_READTRANSACTIONSCREDITS = 10;
+        PERMISSIONS_READTRANSACTIONSDEBITS = 11;
+        PERMISSIONS_READTRANSACTIONSDETAIL = 12;
+    }
+        repeated Permissions Permissions = 2;
+            // Specified start date and time for the transaction query period. If this is not populated, the start date will be open ended, and data will be returned from the earliest available transaction.
+    string TransactionFromDateTime = 3;
+            // Specified end date and time for the transaction query period. If this is not populated, the end date will be open ended, and data will be returned to the latest available transaction.
+    string TransactionToDateTime = 4;
+    }
+    Data Data = 1;
+    // The Risk payload is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.
+    message Risk {
+    }
+    Risk Risk = 2;
+}
+
+message AccountStandingOrders {
+    message Data {
+            // The date on which the first payment for a Standing Order schedule will be made.
+    string AccountId = 1;
+            // Provides the details to identify the beneficiary account.
+    message CreditorAccount {
+                    // Identification assigned by an institution to identify an account. This identification is known by the account owner.
+    string Identification = 1;
+                    // Name of the account, as assigned by the account servicing institution, in agreement with the account owner in order to provide an additional means of identification of the account. Usage: The account name is different from the account owner name. The account name is used in certain user communities to provide a means of identifying the account, in addition to the account owner's identity and the account number.
+    string Name = 2;
+                    // Name of the identification scheme, in a coded form as published in an external list.
+    enum CreditorAccount_SchemeName {
+            CREDITORACCOUNT_SCHEMENAME_BBAN = 0;
+            CREDITORACCOUNT_SCHEMENAME_IBAN = 1;
+        }
+            CreditorAccount_SchemeName SchemeName = 3;
+                    // This is secondary identification of the account, as assigned by the account servicing institution.  This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).
+    string SecondaryIdentification = 4;
+        }
+        CreditorAccount CreditorAccount = 2;
+            // The amount of the final Standing Order
+    message FinalPaymentAmount {
+            string Amount = 1;
+                    // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+        }
+        FinalPaymentAmount FinalPaymentAmount = 3;
+            // The date on which the final payment for a Standing Order schedule will be made.
+    string FinalPaymentDateTime = 4;
+            // The amount of the first Standing Order
+    message FirstPaymentAmount {
+            string Amount = 1;
+                    // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+        }
+        FirstPaymentAmount FirstPaymentAmount = 5;
+            // The date on which the first payment for a Standing Order schedule will be made.
+    string FirstPaymentDateTime = 6;
+            // EvryWorkgDay - PSC070 IntrvlWkDay:PSC110:PSC080 (PSC070 code + PSC110 + PSC080) WkInMnthDay:PSC100:PSC080 (PSC070 code + PSC100 + PSC080) IntrvlMnthDay:PSC120:PSC090 (PSC070 code + PSC120 + PSC090) QtrDay: + either (ENGLISH, SCOTTISH or RECEIVED) PSC070 + PSC130 The following response codes may be generated by this data element: PSC070: T221 - Schedule code must be a valid enumeration value. PSC070: T245 - Must be provided for standing order only. PSC080: T222 - Day in week must be within defined bounds (range 1 to 5). PSC080: T229 - Must be present if Schedule Code = IntrvlWkDay. PSC080: T231 - Must be present if Schedule Code = WkInMnthDay. PSC090: T223 - Day in month must be within defined bounds (range -5 to 31 excluding: 0 & 00). PSC090: T233 - Must be present if Schedule Code = IntrvlMnthDay. PSC100: T224 - Week in month must be within defined bounds (range 1 to 5). PSC100: T232 - Must be present if Schedule Code = WkInMnthDay. PSC110: T225 - Interval in weeks must be within defined bounds (range 1 to 9). PSC110: T230 - Must be present if Schedule Code = IntrvlWkDay. PSC120: T226 - Interval in months must be a valid enumeration value (range 1 to 6, 12 and 24). PSC120: T234 - Must be present if Schedule Code = IntrvlMnthDay. PSC130: T227 - Quarter Day must be a valid enumeration value. PSC130: T235 - Must be present if Schedule Code = QtrDay. The regular expression for this element combines five smaller versions for each permitted pattern. To aid legibility - the components are presented individually here: EvryWorkgDay IntrvlWkDay:0[1-9]:0[1-5] WkInMnthDay:0[1-5]:0[1-5] IntrvlMnthDay:(0[1-6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01]) QtrDay:(ENGLISH|SCOTTISH|RECEIVED) Mandatory/Conditional/Optional/Parent/Leaf: OL Type: 35 char string Regular Expression(s): (EvryWorkgDay)|(IntrvlWkDay:0[1-9]:0[1-5])|(WkInMnthDay:0[1-5]:0[1-5])|(IntrvlMnthDay:(0[1- 6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01]))|(QtrDay:(ENGLISH|SCOTTISH|RECEIVED))
+    string Frequency = 7;
+            // The amount of the next Standing Order
+    message NextPaymentAmount {
+            string Amount = 1;
+                    // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+        }
+        NextPaymentAmount NextPaymentAmount = 8;
+            // The date on which the next payment for a Standing Order schedule will be made.
+    string NextPaymentDateTime = 9;
+            // Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction. Usage: If available, the initiating party should provide this reference in the structured remittance information, to enable reconciliation by the creditor upon receipt of the amount of money. If the business context requires the use of a creditor reference or a payment remit identification, and only one identifier can be passed through the end-to-end chain, the creditor's reference or payment remittance identification should be quoted in the end-to-end transaction identification.
+    string Reference = 10;
+            // Party that manages the account on behalf of the account owner, that is manages the registration and booking of entries on the account, calculates balances on the account and provides information about the account. This is the servicer of the beneficiary account
+    message Servicer {
+                    // Unique and unambiguous identification of the servicing institution.
+    string Identification = 1;
+                    // Name of the identification scheme, in a coded form as published in an external list.
+    enum Servicer_SchemeName {
+            SERVICER_SCHEMENAME_BICFI = 0;
+            SERVICER_SCHEMENAME_UKSORTCODE = 1;
+        }
+            Servicer_SchemeName SchemeName = 2;
+        }
+        Servicer Servicer = 11;
+            // A unique and immutable identifier used to identify the standing order resource. This identifier has no meaning to the account owner.
+    string StandingOrderId = 12;
+    }
+    repeated Data Data = 1;
+    // Links relevant to the payload
+    message Links {
+        string first = 1;
+        string last = 2;
+        string next = 3;
+        string prev = 4;
+        string self = 5;
+    }
+    Links Links = 2;
+    // Meta Data relevant to the payload
+    message Meta {
+        int32 total_pages = 1;
+    }
+    Meta Meta = 3;
+}
+
+message AccountTransactions {
+    // Data Section of the Payload
+    message Data {
+            // A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+    string AccountId = 1;
+            // Information that locates and identifies a specific address, as defined by postal services, that is presented in free format text.
+    string AddressLine = 2;
+            // Amount of money in the cash entry.
+    message Amount {
+            string Amount = 1;
+                    // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+        }
+        Amount Amount = 3;
+            // Set of elements used to define the balance as a numerical representation of the net increases and decreases in an account after a transaction entry is applied to the account.
+    message Balance {
+                    // Amount of money of the cash balance after a transaction entry is applied to the account..
+    message Amount {
+                string Amount = 1;
+                            // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+    string Currency = 2;
+            }
+            Amount Amount = 1;
+                    // Indicates whether the balance is a credit or a debit balance. Usage: A zero balance is considered to be a credit balance.
+    enum Balance_CreditDebitIndicator {
+            BALANCE_CREDITDEBITINDICATOR_CREDIT = 0;
+            BALANCE_CREDITDEBITINDICATOR_DEBIT = 1;
+        }
+            Balance_CreditDebitIndicator CreditDebitIndicator = 2;
+                    // Balance type, in a coded form.
+    enum Balance_Type {
+            BALANCE_TYPE_CLOSINGAVAILABLE = 0;
+            BALANCE_TYPE_CLOSINGBOOKED = 1;
+            BALANCE_TYPE_EXPECTED = 2;
+            BALANCE_TYPE_FORWARDAVAILABLE = 3;
+            BALANCE_TYPE_INFORMATION = 4;
+            BALANCE_TYPE_INTERIMAVAILABLE = 5;
+            BALANCE_TYPE_INTERIMBOOKED = 6;
+            BALANCE_TYPE_OPENINGAVAILABLE = 7;
+            BALANCE_TYPE_OPENINGBOOKED = 8;
+            BALANCE_TYPE_PREVIOUSLYCLOSEDBOOKED = 9;
+        }
+            Balance_Type Type = 3;
+        }
+        Balance Balance = 4;
+            // Set of elements used to fully identify the type of underlying transaction resulting in an entry.
+    message BankTransactionCode {
+                    // Specifies the family within a domain.
+    string Code = 1;
+                    // Specifies the sub-product family within a specific family.
+    string SubCode = 2;
+        }
+        BankTransactionCode BankTransactionCode = 5;
+            // Date and time when a transaction entry is posted to an account on the account servicer's books. Usage: Booking date is the expected booking date, unless the status is booked, in which case it is the actual booking date.
+    string BookingDateTime = 6;
+            // Indicates whether the transaction is a credit or a debit entry.
+    enum Data_CreditDebitIndicator {
+        DATA_CREDITDEBITINDICATOR_CREDIT = 0;
+        DATA_CREDITDEBITINDICATOR_DEBIT = 1;
+    }
+        Data_CreditDebitIndicator CreditDebitIndicator = 7;
+            // Details of the merchant involved in the transaction.
+    message MerchantDetails {
+                    // Category code conform to ISO 18245, related to the type of services or goods the merchant provides for the transaction.
+    string MerchantCategoryCode = 1;
+                    // Name by which the merchant is known.
+    string MerchantName = 2;
+        }
+        MerchantDetails MerchantDetails = 8;
+            // Set of elements to fully identify a proprietary bank transaction code.
+    message ProprietaryBankTransactionCode {
+                    // Proprietary bank transaction code to identify the underlying transaction.
+    string Code = 1;
+                    // Identification of the issuer of the proprietary bank transaction code.
+    string Issuer = 2;
+        }
+        ProprietaryBankTransactionCode ProprietaryBankTransactionCode = 9;
+            // Status of a transaction entry on the books of the account servicer.
+    enum Data_Statu {
+        DATA_STATU_BOOKED = 0;
+        DATA_STATU_PENDING = 1;
+    }
+        Data_Statu Status = 10;
+            // Unique identifier for the transaction within an servicing institution. This identifier is both unique and immutable.
+    string TransactionId = 11;
+            // Further details of the transaction. This is the transaction narrative, which is unstructured text.
+    string TransactionInformation = 12;
+            // Unique reference for the transaction. This reference is optionally populated, and may as an example be the FPID in the Faster Payments context.
+    string TransactionReference = 13;
+            // Date and time at which assets become available to the account owner in case of a credit entry, or cease to be available to the account owner in case of a debit entry.  Usage: If entry status is pending and value date is present, then the value date refers to an expected/requested value date. For entries subject to availability/float and for which availability information is provided, the value date must not be used. In this case the availability component identifies the  number of availability days.
+    string ValueDateTime = 14;
+    }
+    repeated Data Data = 1;
+    // Links relevant to the payload
+    message Links {
+        string first = 1;
+        string last = 2;
+        string next = 3;
+        string prev = 4;
+        string self = 5;
+    }
+    Links Links = 2;
+    // Meta Data relevant to the payload
+    message Meta {
+        int32 total_pages = 1;
+    }
+    Meta Meta = 3;
+}
+
+message CreateAccountRequest {
+    message Data {
+            // Unique identification as assigned to identify the account request resource.
+    string AccountRequestId = 1;
+            // Date and time at which the resource was created.
+    string CreationDateTime = 2;
+            // Specified date and time the permissions will expire. If this is not populated, the permissions will be open ended.
+    string ExpirationDateTime = 3;
+            // Specifies the Open Banking account request types. This is a list of the data clusters being consented by the PSU, and requested for authorisation with the ASPSP.
+    enum Permissions {
+        PERMISSIONS_READACCOUNTSBASIC = 0;
+        PERMISSIONS_READACCOUNTSDETAIL = 1;
+        PERMISSIONS_READBALANCES = 2;
+        PERMISSIONS_READBENEFICIARIESBASIC = 3;
+        PERMISSIONS_READBENEFICIARIESDETAIL = 4;
+        PERMISSIONS_READDIRECTDEBITS = 5;
+        PERMISSIONS_READPRODUCTS = 6;
+        PERMISSIONS_READSTANDINGORDERSBASIC = 7;
+        PERMISSIONS_READSTANDINGORDERSDETAIL = 8;
+        PERMISSIONS_READTRANSACTIONSBASIC = 9;
+        PERMISSIONS_READTRANSACTIONSCREDITS = 10;
+        PERMISSIONS_READTRANSACTIONSDEBITS = 11;
+        PERMISSIONS_READTRANSACTIONSDETAIL = 12;
+    }
+        repeated Permissions Permissions = 4;
+            // Specifies the status of the account request resource.
+    enum Data_Statu {
+        DATA_STATU_AUTHORISED = 0;
+        DATA_STATU_AWAITINGAUTHORISATION = 1;
+        DATA_STATU_REJECTED = 2;
+        DATA_STATU_REVOKED = 3;
+    }
+        Data_Statu Status = 5;
+            // Specified start date and time for the transaction query period. If this is not populated, the start date will be open ended, and data will be returned from the earliest available transaction.
+    string TransactionFromDateTime = 6;
+            // Specified end date and time for the transaction query period. If this is not populated, the end date will be open ended, and data will be returned to the latest available transaction.
+    string TransactionToDateTime = 7;
+    }
+    Data Data = 1;
+    // The Risk payload is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.
+    message Risk {
+    }
+    Risk Risk = 2;
+}
+
+service AccountInformationAPIsService {
+    // Create an account request
+    // 
+    // Create an account request
+    rpc CreateAccountRequest(CreateAccountRequestRequest) returns (CreateAccountRequest) {}
+    // Get an account request
+    // 
+    // Get an account request
+    rpc GetAccountRequest(GetAccountRequestRequest) returns (CreateAccountRequest) {}
+    // Delete an account request
+    // 
+    // Delete an account request
+    rpc DeleteAccountRequest(DeleteAccountRequestRequest) returns (google.protobuf.Empty) {}
+    // Get Accounts
+    // 
+    // Get a list of accounts
+    rpc GetAccounts(GetAccountsRequest) returns (AccountInfo) {}
+    // Get Account
+    // 
+    // Get an account
+    rpc GetAccount(GetAccountRequest) returns (AccountInfo) {}
+    // Get Account Balances
+    // 
+    // Get Balances related to an account
+    rpc GetAccountBalances(GetAccountBalancesRequest) returns (AccountBalance) {}
+    // Get Account Beneficiaries
+    // 
+    // Get Beneficiaries related to an account
+    rpc GetAccountBeneficiaries(GetAccountBeneficiariesRequest) returns (AccountBeneficiaries) {}
+    // Get Account Direct Debits
+    // 
+    // Get Direct Debits related to an account
+    rpc GetAccountDirectDebits(GetAccountDirectDebitsRequest) returns (AccountDirectDebits) {}
+    // Get Account Product
+    // 
+    // Get Product related to an account
+    rpc GetAccountProduct(GetAccountProductRequest) returns (AccountProduct) {}
+    // Get Account Standing Orders
+    // 
+    // Get Standing Orders related to an account
+    rpc GetAccountStandingOrders(GetAccountStandingOrdersRequest) returns (AccountStandingOrders) {}
+    // Get Account Transactions
+    // 
+    // Get transactions related to an account
+    rpc GetAccountTransactions(GetAccountTransactionsRequest) returns (AccountTransactions) {}
+    // Get Balances
+    // 
+    // Get Balances
+    rpc GetBalances(GetBalancesRequest) returns (AccountBalance) {}
+    // Get Beneficiaries
+    // 
+    // Get Beneficiaries
+    rpc GetBeneficiaries(GetBeneficiariesRequest) returns (AccountBeneficiaries) {}
+    // Get Direct Debits
+    // 
+    // Get Direct Debits
+    rpc GetDirectDebits(GetDirectDebitsRequest) returns (AccountDirectDebits) {}
+    // Get Standing Orders
+    // 
+    // Get Standing Orders
+    rpc GetStandingOrders(GetStandingOrdersRequest) returns (AccountStandingOrders) {}
+    // Get Transactions
+    // 
+    // Get Transactions
+    rpc GetTransactions(GetTransactionsRequest) returns (AccountTransactions) {}
+}
