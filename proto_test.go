@@ -228,6 +228,13 @@ func TestGenerateProto(t *testing.T) {
 
 			"fixtures/kubernetes.proto",
 		},
+		{
+			false,
+			false,
+			"fixtures/accountv1-0.json",
+
+			"fixtures/accountv1-0.proto",
+		},
 	}
 
 	origin, _ := os.Getwd()

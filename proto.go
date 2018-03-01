@@ -216,6 +216,17 @@ func importsAndRefs(api *APIDefinition) ([]string, error) {
 	return impts, nil
 }
 
+// sad hack to marshal data out and back into an *Items
+func mapToItem(mp map[string]interface{}) (*Items, error) {
+	data, err := json.Marshal(mp)
+	if err != nil {
+		return nil, err
+	}
+	var it Items
+	err = json.Unmarshal(data, &it)
+	return &it, err
+}
+
 func replaceExternalRefs(item *Items) (map[string]*Items, error) {
 	defs := map[string]*Items{}
 	if item.Ref != "" {
@@ -274,8 +285,13 @@ func replaceExternalRefs(item *Items) (map[string]*Items, error) {
 			defs[k] = v
 		}
 	}
-	if item.AdditionalProperties != nil {
-		ds, err := replaceExternalRefs(item.AdditionalProperties)
+	if addl, ok := item.AdditionalProperties.(map[string]interface{}); ok && addl != nil {
+		item, err := mapToItem(addl)
+		if err != nil {
+			log.Printf("warning: unable to parse additionalProperties: %s", err)
+			return defs, nil
+		}
+		ds, err := replaceExternalRefs(item)
 		if err != nil {
 			return nil, errors.Wrap(err, "unable to replace external spec refs")
 		}
@@ -306,9 +322,12 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 			imports[impt] = struct{}{}
 		}
 	}
-	if item.AdditionalProperties != nil {
-		for _, impt := range traverseItemsForImports(item.AdditionalProperties, defs) {
-			imports[impt] = struct{}{}
+	if addl, ok := item.AdditionalProperties.(map[string]interface{}); ok && addl != nil {
+		item, err := mapToItem(addl)
+		if err == nil {
+			for _, impt := range traverseItemsForImports(item, defs) {
+				imports[impt] = struct{}{}
+			}
 		}
 	}
 	var out []string

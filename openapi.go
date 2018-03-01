@@ -77,7 +77,7 @@ type Items struct {
 	ProtoTag int `yaml:"x-proto-tag" json:"x-proto-tag"`
 
 	// Map type
-	AdditionalProperties *Items `yaml:"additionalProperties" json:"additionalProperties"`
+	AdditionalProperties interface{} `yaml:"additionalProperties" json:"additionalProperties"`
 
 	// ref another Model
 	Ref string `yaml:"$ref"json:"$ref"`
@@ -339,16 +339,20 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 	switch typ {
 	case "object":
 		// check for map declaration
-		if i.AdditionalProperties != nil {
-			var itemType string
-			switch {
-			case i.AdditionalProperties.Ref != "":
-				itemType, _ = refType(i.AdditionalProperties.Ref, defs)
-			case i.AdditionalProperties.Type != nil:
-				itemType = i.AdditionalProperties.Type.(string)
+		switch addl := i.AdditionalProperties.(type) {
+		case map[string]interface{}:
+			if addl != nil {
+				var itemType string
+				ref, ok := addl["$ref"].(string)
+				switch {
+				case ok && ref != "":
+					itemType, _ = refType(ref, defs)
+				case addl["type"] != nil:
+					itemType = addl["type"].(string)
+				}
+				// Note: Map of arrays is not currently supported.
+				return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
 			}
-			// Note: Map of arrays is not currently supported.
-			return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
 		}
 
 		// check for referenced schema object (parameters/fields)
@@ -370,6 +374,15 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			if depth < 0 {
 				return ""
 			}
+
+			// check for enum!
+			if len(i.Items.Enum) > 0 {
+				eName := cleanAndTitle(name)
+				msgStr := ProtoEnum(eName, i.Items.Enum, depth)
+
+				return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth), eName, name, *index)
+			}
+
 			// CHECK FOR SCALAR
 			pt := protoScalarType(name, i.Items.Type, i.Items.Format, *index)
 			if pt != "" {
@@ -406,7 +419,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 				eName = cleanAndTitle(msgName) + "_" + eName
 			}
 
-			msgStr := ProtoEnum(eName, i.Enum, depth+1)
+			msgStr := ProtoEnum(eName, i.Enum, depth)
 			if depth < 0 {
 				return msgStr
 			}
