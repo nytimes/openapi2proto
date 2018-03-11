@@ -1,0 +1,17 @@
+swagger: '2.0'
+info:
+  title: refs
+definitions:
+  TestModel:
+    type: object
+    properties:
+      test_map_object:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/TestModel'
+        x-proto-tag: 11
+      test_map_scalar:
+        type: object
+        additionalProperties:
+          type: string
+        x-proto-tag: 12

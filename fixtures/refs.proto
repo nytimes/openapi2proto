@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package refs;
+
+message TestModel {
+    map<string, TestModel> test_map_object = 11;
+    map<string, string> test_map_scalar = 12;
+}
+
+

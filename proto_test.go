@@ -12,109 +12,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func TestRefType(t *testing.T) {
-	tests := []struct {
-		tName string
-		ref   string
-		defs  map[string]*Items
-
-		want    string
-		wantPkg string
-	}{
-		{
-			"Simple ref",
-
-			"#/definitions/Name",
-			map[string]*Items{
-				"Name": &Items{
-					Type: "object",
-				},
-			},
-			"Name",
-			"",
-		},
-		{
-			"URL nested ref",
-
-			"http://something.com/commons/name.json#/definitions/Name",
-			nil,
-			"commons.name.Name",
-			"commons/name.proto",
-		},
-		{
-			"URL no ref",
-
-			"http://something.com/commons/name.json",
-			nil,
-			"commons.Name",
-			"commons/name.proto",
-		},
-		{
-			"relative no ref",
-
-			"commons/names/Name.json",
-			nil,
-			"commons.names.Name",
-			"commons/names/name.proto",
-		},
-		{
-			"relative nested ref",
-
-			"commons/names/Name.json#/definitions/Name",
-			nil,
-			"commons.names.name.Name",
-			"commons/names/name.proto",
-		},
-		{
-			"relative nested ref",
-
-			"something.json#/definitions/RelativeRef",
-			nil,
-			"something.RelativeRef",
-			"something.proto",
-		},
-
-		{
-			"relative nested ref",
-
-			"names.json#/definitions/Name",
-			nil,
-			"names.Name",
-			"names.proto",
-		},
-
-		{
-			"relative ref, back one dir",
-
-			"../commons/names/Name.json",
-			nil,
-			"commons.names.Name",
-			"commons/names/name.proto",
-		},
-		{
-			"relative nested ref, back two dir",
-
-			"../../commons/names/Name.json#/definitions/Name",
-			nil,
-			"commons.names.name.Name",
-			"commons/names/name.proto",
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.tName, func(t *testing.T) {
-			got, gotPkg := refType(test.ref, test.defs)
-			if got != test.want {
-				t.Errorf("[%s] expected %q got %q", test.tName, test.want, got)
-			}
-
-			if gotPkg != test.wantPkg {
-				t.Errorf("[%s] expected package %q got %q", test.tName, test.wantPkg, gotPkg)
-			}
-		})
-	}
-}
-
 func TestGenerateProto(t *testing.T) {
 	tests := []struct {
 		yaml             bool
@@ -235,6 +132,27 @@ func TestGenerateProto(t *testing.T) {
 
 			"fixtures/accountv1-0.proto",
 		},
+		{
+			false,
+			false,
+			"fixtures/refs.json",
+
+			"fixtures/refs.proto",
+		},
+		{
+			true,
+			false,
+			"fixtures/refs.yaml",
+
+			"fixtures/refs.proto",
+		},
+		{
+			true,
+			false,
+			"fixtures/semantic_api.yaml",
+
+			"fixtures/semantic_api.proto",
+		},
 	}
 
 	origin, _ := os.Getwd()
@@ -260,7 +178,6 @@ func TestGenerateProto(t *testing.T) {
 					t.Fatalf("unable to unmarshal text fixture into APIDefinition: %s - %s",
 						test.givenFixturePath, err)
 				}
-
 			}
 
 			protoResult, err := GenerateProto(&testAPI, test.options)
@@ -277,7 +194,7 @@ func TestGenerateProto(t *testing.T) {
 			if string(want) != string(protoResult) {
 				dmp := diffmatchpatch.New()
 				diffs := dmp.DiffMain(string(want), string(protoResult), false)
-				t.Errorf("testYaml (%s) differences:\n%s",
+				t.Errorf("test (%s) differences:\n%s",
 					test.givenFixturePath, dmp.DiffPrettyText(diffs))
 			}
 		})

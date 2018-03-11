@@ -80,7 +80,7 @@ type Items struct {
 	AdditionalProperties interface{} `yaml:"additionalProperties" json:"additionalProperties"`
 
 	// ref another Model
-	Ref string `yaml:"$ref"json:"$ref"`
+	Ref string `yaml:"$ref" json:"$ref"`
 
 	// is an array
 	Items *Items `yaml:"items" json:"items"`
@@ -338,18 +338,45 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, index *int, depth int) string {
 	switch typ {
 	case "object":
+		// make a map of the additional props we might get
+		addlProps := make(map[string]string)
+
 		// check for map declaration
 		switch addl := i.AdditionalProperties.(type) {
 		case map[string]interface{}:
 			if addl != nil {
-				var itemType string
-				ref, ok := addl["$ref"].(string)
-				switch {
-				case ok && ref != "":
-					itemType, _ = refType(ref, defs)
-				case addl["type"] != nil:
-					itemType = addl["type"].(string)
+				if ref, ok := addl["$ref"].(string); ok {
+					addlProps["$ref"] = ref
 				}
+				if t, ok := addl["type"].(string); ok {
+					addlProps["type"] = t
+				}
+			}
+		// we need to check for both because yaml parses as
+		// map[interface{}]interface{} rather than map[string]interface{}
+		// see: https://github.com/go-yaml/yaml/issues/139
+		case map[interface{}]interface{}:
+			for k, v := range addl {
+				switch k := k.(type) {
+				case string:
+					switch v := v.(type) {
+					case string:
+						addlProps[k] = v
+					}
+				}
+			}
+		}
+
+		if len(addlProps) > 0 {
+			var itemType string
+
+			if ref, ok := addlProps["$ref"]; ok && ref != "" {
+				itemType, _ = refType(ref, defs)
+			} else if t, ok := addlProps["type"]; ok && t != "" {
+				itemType = t
+			}
+
+			if itemType != "" {
 				// Note: Map of arrays is not currently supported.
 				return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
 			}
