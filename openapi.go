@@ -339,7 +339,7 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 	switch typ {
 	case "object":
 		// make a map of the additional props we might get
-		addlProps := make(map[string]string)
+		addlProps := map[string]string{}
 
 		// check for map declaration
 		switch addl := i.AdditionalProperties.(type) {
