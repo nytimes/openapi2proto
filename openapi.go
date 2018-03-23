@@ -122,8 +122,15 @@ func protoScalarType(name string, typ, frmt interface{}, indx int) string {
 		case "bytes":
 			return fmt.Sprintf("bytes %s = %d", name, indx)
 		case "number":
-			if frmat == "" {
+			// #62 type: number + format: long -> int64,
+			//     type: number + format: integer -> int32
+			switch frmat {
+			case "":
 				frmat = "double"
+			case "long":
+				frmat = "int64"
+			case "integer":
+				frmat = "int32"
 			}
 			return fmt.Sprintf("%s %s = %d", frmat, name, indx)
 		case "integer":
