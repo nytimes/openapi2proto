@@ -256,6 +256,12 @@ func TestGenerateProto(t *testing.T) {
 
 			"fixtures/semantic_api.proto",
 		},
+		{
+			true,
+			false,
+			"fixtures/integers.yaml",
+			"fixtures/integers.proto",
+		},
 	}
 
 	origin, _ := os.Getwd()

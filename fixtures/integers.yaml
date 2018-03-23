@@ -1,0 +1,29 @@
+swagger: '2.0'
+
+info:
+  version: "0.0.0"
+  title: "Integers"
+  description: "Make sure integer types are translated correctly to protobuf"
+
+paths:
+  /integer:
+    get:
+      description: |
+        Return a bunch of integers
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful integer retrieval
+          schema:
+            $ref: '#/definitions/Integers'
+definitions:
+  Integers:
+    type: object
+    properties:
+      longValue:
+        type: number
+        format: long
+      intValue:
+        type: number
+        format: integer

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package integers;
+
+message Integers {
+    int32 intValue = 1;
+    int64 longValue = 2;
+}
+
+service IntegersService {
+    // Return a bunch of integers
+    rpc GetInteger(google.protobuf.Empty) returns (Integers) {}
+}
