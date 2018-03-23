@@ -281,6 +281,10 @@ func TestGenerateProto(t *testing.T) {
 			givenFixturePath: "fixtures/semantic_api.yaml",
 			wantProto:        "fixtures/semantic_api.proto",
 		},
+		{
+			givenFixturePath: "fixtures/integers.yaml",
+			wantProto:        "fixtures/integers.proto",
+		},
 	}
 	testGenProto(t, tests...)
 }
