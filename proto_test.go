@@ -3,8 +3,10 @@ package openapi2proto
 import (
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path"
+	"strings"
 	"testing"
 
 	"github.com/pmezard/go-difflib/difflib"
@@ -114,158 +116,26 @@ func TestRefType(t *testing.T) {
 	}
 }
 
-func TestGenerateProto(t *testing.T) {
-	tests := []struct {
-		yaml             bool
-		options          bool
-		givenFixturePath string
+type genProtoTestCase struct {
+	options          bool
+	givenFixturePath string
+	wantProto        string
+	remoteFiles      []string
+}
 
-		wantProto string
-	}{
-		{
-			true,
-			false,
-			"fixtures/cats.yaml",
 
-			"fixtures/cats.proto",
-		},
-		{
-			true,
-			false,
-			"fixtures/catsanddogs.yaml",
-
-			"fixtures/catsanddogs.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/semantic_api.json",
-
-			"fixtures/semantic_api.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/most_popular.json",
-
-			"fixtures/most_popular.proto",
-		},
-		{
-			true,
-			false,
-			"fixtures/spec.yaml",
-
-			"fixtures/spec.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/spec.json",
-
-			"fixtures/spec.proto",
-		},
-		{
-			false,
-			true,
-			"fixtures/semantic_api.json",
-
-			"fixtures/semantic_api-options.proto",
-		},
-		{
-			false,
-			true,
-			"fixtures/most_popular.json",
-
-			"fixtures/most_popular-options.proto",
-		},
-		{
-			true,
-			true,
-			"fixtures/spec.yaml",
-
-			"fixtures/spec-options.proto",
-		},
-		{
-			false,
-			true,
-			"fixtures/spec.json",
-
-			"fixtures/spec-options.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/includes_query.json",
-
-			"fixtures/includes_query.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/lowercase_def.json",
-
-			"fixtures/lowercase_def.proto",
-		},
-		{
-			true,
-			false,
-			"fixtures/petstore/swagger.yaml",
-
-			"fixtures/petstore/swagger.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/missing_type.json",
-
-			"fixtures/missing_type.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/kubernetes.json",
-
-			"fixtures/kubernetes.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/accountv1-0.json",
-
-			"fixtures/accountv1-0.proto",
-		},
-		{
-			false,
-			false,
-			"fixtures/refs.json",
-
-			"fixtures/refs.proto",
-		},
-		{
-			true,
-			false,
-			"fixtures/refs.yaml",
-
-			"fixtures/refs.proto",
-		},
-		{
-			true,
-			false,
-			"fixtures/semantic_api.yaml",
-
-			"fixtures/semantic_api.proto",
-		},
-		{
-			true,
-			false,
-			"fixtures/integers.yaml",
-			"fixtures/integers.proto",
-		},
-	}
-
+func testGenProto(t *testing.T, tests ...genProtoTestCase) {
+	t.Helper()
 	origin, _ := os.Getwd()
 	for _, test := range tests {
 		t.Run(test.givenFixturePath, func(t *testing.T) {
+			for _, remoteFile := range test.remoteFiles {
+				res, err := http.Get(remoteFile)
+				if err != nil || res.StatusCode != http.StatusOK {
+					t.Skip(`Remote file ` + remoteFile + ` is not available`)
+				}
+			}
+
 			os.Chdir(origin)
 			testSpec, err := ioutil.ReadFile(test.givenFixturePath)
 			if err != nil {
@@ -274,7 +144,7 @@ func TestGenerateProto(t *testing.T) {
 
 			os.Chdir(path.Dir(test.givenFixturePath))
 			var testAPI APIDefinition
-			if test.yaml {
+			if strings.HasSuffix(test.givenFixturePath, ".yaml") {
 				err = yaml.Unmarshal(testSpec, &testAPI)
 				if err != nil {
 					t.Fatalf("unable to unmarshal text fixture into APIDefinition: %s - %s ",
@@ -314,4 +184,107 @@ func TestGenerateProto(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestNetwork(t *testing.T) {
+	testGenProto(t, genProtoTestCase{
+		givenFixturePath: "fixtures/petstore/swagger.yaml",
+		wantProto:        "fixtures/petstore/swagger.proto",
+		remoteFiles: []string{
+			"https://raw.githubusercontent.com/NYTimes/openapi2proto/master/fixtures/petstore/Pet.yaml",
+		},
+	})
+}
+
+func TestGenerateProto(t *testing.T) {
+	tests := []genProtoTestCase{
+		{
+			givenFixturePath: "fixtures/cats.yaml",
+			wantProto:        "fixtures/cats.proto",
+		},
+		{
+			givenFixturePath: "fixtures/catsanddogs.yaml",
+
+			wantProto: "fixtures/catsanddogs.proto",
+		},
+		{
+			givenFixturePath: "fixtures/semantic_api.json",
+			wantProto:        "fixtures/semantic_api.proto",
+		},
+		{
+			givenFixturePath: "fixtures/most_popular.json",
+			wantProto:        "fixtures/most_popular.proto",
+		},
+		{
+			givenFixturePath: "fixtures/spec.yaml",
+			wantProto:        "fixtures/spec.proto",
+		},
+		{
+			givenFixturePath: "fixtures/spec.json",
+			wantProto:        "fixtures/spec.proto",
+		},
+		{
+			options:          true,
+			givenFixturePath: "fixtures/semantic_api.json",
+			wantProto:        "fixtures/semantic_api-options.proto",
+		},
+		{
+			options:          true,
+			givenFixturePath: "fixtures/most_popular.json",
+			wantProto:        "fixtures/most_popular-options.proto",
+		},
+		{
+			options:          true,
+			givenFixturePath: "fixtures/spec.yaml",
+			wantProto:        "fixtures/spec-options.proto",
+		},
+		{
+			options:          true,
+			givenFixturePath: "fixtures/spec.json",
+			wantProto:        "fixtures/spec-options.proto",
+		},
+		{
+			givenFixturePath: "fixtures/includes_query.json",
+			wantProto:        "fixtures/includes_query.proto",
+		},
+		{
+
+			givenFixturePath: "fixtures/lowercase_def.json",
+			wantProto:        "fixtures/lowercase_def.proto",
+		},
+		{
+
+			givenFixturePath: "fixtures/missing_type.json",
+			wantProto:        "fixtures/missing_type.proto",
+		},
+		{
+
+			givenFixturePath: "fixtures/kubernetes.json",
+			wantProto:        "fixtures/kubernetes.proto",
+		},
+		{
+
+			givenFixturePath: "fixtures/accountv1-0.json",
+			wantProto:        "fixtures/accountv1-0.proto",
+		},
+		{
+
+			givenFixturePath: "fixtures/refs.json",
+			wantProto:        "fixtures/refs.proto",
+		},
+		{
+
+			givenFixturePath: "fixtures/refs.yaml",
+			wantProto:        "fixtures/refs.proto",
+		},
+		{
+			givenFixturePath: "fixtures/semantic_api.yaml",
+			wantProto:        "fixtures/semantic_api.proto",
+		},
+		{
+			givenFixturePath: "fixtures/integers.yaml",
+			wantProto:        "fixtures/integers.proto",
+		},
+	}
+	testGenProto(t, tests...)
 }
