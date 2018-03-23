@@ -123,9 +123,9 @@ type genProtoTestCase struct {
 	remoteFiles      []string
 }
 
+
 func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 	t.Helper()
-
 	origin, _ := os.Getwd()
 	for _, test := range tests {
 		t.Run(test.givenFixturePath, func(t *testing.T) {
