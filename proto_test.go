@@ -117,17 +117,17 @@ func TestRefType(t *testing.T) {
 }
 
 type genProtoTestCase struct {
-	options          bool
-	givenFixturePath string
-	wantProto        string
-	remoteFiles      []string
+	options     bool
+	fixturePath string
+	wantProto   string
+	remoteFiles []string
 }
 
 func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 	t.Helper()
 	origin, _ := os.Getwd()
 	for _, test := range tests {
-		t.Run(test.givenFixturePath, func(t *testing.T) {
+		t.Run(test.fixturePath, func(t *testing.T) {
 			for _, remoteFile := range test.remoteFiles {
 				res, err := http.Get(remoteFile)
 				if err != nil || res.StatusCode != http.StatusOK {
@@ -136,24 +136,24 @@ func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 			}
 
 			os.Chdir(origin)
-			testSpec, err := ioutil.ReadFile(test.givenFixturePath)
+			testSpec, err := ioutil.ReadFile(test.fixturePath)
 			if err != nil {
 				t.Fatal("unable to open test fixture: ", err)
 			}
 
-			os.Chdir(path.Dir(test.givenFixturePath))
+			os.Chdir(path.Dir(test.fixturePath))
 			var testAPI APIDefinition
-			if strings.HasSuffix(test.givenFixturePath, ".yaml") {
+			if strings.HasSuffix(test.fixturePath, ".yaml") {
 				err = yaml.Unmarshal(testSpec, &testAPI)
 				if err != nil {
 					t.Fatalf("unable to unmarshal text fixture into APIDefinition: %s - %s ",
-						test.givenFixturePath, err)
+						test.fixturePath, err)
 				}
 			} else {
 				err = json.Unmarshal(testSpec, &testAPI)
 				if err != nil {
 					t.Fatalf("unable to unmarshal text fixture into APIDefinition: %s - %s",
-						test.givenFixturePath, err)
+						test.fixturePath, err)
 				}
 
 			}
@@ -164,7 +164,18 @@ func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 			}
 
 			os.Chdir(origin)
-			want, err := ioutil.ReadFile(test.wantProto)
+			// if test.wantProto is empty, guess file name from the original
+			// fixture path
+			wantProtoFile := test.wantProto
+			if wantProtoFile == "" {
+				i := strings.LastIndexByte(test.fixturePath, '.')
+				if i > -1 {
+					wantProtoFile = test.fixturePath[:i] + `.proto`
+				} else {
+					t.Fatalf(`unable to guess proto file name from %s`, test.fixturePath)
+				}
+			}
+			want, err := ioutil.ReadFile(wantProtoFile)
 			if err != nil {
 				t.Fatal("unable to open test fixture: ", err)
 			}
@@ -173,13 +184,13 @@ func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 				diff := difflib.UnifiedDiff{
 					A:        difflib.SplitLines(string(want)),
 					B:        difflib.SplitLines(string(protoResult)),
-					FromFile: test.wantProto,
+					FromFile: wantProtoFile,
 					ToFile:   "Generated",
 					Context:  3,
 				}
 				text, _ := difflib.GetUnifiedDiffString(diff)
 				t.Errorf("testYaml (%s) differences:\n%s",
-					test.givenFixturePath, text)
+					test.fixturePath, text)
 			}
 		})
 	}
@@ -187,8 +198,7 @@ func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 
 func TestNetwork(t *testing.T) {
 	testGenProto(t, genProtoTestCase{
-		givenFixturePath: "fixtures/petstore/swagger.yaml",
-		wantProto:        "fixtures/petstore/swagger.proto",
+		fixturePath: "fixtures/petstore/swagger.yaml",
 		remoteFiles: []string{
 			"https://raw.githubusercontent.com/NYTimes/openapi2proto/master/fixtures/petstore/Pet.yaml",
 		},
@@ -198,95 +208,72 @@ func TestNetwork(t *testing.T) {
 func TestGenerateProto(t *testing.T) {
 	tests := []genProtoTestCase{
 		{
-			givenFixturePath: "fixtures/cats.yaml",
-			wantProto:        "fixtures/cats.proto",
+			fixturePath: "fixtures/cats.yaml",
 		},
 		{
-			givenFixturePath: "fixtures/catsanddogs.yaml",
-
-			wantProto: "fixtures/catsanddogs.proto",
+			fixturePath: "fixtures/catsanddogs.yaml",
 		},
 		{
-			givenFixturePath: "fixtures/semantic_api.json",
-			wantProto:        "fixtures/semantic_api.proto",
+			fixturePath: "fixtures/semantic_api.json",
 		},
 		{
-			givenFixturePath: "fixtures/most_popular.json",
-			wantProto:        "fixtures/most_popular.proto",
+			fixturePath: "fixtures/most_popular.json",
 		},
 		{
-			givenFixturePath: "fixtures/spec.yaml",
-			wantProto:        "fixtures/spec.proto",
+			fixturePath: "fixtures/spec.yaml",
 		},
 		{
-			givenFixturePath: "fixtures/spec.json",
-			wantProto:        "fixtures/spec.proto",
+			fixturePath: "fixtures/spec.json",
 		},
 		{
-			options:          true,
-			givenFixturePath: "fixtures/semantic_api.json",
-			wantProto:        "fixtures/semantic_api-options.proto",
+			options:     true,
+			fixturePath: "fixtures/semantic_api.json",
+			wantProto:   "fixtures/semantic_api-options.proto",
 		},
 		{
-			options:          true,
-			givenFixturePath: "fixtures/most_popular.json",
-			wantProto:        "fixtures/most_popular-options.proto",
+			options:     true,
+			fixturePath: "fixtures/most_popular.json",
+			wantProto:   "fixtures/most_popular-options.proto",
 		},
 		{
-			options:          true,
-			givenFixturePath: "fixtures/spec.yaml",
-			wantProto:        "fixtures/spec-options.proto",
+			options:     true,
+			fixturePath: "fixtures/spec.yaml",
+			wantProto:   "fixtures/spec-options.proto",
 		},
 		{
-			options:          true,
-			givenFixturePath: "fixtures/spec.json",
-			wantProto:        "fixtures/spec-options.proto",
+			options:     true,
+			fixturePath: "fixtures/spec.json",
+			wantProto:   "fixtures/spec-options.proto",
 		},
 		{
-			givenFixturePath: "fixtures/includes_query.json",
-			wantProto:        "fixtures/includes_query.proto",
+			fixturePath: "fixtures/includes_query.json",
 		},
 		{
-
-			givenFixturePath: "fixtures/lowercase_def.json",
-			wantProto:        "fixtures/lowercase_def.proto",
+			fixturePath: "fixtures/lowercase_def.json",
 		},
 		{
-
-			givenFixturePath: "fixtures/missing_type.json",
-			wantProto:        "fixtures/missing_type.proto",
+			fixturePath: "fixtures/missing_type.json",
 		},
 		{
-
-			givenFixturePath: "fixtures/kubernetes.json",
-			wantProto:        "fixtures/kubernetes.proto",
+			fixturePath: "fixtures/kubernetes.json",
 		},
 		{
-
-			givenFixturePath: "fixtures/accountv1-0.json",
-			wantProto:        "fixtures/accountv1-0.proto",
+			fixturePath: "fixtures/accountv1-0.json",
 		},
 		{
-
-			givenFixturePath: "fixtures/refs.json",
-			wantProto:        "fixtures/refs.proto",
+			fixturePath: "fixtures/refs.json",
 		},
 		{
-
-			givenFixturePath: "fixtures/refs.yaml",
-			wantProto:        "fixtures/refs.proto",
+			fixturePath: "fixtures/refs.yaml",
 		},
 		{
-			givenFixturePath: "fixtures/semantic_api.yaml",
-			wantProto:        "fixtures/semantic_api.proto",
+			fixturePath: "fixtures/semantic_api.yaml",
 		},
 		{
-			givenFixturePath: "fixtures/integers.yaml",
-			wantProto:        "fixtures/integers.proto",
+			fixturePath: "fixtures/integers.yaml",
 		},
 		{
-			givenFixturePath: "fixtures/global_options.yaml",
-			wantProto:        "fixtures/global_options.proto",
+			fixturePath: "fixtures/global_options.yaml",
 		},
 	}
 	testGenProto(t, tests...)
