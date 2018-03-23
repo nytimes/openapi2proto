@@ -7,8 +7,7 @@ import (
 	"path"
 	"testing"
 
-	"github.com/sergi/go-diff/diffmatchpatch"
-
+	"github.com/pmezard/go-difflib/difflib"
 	"gopkg.in/yaml.v2"
 )
 
@@ -296,10 +295,16 @@ func TestGenerateProto(t *testing.T) {
 			}
 
 			if string(want) != string(protoResult) {
-				dmp := diffmatchpatch.New()
-				diffs := dmp.DiffMain(string(want), string(protoResult), false)
+				diff := difflib.UnifiedDiff{
+					A:        difflib.SplitLines(string(want)),
+					B:        difflib.SplitLines(string(protoResult)),
+					FromFile: test.wantProto,
+					ToFile:   "Generated",
+					Context:  3,
+				}
+				text, _ := difflib.GetUnifiedDiffString(diff)
 				t.Errorf("testYaml (%s) differences:\n%s",
-					test.givenFixturePath, dmp.DiffPrettyText(diffs))
+					test.givenFixturePath, text)
 			}
 		})
 	}
