@@ -21,13 +21,14 @@ type APIDefinition struct {
 		Description string `yaml:"description" json:"description"`
 		Version     string `yaml:"version" json:"version"`
 	} `yaml:"info" json:"info"`
-	Host        string            `yaml:"host" json:"host"`
-	Schemes     []string          `yaml:"schemes" json:"schemes"`
-	BasePath    string            `yaml:"basePath" json:"basePath"`
-	Produces    []string          `yaml:"produces" json:"produces"`
-	Paths       map[string]*Path  `yaml:"paths" json:"paths"`
-	Definitions map[string]*Items `yaml:"definitions" json:"definitions"`
-	Parameters  map[string]*Items `yaml:"parameters" json:"parameters"`
+	Host          string            `yaml:"host" json:"host"`
+	Schemes       []string          `yaml:"schemes" json:"schemes"`
+	BasePath      string            `yaml:"basePath" json:"basePath"`
+	Produces      []string          `yaml:"produces" json:"produces"`
+	Paths         map[string]*Path  `yaml:"paths" json:"paths"`
+	Definitions   map[string]*Items `yaml:"definitions" json:"definitions"`
+	Parameters    map[string]*Items `yaml:"parameters" json:"parameters"`
+	GlobalOptions map[string]string `yaml:"x-global-options" json:"x-global-options"`
 }
 
 // Path represents all of the endpoints and parameters available for a single

@@ -3,6 +3,7 @@ package openapi2proto
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -195,9 +196,11 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	// Write the preamble
 	var preambleData = struct {
 		Package string
+		GlobalOptions map[string]string
 		Imports []string
 	}{
 		Package: api.Info.Title,
+		GlobalOptions: api.GlobalOptions,
 		Imports: sortedImports,
 	}
 	if err := protoPreambleTmpl.Execute(&out, preambleData); err != nil {
@@ -372,6 +375,9 @@ package {{ packageName .Package}};
 {{ range $import := .Imports }}
 import "{{ $import }}";
 {{- end }}
+{{ range $optName, $optValue := .GlobalOptions }}
+{{ globalOption $optName $optValue }}
+{{- end }}
 `
 
 const protoFileTmplStr = `{{ $annotate := .Annotate }}{{ $defs := .Definitions }}
@@ -410,6 +416,7 @@ var funcMap = template.FuncMap{
 	"packageName":      packageName,
 	"serviceName":      serviceName,
 	"PathMethodToName": PathMethodToName,
+	"globalOption":     globalOption,
 }
 
 func packageName(t string) string {
@@ -508,4 +515,8 @@ func extraImports(body string) []string {
 		}
 	}
 	return imports
+}
+
+func globalOption(name, value string) string {
+	return fmt.Sprintf(`option %s = %s;`, name, strconv.Quote(value))
 }
