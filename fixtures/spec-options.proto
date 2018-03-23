@@ -1,10 +1,9 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
+package uberapi;
 
 import "google/api/annotations.proto";
-
-package uberapi;
+import "google/protobuf/empty.proto";
 
 message GetEstimatesPriceRequest {
     // Latitude component of end location.

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
-
 package missingtypeapi;
+
+import "google/protobuf/empty.proto";
 
 message Item {
 }
