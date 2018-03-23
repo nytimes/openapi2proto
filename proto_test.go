@@ -13,12 +13,31 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type namingConversionTestCase struct {
+	Source   string
+	Expected string
+}
+
 func TestNameConversions(t *testing.T) {
+	t.Run("Endpoint", func(t *testing.T) {
+		var tests = []namingConversionTestCase{
+			{
+				Source:   "/queue/{id}/enqueue_player",
+				Expected: "GetQueueIdEnqueuePlayer",
+			},
+		}
+		for _, test := range tests {
+			t.Run(test.Source, func(t *testing.T) {
+				// TODO: this seems like a misnomer
+				if v := PathMethodToName(test.Source, "get", ""); v != test.Expected {
+					t.Errorf("PathMethodToName conversion failed: expected %s, got %s", test.Expected, v)
+				}
+			})
+		}
+	})
+
 	t.Run("Enum", func(t *testing.T) {
-		var tests = []struct {
-			Source   string
-			Expected string
-		}{
+		var tests = []namingConversionTestCase{
 			{
 				Source:   "foo & bar",
 				Expected: "FOO_AND_BAR",
@@ -305,6 +324,9 @@ func TestGenerateProto(t *testing.T) {
 		},
 		{
 			fixturePath: "fixtures/global_options.yaml",
+		},
+		{
+			fixturePath: "fixtures/naming_conversion.yaml",
 		},
 	}
 	testGenProto(t, tests...)

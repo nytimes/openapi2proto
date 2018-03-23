@@ -493,17 +493,31 @@ func PathMethodToName(path, method, operationID string) string {
 		return OperationIDToName(operationID)
 	}
 
-	var name string
 	path = strings.TrimSuffix(path, ".json")
-	path = strings.Replace(path, "-", " ", -1)
-	path = strings.Replace(path, ".", " ", -1)
-	path = strings.Replace(path, "/", " ", -1)
-	// Strip out illegal-for-identifier characters in the path, including any query string.
-	// Note that query strings are illegal in swagger paths, but some tooling seems to tolerate them.
-	re := regexp.MustCompile(`[\{\}\[\]()/\.]|\?.*`)
-	path = re.ReplaceAllString(path, "")
-	for _, nme := range strings.Fields(path) {
-		name += cleanAndTitle(nme)
+	// Strip query strings. Note that query strings are illegal
+	// in swagger paths, but some tooling seems to tolerate them.
+	if i := strings.LastIndexByte(path, '?'); i > 0 {
+		path = path[:i]
+	}
+
+	var buf bytes.Buffer
+	for _, r := range path {
+		switch r {
+		case '_', '-', '.', '/':
+			// turn these into spaces
+			r = ' '
+		case '{', '}', '[', ']', '(', ')':
+			// Strip out illegal-for-identifier characters in the path
+			// (XXX Shouldn't we be white-listing this instead of
+			// removing black-listed characters?)
+			continue
+		}
+		buf.WriteRune(r)
+	}
+
+	var name string
+	for _, v := range strings.Fields(buf.String()) {
+		name += cleanAndTitle(v)
 	}
 	return cleanAndTitle(method) + name
 }
