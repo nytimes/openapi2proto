@@ -9,8 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sergi/go-diff/diffmatchpatch"
-
+	"github.com/pmezard/go-difflib/difflib"
 	"gopkg.in/yaml.v2"
 )
 

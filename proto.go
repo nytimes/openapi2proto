@@ -3,7 +3,6 @@ package openapi2proto
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -156,39 +155,77 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 		log.Fatal(err)
 	}
 
+	if annotate {
+		imports[`google/api/annotations.proto`] = struct{}{}
+	}
+
 	// if no package name given, default to filename
 	if api.Info.Title == "" {
 		api.Info.Title = strings.TrimSuffix(path.Base(api.FileName),
 			path.Ext(api.FileName))
 	}
 
-	var out bytes.Buffer
 	data := struct {
 		*APIDefinition
 		Annotate bool
-		Imports  []string
 	}{
-		api, annotate, imports,
+		api, annotate,
 	}
-	err = protoFileTmpl.Execute(&out, data)
-	if err != nil {
-		return nil, fmt.Errorf("unable to generate protobuf schema: %s", err)
+
+	// This generates everything except for the preamble, which includes
+	// syntax, package, and imports
+	var body bytes.Buffer
+	if err := protoFileTmpl.Execute(&body, data); err != nil {
+		return nil, errors.Wrap(err, "unable to generate protobuf schema")
 	}
-	return cleanSpacing(addImports(out.Bytes())), nil
+
+	// extract extra imports from the generated code
+	for _, pkg := range extraImports(body.String()) {
+		imports[pkg] = struct{}{}
+	}
+
+	var sortedImports []string
+	for pkg := range imports {
+		sortedImports = append(sortedImports, pkg)
+	}
+	sort.Strings(sortedImports)
+
+	var out bytes.Buffer
+
+	// Write the preamble
+	var preambleData = struct {
+		Package string
+		Imports []string
+	}{
+		Package: api.Info.Title,
+		Imports: sortedImports,
+	}
+	if err := protoPreambleTmpl.Execute(&out, preambleData); err != nil {
+		return nil, errors.Wrap(err, "unable to generate protobuf preamble")
+	}
+
+	// Add the body
+	body.WriteTo(&out)
+
+	return cleanSpacing(out.Bytes()), nil
 }
 
-func importsAndRefs(api *APIDefinition) ([]string, error) {
-	var imports []string
+func importsAndRefs(api *APIDefinition) (map[string]struct{}, error) {
+	var imports = map[string]struct{}{}
+
 	// determine external imports by traversing struct, looking for $refs
 	for _, def := range api.Definitions {
 		defs, err := replaceExternalRefs(def)
 		if err != nil {
-			return imports, errors.Wrap(err, "unable to replace external refs in definitions")
+			return nil, errors.Wrap(err, "unable to replace external refs in definitions")
 		}
 		for k, v := range defs {
 			api.Definitions[k] = v
 		}
-		imports = append(imports, traverseItemsForImports(def, api.Definitions)...)
+
+		for _, pkg := range traverseItemsForImports(def, api.Definitions) {
+			imports[pkg] = struct{}{}
+		}
 	}
 
 	for _, pth := range api.Paths {
@@ -200,20 +237,12 @@ func importsAndRefs(api *APIDefinition) ([]string, error) {
 			for k, v := range defs {
 				api.Definitions[k] = v
 			}
-			imports = append(imports, traverseItemsForImports(itm, api.Definitions)...)
+			for _, pkg := range traverseItemsForImports(itm, api.Definitions) {
+				imports[pkg] = struct{}{}
+			}
 		}
 	}
-	sort.Strings(imports)
-	var impts []string
-	// dedupe
-	var last string
-	for _, i := range imports {
-		if i != last {
-			impts = append(impts, i)
-		}
-		last = i
-	}
-	return impts, nil
+	return imports, nil
 }
 
 // sad hack to marshal data out and back into an *Items
@@ -337,13 +366,15 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	return out
 }
 
-const protoFileTmplStr = `syntax = "proto3";
-{{ $defs := .Definitions }}{{ $annotate := .Annotate }}{{ if $annotate }}
-import "google/api/annotations.proto";
-{{ end }}{{ range $import := .Imports }}
+const protoPreambleTmplStr = `syntax = "proto3";
+
+package {{ packageName .Package}};
+{{ range $import := .Imports }}
 import "{{ $import }}";
-{{ end }}
-package {{ packageName .Info.Title }};
+{{- end }}
+`
+
+const protoFileTmplStr = `{{ $annotate := .Annotate }}{{ $defs := .Definitions }}
 {{ range $path, $endpoint := .Paths }}
 {{ $endpoint.ProtoMessages $path $defs }}
 {{ end }}
@@ -433,6 +464,7 @@ func toEnum(name, enum string, depth int) string {
 
 var (
 	protoFileTmpl     = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileTmplStr))
+	protoPreambleTmpl = template.Must(template.New("protoPreamble").Funcs(funcMap).Parse(protoPreambleTmplStr))
 	protoMsgTmpl      = template.Must(template.New("protoMsg").Funcs(funcMap).Parse(protoMsgTmplStr))
 	protoEndpointTmpl = template.Must(template.New("protoEndpoint").Funcs(funcMap).Parse(protoEndpointTmplStr))
 	protoEnumTmpl     = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
@@ -455,34 +487,25 @@ func cleanSpacing(output []byte) []byte {
 	return re.ReplaceAll(output, []byte("}\n\nservice "))
 }
 
-func addImports(output []byte) []byte {
-	if bytes.Contains(output, []byte("google.protobuf.Any")) {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
+var knownImports = map[string]string{
+	"google.protobuf.Any":       "google/protobuf/any.proto",
+	"google.protobuf.Empty":     "google/protobuf/empty.proto",
+	"google.protobuf.NullValue": "google/protobuf/struct.proto",
+}
 
-import "google/protobuf/any.proto";`), 1)
+func init() {
+	for _, wrap := range []string{"String", "Bytes", "Bool", "Int64", "Int32", "UInt64", "UInt32", "Float", "Double"} {
+		knownImports[`google.protobuf.`+wrap+`Value`] = "google/protobuf/wrappers.proto"
 	}
+}
 
-	if bytes.Contains(output, []byte("google.protobuf.Empty")) {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
+func extraImports(body string) []string {
+	var imports []string
 
-import "google/protobuf/empty.proto";`), 1)
+	for typ, imp := range knownImports {
+		if strings.Contains(body, typ) {
+			imports = append(imports, imp)
+		}
 	}
-
-	if bytes.Contains(output, []byte("google.protobuf.NullValue")) {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
-
-import "google/protobuf/struct.proto";`), 1)
-	}
-
-	match, err := regexp.Match("google.protobuf.(String|Bytes|Int.*|UInt.*|Float|Double)Value", output)
-	if err != nil {
-		log.Fatal("unable to find wrapper values: ", err)
-	}
-	if match {
-		output = bytes.Replace(output, []byte(`"proto3";`), []byte(`"proto3";
-
-import "google/protobuf/wrappers.proto";`), 1)
-	}
-
-	return output
+	return imports
 }
