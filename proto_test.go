@@ -123,7 +123,6 @@ type genProtoTestCase struct {
 	remoteFiles      []string
 }
 
-
 func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 	t.Helper()
 	origin, _ := os.Getwd()
@@ -284,6 +283,10 @@ func TestGenerateProto(t *testing.T) {
 		{
 			givenFixturePath: "fixtures/integers.yaml",
 			wantProto:        "fixtures/integers.proto",
+		},
+		{
+			givenFixturePath: "fixtures/global_options.yaml",
+			wantProto:        "fixtures/global_options.proto",
 		},
 	}
 	testGenProto(t, tests...)

@@ -1,0 +1,16 @@
+swagger: '2.0'
+  
+info:
+  version: "0.0.0"
+  title: Global options
+  description: Produce global gRPC options
+
+x-global-options:
+  go_package: myawesomepackage
+
+paths:
+  /foo:
+    get:
+      200:
+        schema:
+          type: string
