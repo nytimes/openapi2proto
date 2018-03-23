@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"unicode"
 
 	"github.com/pkg/errors"
 
@@ -195,13 +196,13 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 
 	// Write the preamble
 	var preambleData = struct {
-		Package string
+		Package       string
 		GlobalOptions map[string]string
-		Imports []string
+		Imports       []string
 	}{
-		Package: api.Info.Title,
+		Package:       api.Info.Title,
 		GlobalOptions: api.GlobalOptions,
-		Imports: sortedImports,
+		Imports:       sortedImports,
 	}
 	if err := protoPreambleTmpl.Execute(&out, preambleData); err != nil {
 		return nil, errors.Wrap(err, "unable to generate protobuf preamble")
@@ -461,12 +462,31 @@ func toEnum(name, enum string, depth int) string {
 	if _, err := strconv.Atoi(enum); err == nil || depth > 0 {
 		e = name + "_" + enum
 	}
+
+
+	// For backwards compatibility, we want "foo&bar" and
+	// "foo & bar" to both translate to "FOO_AND_BAR".
 	e = strings.Replace(e, " & ", " AND ", -1)
 	e = strings.Replace(e, "&", "_AND_", -1)
-	e = strings.Replace(e, " ", "_", -1)
-	re := regexp.MustCompile(`[%\{\}\[\]()/\.'’-]`)
-	e = re.ReplaceAllString(e, "")
-	return strings.ToUpper(e)
+
+	var out bytes.Buffer
+	for _, r := range e {
+		switch r {
+		case '%', '{', '}', '[', ']', '(', ')', '/', '.', '\'', '’', '-':
+			// these characters are not allowed
+			continue
+		case '&':
+			out.WriteString("AND")
+		case ' ':
+			// spaces are converted to underscores
+			out.WriteRune('_')
+		default:
+			// everything else is upper-cased
+			out.WriteRune(unicode.ToUpper(r))
+		}
+	}
+
+	return out.String()
 }
 
 var (
