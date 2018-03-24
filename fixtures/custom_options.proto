@@ -33,7 +33,7 @@ message PurchaseResponse {
 
 service PurchasesService {
     // get a purchase
-    //
+    // 
     // some description
     rpc GetPurchase(google.protobuf.Empty) returns (google.protobuf.Empty) {
       option (google.api.http) = {
@@ -44,7 +44,7 @@ service PurchasesService {
       option (visibility) = "public, internal";
     }
     // Purchase something
-    //
+    // 
     // description
     rpc Purchase(PurchaseRequest) returns (PurchaseResponse) {
       option (google.api.http) = {
