@@ -1,9 +1,11 @@
 package openapi2proto
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -197,7 +199,7 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	// Write the preamble
 	var preambleData = struct {
 		Package       string
-		GlobalOptions map[string]string
+		GlobalOptions GRPCOptions
 		Imports       []string
 	}{
 		Package:       api.Info.Title,
@@ -377,7 +379,7 @@ package {{ packageName .Package}};
 import "{{ $import }}";
 {{- end }}
 {{ range $optName, $optValue := .GlobalOptions }}
-{{ globalOption $optName $optValue }}
+{{ option $optName $optValue true "" }}
 {{- end }}
 `
 
@@ -389,15 +391,12 @@ const protoFileTmplStr = `{{ $annotate := .Annotate }}{{ $defs := .Definitions }
 {{ $model.ProtoMessage "" $modelName $defs counter -1 }}
 {{ end }}{{ $basePath := .BasePath }}
 {{ if len .Paths }}service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths }}
-{{ $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
+{{- $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
 }{{ end }}
 `
 
-const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ if .Annotate }}
-      option (google.api.http) = {
-        {{ .Method }}: "{{ .Path }}"{{ if .IncludeBody }}
-        body: "{{ .BodyAttr }}"{{ end }}
-      };
+const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ range $optName, $optValue := .Options }}
+      {{ option $optName $optValue false }}
     {{ end }}{{"}"}}`
 
 const protoMsgTmplStr = `{{ $i := counter }}{{ $defs := .Defs }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
@@ -417,7 +416,7 @@ var funcMap = template.FuncMap{
 	"packageName":      packageName,
 	"serviceName":      serviceName,
 	"PathMethodToName": PathMethodToName,
-	"globalOption":     globalOption,
+	"option":           option,
 }
 
 func packageName(t string) string {
@@ -462,7 +461,6 @@ func toEnum(name, enum string, depth int) string {
 	if _, err := strconv.Atoi(enum); err == nil || depth > 0 {
 		e = name + "_" + enum
 	}
-
 
 	// For backwards compatibility, we want "foo&bar" and
 	// "foo & bar" to both translate to "FOO_AND_BAR".
@@ -537,6 +535,60 @@ func extraImports(body string) []string {
 	return imports
 }
 
-func globalOption(name, value string) string {
-	return fmt.Sprintf(`option %s = %s;`, name, strconv.Quote(value))
+func option(name, value interface{}, global bool, indent string) string {
+	var vstr string
+
+	switch v := value.(type) {
+	case interface {
+		Protobuf(string) string
+	}:
+		vstr = v.Protobuf(indent)
+	case string:
+		vstr = strconv.Quote(v)
+	case int:
+		vstr = strconv.FormatInt(int64(v), 10)
+	case int8:
+		vstr = strconv.FormatInt(int64(v), 10)
+	case int16:
+		vstr = strconv.FormatInt(int64(v), 10)
+	case int64:
+		vstr = strconv.FormatInt(v, 10)
+	case uint:
+		vstr = strconv.FormatUint(uint64(v), 10)
+	case uint8:
+		vstr = strconv.FormatUint(uint64(v), 10)
+	case uint16:
+		vstr = strconv.FormatUint(uint64(v), 10)
+	case uint64:
+		vstr = strconv.FormatUint(v, 10)
+	default:
+		vstr = strconv.Quote(fmt.Sprintf(`%s`, v))
+	}
+
+	var buf bytes.Buffer
+	if global {
+		fmt.Fprintf(&buf, "option %s = %s;", name, vstr)
+	} else {
+		fmt.Fprintf(&buf, "option (%s) = %s;", name, vstr)
+	}
+
+	return prependIndent(&buf, indent)
+}
+
+func prependIndent(rdr io.Reader, indent string) string {
+	var out bytes.Buffer
+
+	// every block should be indented
+	if len(indent) == 0 {
+		io.Copy(&out, rdr)
+	} else {
+		scanner := bufio.NewScanner(rdr)
+		for scanner.Scan() {
+			txt := scanner.Text()
+			out.WriteByte('\n')
+			out.WriteString(indent)
+			out.WriteString(txt)
+		}
+	}
+	return out.String()
 }

@@ -8,99 +8,9 @@ import (
 	"os"
 	"path"
 	"regexp"
+	"sort"
 	"strings"
 )
-
-// APIDefinition is the base struct for containing OpenAPI spec
-// declarations.
-type APIDefinition struct {
-	FileName string // internal use to pass file path
-	Swagger  string `yaml:"swagger" json:"swagger"`
-	Info     struct {
-		Title       string `yaml:"title" json:"title"`
-		Description string `yaml:"description" json:"description"`
-		Version     string `yaml:"version" json:"version"`
-	} `yaml:"info" json:"info"`
-	Host          string            `yaml:"host" json:"host"`
-	Schemes       []string          `yaml:"schemes" json:"schemes"`
-	BasePath      string            `yaml:"basePath" json:"basePath"`
-	Produces      []string          `yaml:"produces" json:"produces"`
-	Paths         map[string]*Path  `yaml:"paths" json:"paths"`
-	Definitions   map[string]*Items `yaml:"definitions" json:"definitions"`
-	Parameters    map[string]*Items `yaml:"parameters" json:"parameters"`
-	GlobalOptions map[string]string `yaml:"x-global-options" json:"x-global-options"`
-}
-
-// Path represents all of the endpoints and parameters available for a single
-// path.
-type Path struct {
-	Get        *Endpoint  `yaml:"get" json:"get"`
-	Put        *Endpoint  `yaml:"put" json:"put"`
-	Post       *Endpoint  `yaml:"post" json:"post"`
-	Delete     *Endpoint  `yaml:"delete" json:"delete"`
-	Parameters Parameters `yaml:"parameters" json:"parameters"`
-}
-
-// Parameters is a slice of request parameters for a single endpoint.
-type Parameters []*Items
-
-// Response represents the response object in an OpenAPI spec.
-type Response struct {
-	Description string `yaml:"description" json:"description"`
-	Schema      *Items `yaml:"schema" json:"schema"`
-}
-
-// Endpoint represents an endpoint for a path in an OpenAPI spec.
-type Endpoint struct {
-	Summary     string               `yaml:"summary" json:"summary"`
-	Description string               `yaml:"description" json:"description"`
-	Parameters  Parameters           `yaml:"parameters" json:"parameters"`
-	Tags        []string             `yaml:"tags" json:"tags"`
-	Responses   map[string]*Response `yaml:"responses" json:"responses"`
-	OperationID string               `yaml:"operationId" json:"operationId"`
-}
-
-// Model represents a model definition from an OpenAPI spec.
-type Model struct {
-	Properties map[string]*Items `yaml:"properties" json:"properties"`
-	Name       string
-	Depth      int
-}
-
-// Items represent Model properties in an OpenAPI spec.
-type Items struct {
-	Description string `yaml:"description,omitempty" json:"description,omitempty"`
-	// scalar
-	Type   interface{} `yaml:"type" json:"type"`
-	Format interface{} `yaml:"format,omitempty" json:"format,omitempty"`
-	Enum   []string    `yaml:"enum,omitempty" json:"enum,omitempty"`
-
-	ProtoTag int `yaml:"x-proto-tag" json:"x-proto-tag"`
-
-	// Map type
-	AdditionalProperties interface{} `yaml:"additionalProperties" json:"additionalProperties"`
-
-	// ref another Model
-	Ref string `yaml:"$ref" json:"$ref"`
-
-	// is an array
-	Items *Items `yaml:"items" json:"items"`
-
-	// for request parameters
-	In     string `yaml:"in" json:"in"`
-	Schema *Items `yaml:"schema" json:"schema"`
-
-	// is an other Model
-	Model `yaml:",inline"`
-
-	// required items
-	Required interface{} `yaml:"required,omitempty" json:"required,omitempty"`
-
-	// validation (regex pattern, max/min length)
-	Pattern   string `yaml:"pattern,omitempty" json:"pattern,omitempty"`
-	MaxLength int    `yaml:"maxLength,omitempty" json:"max_length,omitempty"`
-	MinLength int    `yaml:"minLength,omitempty" json:"min_length,omitempty"`
-}
 
 func (i Items) Comment() string {
 	return prepComment(i.Description, "    ")
@@ -646,38 +556,44 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 		comment += e.Description
 	}
 
-	comment = prepComment(comment, "    ")
+	comment = prepComment(comment, "")
 
-	tData := struct {
-		Annotate     bool
-		Method       string
-		Name         string
-		RequestName  string
-		ResponseName string
-		Path         string
-		IncludeBody  bool
-		BodyAttr     string
-		Comment      string
-		HasComment   bool
-	}{
-		annotate,
-		method,
-		endpointName,
-		reqName,
-		respName,
-		path,
-		(bodyAttr != ""),
-		bodyAttr,
-		comment,
-		(comment != ""),
+	// Create a copy of options so we can mutate it
+	var options = GRPCOptions{}
+	for k, v := range e.Options {
+		options[k] = v
+	}
+
+	if annotate {
+		if _, ok := options[optionGoogleAPIHTTP]; !ok {
+			options[optionGoogleAPIHTTP] = NewHTTPAnnotation(method, path, bodyAttr)
+		}
 	}
 
 	var b bytes.Buffer
-	err := protoEndpointTmpl.Execute(&b, tData)
-	if err != nil {
-		log.Fatal("unable to protobuf model: ", err)
+
+	if comment != "" {
+		fmt.Fprintf(&b, "%s", comment)
 	}
-	return b.String()
+
+	fmt.Fprintf(&b, `rpc %s(%s) returns (%s) {`, endpointName, reqName, respName)
+
+	var optkeys []string
+	for k := range options {
+		optkeys = append(optkeys, k)
+	}
+
+	if len(optkeys) == 0 {
+		fmt.Fprintf(&b, "}")
+	} else {
+		sort.Strings(optkeys)
+		for _, k := range optkeys {
+			fmt.Fprintf(&b, "%s", option(k, options[k], false, annotationIndentStr))
+		}
+		fmt.Fprintf(&b, "\n}")
+	}
+
+	return prependIndent(&b, indentStr)
 }
 
 func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string, defs map[string]*Items) string {
@@ -707,20 +623,16 @@ func (p *Path) ProtoEndpoints(annotate bool, base, path string) string {
 
 	var out bytes.Buffer
 	if p.Get != nil {
-		msg := p.Get.protoEndpoint(annotate, p.Parameters, base, path, "get")
-		out.WriteString(msg + "\n")
+		out.WriteString(p.Get.protoEndpoint(annotate, p.Parameters, base, path, "get"))
 	}
 	if p.Put != nil {
-		msg := p.Put.protoEndpoint(annotate, p.Parameters, base, path, "put")
-		out.WriteString(msg + "\n")
+		out.WriteString(p.Put.protoEndpoint(annotate, p.Parameters, base, path, "put"))
 	}
 	if p.Post != nil {
-		msg := p.Post.protoEndpoint(annotate, p.Parameters, base, path, "post")
-		out.WriteString(msg + "\n")
+		out.WriteString(p.Post.protoEndpoint(annotate, p.Parameters, base, path, "post"))
 	}
 	if p.Delete != nil {
-		msg := p.Delete.protoEndpoint(annotate, p.Parameters, base, path, "delete")
-		out.WriteString(msg + "\n")
+		out.WriteString(p.Delete.protoEndpoint(annotate, p.Parameters, base, path, "delete"))
 	}
 
 	return strings.TrimSuffix(out.String(), "\n")
