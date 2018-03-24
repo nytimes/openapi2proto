@@ -174,19 +174,48 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 			path.Ext(api.FileName))
 	}
 
-	data := struct {
-		*APIDefinition
-		Annotate bool
-	}{
-		api, annotate,
-	}
-
 	// This generates everything except for the preamble, which includes
 	// syntax, package, and imports
 	var body bytes.Buffer
-	if err := protoFileTmpl.Execute(&body, data); err != nil {
-		return nil, errors.Wrap(err, "unable to generate protobuf schema")
+
+	var sortedPaths []string
+	for path := range api.Paths {
+		sortedPaths = append(sortedPaths, path)
 	}
+	sort.Strings(sortedPaths)
+
+	var sortedModels []string
+	for modelName := range api.Definitions {
+		sortedModels = append(sortedModels, modelName)
+	}
+	sort.Strings(sortedModels)
+
+	for _, path := range sortedPaths {
+		endpoint := api.Paths[path]
+		fmt.Fprintf(&body, "%s", endpoint.ProtoMessages(path, api.Definitions))
+	}
+
+	for _, modelName := range sortedModels {
+		model := api.Definitions[modelName]
+		fmt.Fprintf(&body, "%s", model.ProtoMessage("", modelName, api.Definitions, counter(), -1))
+	}
+
+	if len(api.Extensions) > 0 {
+		fmt.Fprintf(&body, "\n")
+		for _, ext := range api.Extensions {
+			fmt.Fprintf(&body, "\n%s", ext.Protobuf(indentStr))
+		}
+	}
+
+	if len(api.Paths) > 0 {
+		fmt.Fprintf(&body, "\nservice %s {", serviceName(api.Info.Title))
+		for _, path := range sortedPaths {
+			endpoint := api.Paths[path]
+			fmt.Fprintf(&body, "%s", endpoint.ProtoEndpoints(annotate, api.BasePath, path))
+		}
+		fmt.Fprintf(&body, "\n}")
+	}
+	fmt.Fprintf(&body, "\n")
 
 	// extract extra imports from the generated code
 	for _, pkg := range extraImports(body.String()) {
@@ -216,13 +245,6 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 		fmt.Fprintf(&out, "\n")
 		for optName, optValue := range api.GlobalOptions {
 			fmt.Fprintf(&out, "\n%s", option(optName, optValue, true, ""))
-		}
-	}
-
-	if len(api.Extensions) > 0 {
-		fmt.Fprintf(&out, "\n")
-		for _, ext := range api.Extensions {
-			fmt.Fprintf(&out, "\n%s", ext.Protobuf(indentStr))
 		}
 	}
 
@@ -390,18 +412,6 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	return out
 }
 
-const protoFileTmplStr = `{{ $annotate := .Annotate }}{{ $defs := .Definitions }}
-{{ range $path, $endpoint := .Paths }}
-{{ $endpoint.ProtoMessages $path $defs }}
-{{ end }}
-{{ range $modelName, $model := $defs }}
-{{ $model.ProtoMessage "" $modelName $defs counter -1 }}
-{{ end }}{{ $basePath := .BasePath }}
-{{ if len .Paths }}service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths }}
-{{- $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
-}{{ end }}
-`
-
 const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ range $optName, $optValue := .Options }}
       {{ option $optName $optValue false }}
     {{ end }}{{"}"}}`
@@ -495,7 +505,6 @@ func toEnum(name, enum string, depth int) string {
 }
 
 var (
-	protoFileTmpl     = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileTmplStr))
 	protoMsgTmpl      = template.Must(template.New("protoMsg").Funcs(funcMap).Parse(protoMsgTmplStr))
 	protoEndpointTmpl = template.Must(template.New("protoEndpoint").Funcs(funcMap).Parse(protoEndpointTmplStr))
 	protoEnumTmpl     = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))

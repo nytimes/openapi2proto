@@ -6,12 +6,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/empty.proto";
 
-extend google.protobuf.MethodOptions {
-    string role = 50001;
-    string visibility = 50002;
-    int32 timeout = 50003;
-}
-
 message PurchaseRequest {
     // Pet object that needs to be added to the store
     Purchase body = 1;
@@ -29,6 +23,12 @@ message Purchase {
 message PurchaseResponse {
     string orderId = 1;
     double orderTotal = 2;
+}
+
+extend google.protobuf.MethodOptions {
+    string role = 50001;
+    string visibility = 50002;
+    int32 timeout = 50003;
 }
 
 service PurchasesService {

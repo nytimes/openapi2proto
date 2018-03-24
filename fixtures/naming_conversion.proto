@@ -4,10 +4,6 @@ package namingconversions;
 
 import "google/protobuf/empty.proto";
 
-
-
-
-
 service NamingConversionsService {
     rpc PostQueueIdEnqueuePlayer(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }

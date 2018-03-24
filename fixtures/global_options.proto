@@ -6,10 +6,6 @@ import "google/protobuf/empty.proto";
 
 option go_package = "myawesomepackage";
 
-
-
-
-
 service GlobalOptionsService {
     rpc GetFoo(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
