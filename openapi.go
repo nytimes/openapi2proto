@@ -620,7 +620,6 @@ func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string, d
 // ProtoEndpoints will return any protobuf v3 endpoints for gRPC
 // service declarations.
 func (p *Path) ProtoEndpoints(annotate bool, base, path string) string {
-
 	var out bytes.Buffer
 	if p.Get != nil {
 		out.WriteString(p.Get.protoEndpoint(annotate, p.Parameters, base, path, "get"))

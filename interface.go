@@ -1,9 +1,11 @@
 package openapi2proto
 
 const (
-	indentStr           = `    ` // 4 spaces for regular indent
-	annotationIndentStr = `  `   // but for whatever reasons, 2 spaces for annotations
-	optionGoogleAPIHTTP = `google.api.http`
+	indentStr                     = `    ` // 4 spaces for regular indent
+	annotationIndentStr           = `  `   // but for whatever reasons, 2 spaces for annotations
+	optionGoogleAPIHTTP           = `google.api.http`
+	protoGoogleAPIAnnotations     = `google/api/annotations.proto`
+	protoGoogleProtobufDescriptor = `google/protobuf/descriptor.proto`
 )
 
 type GRPCOptions map[string]interface{}
@@ -12,6 +14,17 @@ type HTTPAnnotation struct {
 	method string
 	path   string
 	body   string
+}
+
+type Extension struct {
+	Base   string            `json:"base" yaml:"base"`
+	Fields []*ExtensionField `json:"fields" yaml:"fields"`
+}
+
+type ExtensionField struct {
+	Name   string `yaml:"name" json:"name"`
+	Type   string `yaml:"type" json:"type"`
+	Number string `yaml:"number" json:"number"`
 }
 
 // APIDefinition is the base struct for containing OpenAPI spec
@@ -32,6 +45,7 @@ type APIDefinition struct {
 	Definitions   map[string]*Items `yaml:"definitions" json:"definitions"`
 	Parameters    map[string]*Items `yaml:"parameters" json:"parameters"`
 	GlobalOptions GRPCOptions       `yaml:"x-global-options" json:"x-global-options"`
+	Extensions    []*Extension      `yaml:"x-extensions" json:"x-extensions"`
 }
 
 // Path represents all of the endpoints and parameters available for a single

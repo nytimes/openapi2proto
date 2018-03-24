@@ -160,7 +160,12 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	}
 
 	if annotate {
-		imports[`google/api/annotations.proto`] = struct{}{}
+		imports[protoGoogleAPIAnnotations] = struct{}{}
+	}
+
+	// if the definition has extensions, then we need the descriptor.proto
+	if len(api.Extensions) > 0 {
+		imports[protoGoogleProtobufDescriptor] = struct{}{}
 	}
 
 	// if no package name given, default to filename
@@ -197,18 +202,31 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	var out bytes.Buffer
 
 	// Write the preamble
-	var preambleData = struct {
-		Package       string
-		GlobalOptions GRPCOptions
-		Imports       []string
-	}{
-		Package:       api.Info.Title,
-		GlobalOptions: api.GlobalOptions,
-		Imports:       sortedImports,
+	fmt.Fprintf(&out, `syntax = "proto3";`)
+	fmt.Fprintf(&out, "\n\npackage %s;", packageName(api.Info.Title))
+
+	if len(sortedImports) > 0 {
+		fmt.Fprintf(&out, "\n")
+		for _, pkg := range sortedImports {
+			fmt.Fprintf(&out, "\nimport %s;", strconv.Quote(pkg))
+		}
 	}
-	if err := protoPreambleTmpl.Execute(&out, preambleData); err != nil {
-		return nil, errors.Wrap(err, "unable to generate protobuf preamble")
+
+	if len(api.GlobalOptions) > 0 {
+		fmt.Fprintf(&out, "\n")
+		for optName, optValue := range api.GlobalOptions {
+			fmt.Fprintf(&out, "\n%s", option(optName, optValue, true, ""))
+		}
 	}
+
+	if len(api.Extensions) > 0 {
+		fmt.Fprintf(&out, "\n")
+		for _, ext := range api.Extensions {
+			fmt.Fprintf(&out, "\n%s", ext.Protobuf(indentStr))
+		}
+	}
+
+	fmt.Fprintf(&out, "\n")
 
 	// Add the body
 	body.WriteTo(&out)
@@ -372,17 +390,6 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	return out
 }
 
-const protoPreambleTmplStr = `syntax = "proto3";
-
-package {{ packageName .Package}};
-{{ range $import := .Imports }}
-import "{{ $import }}";
-{{- end }}
-{{ range $optName, $optValue := .GlobalOptions }}
-{{ option $optName $optValue true "" }}
-{{- end }}
-`
-
 const protoFileTmplStr = `{{ $annotate := .Annotate }}{{ $defs := .Definitions }}
 {{ range $path, $endpoint := .Paths }}
 {{ $endpoint.ProtoMessages $path $defs }}
@@ -489,7 +496,6 @@ func toEnum(name, enum string, depth int) string {
 
 var (
 	protoFileTmpl     = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileTmplStr))
-	protoPreambleTmpl = template.Must(template.New("protoPreamble").Funcs(funcMap).Parse(protoPreambleTmplStr))
 	protoMsgTmpl      = template.Must(template.New("protoMsg").Funcs(funcMap).Parse(protoMsgTmplStr))
 	protoEndpointTmpl = template.Must(template.New("protoEndpoint").Funcs(funcMap).Parse(protoEndpointTmplStr))
 	protoEnumTmpl     = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
