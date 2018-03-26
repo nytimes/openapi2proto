@@ -1,9 +1,11 @@
 package openapi2proto
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -14,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"unicode"
 
 	"github.com/pkg/errors"
 
@@ -157,7 +160,12 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	}
 
 	if annotate {
-		imports[`google/api/annotations.proto`] = struct{}{}
+		imports[protoGoogleAPIAnnotations] = struct{}{}
+	}
+
+	// if the definition has extensions, then we need the descriptor.proto
+	if len(api.Extensions) > 0 {
+		imports[protoGoogleProtobufDescriptor] = struct{}{}
 	}
 
 	// if no package name given, default to filename
@@ -166,19 +174,48 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 			path.Ext(api.FileName))
 	}
 
-	data := struct {
-		*APIDefinition
-		Annotate bool
-	}{
-		api, annotate,
-	}
-
 	// This generates everything except for the preamble, which includes
 	// syntax, package, and imports
 	var body bytes.Buffer
-	if err := protoFileTmpl.Execute(&body, data); err != nil {
-		return nil, errors.Wrap(err, "unable to generate protobuf schema")
+
+	var sortedPaths []string
+	for path := range api.Paths {
+		sortedPaths = append(sortedPaths, path)
 	}
+	sort.Strings(sortedPaths)
+
+	var sortedModels []string
+	for modelName := range api.Definitions {
+		sortedModels = append(sortedModels, modelName)
+	}
+	sort.Strings(sortedModels)
+
+	for _, path := range sortedPaths {
+		endpoint := api.Paths[path]
+		fmt.Fprintf(&body, "%s", endpoint.ProtoMessages(path, api.Definitions))
+	}
+
+	for _, modelName := range sortedModels {
+		model := api.Definitions[modelName]
+		fmt.Fprintf(&body, "%s", model.ProtoMessage("", modelName, api.Definitions, counter(), -1))
+	}
+
+	if len(api.Extensions) > 0 {
+		fmt.Fprintf(&body, "\n")
+		for _, ext := range api.Extensions {
+			fmt.Fprintf(&body, "\n%s", ext.Protobuf(indentStr))
+		}
+	}
+
+	if len(api.Paths) > 0 {
+		fmt.Fprintf(&body, "\nservice %s {", serviceName(api.Info.Title))
+		for _, path := range sortedPaths {
+			endpoint := api.Paths[path]
+			fmt.Fprintf(&body, "%s", endpoint.ProtoEndpoints(annotate, api.BasePath, path))
+		}
+		fmt.Fprintf(&body, "\n}")
+	}
+	fmt.Fprintf(&body, "\n")
 
 	// extract extra imports from the generated code
 	for _, pkg := range extraImports(body.String()) {
@@ -194,18 +231,24 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	var out bytes.Buffer
 
 	// Write the preamble
-	var preambleData = struct {
-		Package string
-		GlobalOptions map[string]string
-		Imports []string
-	}{
-		Package: api.Info.Title,
-		GlobalOptions: api.GlobalOptions,
-		Imports: sortedImports,
+	fmt.Fprintf(&out, `syntax = "proto3";`)
+	fmt.Fprintf(&out, "\n\npackage %s;", packageName(api.Info.Title))
+
+	if len(sortedImports) > 0 {
+		fmt.Fprintf(&out, "\n")
+		for _, pkg := range sortedImports {
+			fmt.Fprintf(&out, "\nimport %s;", strconv.Quote(pkg))
+		}
 	}
-	if err := protoPreambleTmpl.Execute(&out, preambleData); err != nil {
-		return nil, errors.Wrap(err, "unable to generate protobuf preamble")
+
+	if len(api.GlobalOptions) > 0 {
+		fmt.Fprintf(&out, "\n")
+		for optName, optValue := range api.GlobalOptions {
+			fmt.Fprintf(&out, "\n%s", option(optName, optValue, true, ""))
+		}
 	}
+
+	fmt.Fprintf(&out, "\n")
 
 	// Add the body
 	body.WriteTo(&out)
@@ -369,34 +412,8 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	return out
 }
 
-const protoPreambleTmplStr = `syntax = "proto3";
-
-package {{ packageName .Package}};
-{{ range $import := .Imports }}
-import "{{ $import }}";
-{{- end }}
-{{ range $optName, $optValue := .GlobalOptions }}
-{{ globalOption $optName $optValue }}
-{{- end }}
-`
-
-const protoFileTmplStr = `{{ $annotate := .Annotate }}{{ $defs := .Definitions }}
-{{ range $path, $endpoint := .Paths }}
-{{ $endpoint.ProtoMessages $path $defs }}
-{{ end }}
-{{ range $modelName, $model := $defs }}
-{{ $model.ProtoMessage "" $modelName $defs counter -1 }}
-{{ end }}{{ $basePath := .BasePath }}
-{{ if len .Paths }}service {{ serviceName .Info.Title }} {{"{"}}{{ range $path, $endpoint := .Paths }}
-{{ $endpoint.ProtoEndpoints $annotate $basePath $path }}{{ end }}
-}{{ end }}
-`
-
-const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ if .Annotate }}
-      option (google.api.http) = {
-        {{ .Method }}: "{{ .Path }}"{{ if .IncludeBody }}
-        body: "{{ .BodyAttr }}"{{ end }}
-      };
+const protoEndpointTmplStr = `{{ if .HasComment }}{{ .Comment }}{{ end }}    rpc {{ .Name }}({{ .RequestName }}) returns ({{ .ResponseName }}) {{"{"}}{{ range $optName, $optValue := .Options }}
+      {{ option $optName $optValue false }}
     {{ end }}{{"}"}}`
 
 const protoMsgTmplStr = `{{ $i := counter }}{{ $defs := .Defs }}{{ $msgName := .Name }}{{ $depth := .Depth }}message {{ .Name }} {{"{"}}{{ range $propName, $prop := .Properties }}
@@ -416,7 +433,7 @@ var funcMap = template.FuncMap{
 	"packageName":      packageName,
 	"serviceName":      serviceName,
 	"PathMethodToName": PathMethodToName,
-	"globalOption":     globalOption,
+	"option":           option,
 }
 
 func packageName(t string) string {
@@ -461,17 +478,33 @@ func toEnum(name, enum string, depth int) string {
 	if _, err := strconv.Atoi(enum); err == nil || depth > 0 {
 		e = name + "_" + enum
 	}
+
+	// For backwards compatibility, we want "foo&bar" and
+	// "foo & bar" to both translate to "FOO_AND_BAR".
 	e = strings.Replace(e, " & ", " AND ", -1)
 	e = strings.Replace(e, "&", "_AND_", -1)
-	e = strings.Replace(e, " ", "_", -1)
-	re := regexp.MustCompile(`[%\{\}\[\]()/\.'’-]`)
-	e = re.ReplaceAllString(e, "")
-	return strings.ToUpper(e)
+
+	var out bytes.Buffer
+	for _, r := range e {
+		switch r {
+		case '%', '{', '}', '[', ']', '(', ')', '/', '.', '\'', '’', '-':
+			// these characters are not allowed
+			continue
+		case '&':
+			out.WriteString("AND")
+		case ' ':
+			// spaces are converted to underscores
+			out.WriteRune('_')
+		default:
+			// everything else is upper-cased
+			out.WriteRune(unicode.ToUpper(r))
+		}
+	}
+
+	return out.String()
 }
 
 var (
-	protoFileTmpl     = template.Must(template.New("protoFile").Funcs(funcMap).Parse(protoFileTmplStr))
-	protoPreambleTmpl = template.Must(template.New("protoPreamble").Funcs(funcMap).Parse(protoPreambleTmplStr))
 	protoMsgTmpl      = template.Must(template.New("protoMsg").Funcs(funcMap).Parse(protoMsgTmplStr))
 	protoEndpointTmpl = template.Must(template.New("protoEndpoint").Funcs(funcMap).Parse(protoEndpointTmplStr))
 	protoEnumTmpl     = template.Must(template.New("protoEnum").Funcs(funcMap).Parse(protoEnumTmplStr))
@@ -517,6 +550,60 @@ func extraImports(body string) []string {
 	return imports
 }
 
-func globalOption(name, value string) string {
-	return fmt.Sprintf(`option %s = %s;`, name, strconv.Quote(value))
+func option(name, value interface{}, global bool, indent string) string {
+	var vstr string
+
+	switch v := value.(type) {
+	case interface {
+		Protobuf(string) string
+	}:
+		vstr = v.Protobuf(indent)
+	case string:
+		vstr = strconv.Quote(v)
+	case int:
+		vstr = strconv.FormatInt(int64(v), 10)
+	case int8:
+		vstr = strconv.FormatInt(int64(v), 10)
+	case int16:
+		vstr = strconv.FormatInt(int64(v), 10)
+	case int64:
+		vstr = strconv.FormatInt(v, 10)
+	case uint:
+		vstr = strconv.FormatUint(uint64(v), 10)
+	case uint8:
+		vstr = strconv.FormatUint(uint64(v), 10)
+	case uint16:
+		vstr = strconv.FormatUint(uint64(v), 10)
+	case uint64:
+		vstr = strconv.FormatUint(v, 10)
+	default:
+		vstr = strconv.Quote(fmt.Sprintf(`%s`, v))
+	}
+
+	var buf bytes.Buffer
+	if global {
+		fmt.Fprintf(&buf, "option %s = %s;", name, vstr)
+	} else {
+		fmt.Fprintf(&buf, "option (%s) = %s;", name, vstr)
+	}
+
+	return prependIndent(&buf, indent)
+}
+
+func prependIndent(rdr io.Reader, indent string) string {
+	var out bytes.Buffer
+
+	// every block should be indented
+	if len(indent) == 0 {
+		io.Copy(&out, rdr)
+	} else {
+		scanner := bufio.NewScanner(rdr)
+		for scanner.Scan() {
+			txt := scanner.Text()
+			out.WriteByte('\n')
+			out.WriteString(indent)
+			out.WriteString(txt)
+		}
+	}
+	return out.String()
 }

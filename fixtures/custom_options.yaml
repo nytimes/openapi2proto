@@ -1,0 +1,119 @@
+swagger: '2.0'
+info:
+  description: Just an example
+  version: 1.0.0
+  title: Purchases
+tags:
+- name: purchase
+  description: Everything purchase releated
+schemes:
+- http
+x-extensions:
+- base: google.protobuf.MethodOptions
+  fields:
+  - name: role
+    type: string
+    number: 50001
+  - name: visibility
+    type: string
+    number: 50002
+  - name: timeout
+    type: int32
+    number: 50003
+paths:
+  /purchases/{brand}/users/{userId}/purchases:
+    post:
+      tags:
+      - purchase
+      x-options:
+        role: end-user
+        visibility: public
+
+      summary: Purchase something
+      description: description
+      operationId: Purchase
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Pet object that needs to be added to the store
+        required: true
+        schema:
+          $ref: '#/definitions/Purchase'
+      responses:
+        200:
+          description: purchase response
+          schema:
+            $ref: '#/definitions/PurchaseResponse'
+        405:
+          description: Invalid input
+        404:
+          description: User not found
+    get:
+      tags:
+      - purchase
+      x-options:
+        role: end-user
+        visibility: public, internal
+        timeout: 5000
+
+      summary: get a purchase
+      description: some description
+      operationId: getPurchase
+      responses:
+        200:
+          description: OK
+        404:
+          description: User not found
+
+definitions:
+  Purchase:
+    type: object
+    required:
+    - paymentInstrumentId
+    - productId
+    - quantity
+    - pricingLocale
+    properties:
+      paymentInstrumentId:
+        type: string
+        example: paymentInstrumentId
+        maxLength: 1024
+        minLength: 1
+      productId:
+        type: string
+        example: productId
+        maxLength: 1024
+        minLength: 1
+      quantity:
+        type: integer
+        minimum: 1
+      pricingLocale:
+        type: string
+        example: pricingLocale
+        maxLength: 10
+        minLength: 1
+      deviceKey:
+        type: string
+        example: deviceKey
+      promotionCode:
+        type: string
+        example: promotionCode
+
+  PurchaseResponse:
+    type: object
+    description: response for a purchase
+    properties:
+      orderId:
+        type: string
+        example: orderId
+        maxLength: 1024
+        minLength: 1
+      orderTotal:
+        type: number
+        example: orderTotal
+        maxLength: 1024
+        minLength: 1

@@ -1,0 +1,16 @@
+swagger: '2.0'
+
+info:
+  version: "0.0.0"
+  title: "Naming Conversions"
+  description: "Test Naming Conversions"
+
+paths:
+  /queue/{id}/enqueue_player:
+    post:
+      produces:
+        - application/json
+      responses:
+        200:
+          schema:
+            type: string
