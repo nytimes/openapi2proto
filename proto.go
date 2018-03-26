@@ -430,10 +430,6 @@ func counter() *int {
 	i := 0
 	return &i
 }
-func zcounter() *int {
-	i := -1
-	return &i
-}
 
 func toEnum(name, enum string, depth int) string {
 	if strings.TrimSpace(enum) == "" {

@@ -430,12 +430,9 @@ func ProtoEnum(name string, enums []string, depth int) string {
 
 	var b bytes.Buffer
 
-	c := zcounter()
-
 	fmt.Fprintf(&b, "enum %s {", name)
-	for _, enum := range enums {
-		*c++
-		fmt.Fprintf(&b, "\n%s%s = %d;", indentStr, toEnum(name, enum, depth), *c)
+	for i, enum := range enums {
+		fmt.Fprintf(&b, "\n%s%s = %d;", indentStr, toEnum(name, enum, depth), i)
 	}
 	fmt.Fprintf(&b, "\n}")
 	return b.String()
