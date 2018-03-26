@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"regexp"
 	"sort"
 	"strconv"
 	"strings"
