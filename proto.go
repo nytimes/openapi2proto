@@ -195,8 +195,9 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	}
 
 	for _, modelName := range sortedModels {
+		var counter int
 		model := api.Definitions[modelName]
-		model.ProtoMessage(&body, "", modelName, api.Definitions, counter(), -1)
+		model.ProtoMessage(&body, "", modelName, api.Definitions, &counter, -1)
 	}
 
 	if len(api.Extensions) > 0 {
@@ -424,11 +425,6 @@ func serviceName(t string) string {
 		name += strings.Title(nme)
 	}
 	return cleanCharacters(name) + "Service"
-}
-
-func counter() *int {
-	i := 0
-	return &i
 }
 
 func toEnum(name, enum string, depth int) string {

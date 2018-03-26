@@ -764,8 +764,7 @@ func messageProtobuf(dst io.Writer, m *Model, defs map[string]*Items) {
 	sort.Strings(propNames)
 
 	var b bytes.Buffer
-	c := counter()
-
+	var counter int
 	var buf bytes.Buffer // holds the contents within message %s {...}
 	for i, pname := range propNames {
 		prop := m.Properties[pname]
@@ -779,7 +778,7 @@ func messageProtobuf(dst io.Writer, m *Model, defs map[string]*Items) {
 		}
 
 		fmt.Fprintf(&buf, "\n")
-		prop.ProtoMessage(&buf, m.Name, pname, defs, c, m.Depth)
+		prop.ProtoMessage(&buf, m.Name, pname, defs, &counter, m.Depth)
 		fmt.Fprintf(&buf, ";")
 	}
 
