@@ -415,18 +415,6 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	return out
 }
 
-func packageName(t string) string {
-	return cleanCharacters(strings.ToLower(strings.Join(strings.Fields(t), "")))
-}
-
-func serviceName(t string) string {
-	var name string
-	for _, nme := range strings.Fields(t) {
-		name += strings.Title(nme)
-	}
-	return cleanCharacters(name) + "Service"
-}
-
 func toEnum(name, enum string, depth int) string {
 	if strings.TrimSpace(enum) == "" {
 		enum = "empty"
@@ -459,34 +447,6 @@ func toEnum(name, enum string, depth int) string {
 	}
 
 	return out.String()
-}
-
-func cleanCharacters(input string) string {
-	var buf bytes.Buffer
-	for _, r := range input {
-		// anything other than a-z, A-Z, 0-9 should be converted
-		// to an underscore
-		switch {
-		case r >= 0x41 && r <= 0x5a: // A-Z
-		case r >= 0x61 && r <= 0x7a: // a-z
-		case r >= 0x30 && r <= 0x39: // 0-9
-		default:
-			r = '_'
-		}
-		buf.WriteRune(r)
-	}
-	return buf.String()
-}
-
-func cleanSpacing(output []byte) []byte {
-	re := regexp.MustCompile(`}\n*message `)
-	output = re.ReplaceAll(output, []byte("}\n\nmessage "))
-	re = regexp.MustCompile(`}\n*enum `)
-	output = re.ReplaceAll(output, []byte("}\n\nenum "))
-	re = regexp.MustCompile(`;\n*message `)
-	output = re.ReplaceAll(output, []byte(";\n\nmessage "))
-	re = regexp.MustCompile(`}\n*service `)
-	return re.ReplaceAll(output, []byte("}\n\nservice "))
 }
 
 var knownImports = map[string]string{

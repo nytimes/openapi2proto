@@ -809,7 +809,3 @@ func format(fmt interface{}) string {
 	return format
 
 }
-
-func cleanAndTitle(s string) string {
-	return cleanCharacters(strings.Title(s))
-}
