@@ -331,7 +331,7 @@ func protoComplex(dst io.Writer, i *Items, typ, msgName, name string, defs map[s
 		// check for referenced schema object (parameters/fields)
 		if i.Schema != nil {
 			if i.Schema.Ref != "" {
-				refDef(dst, indent(depth+1)+name, i.Schema.Ref, *index, defs)
+				refDef(dst, name, i.Schema.Ref, *index, defs)
 				return
 			}
 		}

@@ -435,14 +435,6 @@ func zcounter() *int {
 	return &i
 }
 
-func indent(depth int) string {
-	var out string
-	for i := 0; i < depth; i++ {
-		out += "    "
-	}
-	return out
-}
-
 func toEnum(name, enum string, depth int) string {
 	if strings.TrimSpace(enum) == "" {
 		enum = "empty"
