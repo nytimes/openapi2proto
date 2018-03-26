@@ -466,9 +466,20 @@ func toEnum(name, enum string, depth int) string {
 }
 
 func cleanCharacters(input string) string {
-	re := regexp.MustCompile(`[^a-zA-Z0-9]+`)
-	output := re.ReplaceAllString(input, "_")
-	return output
+	var buf bytes.Buffer
+	for _, r := range input {
+		// anything other than a-z, A-Z, 0-9 should be converted
+		// to an underscore
+		switch {
+		case r >= 0x41 && r <= 0x5a: // A-Z
+		case r >= 0x61 && r <= 0x7a: // a-z
+		case r >= 0x30 && r <= 0x39: // 0-9
+		default:
+			r = '_'
+		}
+		buf.WriteRune(r)
+	}
+	return buf.String()
 }
 
 func cleanSpacing(output []byte) []byte {
