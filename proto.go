@@ -435,11 +435,6 @@ func zcounter() *int {
 	return &i
 }
 
-func inc(i *int) int {
-	*i++
-	return *i
-}
-
 func indent(depth int) string {
 	var out string
 	for i := 0; i < depth; i++ {
