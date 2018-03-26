@@ -69,6 +69,7 @@ type Response struct {
 
 // Endpoint represents an endpoint for a path in an OpenAPI spec.
 type Endpoint struct {
+	verb        string               // this is added internally (for now)
 	Summary     string               `yaml:"summary" json:"summary"`
 	Description string               `yaml:"description" json:"description"`
 	Parameters  Parameters           `yaml:"parameters" json:"parameters"`

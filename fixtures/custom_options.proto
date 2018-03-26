@@ -43,6 +43,7 @@ service PurchasesService {
       option (timeout) = 5000;
       option (visibility) = "public, internal";
     }
+
     // Purchase something
     // 
     // description

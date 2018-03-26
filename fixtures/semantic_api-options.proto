@@ -34,8 +34,10 @@ message GetConceptSearchRequest {
         GETCONCEPTSEARCHREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
     GetConceptSearchRequest_Field fields = 1;
+
     // Integer value for the index count from the first concept to the last concept, sorted alphabetically. Used in a Search Query. A Search Query will return up to 10 concepts in its results.
     int32 offset = 2;
+
     // Precedes the search term string. Used in a Search Query. Except for <specific_concept_name>, Search Query will take the required parameters listed above (<concept_type>, <concept_uri>, <article_uri>) as an optional_parameter in addition to the query=<query_term>.
     string query = 3;
 }
@@ -49,6 +51,7 @@ message GetConceptSearchResponse {
 
 message GetNameConceptTypeSpecificConceptRequest {
     ConceptTypeParam concept_type = 1;
+
     // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
     // 
     // Optional fields are returned in result_set. They are briefly explained here:
@@ -75,6 +78,7 @@ message GetNameConceptTypeSpecificConceptRequest {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELD_SEARCH_API_QUERY = 9;
     }
     GetNameConceptTypeSpecificConceptRequest_Field fields = 2;
+
     // Precedes the search term string. Used in a Search Query. Except for <specific_concept_name>, Search Query will take the required parameters listed above (<concept_type>, <concept_uri>, <article_uri>) as an optional_parameter in addition to the query=<query_term>.
     string query = 3;
     string specific_concept = 4;
@@ -218,11 +222,13 @@ service TheSemanticAPIService {
         get: "/svc/semantic/v2/concept/concept/search.json"
       };
     }
+
     rpc GetNameConceptTypeSpecificConcept(GetNameConceptTypeSpecificConceptRequest) returns (GetNameConceptTypeSpecificConceptResponse) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/name/{concept-type}/{specific-concept}.json"
       };
     }
+
     rpc GetSomethingBlah(google.protobuf.Empty) returns (google.protobuf.Empty) {
       option (google.api.http) = {
         get: "/svc/semantic/v2/concept/something/blah.json"
