@@ -155,7 +155,7 @@ func refDef(dst io.Writer, name, ref string, index int, defs map[string]*Items) 
 	if ok {
 		// if it is an array type, protocomplex instead of just using the referenced type
 		if def.Type == "array" {
-			protoComplex(dst, def, def.Type.(string), "", name, defs, &index, 0)
+			protoArray(dst, def, "", name, defs, &index, 0)
 			return
 		}
 		if def.Type == "number" || def.Type == "integer" {
@@ -204,7 +204,7 @@ func (i *Items) ProtoMessage(dst io.Writer, msgName, name string, defs map[strin
 
 	switch i.Type.(type) {
 	case nil:
-		protoComplex(dst, i, "object", msgName, cleanAndTitle(name), defs, indx, depth)
+		protoObject(dst, i, msgName, cleanAndTitle(name), defs, indx, depth)
 		return
 	case string:
 		protoComplex(dst, i, i.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
@@ -283,139 +283,16 @@ func (i *Items) ProtoMessage(dst io.Writer, msgName, name string, defs map[strin
 func protoComplex(dst io.Writer, i *Items, typ, msgName, name string, defs map[string]*Items, index *int, depth int) {
 	switch typ {
 	case "object":
-		// make a map of the additional props we might get
-		addlProps := map[string]string{}
-
-		// check for map declaration
-		switch addl := i.AdditionalProperties.(type) {
-		case map[string]interface{}:
-			if addl != nil {
-				if ref, ok := addl["$ref"].(string); ok {
-					addlProps["$ref"] = ref
-				}
-				if t, ok := addl["type"].(string); ok {
-					addlProps["type"] = t
-				}
-			}
-		// we need to check for both because yaml parses as
-		// map[interface{}]interface{} rather than map[string]interface{}
-		// see: https://github.com/go-yaml/yaml/issues/139
-		case map[interface{}]interface{}:
-			for k, v := range addl {
-				switch k := k.(type) {
-				case string:
-					switch v := v.(type) {
-					case string:
-						addlProps[k] = v
-					}
-				}
-			}
-		}
-
-		if len(addlProps) > 0 {
-			var itemType string
-
-			if ref, ok := addlProps["$ref"]; ok && ref != "" {
-				itemType, _ = refType(ref, defs)
-			} else if t, ok := addlProps["type"]; ok && t != "" {
-				itemType = t
-			}
-
-			if itemType != "" {
-				// Note: Map of arrays is not currently supported.
-				fmt.Fprintf(dst, "map<string, %s> %s = %d", itemType, name, *index)
-				return
-			}
-		}
-
-		// check for referenced schema object (parameters/fields)
-		if i.Schema != nil {
-			if i.Schema.Ref != "" {
-				refDef(dst, name, i.Schema.Ref, *index, defs)
-				return
-			}
-		}
-
-		// otherwise, normal object model
-		i.Model.Name = cleanAndTitle(name)
-		i.Model.ProtoModel(dst, i.Model.Name, depth+1, defs)
-		if depth >= 0 {
-			fmt.Fprintf(dst, "\n%s %s = %d", i.Model.Name, name, *index)
-		}
-		return
+		protoObject(dst, i, msgName, name, defs, index, depth)
 	case "array":
-		if i.Items != nil {
-			if depth < 0 {
-				return
-			}
-
-			// check for enum!
-			if len(i.Items.Enum) > 0 {
-				eName := cleanAndTitle(name)
-				msgStr := ProtoEnum(eName, i.Items.Enum, depth+1)
-				fmt.Fprintf(dst, "%s\n%srepeated %s %s = %d", msgStr, "", eName, name, *index)
-				return
-			}
-
-			// CHECK FOR SCALAR
-			if pt := scalarType(i.Items.Type, i.Items.Format); pt != "" {
-				fmt.Fprintf(dst, "repeated ")
-				writeScalarDecl(dst, name, pt, *index)
-				return
-			}
-
-			// CHECK FOR REF
-			if i.Items.Ref != "" {
-				fmt.Fprintf(dst, "repeated ")
-				refDef(dst, name, i.Items.Ref, *index, defs)
-				return
-			}
-
-			// breaks on 'Class' :\
-			if !strings.HasSuffix(name, "ss") {
-				i.Items.Model.Name = cleanAndTitle(strings.TrimSuffix(name, "s"))
-			} else {
-				i.Items.Model.Name = cleanAndTitle(name)
-			}
-			i.Items.Model.ProtoModel(dst, i.Items.Model.Name, depth+1, defs)
-			fmt.Fprintf(dst, "\nrepeated %s %s = %d", i.Items.Model.Name, name, *index)
-			return
-		}
+		protoArray(dst, i, msgName, name, defs, index, depth)
 	case "string":
-		if len(i.Enum) > 0 {
-			var eName string
-			// breaks on 'Class' :\
-			if !strings.HasSuffix(name, "ss") {
-				eName = strings.TrimSuffix(name, "s")
-			} else {
-				eName = name
-			}
-
-			eName = cleanAndTitle(eName)
-
-			if msgName != "" {
-				eName = cleanAndTitle(msgName) + "_" + eName
-			}
-
-			msgStr := ProtoEnum(eName, i.Enum, depth+1)
-			fmt.Fprintf(dst, "%s", msgStr)
-			if depth >= 0 {
-				fmt.Fprintf(dst, "\n%s %s = %d", eName, name, *index)
-			}
-			return
-		}
-		if depth >= 0 {
-			if pt := scalarType(i.Type, i.Format); pt != "" {
-				writeScalarDecl(dst, name, pt, *index)
-			}
-			return
-		}
+		protoString(dst, i, msgName, name, defs, index, depth)
 	default:
 		if depth >= 0 {
 			if pt := scalarType(i.Type, i.Format); pt != "" {
 				writeScalarDecl(dst, name, pt, *index)
 			}
-			return
 		}
 	}
 }
@@ -808,4 +685,139 @@ func format(fmt interface{}) string {
 	}
 	return format
 
+}
+
+func protoObject(dst io.Writer, i *Items, msgName, name string, defs map[string]*Items, index *int, depth int) {
+	// make a map of the additional props we might get
+	addlProps := map[string]string{}
+
+	// check for map declaration
+	switch addl := i.AdditionalProperties.(type) {
+	case map[string]interface{}:
+		if addl != nil {
+			if ref, ok := addl["$ref"].(string); ok {
+				addlProps["$ref"] = ref
+			}
+			if t, ok := addl["type"].(string); ok {
+				addlProps["type"] = t
+			}
+		}
+	// we need to check for both because yaml parses as
+	// map[interface{}]interface{} rather than map[string]interface{}
+	// see: https://github.com/go-yaml/yaml/issues/139
+	case map[interface{}]interface{}:
+		for k, v := range addl {
+			switch k := k.(type) {
+			case string:
+				switch v := v.(type) {
+				case string:
+					addlProps[k] = v
+				}
+			}
+		}
+	}
+
+	if len(addlProps) > 0 {
+		var itemType string
+
+		if ref, ok := addlProps["$ref"]; ok && ref != "" {
+			itemType, _ = refType(ref, defs)
+		} else if t, ok := addlProps["type"]; ok && t != "" {
+			itemType = t
+		}
+
+		if itemType != "" {
+			// Note: Map of arrays is not currently supported.
+			fmt.Fprintf(dst, "map<string, %s> %s = %d", itemType, name, *index)
+			return
+		}
+	}
+
+	// check for referenced schema object (parameters/fields)
+	if i.Schema != nil {
+		if i.Schema.Ref != "" {
+			refDef(dst, name, i.Schema.Ref, *index, defs)
+			return
+		}
+	}
+
+	// otherwise, normal object model
+	i.Model.Name = cleanAndTitle(name)
+	i.Model.ProtoModel(dst, i.Model.Name, depth+1, defs)
+	if depth >= 0 {
+		fmt.Fprintf(dst, "\n%s %s = %d", i.Model.Name, name, *index)
+	}
+}
+
+func protoArray(dst io.Writer, i *Items, msgName, name string, defs map[string]*Items, index *int, depth int) {
+	if i.Items == nil {
+		return
+	}
+
+	if depth < 0 {
+		return
+	}
+
+	// check for enum!
+	if len(i.Items.Enum) > 0 {
+		eName := cleanAndTitle(name)
+		msgStr := ProtoEnum(eName, i.Items.Enum, depth+1)
+		fmt.Fprintf(dst, "%s\n%srepeated %s %s = %d", msgStr, "", eName, name, *index)
+		return
+	}
+
+	// CHECK FOR SCALAR
+	if pt := scalarType(i.Items.Type, i.Items.Format); pt != "" {
+		fmt.Fprintf(dst, "repeated ")
+		writeScalarDecl(dst, name, pt, *index)
+		return
+	}
+
+	// CHECK FOR REF
+	if i.Items.Ref != "" {
+		fmt.Fprintf(dst, "repeated ")
+		refDef(dst, name, i.Items.Ref, *index, defs)
+		return
+	}
+
+	// breaks on 'Class' :\
+	if !strings.HasSuffix(name, "ss") {
+		i.Items.Model.Name = cleanAndTitle(strings.TrimSuffix(name, "s"))
+	} else {
+		i.Items.Model.Name = cleanAndTitle(name)
+	}
+	i.Items.Model.ProtoModel(dst, i.Items.Model.Name, depth+1, defs)
+	fmt.Fprintf(dst, "\nrepeated %s %s = %d", i.Items.Model.Name, name, *index)
+	return
+}
+
+func protoString(dst io.Writer, i *Items, msgName, name string, defs map[string]*Items, index *int, depth int) {
+	if len(i.Enum) > 0 {
+		var eName string
+		// breaks on 'Class' :\
+		if !strings.HasSuffix(name, "ss") {
+			eName = strings.TrimSuffix(name, "s")
+		} else {
+			eName = name
+		}
+
+		eName = cleanAndTitle(eName)
+
+		if msgName != "" {
+			eName = cleanAndTitle(msgName) + "_" + eName
+		}
+
+		msgStr := ProtoEnum(eName, i.Enum, depth+1)
+		fmt.Fprintf(dst, "%s", msgStr)
+		if depth >= 0 {
+			fmt.Fprintf(dst, "\n%s %s = %d", eName, name, *index)
+		}
+		return
+	}
+	if depth >= 0 {
+		if pt := scalarType(i.Type, i.Format); pt != "" {
+			writeScalarDecl(dst, name, pt, *index)
+		}
+		return
+	}
 }
