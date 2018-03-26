@@ -7,10 +7,13 @@ import "google/protobuf/empty.proto";
 message GetEstimatesPriceRequest {
     // Latitude component of end location.
     double end_latitude = 1;
+
     // Longitude component of end location.
     double end_longitude = 2;
+
     // Latitude component of start location.
     double start_latitude = 3;
+
     // Longitude component of start location.
     double start_longitude = 4;
 }
@@ -22,10 +25,13 @@ message GetEstimatesPriceResponse {
 message GetEstimatesTimeRequest {
     // Unique customer identifier to be used for experience customization.
     string customer_uuid = 1;
+
     // Unique identifier representing a specific product for a given latitude & longitude.
     string product_id = 2;
+
     // Latitude component of start location.
     double start_latitude = 3;
+
     // Longitude component of start location.
     double start_longitude = 4;
 }
@@ -37,6 +43,7 @@ message GetEstimatesTimeResponse {
 message GetHistoryRequest {
     // Number of items to retrieve. Default is 5, maximum is 100.
     int32 limit = 1;
+
     // Offset the list of returned results by this amount. Default is zero.
     int32 offset = 2;
 }
@@ -48,6 +55,7 @@ message PutMeRequest {
 message GetProductsRequest {
     // Latitude component of location.
     double latitude = 1;
+
     // Longitude component of location.
     double longitude = 2;
 }
@@ -60,8 +68,10 @@ message Activities {
     // Total number of items available.
     int32 count = 1;
     repeated Activity history = 2;
+
     // Number of items to retrieve (100 max).
     int32 limit = 3;
+
     // Position in pagination.
     int32 offset = 4;
 }
@@ -80,16 +90,22 @@ message Error {
 message PriceEstimate {
     // [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) currency code.
     string currency_code = 1;
+
     // Display name of product.
     string display_name = 2;
+
     // Formatted string of estimate in local currency of the start location. Estimate could be a range, a single number (flat rate) or "Metered" for TAXI.
     string estimate = 3;
+
     // Upper bound of the estimated price.
     double high_estimate = 4;
+
     // Lower bound of the estimated price.
     double low_estimate = 5;
+
     // Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles
     string product_id = 6;
+
     // Expected surge multipflier. Surge is active if surge_multiplier is greater than 1. Price estimate already factors in the surge multiplier.
     double surge_multiplier = 7;
 }
@@ -97,12 +113,16 @@ message PriceEstimate {
 message Product {
     // Capacity of product. For example, 4 people.
     string capacity = 1;
+
     // Description of product.
     string description = 2;
+
     // Display name of product.
     string display_name = 3;
+
     // Image URL representing the product.
     string image = 4;
+
     // Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles.
     string product_id = 5;
 }
@@ -110,12 +130,16 @@ message Product {
 message Profile {
     // Email address of the Uber user
     string email = 1;
+
     // First name of the Uber user.
     string first_name = 2;
+
     // Last name of the Uber user.
     string last_name = 3;
+
     // Image URL of the Uber user.
     string picture = 4;
+
     // Promo code of the Uber user.
     string promo_code = 5;
 }
@@ -132,22 +156,27 @@ service UberAPIService {
     // product, its surge_multiplier will be greater than 1, but the price estimate
     // already factors in this multiplier.
     rpc GetEstimatesPrice(GetEstimatesPriceRequest) returns (GetEstimatesPriceResponse) {}
+
     // Time Estimates
     // 
     // The Time Estimates endpoint returns ETAs for all products offered at a given location, with the responses expressed as integers in seconds. We recommend that this endpoint be called every minute to provide the most accurate, up-to-date ETAs.
     rpc GetEstimatesTime(GetEstimatesTimeRequest) returns (GetEstimatesTimeResponse) {}
+
     // User Activity
     // 
     // The User Activity endpoint returns data about a user's lifetime activity with Uber. The response will include pickup locations and times, dropoff locations and times, the distance of past requests, and information about which products were requested.<br><br>The history array in the response will have a maximum length based on the limit parameter. The response value count may exceed limit, therefore subsequent API requests may be necessary.
     rpc GetHistory(GetHistoryRequest) returns (Activities) {}
+
     // User Profile
     // 
     // The User Profile endpoint returns information about the Uber user that has authorized with the application.
     rpc GetMe(google.protobuf.Empty) returns (Profile) {}
+
     // Save User Profile
     // 
     // The User Profile endpoint returns information about the Uber user that has authorized with the application.
     rpc PutMe(PutMeRequest) returns (Profile) {}
+
     // Product Types
     // 
     // The Products endpoint returns information about the *Uber* products

@@ -1,8 +1,10 @@
 package openapi2proto
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net/url"
 	"os"
@@ -13,50 +15,60 @@ import (
 )
 
 func (i Items) Comment() string {
-	return prepComment(i.Description, "    ")
+	return i.Description
 }
 
 func (i Items) HasComment() bool {
 	return i.Description != ""
 }
 
-func protoScalarType(name string, typ, frmt interface{}, indx int) string {
-	frmat := format(frmt)
-	switch typ.(type) {
-	case string:
-		switch typ.(string) {
-		case "string":
-			if frmat == "byte" {
-				return fmt.Sprintf("bytes %s = %d", name, indx)
-			}
-			return fmt.Sprintf("string %s = %d", name, indx)
-		case "bytes":
-			return fmt.Sprintf("bytes %s = %d", name, indx)
-		case "number":
-			// #62 type: number + format: long -> int64,
-			//     type: number + format: integer -> int32
-			switch frmat {
-			case "":
-				frmat = "double"
-			case "long":
-				frmat = "int64"
-			case "integer":
-				frmat = "int32"
-			}
-			return fmt.Sprintf("%s %s = %d", frmat, name, indx)
-		case "integer":
-			if frmat == "" {
-				frmat = "int32"
-			}
-			return fmt.Sprintf("%s %s = %d", frmat, name, indx)
-		case "boolean":
-			return fmt.Sprintf("bool %s = %d", name, indx)
-		case "null":
-			return fmt.Sprintf("google.protobuf.NullValue %s = %d", name, indx)
-		}
+// scalarType returns the protocol buffer type for typ + frmt
+// if no applicable type can be guessed, then it returns the empty string
+func scalarType(typ, frmt interface{}) string {
+	// if typ is not a string, we can't do jack
+	// XXX Why don't we just accept `typ string`? Guess: probably because we're receiving
+	// from an unknown source
+	typStr, ok := typ.(string)
+	if !ok {
+		return ""
 	}
 
+	switch typStr {
+	case "bytes":
+		return "bytes"
+	case "boolean":
+		return "bool"
+	case "null":
+		return "google.protobuf.NullValue"
+	case "string":
+		if format(frmt) == "byte" {
+			return "bytes"
+		}
+		return "string"
+	case "integer":
+		if v := format(frmt); v != "" {
+			return v
+		}
+		return "int32"
+	case "number":
+		// #62 type: number + format: long -> int64,
+		//     type: number + format: integer -> int32
+		switch v := format(frmt); v {
+		case "":
+			return "double"
+		case "long":
+			return "int64"
+		case "integer":
+			return "int32"
+		default:
+			return v
+		}
+	}
 	return ""
+}
+
+func writeScalarDecl(dst io.Writer, name string, typ string, indx int) {
+	fmt.Fprintf(dst, "%s %s = %d", typ, name, indx)
 }
 
 func refDatas(ref string) (string, string) {
@@ -135,7 +147,7 @@ func refType(ref string, defs map[string]*Items) (string, string) {
 	return itemType, pkg
 }
 
-func refDef(name, ref string, index int, defs map[string]*Items) string {
+func refDef(dst io.Writer, name, ref string, index int, defs map[string]*Items) {
 	itemType, _ := refType(ref, defs)
 	// check if this is an array, parameter types can be setup differently and
 	// this may not have been caught earlier
@@ -143,18 +155,22 @@ func refDef(name, ref string, index int, defs map[string]*Items) string {
 	if ok {
 		// if it is an array type, protocomplex instead of just using the referenced type
 		if def.Type == "array" {
-			return protoComplex(def, def.Type.(string), "", name, defs, &index, 0)
+			protoComplex(dst, def, def.Type.(string), "", name, defs, &index, 0)
+			return
 		}
 		if def.Type == "number" || def.Type == "integer" {
-			return protoScalarType(name, def.Type, def.Format, index)
+			if pt := scalarType(def.Type, def.Format); pt != "" {
+				writeScalarDecl(dst, name, pt, index)
+			}
+			return
 		}
 	}
-	return fmt.Sprintf("%s %s = %d", itemType, cleanCharacters(name), index)
+	fmt.Fprintf(dst, "%s %s = %d", itemType, cleanCharacters(name), index)
 }
 
 // ProtoMessage will generate a set of fields for a protobuf v3 schema given the
 // current Items and information.
-func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx *int, depth int) string {
+func (i *Items) ProtoMessage(dst io.Writer, msgName, name string, defs map[string]*Items, indx *int, depth int) {
 	*indx++
 	if i.ProtoTag != 0 {
 		*indx = i.ProtoTag
@@ -163,16 +179,17 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 
 	if i.Ref != "" {
 		// Handle top-level definitions that are just a reference.
-		if depth == -1 {
-			return ""
+		if depth > -1 {
+			refDef(dst, name, i.Ref, index, defs)
 		}
-		return refDef(name, i.Ref, index, defs)
+		return
 	}
 
 	// for parameters
 	if i.Schema != nil {
 		if i.Schema.Ref != "" {
-			return refDef(name, i.Schema.Ref, index, defs)
+			refDef(dst, name, i.Schema.Ref, index, defs)
+			return
 		}
 		if i.In == "body" && i.Schema.Type == nil {
 			i.Schema.Type = "object"
@@ -181,14 +198,17 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 				msgName, name, i.Schema.Type)
 			os.Exit(1)
 		}
-		return protoComplex(i.Schema, i.Schema.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
+		protoComplex(dst, i.Schema, i.Schema.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
+		return
 	}
 
 	switch i.Type.(type) {
 	case nil:
-		return protoComplex(i, "object", msgName, cleanAndTitle(name), defs, indx, depth)
+		protoComplex(dst, i, "object", msgName, cleanAndTitle(name), defs, indx, depth)
+		return
 	case string:
-		return protoComplex(i, i.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
+		protoComplex(dst, i, i.Type.(string), msgName, cleanCharacters(name), defs, indx, depth)
+		return
 	case []interface{}:
 		types := i.Type.([]interface{})
 		hasNull := false
@@ -203,19 +223,20 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 		}
 		// non-nullable fields with multiple types? Make it an Any.
 		if !hasNull || len(otherTypes) > 1 {
-			if depth >= 0 {
-				return fmt.Sprintf("google.protobuf.Any %s = %d", cleanCharacters(name), *indx)
+			if depth > -1 {
+				fmt.Fprintf(dst, "google.protobuf.Any %s = %d", cleanCharacters(name), *indx)
 			}
-			return ""
+			return
 		}
 
 		if depth < 0 {
-			return ""
+			return
 		}
 
 		switch otherTypes[0] {
 		case "string":
-			return fmt.Sprintf("google.protobuf.StringValue %s = %d", cleanCharacters(name), *indx)
+			fmt.Fprintf(dst, "google.protobuf.StringValue %s = %d", cleanCharacters(name), *indx)
+			return
 		case "number":
 			frmat := format(i.Format)
 			if frmat == "" {
@@ -223,7 +244,8 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 			} else {
 				frmat = cleanAndTitle(frmat)
 			}
-			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, cleanCharacters(name), *indx)
+			fmt.Fprintf(dst, "google.protobuf.%sValue %s = %d", frmat, cleanCharacters(name), *indx)
+			return
 		case "integer":
 			frmat := format(i.Format)
 			if frmat == "" {
@@ -235,25 +257,30 @@ func (i *Items) ProtoMessage(msgName, name string, defs map[string]*Items, indx 
 				frmat = strings.TrimPrefix(frmat, "Ui")
 				frmat = "UI" + frmat
 			}
-			return fmt.Sprintf("google.protobuf.%sValue %s = %d", frmat, cleanCharacters(name), *indx)
+			fmt.Fprintf(dst, "google.protobuf.%sValue %s = %d", frmat, cleanCharacters(name), *indx)
+			return
 		case "bytes":
-			return fmt.Sprintf("google.protobuf.BytesValue %s = %d", cleanCharacters(name), *indx)
+			fmt.Fprintf(dst, "google.protobuf.BytesValue %s = %d", cleanCharacters(name), *indx)
+			return
 		case "boolean":
-			return fmt.Sprintf("google.protobuf.BoolValue %s = %d", cleanCharacters(name), *indx)
+			fmt.Fprintf(dst, "google.protobuf.BoolValue %s = %d", cleanCharacters(name), *indx)
+			return
 		default:
 			if depth >= 0 {
-				return fmt.Sprintf("google.protobuf.Any %s = %d", cleanCharacters(name), *indx)
+				fmt.Fprintf(dst, "google.protobuf.Any %s = %d", cleanCharacters(name), *indx)
 			}
+			return
 		}
 	}
 
 	if depth >= 0 {
-		return protoScalarType(name, i.Type, i.Format, index)
+		if pt := scalarType(i.Type, i.Format); pt != "" {
+			writeScalarDecl(dst, name, pt, *indx)
+		}
 	}
-	return ""
 }
 
-func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, index *int, depth int) string {
+func protoComplex(dst io.Writer, i *Items, typ, msgName, name string, defs map[string]*Items, index *int, depth int) {
 	switch typ {
 	case "object":
 		// make a map of the additional props we might get
@@ -296,46 +323,52 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 
 			if itemType != "" {
 				// Note: Map of arrays is not currently supported.
-				return fmt.Sprintf("map<string, %s> %s = %d", itemType, name, *index)
+				fmt.Fprintf(dst, "map<string, %s> %s = %d", itemType, name, *index)
+				return
 			}
 		}
 
 		// check for referenced schema object (parameters/fields)
 		if i.Schema != nil {
 			if i.Schema.Ref != "" {
-				return refDef(indent(depth+1)+name, i.Schema.Ref, *index, defs)
+				refDef(dst, indent(depth+1)+name, i.Schema.Ref, *index, defs)
+				return
 			}
 		}
 
 		// otherwise, normal object model
 		i.Model.Name = cleanAndTitle(name)
-		msgStr := i.Model.ProtoModel(i.Model.Name, depth+1, defs)
-		if depth < 0 {
-			return msgStr
+		i.Model.ProtoModel(dst, i.Model.Name, depth+1, defs)
+		if depth >= 0 {
+			fmt.Fprintf(dst, "\n%s %s = %d", i.Model.Name, name, *index)
 		}
-		return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), i.Model.Name, name, *index)
+		return
 	case "array":
 		if i.Items != nil {
 			if depth < 0 {
-				return ""
+				return
 			}
 
 			// check for enum!
 			if len(i.Items.Enum) > 0 {
 				eName := cleanAndTitle(name)
 				msgStr := ProtoEnum(eName, i.Items.Enum, depth+1)
-				return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), eName, name, *index)
+				fmt.Fprintf(dst, "%s\n%srepeated %s %s = %d", msgStr, "", eName, name, *index)
+				return
 			}
 
 			// CHECK FOR SCALAR
-			pt := protoScalarType(name, i.Items.Type, i.Items.Format, *index)
-			if pt != "" {
-				return fmt.Sprintf("repeated %s", pt)
+			if pt := scalarType(i.Items.Type, i.Items.Format); pt != "" {
+				fmt.Fprintf(dst, "repeated ")
+				writeScalarDecl(dst, name, pt, *index)
+				return
 			}
 
 			// CHECK FOR REF
 			if i.Items.Ref != "" {
-				return "repeated " + refDef(name, i.Items.Ref, *index, defs)
+				fmt.Fprintf(dst, "repeated ")
+				refDef(dst, name, i.Items.Ref, *index, defs)
+				return
 			}
 
 			// breaks on 'Class' :\
@@ -344,8 +377,9 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			} else {
 				i.Items.Model.Name = cleanAndTitle(name)
 			}
-			msgStr := i.Items.Model.ProtoModel(i.Items.Model.Name, depth+1, defs)
-			return fmt.Sprintf("%s\n%srepeated %s %s = %d", msgStr, indent(depth+1), i.Items.Model.Name, name, *index)
+			i.Items.Model.ProtoModel(dst, i.Items.Model.Name, depth+1, defs)
+			fmt.Fprintf(dst, "\nrepeated %s %s = %d", i.Items.Model.Name, name, *index)
+			return
 		}
 	case "string":
 		if len(i.Enum) > 0 {
@@ -364,37 +398,46 @@ func protoComplex(i *Items, typ, msgName, name string, defs map[string]*Items, i
 			}
 
 			msgStr := ProtoEnum(eName, i.Enum, depth+1)
-			if depth < 0 {
-				return msgStr
+			fmt.Fprintf(dst, "%s", msgStr)
+			if depth >= 0 {
+				fmt.Fprintf(dst, "\n%s %s = %d", eName, name, *index)
 			}
-			return fmt.Sprintf("%s\n%s%s %s = %d", msgStr, indent(depth+1), eName, name, *index)
+			return
 		}
 		if depth >= 0 {
-			return protoScalarType(name, i.Type, i.Format, *index)
+			if pt := scalarType(i.Type, i.Format); pt != "" {
+				writeScalarDecl(dst, name, pt, *index)
+			}
+			return
 		}
 	default:
 		if depth >= 0 {
-			return protoScalarType(name, i.Type, i.Format, *index)
+			if pt := scalarType(i.Type, i.Format); pt != "" {
+				writeScalarDecl(dst, name, pt, *index)
+			}
+			return
 		}
 	}
-	return ""
 }
 
 // ProtoEnum will generate a protobuf v3 enum declaration from
 // the given info.
 func ProtoEnum(name string, enums []string, depth int) string {
-	s := struct {
-		Name  string
-		Enum  []string
-		Depth int
-	}{
-		name, enums, depth,
-	}
+	// the enum will be indented properly relative to the start
+	// of this string. It is up to the caller to fix more indentation
+	// in case the whole block should be indented further
+	// XXX ignore depth for now
+
 	var b bytes.Buffer
-	err := protoEnumTmpl.Execute(&b, s)
-	if err != nil {
-		log.Fatal("unable to protobuf model: ", err)
+
+	c := zcounter()
+
+	fmt.Fprintf(&b, "enum %s {", name)
+	for _, enum := range enums {
+		*c++
+		fmt.Fprintf(&b, "\n%s%s = %d;", indentStr, toEnum(name, enum, depth), *c)
 	}
+	fmt.Fprintf(&b, "\n}")
 	return b.String()
 }
 
@@ -461,19 +504,17 @@ func OperationIDToName(operationID string) string {
 // based on the response schema. If the response is an array
 // type, it will get wrapped in a generic message with a single
 // 'items' field to contain the array.
-func (r *Response) ProtoMessage(endpointName string, defs map[string]*Items) string {
+func (r *Response) ProtoMessage(dst io.Writer, endpointName string, defs map[string]*Items) {
 	name := endpointName + "Response"
 	if r.Schema == nil {
-		return ""
+		return
 	}
 	switch r.Schema.Type {
 	case "object":
-		return r.Schema.Model.ProtoModel(name, 0, defs)
+		r.Schema.Model.ProtoModel(dst, name, 0, defs)
 	case "array":
 		model := &Model{Properties: map[string]*Items{"items": r.Schema}}
-		return model.ProtoModel(name, 0, defs)
-	default:
-		return ""
+		model.ProtoModel(dst, name, 0, defs)
 	}
 }
 
@@ -508,26 +549,10 @@ func includeBody(parent, child Parameters) string {
 	return ""
 }
 
-var lineStart = regexp.MustCompile(`^`)
-var newLine = regexp.MustCompile(`\n`)
-
-func prepComment(comment, space string) string {
-	if comment == "" {
-		return ""
-	}
-	comment = lineStart.ReplaceAllString(comment, space+"// ")
-	comment = newLine.ReplaceAllString(comment, "\n"+space+"// ")
-	comment = strings.TrimRight(comment, "/ ")
-	if !strings.HasSuffix(comment, "\n") {
-		comment += "\n"
-	}
-	return comment
-}
-
-func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, path, method string) string {
+func (e *Endpoint) protoEndpoint(dst io.Writer, annotate bool, parentParams Parameters, base, path string) {
 	reqName := "google.protobuf.Empty"
 
-	endpointName := PathMethodToName(path, method, e.OperationID)
+	endpointName := PathMethodToName(path, e.verb, e.OperationID)
 
 	path = base + path
 
@@ -546,17 +571,14 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 
 	comment := e.Summary
 	if comment != "" && e.Description != "" {
-		if !strings.HasSuffix(comment, "\n") {
+		for !strings.HasSuffix(comment, "\n\n") {
 			comment += "\n"
 		}
-		comment += "\n"
 	}
 
 	if e.Description != "" {
 		comment += e.Description
 	}
-
-	comment = prepComment(comment, "")
 
 	// Create a copy of options so we can mutate it
 	var options = GRPCOptions{}
@@ -566,17 +588,18 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 
 	if annotate {
 		if _, ok := options[optionGoogleAPIHTTP]; !ok {
-			options[optionGoogleAPIHTTP] = NewHTTPAnnotation(method, path, bodyAttr)
+			options[optionGoogleAPIHTTP] = NewHTTPAnnotation(e.verb, path, bodyAttr)
 		}
 	}
 
 	var b bytes.Buffer
 
 	if comment != "" {
-		fmt.Fprintf(&b, "%s", comment)
+		fmt.Fprintf(&b, "\n")
+		writeComment(&b, comment)
 	}
 
-	fmt.Fprintf(&b, `rpc %s(%s) returns (%s) {`, endpointName, reqName, respName)
+	fmt.Fprintf(&b, "\nrpc %s(%s) returns (%s) {", endpointName, reqName, respName)
 
 	var optkeys []string
 	for k := range options {
@@ -593,25 +616,17 @@ func (e *Endpoint) protoEndpoint(annotate bool, parentParams Parameters, base, p
 		fmt.Fprintf(&b, "\n}")
 	}
 
-	return prependIndent(&b, indentStr)
+	writeLinesWithPrefix(dst, &b, indentStr, true)
 }
 
-func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string, defs map[string]*Items) string {
+func (e *Endpoint) protoMessages(dst io.Writer, parentParams Parameters, endpointName string, defs map[string]*Items) string {
 	var out bytes.Buffer
-	msg := e.Parameters.ProtoMessage(parentParams, endpointName, defs)
-	if msg != "" {
-		out.WriteString(msg + "\n\n")
-	}
 
-	if resp, ok := e.Responses["200"]; ok {
-		msg := resp.ProtoMessage(endpointName, defs)
-		if msg != "" {
-			out.WriteString(msg + "\n\n")
-		}
-	} else if resp, ok := e.Responses["201"]; ok {
-		msg := resp.ProtoMessage(endpointName, defs)
-		if msg != "" {
-			out.WriteString(msg + "\n\n")
+	e.Parameters.ProtoMessage(dst, parentParams, endpointName, defs)
+
+	for _, code := range []string{`200`, `201`} {
+		if resp, ok := e.Responses[code]; ok {
+			resp.ProtoMessage(dst, endpointName, defs)
 		}
 	}
 	return out.String()
@@ -619,63 +634,54 @@ func (e *Endpoint) protoMessages(parentParams Parameters, endpointName string, d
 
 // ProtoEndpoints will return any protobuf v3 endpoints for gRPC
 // service declarations.
-func (p *Path) ProtoEndpoints(annotate bool, base, path string) string {
-	var out bytes.Buffer
-	if p.Get != nil {
-		out.WriteString(p.Get.protoEndpoint(annotate, p.Parameters, base, path, "get"))
-	}
-	if p.Put != nil {
-		out.WriteString(p.Put.protoEndpoint(annotate, p.Parameters, base, path, "put"))
-	}
-	if p.Post != nil {
-		out.WriteString(p.Post.protoEndpoint(annotate, p.Parameters, base, path, "post"))
-	}
-	if p.Delete != nil {
-		out.WriteString(p.Delete.protoEndpoint(annotate, p.Parameters, base, path, "delete"))
+func (p *Path) ProtoEndpoints(dst io.Writer, annotate bool, base, path string) {
+	var endpoints []*Endpoint
+	addEndpoint := func(e *Endpoint, verb string) {
+		if e == nil {
+			return
+		}
+		e.verb = verb
+		endpoints = append(endpoints, e)
 	}
 
-	return strings.TrimSuffix(out.String(), "\n")
+	addEndpoint(p.Get, "get")
+	addEndpoint(p.Put, "put")
+	addEndpoint(p.Post, "post")
+	addEndpoint(p.Delete, "delete")
+
+	for i, e := range endpoints {
+		if i > 0 {
+			io.WriteString(dst, "\n")
+		}
+		e.protoEndpoint(dst, annotate, p.Parameters, base, path)
+	}
+	return
 }
 
 // ProtoMessages will return protobuf v3 messages that represents
 // the request Parameters of the endpoints within this path declaration
 // and any custom response messages not listed in the definitions.
-func (p *Path) ProtoMessages(path string, defs map[string]*Items) string {
+func (p *Path) ProtoMessages(dst io.Writer, path string, defs map[string]*Items) {
+	var endpoints []*Endpoint
+	addEndpoint := func(e *Endpoint, verb string) {
+		if e == nil {
+			return
+		}
+		e.verb = verb
+		endpoints = append(endpoints, e)
+	}
+
+	addEndpoint(p.Get, "get")
+	addEndpoint(p.Put, "put")
+	addEndpoint(p.Post, "post")
+	addEndpoint(p.Delete, "delete")
+
 	var out bytes.Buffer
-	if p.Get != nil {
-		endpointName := PathMethodToName(path, "get", p.Get.OperationID)
-
-		msg := p.Get.protoMessages(p.Parameters, endpointName, defs)
-		if msg != "" {
-			out.WriteString(msg)
-		}
-	}
-	if p.Put != nil {
-		endpointName := PathMethodToName(path, "put", p.Put.OperationID)
-
-		msg := p.Put.protoMessages(p.Parameters, endpointName, defs)
-		if msg != "" {
-			out.WriteString(msg)
-		}
-	}
-	if p.Post != nil {
-		endpointName := PathMethodToName(path, "post", p.Post.OperationID)
-
-		msg := p.Post.protoMessages(p.Parameters, endpointName, defs)
-		if msg != "" {
-			out.WriteString(msg)
-		}
-	}
-	if p.Delete != nil {
-		endpointName := PathMethodToName(path, "delete", p.Delete.OperationID)
-
-		msg := p.Delete.protoMessages(p.Parameters, endpointName, defs)
-		if msg != "" {
-			out.WriteString(msg)
-		}
+	for _, e := range endpoints {
+		e.protoMessages(&out, p.Parameters, PathMethodToName(path, e.verb, e.OperationID), defs)
 	}
 
-	return strings.TrimSuffix(out.String(), "\n")
+	io.Copy(dst, &out)
 }
 
 func paramsToProps(parent, child Parameters, defs map[string]*Items) map[string]*Items {
@@ -707,45 +713,96 @@ func findRefName(i *Items, defs map[string]*Items) string {
 
 // ProtoMessage will return a protobuf v3 message that represents
 // the request Parameters.
-func (p Parameters) ProtoMessage(parent Parameters, endpointName string, defs map[string]*Items) string {
+func (p Parameters) ProtoMessage(dst io.Writer, parent Parameters, endpointName string, defs map[string]*Items) {
 	m := &Model{Properties: paramsToProps(parent, p, defs)}
 
 	// do nothing, no props and should be a google.protobuf.Empty
 	if len(m.Properties) == 0 {
-		return ""
+		return
 	}
 
-	var b bytes.Buffer
 	m.Name = endpointName + "Request"
 	m.Depth = 0
 
-	s := struct {
-		*Model
-		Defs map[string]*Items
-	}{m, defs}
+	//	fmt.Fprintf(dst, "\nstart Parameters.ProtoModel\n")
+	messageProtobuf(dst, m, defs)
+	//	fmt.Fprintf(dst, "\nend Parameters.ProtoModel")
+}
 
-	err := protoMsgTmpl.Execute(&b, s)
-	if err != nil {
-		log.Fatal("unable to protobuf parameters: ", err)
+func writeComment(dst io.Writer, comment string) {
+	scanner := bufio.NewScanner(strings.NewReader(comment))
+	var buf bytes.Buffer
+
+	for scanner.Scan() {
+		buf.WriteString(scanner.Text())
+		buf.WriteString("\n")
 	}
-	return b.String()
+
+	writeLinesWithPrefix(dst, &buf, "// ", false)
+}
+
+func writeLinesWithPrefix(dst io.Writer, src io.Reader, prefix string, skipEmpty bool) {
+	scanner := bufio.NewScanner(src)
+	var buf bytes.Buffer
+	for scanner.Scan() {
+		if txt := scanner.Text(); txt != "" || !skipEmpty {
+			io.WriteString(&buf, prefix)
+			io.WriteString(&buf, txt)
+		}
+		io.WriteString(&buf, "\n")
+	}
+
+	// remove the last trailing new line
+	if buf.Len() > 0 {
+		buf.Truncate(buf.Len() - 1)
+	}
+	buf.WriteTo(dst)
+}
+
+func messageProtobuf(dst io.Writer, m *Model, defs map[string]*Items) {
+	var propNames []string
+	for pname := range m.Properties {
+		propNames = append(propNames, pname)
+	}
+	sort.Strings(propNames)
+
+	var b bytes.Buffer
+	c := counter()
+
+	var buf bytes.Buffer // holds the contents within message %s {...}
+	for i, pname := range propNames {
+		prop := m.Properties[pname]
+		if prop.HasComment() {
+			if i > 0 {
+				fmt.Fprintf(&buf, "\n")
+			}
+
+			fmt.Fprintf(&buf, "\n")
+			writeComment(&buf, prop.Comment())
+		}
+
+		fmt.Fprintf(&buf, "\n")
+		prop.ProtoMessage(&buf, m.Name, pname, defs, c, m.Depth)
+		fmt.Fprintf(&buf, ";")
+	}
+
+	// Now write this proper indentation
+	fmt.Fprintf(&b, "message %s {", m.Name)
+	writeLinesWithPrefix(&b, &buf, indentStr, true)
+	fmt.Fprintf(&b, "\n}")
+
+	io.Copy(dst, &b)
 }
 
 // ProtoModel will return a protobuf v3 message that represents
 // the current Model.
-func (m *Model) ProtoModel(name string, depth int, defs map[string]*Items) string {
-	var b bytes.Buffer
+func (m *Model) ProtoModel(dst io.Writer, name string, depth int, defs map[string]*Items) {
 	m.Name = cleanAndTitle(name)
 	m.Depth = depth
-	s := struct {
-		*Model
-		Defs map[string]*Items
-	}{m, defs}
-	err := protoMsgTmpl.Execute(&b, s)
-	if err != nil {
-		log.Fatal("unable to protobuf model: ", err)
-	}
-	return b.String()
+
+	//	fmt.Fprintf(dst, "\nstart Model.ProtoModel\n")
+	messageProtobuf(dst, m, defs)
+	//	fmt.Fprintf(dst, "\nend Model.ProtoModel")
 }
 
 func format(fmt interface{}) string {
