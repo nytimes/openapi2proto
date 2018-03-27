@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -195,8 +194,9 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	}
 
 	for _, modelName := range sortedModels {
+		var counter int
 		model := api.Definitions[modelName]
-		model.ProtoMessage(&body, "", modelName, api.Definitions, counter(), -1)
+		model.ProtoMessage(&body, "", modelName, api.Definitions, &counter, -1)
 	}
 
 	if len(api.Extensions) > 0 {
@@ -414,40 +414,6 @@ func traverseItemsForImports(item *Items, defs map[string]*Items) []string {
 	return out
 }
 
-func packageName(t string) string {
-	return cleanCharacters(strings.ToLower(strings.Join(strings.Fields(t), "")))
-}
-
-func serviceName(t string) string {
-	var name string
-	for _, nme := range strings.Fields(t) {
-		name += strings.Title(nme)
-	}
-	return cleanCharacters(name) + "Service"
-}
-
-func counter() *int {
-	i := 0
-	return &i
-}
-func zcounter() *int {
-	i := -1
-	return &i
-}
-
-func inc(i *int) int {
-	*i++
-	return *i
-}
-
-func indent(depth int) string {
-	var out string
-	for i := 0; i < depth; i++ {
-		out += "    "
-	}
-	return out
-}
-
 func toEnum(name, enum string, depth int) string {
 	if strings.TrimSpace(enum) == "" {
 		enum = "empty"
@@ -480,23 +446,6 @@ func toEnum(name, enum string, depth int) string {
 	}
 
 	return out.String()
-}
-
-func cleanCharacters(input string) string {
-	re := regexp.MustCompile(`[^a-zA-Z0-9]+`)
-	output := re.ReplaceAllString(input, "_")
-	return output
-}
-
-func cleanSpacing(output []byte) []byte {
-	re := regexp.MustCompile(`}\n*message `)
-	output = re.ReplaceAll(output, []byte("}\n\nmessage "))
-	re = regexp.MustCompile(`}\n*enum `)
-	output = re.ReplaceAll(output, []byte("}\n\nenum "))
-	re = regexp.MustCompile(`;\n*message `)
-	output = re.ReplaceAll(output, []byte(";\n\nmessage "))
-	re = regexp.MustCompile(`}\n*service `)
-	return re.ReplaceAll(output, []byte("}\n\nservice "))
 }
 
 var knownImports = map[string]string{
