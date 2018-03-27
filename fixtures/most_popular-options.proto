@@ -69,7 +69,7 @@ message ArticleWithCountType {
     message Media {
         string caption = 1;
         string copyright = 2;
-        message Media_metadata {
+        message MediaMetadata {
             string format = 1;
             int32 height = 2;
             string url = 3;

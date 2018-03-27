@@ -92,7 +92,7 @@ message GetNameConceptTypeSpecificConceptResponse {
 
 message Concept {
     repeated ConceptRelation ancestors = 1;
-    message Article_list {
+    message ArticleList {
         message Result {
             string body = 1;
             string byline = 2;
@@ -143,7 +143,7 @@ message Concept {
         string relation = 10;
     }
     repeated Link links = 12;
-    message Scope_note {
+    message ScopeNote {
         string scope_note = 1;
         string scope_note_name = 2;
         string scope_note_type = 3;

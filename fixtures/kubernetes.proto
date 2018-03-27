@@ -12964,7 +12964,7 @@ message LogFileHandlerRequest {
     string logpath = 1;
 }
 
-message Io_K8s_Api_Apps_V1beta1_ControllerRevision {
+message IoK8sApiAppsV1beta1ControllerRevision {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -12981,7 +12981,7 @@ message Io_K8s_Api_Apps_V1beta1_ControllerRevision {
     int64 revision = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta1_ControllerRevisionList {
+message IoK8sApiAppsV1beta1ControllerRevisionList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -12995,7 +12995,7 @@ message Io_K8s_Api_Apps_V1beta1_ControllerRevisionList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta1_Deployment {
+message IoK8sApiAppsV1beta1Deployment {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13012,7 +13012,7 @@ message Io_K8s_Api_Apps_V1beta1_Deployment {
     Io_K8s_Api_Apps_V1beta1_DeploymentStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta1_DeploymentCondition {
+message IoK8sApiAppsV1beta1DeploymentCondition {
     // Last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -13032,7 +13032,7 @@ message Io_K8s_Api_Apps_V1beta1_DeploymentCondition {
     string type = 6;
 }
 
-message Io_K8s_Api_Apps_V1beta1_DeploymentList {
+message IoK8sApiAppsV1beta1DeploymentList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13046,7 +13046,7 @@ message Io_K8s_Api_Apps_V1beta1_DeploymentList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta1_DeploymentRollback {
+message IoK8sApiAppsV1beta1DeploymentRollback {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13063,7 +13063,7 @@ message Io_K8s_Api_Apps_V1beta1_DeploymentRollback {
     map<string, string> updatedAnnotations = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta1_DeploymentSpec {
+message IoK8sApiAppsV1beta1DeploymentSpec {
     // Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
     int32 minReadySeconds = 1;
 
@@ -13092,7 +13092,7 @@ message Io_K8s_Api_Apps_V1beta1_DeploymentSpec {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 9;
 }
 
-message Io_K8s_Api_Apps_V1beta1_DeploymentStatus {
+message IoK8sApiAppsV1beta1DeploymentStatus {
     // Total number of available pods (ready for at least minReadySeconds) targeted by this deployment.
     int32 availableReplicas = 1;
 
@@ -13118,7 +13118,7 @@ message Io_K8s_Api_Apps_V1beta1_DeploymentStatus {
     int32 updatedReplicas = 8;
 }
 
-message Io_K8s_Api_Apps_V1beta1_DeploymentStrategy {
+message IoK8sApiAppsV1beta1DeploymentStrategy {
     // Rolling update config params. Present only if DeploymentStrategyType = RollingUpdate.
     Io_K8s_Api_Apps_V1beta1_RollingUpdateDeployment rollingUpdate = 1;
 
@@ -13126,12 +13126,12 @@ message Io_K8s_Api_Apps_V1beta1_DeploymentStrategy {
     string type = 2;
 }
 
-message Io_K8s_Api_Apps_V1beta1_RollbackConfig {
+message IoK8sApiAppsV1beta1RollbackConfig {
     // The revision to rollback to. If set to 0, rollback to the last revision.
     int64 revision = 1;
 }
 
-message Io_K8s_Api_Apps_V1beta1_RollingUpdateDeployment {
+message IoK8sApiAppsV1beta1RollingUpdateDeployment {
     // The maximum number of pods that can be scheduled above the desired number of pods. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). This can not be 0 if MaxUnavailable is 0. Absolute number is calculated from percentage by rounding up. Defaults to 25%. Example: when this is set to 30%, the new RC can be scaled up immediately when the rolling update starts, such that the total number of old and new pods do not exceed 130% of desired pods. Once old pods have been killed, new RC can be scaled up further, ensuring that total number of pods running at any time during the update is atmost 130% of desired pods.
     string maxSurge = 1;
 
@@ -13139,12 +13139,12 @@ message Io_K8s_Api_Apps_V1beta1_RollingUpdateDeployment {
     string maxUnavailable = 2;
 }
 
-message Io_K8s_Api_Apps_V1beta1_RollingUpdateStatefulSetStrategy {
+message IoK8sApiAppsV1beta1RollingUpdateStatefulSetStrategy {
     // Partition indicates the ordinal at which the StatefulSet should be partitioned.
     int32 partition = 1;
 }
 
-message Io_K8s_Api_Apps_V1beta1_Scale {
+message IoK8sApiAppsV1beta1Scale {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13161,12 +13161,12 @@ message Io_K8s_Api_Apps_V1beta1_Scale {
     Io_K8s_Api_Apps_V1beta1_ScaleStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta1_ScaleSpec {
+message IoK8sApiAppsV1beta1ScaleSpec {
     // desired number of instances for the scaled object.
     int32 replicas = 1;
 }
 
-message Io_K8s_Api_Apps_V1beta1_ScaleStatus {
+message IoK8sApiAppsV1beta1ScaleStatus {
     // actual number of observed instances of the scaled object.
     int32 replicas = 1;
 
@@ -13177,7 +13177,7 @@ message Io_K8s_Api_Apps_V1beta1_ScaleStatus {
     string targetSelector = 3;
 }
 
-message Io_K8s_Api_Apps_V1beta1_StatefulSet {
+message IoK8sApiAppsV1beta1StatefulSet {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13192,7 +13192,7 @@ message Io_K8s_Api_Apps_V1beta1_StatefulSet {
     Io_K8s_Api_Apps_V1beta1_StatefulSetStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta1_StatefulSetList {
+message IoK8sApiAppsV1beta1StatefulSetList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
     repeated Io_K8s_Api_Apps_V1beta1_StatefulSet items = 2;
@@ -13202,7 +13202,7 @@ message Io_K8s_Api_Apps_V1beta1_StatefulSetList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta1_StatefulSetSpec {
+message IoK8sApiAppsV1beta1StatefulSetSpec {
     // podManagementPolicy controls how pods are created during initial scale up, when replacing pods on nodes, or when scaling down. The default policy is `OrderedReady`, where pods are created in increasing order (pod-0, then pod-1, etc) and the controller will wait until each pod is ready before continuing. When scaling down, the pods are removed in the opposite order. The alternative policy is `Parallel` which will create pods in parallel to match the desired scale without waiting, and on scale down will delete all pods at once.
     string podManagementPolicy = 1;
 
@@ -13228,7 +13228,7 @@ message Io_K8s_Api_Apps_V1beta1_StatefulSetSpec {
     repeated Io_K8s_Api_Core_V1_PersistentVolumeClaim volumeClaimTemplates = 8;
 }
 
-message Io_K8s_Api_Apps_V1beta1_StatefulSetStatus {
+message IoK8sApiAppsV1beta1StatefulSetStatus {
     // collisionCount is the count of hash collisions for the StatefulSet. The StatefulSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
     int32 collisionCount = 1;
 
@@ -13254,7 +13254,7 @@ message Io_K8s_Api_Apps_V1beta1_StatefulSetStatus {
     int32 updatedReplicas = 8;
 }
 
-message Io_K8s_Api_Apps_V1beta1_StatefulSetUpdateStrategy {
+message IoK8sApiAppsV1beta1StatefulSetUpdateStrategy {
     // RollingUpdate is used to communicate parameters when Type is RollingUpdateStatefulSetStrategyType.
     Io_K8s_Api_Apps_V1beta1_RollingUpdateStatefulSetStrategy rollingUpdate = 1;
 
@@ -13262,7 +13262,7 @@ message Io_K8s_Api_Apps_V1beta1_StatefulSetUpdateStrategy {
     string type = 2;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ControllerRevision {
+message IoK8sApiAppsV1beta2ControllerRevision {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13279,7 +13279,7 @@ message Io_K8s_Api_Apps_V1beta2_ControllerRevision {
     int64 revision = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ControllerRevisionList {
+message IoK8sApiAppsV1beta2ControllerRevisionList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13293,7 +13293,7 @@ message Io_K8s_Api_Apps_V1beta2_ControllerRevisionList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DaemonSet {
+message IoK8sApiAppsV1beta2DaemonSet {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13310,7 +13310,7 @@ message Io_K8s_Api_Apps_V1beta2_DaemonSet {
     Io_K8s_Api_Apps_V1beta2_DaemonSetStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DaemonSetList {
+message IoK8sApiAppsV1beta2DaemonSetList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13324,7 +13324,7 @@ message Io_K8s_Api_Apps_V1beta2_DaemonSetList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DaemonSetSpec {
+message IoK8sApiAppsV1beta2DaemonSetSpec {
     // The minimum number of seconds for which a newly created DaemonSet pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready).
     int32 minReadySeconds = 1;
 
@@ -13341,7 +13341,7 @@ message Io_K8s_Api_Apps_V1beta2_DaemonSetSpec {
     Io_K8s_Api_Apps_V1beta2_DaemonSetUpdateStrategy updateStrategy = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DaemonSetStatus {
+message IoK8sApiAppsV1beta2DaemonSetStatus {
     // Count of hash collisions for the DaemonSet. The DaemonSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
     int32 collisionCount = 1;
 
@@ -13370,7 +13370,7 @@ message Io_K8s_Api_Apps_V1beta2_DaemonSetStatus {
     int32 updatedNumberScheduled = 9;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DaemonSetUpdateStrategy {
+message IoK8sApiAppsV1beta2DaemonSetUpdateStrategy {
     // Rolling update config params. Present only if type = "RollingUpdate".
     Io_K8s_Api_Apps_V1beta2_RollingUpdateDaemonSet rollingUpdate = 1;
 
@@ -13378,7 +13378,7 @@ message Io_K8s_Api_Apps_V1beta2_DaemonSetUpdateStrategy {
     string type = 2;
 }
 
-message Io_K8s_Api_Apps_V1beta2_Deployment {
+message IoK8sApiAppsV1beta2Deployment {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13395,7 +13395,7 @@ message Io_K8s_Api_Apps_V1beta2_Deployment {
     Io_K8s_Api_Apps_V1beta2_DeploymentStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DeploymentCondition {
+message IoK8sApiAppsV1beta2DeploymentCondition {
     // Last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -13415,7 +13415,7 @@ message Io_K8s_Api_Apps_V1beta2_DeploymentCondition {
     string type = 6;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DeploymentList {
+message IoK8sApiAppsV1beta2DeploymentList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13429,7 +13429,7 @@ message Io_K8s_Api_Apps_V1beta2_DeploymentList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DeploymentSpec {
+message IoK8sApiAppsV1beta2DeploymentSpec {
     // Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
     int32 minReadySeconds = 1;
 
@@ -13455,7 +13455,7 @@ message Io_K8s_Api_Apps_V1beta2_DeploymentSpec {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 8;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DeploymentStatus {
+message IoK8sApiAppsV1beta2DeploymentStatus {
     // Total number of available pods (ready for at least minReadySeconds) targeted by this deployment.
     int32 availableReplicas = 1;
 
@@ -13481,7 +13481,7 @@ message Io_K8s_Api_Apps_V1beta2_DeploymentStatus {
     int32 updatedReplicas = 8;
 }
 
-message Io_K8s_Api_Apps_V1beta2_DeploymentStrategy {
+message IoK8sApiAppsV1beta2DeploymentStrategy {
     // Rolling update config params. Present only if DeploymentStrategyType = RollingUpdate.
     Io_K8s_Api_Apps_V1beta2_RollingUpdateDeployment rollingUpdate = 1;
 
@@ -13489,7 +13489,7 @@ message Io_K8s_Api_Apps_V1beta2_DeploymentStrategy {
     string type = 2;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ReplicaSet {
+message IoK8sApiAppsV1beta2ReplicaSet {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13506,7 +13506,7 @@ message Io_K8s_Api_Apps_V1beta2_ReplicaSet {
     Io_K8s_Api_Apps_V1beta2_ReplicaSetStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ReplicaSetCondition {
+message IoK8sApiAppsV1beta2ReplicaSetCondition {
     // The last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -13523,7 +13523,7 @@ message Io_K8s_Api_Apps_V1beta2_ReplicaSetCondition {
     string type = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ReplicaSetList {
+message IoK8sApiAppsV1beta2ReplicaSetList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13537,7 +13537,7 @@ message Io_K8s_Api_Apps_V1beta2_ReplicaSetList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ReplicaSetSpec {
+message IoK8sApiAppsV1beta2ReplicaSetSpec {
     // Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
     int32 minReadySeconds = 1;
 
@@ -13551,7 +13551,7 @@ message Io_K8s_Api_Apps_V1beta2_ReplicaSetSpec {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ReplicaSetStatus {
+message IoK8sApiAppsV1beta2ReplicaSetStatus {
     // The number of available replicas (ready for at least minReadySeconds) for this replica set.
     int32 availableReplicas = 1;
 
@@ -13571,12 +13571,12 @@ message Io_K8s_Api_Apps_V1beta2_ReplicaSetStatus {
     int32 replicas = 6;
 }
 
-message Io_K8s_Api_Apps_V1beta2_RollingUpdateDaemonSet {
+message IoK8sApiAppsV1beta2RollingUpdateDaemonSet {
     // The maximum number of DaemonSet pods that can be unavailable during the update. Value can be an absolute number (ex: 5) or a percentage of total number of DaemonSet pods at the start of the update (ex: 10%). Absolute number is calculated from percentage by rounding up. This cannot be 0. Default value is 1. Example: when this is set to 30%, at most 30% of the total number of nodes that should be running the daemon pod (i.e. status.desiredNumberScheduled) can have their pods stopped for an update at any given time. The update starts by stopping at most 30% of those DaemonSet pods and then brings up new DaemonSet pods in their place. Once the new pods are available, it then proceeds onto other DaemonSet pods, thus ensuring that at least 70% of original number of DaemonSet pods are available at all times during the update.
     string maxUnavailable = 1;
 }
 
-message Io_K8s_Api_Apps_V1beta2_RollingUpdateDeployment {
+message IoK8sApiAppsV1beta2RollingUpdateDeployment {
     // The maximum number of pods that can be scheduled above the desired number of pods. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). This can not be 0 if MaxUnavailable is 0. Absolute number is calculated from percentage by rounding up. Defaults to 25%. Example: when this is set to 30%, the new RC can be scaled up immediately when the rolling update starts, such that the total number of old and new pods do not exceed 130% of desired pods. Once old pods have been killed, new RC can be scaled up further, ensuring that total number of pods running at any time during the update is atmost 130% of desired pods.
     string maxSurge = 1;
 
@@ -13584,12 +13584,12 @@ message Io_K8s_Api_Apps_V1beta2_RollingUpdateDeployment {
     string maxUnavailable = 2;
 }
 
-message Io_K8s_Api_Apps_V1beta2_RollingUpdateStatefulSetStrategy {
+message IoK8sApiAppsV1beta2RollingUpdateStatefulSetStrategy {
     // Partition indicates the ordinal at which the StatefulSet should be partitioned. Default value is 0.
     int32 partition = 1;
 }
 
-message Io_K8s_Api_Apps_V1beta2_Scale {
+message IoK8sApiAppsV1beta2Scale {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13606,12 +13606,12 @@ message Io_K8s_Api_Apps_V1beta2_Scale {
     Io_K8s_Api_Apps_V1beta2_ScaleStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ScaleSpec {
+message IoK8sApiAppsV1beta2ScaleSpec {
     // desired number of instances for the scaled object.
     int32 replicas = 1;
 }
 
-message Io_K8s_Api_Apps_V1beta2_ScaleStatus {
+message IoK8sApiAppsV1beta2ScaleStatus {
     // actual number of observed instances of the scaled object.
     int32 replicas = 1;
 
@@ -13622,7 +13622,7 @@ message Io_K8s_Api_Apps_V1beta2_ScaleStatus {
     string targetSelector = 3;
 }
 
-message Io_K8s_Api_Apps_V1beta2_StatefulSet {
+message IoK8sApiAppsV1beta2StatefulSet {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13637,7 +13637,7 @@ message Io_K8s_Api_Apps_V1beta2_StatefulSet {
     Io_K8s_Api_Apps_V1beta2_StatefulSetStatus status = 5;
 }
 
-message Io_K8s_Api_Apps_V1beta2_StatefulSetList {
+message IoK8sApiAppsV1beta2StatefulSetList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
     repeated Io_K8s_Api_Apps_V1beta2_StatefulSet items = 2;
@@ -13647,7 +13647,7 @@ message Io_K8s_Api_Apps_V1beta2_StatefulSetList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Apps_V1beta2_StatefulSetSpec {
+message IoK8sApiAppsV1beta2StatefulSetSpec {
     // podManagementPolicy controls how pods are created during initial scale up, when replacing pods on nodes, or when scaling down. The default policy is `OrderedReady`, where pods are created in increasing order (pod-0, then pod-1, etc) and the controller will wait until each pod is ready before continuing. When scaling down, the pods are removed in the opposite order. The alternative policy is `Parallel` which will create pods in parallel to match the desired scale without waiting, and on scale down will delete all pods at once.
     string podManagementPolicy = 1;
 
@@ -13673,7 +13673,7 @@ message Io_K8s_Api_Apps_V1beta2_StatefulSetSpec {
     repeated Io_K8s_Api_Core_V1_PersistentVolumeClaim volumeClaimTemplates = 8;
 }
 
-message Io_K8s_Api_Apps_V1beta2_StatefulSetStatus {
+message IoK8sApiAppsV1beta2StatefulSetStatus {
     // collisionCount is the count of hash collisions for the StatefulSet. The StatefulSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
     int32 collisionCount = 1;
 
@@ -13699,7 +13699,7 @@ message Io_K8s_Api_Apps_V1beta2_StatefulSetStatus {
     int32 updatedReplicas = 8;
 }
 
-message Io_K8s_Api_Apps_V1beta2_StatefulSetUpdateStrategy {
+message IoK8sApiAppsV1beta2StatefulSetUpdateStrategy {
     // RollingUpdate is used to communicate parameters when Type is RollingUpdateStatefulSetStrategyType.
     Io_K8s_Api_Apps_V1beta2_RollingUpdateStatefulSetStrategy rollingUpdate = 1;
 
@@ -13707,7 +13707,7 @@ message Io_K8s_Api_Apps_V1beta2_StatefulSetUpdateStrategy {
     string type = 2;
 }
 
-message Io_K8s_Api_Authentication_V1_TokenReview {
+message IoK8sApiAuthenticationV1TokenReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13722,12 +13722,12 @@ message Io_K8s_Api_Authentication_V1_TokenReview {
     Io_K8s_Api_Authentication_V1_TokenReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authentication_V1_TokenReviewSpec {
+message IoK8sApiAuthenticationV1TokenReviewSpec {
     // Token is the opaque bearer token.
     string token = 1;
 }
 
-message Io_K8s_Api_Authentication_V1_TokenReviewStatus {
+message IoK8sApiAuthenticationV1TokenReviewStatus {
     // Authenticated indicates that the token was associated with a known user.
     bool authenticated = 1;
 
@@ -13738,7 +13738,7 @@ message Io_K8s_Api_Authentication_V1_TokenReviewStatus {
     Io_K8s_Api_Authentication_V1_UserInfo user = 3;
 }
 
-message Io_K8s_Api_Authentication_V1_UserInfo {
+message IoK8sApiAuthenticationV1UserInfo {
     // Any additional information provided by the authenticator.
     map<string, array> extra = 1;
 
@@ -13752,7 +13752,7 @@ message Io_K8s_Api_Authentication_V1_UserInfo {
     string username = 4;
 }
 
-message Io_K8s_Api_Authentication_V1beta1_TokenReview {
+message IoK8sApiAuthenticationV1beta1TokenReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13767,12 +13767,12 @@ message Io_K8s_Api_Authentication_V1beta1_TokenReview {
     Io_K8s_Api_Authentication_V1beta1_TokenReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authentication_V1beta1_TokenReviewSpec {
+message IoK8sApiAuthenticationV1beta1TokenReviewSpec {
     // Token is the opaque bearer token.
     string token = 1;
 }
 
-message Io_K8s_Api_Authentication_V1beta1_TokenReviewStatus {
+message IoK8sApiAuthenticationV1beta1TokenReviewStatus {
     // Authenticated indicates that the token was associated with a known user.
     bool authenticated = 1;
 
@@ -13783,7 +13783,7 @@ message Io_K8s_Api_Authentication_V1beta1_TokenReviewStatus {
     Io_K8s_Api_Authentication_V1beta1_UserInfo user = 3;
 }
 
-message Io_K8s_Api_Authentication_V1beta1_UserInfo {
+message IoK8sApiAuthenticationV1beta1UserInfo {
     // Any additional information provided by the authenticator.
     map<string, array> extra = 1;
 
@@ -13797,7 +13797,7 @@ message Io_K8s_Api_Authentication_V1beta1_UserInfo {
     string username = 4;
 }
 
-message Io_K8s_Api_Authorization_V1_LocalSubjectAccessReview {
+message IoK8sApiAuthorizationV1LocalSubjectAccessReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13812,7 +13812,7 @@ message Io_K8s_Api_Authorization_V1_LocalSubjectAccessReview {
     Io_K8s_Api_Authorization_V1_SubjectAccessReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1_NonResourceAttributes {
+message IoK8sApiAuthorizationV1NonResourceAttributes {
     // Path is the URL path of the request
     string path = 1;
 
@@ -13820,7 +13820,7 @@ message Io_K8s_Api_Authorization_V1_NonResourceAttributes {
     string verb = 2;
 }
 
-message Io_K8s_Api_Authorization_V1_NonResourceRule {
+message IoK8sApiAuthorizationV1NonResourceRule {
     // NonResourceURLs is a set of partial urls that a user should have access to.  *s are allowed, but only as the full, final step in the path.  "*" means all.
     repeated string nonResourceURLs = 1;
 
@@ -13828,7 +13828,7 @@ message Io_K8s_Api_Authorization_V1_NonResourceRule {
     repeated string verbs = 2;
 }
 
-message Io_K8s_Api_Authorization_V1_ResourceAttributes {
+message IoK8sApiAuthorizationV1ResourceAttributes {
     // Group is the API Group of the Resource.  "*" means all.
     string group = 1;
 
@@ -13851,7 +13851,7 @@ message Io_K8s_Api_Authorization_V1_ResourceAttributes {
     string version = 7;
 }
 
-message Io_K8s_Api_Authorization_V1_ResourceRule {
+message IoK8sApiAuthorizationV1ResourceRule {
     // APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed.  "*" means all.
     repeated string apiGroups = 1;
 
@@ -13865,7 +13865,7 @@ message Io_K8s_Api_Authorization_V1_ResourceRule {
     repeated string verbs = 4;
 }
 
-message Io_K8s_Api_Authorization_V1_SelfSubjectAccessReview {
+message IoK8sApiAuthorizationV1SelfSubjectAccessReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13880,7 +13880,7 @@ message Io_K8s_Api_Authorization_V1_SelfSubjectAccessReview {
     Io_K8s_Api_Authorization_V1_SubjectAccessReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1_SelfSubjectAccessReviewSpec {
+message IoK8sApiAuthorizationV1SelfSubjectAccessReviewSpec {
     // NonResourceAttributes describes information for a non-resource access request
     Io_K8s_Api_Authorization_V1_NonResourceAttributes nonResourceAttributes = 1;
 
@@ -13888,7 +13888,7 @@ message Io_K8s_Api_Authorization_V1_SelfSubjectAccessReviewSpec {
     Io_K8s_Api_Authorization_V1_ResourceAttributes resourceAttributes = 2;
 }
 
-message Io_K8s_Api_Authorization_V1_SelfSubjectRulesReview {
+message IoK8sApiAuthorizationV1SelfSubjectRulesReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13903,12 +13903,12 @@ message Io_K8s_Api_Authorization_V1_SelfSubjectRulesReview {
     Io_K8s_Api_Authorization_V1_SubjectRulesReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1_SelfSubjectRulesReviewSpec {
+message IoK8sApiAuthorizationV1SelfSubjectRulesReviewSpec {
     // Namespace to evaluate rules for. Required.
     string namespace = 1;
 }
 
-message Io_K8s_Api_Authorization_V1_SubjectAccessReview {
+message IoK8sApiAuthorizationV1SubjectAccessReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13923,7 +13923,7 @@ message Io_K8s_Api_Authorization_V1_SubjectAccessReview {
     Io_K8s_Api_Authorization_V1_SubjectAccessReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1_SubjectAccessReviewSpec {
+message IoK8sApiAuthorizationV1SubjectAccessReviewSpec {
     // Extra corresponds to the user.Info.GetExtra() method from the authenticator.  Since that is input to the authorizer it needs a reflection here.
     map<string, array> extra = 1;
 
@@ -13943,7 +13943,7 @@ message Io_K8s_Api_Authorization_V1_SubjectAccessReviewSpec {
     string user = 6;
 }
 
-message Io_K8s_Api_Authorization_V1_SubjectAccessReviewStatus {
+message IoK8sApiAuthorizationV1SubjectAccessReviewStatus {
     // Allowed is required.  True if the action would be allowed, false otherwise.
     bool allowed = 1;
 
@@ -13954,7 +13954,7 @@ message Io_K8s_Api_Authorization_V1_SubjectAccessReviewStatus {
     string reason = 3;
 }
 
-message Io_K8s_Api_Authorization_V1_SubjectRulesReviewStatus {
+message IoK8sApiAuthorizationV1SubjectRulesReviewStatus {
     // EvaluationError can appear in combination with Rules. It indicates an error occurred during rule evaluation, such as an authorizer that doesn't support rule evaluation, and that ResourceRules and/or NonResourceRules may be incomplete.
     string evaluationError = 1;
 
@@ -13968,7 +13968,7 @@ message Io_K8s_Api_Authorization_V1_SubjectRulesReviewStatus {
     repeated Io_K8s_Api_Authorization_V1_ResourceRule resourceRules = 4;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_LocalSubjectAccessReview {
+message IoK8sApiAuthorizationV1beta1LocalSubjectAccessReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -13983,7 +13983,7 @@ message Io_K8s_Api_Authorization_V1beta1_LocalSubjectAccessReview {
     Io_K8s_Api_Authorization_V1beta1_SubjectAccessReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_NonResourceAttributes {
+message IoK8sApiAuthorizationV1beta1NonResourceAttributes {
     // Path is the URL path of the request
     string path = 1;
 
@@ -13991,7 +13991,7 @@ message Io_K8s_Api_Authorization_V1beta1_NonResourceAttributes {
     string verb = 2;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_NonResourceRule {
+message IoK8sApiAuthorizationV1beta1NonResourceRule {
     // NonResourceURLs is a set of partial urls that a user should have access to.  *s are allowed, but only as the full, final step in the path.  "*" means all.
     repeated string nonResourceURLs = 1;
 
@@ -13999,7 +13999,7 @@ message Io_K8s_Api_Authorization_V1beta1_NonResourceRule {
     repeated string verbs = 2;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_ResourceAttributes {
+message IoK8sApiAuthorizationV1beta1ResourceAttributes {
     // Group is the API Group of the Resource.  "*" means all.
     string group = 1;
 
@@ -14022,7 +14022,7 @@ message Io_K8s_Api_Authorization_V1beta1_ResourceAttributes {
     string version = 7;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_ResourceRule {
+message IoK8sApiAuthorizationV1beta1ResourceRule {
     // APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed.  "*" means all.
     repeated string apiGroups = 1;
 
@@ -14036,7 +14036,7 @@ message Io_K8s_Api_Authorization_V1beta1_ResourceRule {
     repeated string verbs = 4;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SelfSubjectAccessReview {
+message IoK8sApiAuthorizationV1beta1SelfSubjectAccessReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14051,7 +14051,7 @@ message Io_K8s_Api_Authorization_V1beta1_SelfSubjectAccessReview {
     Io_K8s_Api_Authorization_V1beta1_SubjectAccessReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SelfSubjectAccessReviewSpec {
+message IoK8sApiAuthorizationV1beta1SelfSubjectAccessReviewSpec {
     // NonResourceAttributes describes information for a non-resource access request
     Io_K8s_Api_Authorization_V1beta1_NonResourceAttributes nonResourceAttributes = 1;
 
@@ -14059,7 +14059,7 @@ message Io_K8s_Api_Authorization_V1beta1_SelfSubjectAccessReviewSpec {
     Io_K8s_Api_Authorization_V1beta1_ResourceAttributes resourceAttributes = 2;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SelfSubjectRulesReview {
+message IoK8sApiAuthorizationV1beta1SelfSubjectRulesReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14074,12 +14074,12 @@ message Io_K8s_Api_Authorization_V1beta1_SelfSubjectRulesReview {
     Io_K8s_Api_Authorization_V1beta1_SubjectRulesReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SelfSubjectRulesReviewSpec {
+message IoK8sApiAuthorizationV1beta1SelfSubjectRulesReviewSpec {
     // Namespace to evaluate rules for. Required.
     string namespace = 1;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SubjectAccessReview {
+message IoK8sApiAuthorizationV1beta1SubjectAccessReview {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14094,7 +14094,7 @@ message Io_K8s_Api_Authorization_V1beta1_SubjectAccessReview {
     Io_K8s_Api_Authorization_V1beta1_SubjectAccessReviewStatus status = 5;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SubjectAccessReviewSpec {
+message IoK8sApiAuthorizationV1beta1SubjectAccessReviewSpec {
     // Extra corresponds to the user.Info.GetExtra() method from the authenticator.  Since that is input to the authorizer it needs a reflection here.
     map<string, array> extra = 1;
 
@@ -14114,7 +14114,7 @@ message Io_K8s_Api_Authorization_V1beta1_SubjectAccessReviewSpec {
     string user = 6;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SubjectAccessReviewStatus {
+message IoK8sApiAuthorizationV1beta1SubjectAccessReviewStatus {
     // Allowed is required.  True if the action would be allowed, false otherwise.
     bool allowed = 1;
 
@@ -14125,7 +14125,7 @@ message Io_K8s_Api_Authorization_V1beta1_SubjectAccessReviewStatus {
     string reason = 3;
 }
 
-message Io_K8s_Api_Authorization_V1beta1_SubjectRulesReviewStatus {
+message IoK8sApiAuthorizationV1beta1SubjectRulesReviewStatus {
     // EvaluationError can appear in combination with Rules. It indicates an error occurred during rule evaluation, such as an authorizer that doesn't support rule evaluation, and that ResourceRules and/or NonResourceRules may be incomplete.
     string evaluationError = 1;
 
@@ -14139,7 +14139,7 @@ message Io_K8s_Api_Authorization_V1beta1_SubjectRulesReviewStatus {
     repeated Io_K8s_Api_Authorization_V1beta1_ResourceRule resourceRules = 4;
 }
 
-message Io_K8s_Api_Autoscaling_V1_CrossVersionObjectReference {
+message IoK8sApiAutoscalingV1CrossVersionObjectReference {
     // API version of the referent
     string apiVersion = 1;
 
@@ -14150,7 +14150,7 @@ message Io_K8s_Api_Autoscaling_V1_CrossVersionObjectReference {
     string name = 3;
 }
 
-message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscaler {
+message IoK8sApiAutoscalingV1HorizontalPodAutoscaler {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14167,7 +14167,7 @@ message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscaler {
     Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscalerStatus status = 5;
 }
 
-message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscalerList {
+message IoK8sApiAutoscalingV1HorizontalPodAutoscalerList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14181,7 +14181,7 @@ message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscalerList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscalerSpec {
+message IoK8sApiAutoscalingV1HorizontalPodAutoscalerSpec {
     // upper limit for the number of pods that can be set by the autoscaler; cannot be smaller than MinReplicas.
     int32 maxReplicas = 1;
 
@@ -14195,7 +14195,7 @@ message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscalerSpec {
     int32 targetCPUUtilizationPercentage = 4;
 }
 
-message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscalerStatus {
+message IoK8sApiAutoscalingV1HorizontalPodAutoscalerStatus {
     // current average CPU utilization over all pods, represented as a percentage of requested CPU, e.g. 70 means that an average pod is using now 70% of its requested CPU.
     int32 currentCPUUtilizationPercentage = 1;
 
@@ -14212,7 +14212,7 @@ message Io_K8s_Api_Autoscaling_V1_HorizontalPodAutoscalerStatus {
     int64 observedGeneration = 5;
 }
 
-message Io_K8s_Api_Autoscaling_V1_Scale {
+message IoK8sApiAutoscalingV1Scale {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14229,12 +14229,12 @@ message Io_K8s_Api_Autoscaling_V1_Scale {
     Io_K8s_Api_Autoscaling_V1_ScaleStatus status = 5;
 }
 
-message Io_K8s_Api_Autoscaling_V1_ScaleSpec {
+message IoK8sApiAutoscalingV1ScaleSpec {
     // desired number of instances for the scaled object.
     int32 replicas = 1;
 }
 
-message Io_K8s_Api_Autoscaling_V1_ScaleStatus {
+message IoK8sApiAutoscalingV1ScaleStatus {
     // actual number of observed instances of the scaled object.
     int32 replicas = 1;
 
@@ -14242,7 +14242,7 @@ message Io_K8s_Api_Autoscaling_V1_ScaleStatus {
     string selector = 2;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_CrossVersionObjectReference {
+message IoK8sApiAutoscalingV2beta1CrossVersionObjectReference {
     // API version of the referent
     string apiVersion = 1;
 
@@ -14253,7 +14253,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_CrossVersionObjectReference {
     string name = 3;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscaler {
+message IoK8sApiAutoscalingV2beta1HorizontalPodAutoscaler {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14270,7 +14270,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscaler {
     Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerStatus status = 5;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerCondition {
+message IoK8sApiAutoscalingV2beta1HorizontalPodAutoscalerCondition {
     // lastTransitionTime is the last time the condition transitioned from one status to another
     string lastTransitionTime = 1;
 
@@ -14287,7 +14287,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerCondition {
     string type = 5;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerList {
+message IoK8sApiAutoscalingV2beta1HorizontalPodAutoscalerList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14301,7 +14301,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerSpec {
+message IoK8sApiAutoscalingV2beta1HorizontalPodAutoscalerSpec {
     // maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up. It cannot be less that minReplicas.
     int32 maxReplicas = 1;
 
@@ -14315,7 +14315,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerSpec {
     Io_K8s_Api_Autoscaling_V2beta1_CrossVersionObjectReference scaleTargetRef = 4;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerStatus {
+message IoK8sApiAutoscalingV2beta1HorizontalPodAutoscalerStatus {
     // conditions is the set of conditions required for this autoscaler to scale its target, and indicates whether or not those conditions are met.
     repeated Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerCondition conditions = 1;
 
@@ -14335,7 +14335,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_HorizontalPodAutoscalerStatus {
     int64 observedGeneration = 6;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_MetricSpec {
+message IoK8sApiAutoscalingV2beta1MetricSpec {
     // object refers to a metric describing a single kubernetes object (for example, hits-per-second on an Ingress object).
     Io_K8s_Api_Autoscaling_V2beta1_ObjectMetricSource object = 1;
 
@@ -14349,7 +14349,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_MetricSpec {
     string type = 4;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_MetricStatus {
+message IoK8sApiAutoscalingV2beta1MetricStatus {
     // object refers to a metric describing a single kubernetes object (for example, hits-per-second on an Ingress object).
     Io_K8s_Api_Autoscaling_V2beta1_ObjectMetricStatus object = 1;
 
@@ -14363,7 +14363,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_MetricStatus {
     string type = 4;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_ObjectMetricSource {
+message IoK8sApiAutoscalingV2beta1ObjectMetricSource {
     // metricName is the name of the metric in question.
     string metricName = 1;
 
@@ -14374,7 +14374,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_ObjectMetricSource {
     string targetValue = 3;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_ObjectMetricStatus {
+message IoK8sApiAutoscalingV2beta1ObjectMetricStatus {
     // currentValue is the current value of the metric (as a quantity).
     string currentValue = 1;
 
@@ -14385,7 +14385,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_ObjectMetricStatus {
     Io_K8s_Api_Autoscaling_V2beta1_CrossVersionObjectReference target = 3;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_PodsMetricSource {
+message IoK8sApiAutoscalingV2beta1PodsMetricSource {
     // metricName is the name of the metric in question
     string metricName = 1;
 
@@ -14393,7 +14393,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_PodsMetricSource {
     string targetAverageValue = 2;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_PodsMetricStatus {
+message IoK8sApiAutoscalingV2beta1PodsMetricStatus {
     // currentAverageValue is the current value of the average of the metric across all relevant pods (as a quantity)
     string currentAverageValue = 1;
 
@@ -14401,7 +14401,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_PodsMetricStatus {
     string metricName = 2;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_ResourceMetricSource {
+message IoK8sApiAutoscalingV2beta1ResourceMetricSource {
     // name is the name of the resource in question.
     string name = 1;
 
@@ -14412,7 +14412,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_ResourceMetricSource {
     string targetAverageValue = 3;
 }
 
-message Io_K8s_Api_Autoscaling_V2beta1_ResourceMetricStatus {
+message IoK8sApiAutoscalingV2beta1ResourceMetricStatus {
     // currentAverageUtilization is the current value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods.  It will only be present if `targetAverageValue` was set in the corresponding metric specification.
     int32 currentAverageUtilization = 1;
 
@@ -14423,7 +14423,7 @@ message Io_K8s_Api_Autoscaling_V2beta1_ResourceMetricStatus {
     string name = 3;
 }
 
-message Io_K8s_Api_Batch_V1_Job {
+message IoK8sApiBatchV1Job {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14440,7 +14440,7 @@ message Io_K8s_Api_Batch_V1_Job {
     Io_K8s_Api_Batch_V1_JobStatus status = 5;
 }
 
-message Io_K8s_Api_Batch_V1_JobCondition {
+message IoK8sApiBatchV1JobCondition {
     // Last time the condition was checked.
     string lastProbeTime = 1;
 
@@ -14460,7 +14460,7 @@ message Io_K8s_Api_Batch_V1_JobCondition {
     string type = 6;
 }
 
-message Io_K8s_Api_Batch_V1_JobList {
+message IoK8sApiBatchV1JobList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14474,7 +14474,7 @@ message Io_K8s_Api_Batch_V1_JobList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Batch_V1_JobSpec {
+message IoK8sApiBatchV1JobSpec {
     // Specifies the duration in seconds relative to the startTime that the job may be active before the system tries to terminate it; value must be positive integer
     int64 activeDeadlineSeconds = 1;
 
@@ -14497,7 +14497,7 @@ message Io_K8s_Api_Batch_V1_JobSpec {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 7;
 }
 
-message Io_K8s_Api_Batch_V1_JobStatus {
+message IoK8sApiBatchV1JobStatus {
     // The number of actively running pods.
     int32 active = 1;
 
@@ -14517,7 +14517,7 @@ message Io_K8s_Api_Batch_V1_JobStatus {
     int32 succeeded = 6;
 }
 
-message Io_K8s_Api_Batch_V1beta1_CronJob {
+message IoK8sApiBatchV1beta1CronJob {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14534,7 +14534,7 @@ message Io_K8s_Api_Batch_V1beta1_CronJob {
     Io_K8s_Api_Batch_V1beta1_CronJobStatus status = 5;
 }
 
-message Io_K8s_Api_Batch_V1beta1_CronJobList {
+message IoK8sApiBatchV1beta1CronJobList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14548,7 +14548,7 @@ message Io_K8s_Api_Batch_V1beta1_CronJobList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Batch_V1beta1_CronJobSpec {
+message IoK8sApiBatchV1beta1CronJobSpec {
     // Specifies how to treat concurrent executions of a Job. Defaults to Allow.
     string concurrencyPolicy = 1;
 
@@ -14571,7 +14571,7 @@ message Io_K8s_Api_Batch_V1beta1_CronJobSpec {
     bool suspend = 7;
 }
 
-message Io_K8s_Api_Batch_V1beta1_CronJobStatus {
+message IoK8sApiBatchV1beta1CronJobStatus {
     // A list of pointers to currently running jobs.
     repeated Io_K8s_Api_Core_V1_ObjectReference active = 1;
 
@@ -14579,7 +14579,7 @@ message Io_K8s_Api_Batch_V1beta1_CronJobStatus {
     string lastScheduleTime = 2;
 }
 
-message Io_K8s_Api_Batch_V1beta1_JobTemplateSpec {
+message IoK8sApiBatchV1beta1JobTemplateSpec {
     // Standard object's metadata of the jobs created from this template. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ObjectMeta metadata = 1;
 
@@ -14587,7 +14587,7 @@ message Io_K8s_Api_Batch_V1beta1_JobTemplateSpec {
     Io_K8s_Api_Batch_V1_JobSpec spec = 2;
 }
 
-message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequest {
+message IoK8sApiCertificatesV1beta1CertificateSigningRequest {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14602,7 +14602,7 @@ message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequest {
     Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestStatus status = 5;
 }
 
-message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestCondition {
+message IoK8sApiCertificatesV1beta1CertificateSigningRequestCondition {
     // timestamp for the last update to this condition
     string lastUpdateTime = 1;
 
@@ -14616,7 +14616,7 @@ message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestCondition {
     string type = 4;
 }
 
-message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestList {
+message IoK8sApiCertificatesV1beta1CertificateSigningRequestList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
     repeated Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequest items = 2;
@@ -14626,7 +14626,7 @@ message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestSpec {
+message IoK8sApiCertificatesV1beta1CertificateSigningRequestSpec {
     // Extra information about the requesting user. See user.Info interface for details.
     map<string, array> extra = 1;
 
@@ -14647,7 +14647,7 @@ message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestSpec {
     string username = 6;
 }
 
-message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestStatus {
+message IoK8sApiCertificatesV1beta1CertificateSigningRequestStatus {
     // If request was approved, the controller will place the issued certificate here.
     bytes certificate = 1;
 
@@ -14655,7 +14655,7 @@ message Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestStatus {
     repeated Io_K8s_Api_Certificates_V1beta1_CertificateSigningRequestCondition conditions = 2;
 }
 
-message Io_K8s_Api_Core_V1_AWSElasticBlockStoreVolumeSource {
+message IoK8sApiCoreV1AWSElasticBlockStoreVolumeSource {
     // Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore
     string fsType = 1;
 
@@ -14669,7 +14669,7 @@ message Io_K8s_Api_Core_V1_AWSElasticBlockStoreVolumeSource {
     string volumeID = 4;
 }
 
-message Io_K8s_Api_Core_V1_Affinity {
+message IoK8sApiCoreV1Affinity {
     // Describes node affinity scheduling rules for the pod.
     Io_K8s_Api_Core_V1_NodeAffinity nodeAffinity = 1;
 
@@ -14680,7 +14680,7 @@ message Io_K8s_Api_Core_V1_Affinity {
     Io_K8s_Api_Core_V1_PodAntiAffinity podAntiAffinity = 3;
 }
 
-message Io_K8s_Api_Core_V1_AttachedVolume {
+message IoK8sApiCoreV1AttachedVolume {
     // DevicePath represents the device path where the volume should be available
     string devicePath = 1;
 
@@ -14688,7 +14688,7 @@ message Io_K8s_Api_Core_V1_AttachedVolume {
     string name = 2;
 }
 
-message Io_K8s_Api_Core_V1_AzureDiskVolumeSource {
+message IoK8sApiCoreV1AzureDiskVolumeSource {
     // Host Caching mode: None, Read Only, Read Write.
     string cachingMode = 1;
 
@@ -14708,7 +14708,7 @@ message Io_K8s_Api_Core_V1_AzureDiskVolumeSource {
     bool readOnly = 6;
 }
 
-message Io_K8s_Api_Core_V1_AzureFilePersistentVolumeSource {
+message IoK8sApiCoreV1AzureFilePersistentVolumeSource {
     // Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
     bool readOnly = 1;
 
@@ -14722,7 +14722,7 @@ message Io_K8s_Api_Core_V1_AzureFilePersistentVolumeSource {
     string shareName = 4;
 }
 
-message Io_K8s_Api_Core_V1_AzureFileVolumeSource {
+message IoK8sApiCoreV1AzureFileVolumeSource {
     // Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
     bool readOnly = 1;
 
@@ -14733,7 +14733,7 @@ message Io_K8s_Api_Core_V1_AzureFileVolumeSource {
     string shareName = 3;
 }
 
-message Io_K8s_Api_Core_V1_Binding {
+message IoK8sApiCoreV1Binding {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14747,7 +14747,7 @@ message Io_K8s_Api_Core_V1_Binding {
     Io_K8s_Api_Core_V1_ObjectReference target = 4;
 }
 
-message Io_K8s_Api_Core_V1_Capabilities {
+message IoK8sApiCoreV1Capabilities {
     // Added capabilities
     repeated string add = 1;
 
@@ -14755,7 +14755,7 @@ message Io_K8s_Api_Core_V1_Capabilities {
     repeated string drop = 2;
 }
 
-message Io_K8s_Api_Core_V1_CephFSPersistentVolumeSource {
+message IoK8sApiCoreV1CephFSPersistentVolumeSource {
     // Required: Monitors is a collection of Ceph monitors More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
     repeated string monitors = 1;
 
@@ -14775,7 +14775,7 @@ message Io_K8s_Api_Core_V1_CephFSPersistentVolumeSource {
     string user = 6;
 }
 
-message Io_K8s_Api_Core_V1_CephFSVolumeSource {
+message IoK8sApiCoreV1CephFSVolumeSource {
     // Required: Monitors is a collection of Ceph monitors More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it
     repeated string monitors = 1;
 
@@ -14795,7 +14795,7 @@ message Io_K8s_Api_Core_V1_CephFSVolumeSource {
     string user = 6;
 }
 
-message Io_K8s_Api_Core_V1_CinderVolumeSource {
+message IoK8sApiCoreV1CinderVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
     string fsType = 1;
 
@@ -14806,12 +14806,12 @@ message Io_K8s_Api_Core_V1_CinderVolumeSource {
     string volumeID = 3;
 }
 
-message Io_K8s_Api_Core_V1_ClientIPConfig {
+message IoK8sApiCoreV1ClientIPConfig {
     // timeoutSeconds specifies the seconds of ClientIP type session sticky time. The value must be >0 && <=86400(for 1 day) if ServiceAffinity == "ClientIP". Default value is 10800(for 3 hours).
     int32 timeoutSeconds = 1;
 }
 
-message Io_K8s_Api_Core_V1_ComponentCondition {
+message IoK8sApiCoreV1ComponentCondition {
     // Condition error code for a component. For example, a health check error code.
     string error = 1;
 
@@ -14825,7 +14825,7 @@ message Io_K8s_Api_Core_V1_ComponentCondition {
     string type = 4;
 }
 
-message Io_K8s_Api_Core_V1_ComponentStatus {
+message IoK8sApiCoreV1ComponentStatus {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14839,7 +14839,7 @@ message Io_K8s_Api_Core_V1_ComponentStatus {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ObjectMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ComponentStatusList {
+message IoK8sApiCoreV1ComponentStatusList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14853,7 +14853,7 @@ message Io_K8s_Api_Core_V1_ComponentStatusList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ConfigMap {
+message IoK8sApiCoreV1ConfigMap {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14867,7 +14867,7 @@ message Io_K8s_Api_Core_V1_ConfigMap {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ObjectMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ConfigMapEnvSource {
+message IoK8sApiCoreV1ConfigMapEnvSource {
     // Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
     string name = 1;
 
@@ -14875,7 +14875,7 @@ message Io_K8s_Api_Core_V1_ConfigMapEnvSource {
     bool optional = 2;
 }
 
-message Io_K8s_Api_Core_V1_ConfigMapKeySelector {
+message IoK8sApiCoreV1ConfigMapKeySelector {
     // The key to select.
     string key = 1;
 
@@ -14886,7 +14886,7 @@ message Io_K8s_Api_Core_V1_ConfigMapKeySelector {
     bool optional = 3;
 }
 
-message Io_K8s_Api_Core_V1_ConfigMapList {
+message IoK8sApiCoreV1ConfigMapList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -14900,7 +14900,7 @@ message Io_K8s_Api_Core_V1_ConfigMapList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ConfigMapProjection {
+message IoK8sApiCoreV1ConfigMapProjection {
     // If unspecified, each key-value pair in the Data field of the referenced ConfigMap will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the ConfigMap, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'.
     repeated Io_K8s_Api_Core_V1_KeyToPath items = 1;
 
@@ -14911,7 +14911,7 @@ message Io_K8s_Api_Core_V1_ConfigMapProjection {
     bool optional = 3;
 }
 
-message Io_K8s_Api_Core_V1_ConfigMapVolumeSource {
+message IoK8sApiCoreV1ConfigMapVolumeSource {
     // Optional: mode bits to use on created files by default. Must be a value between 0 and 0777. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
     int32 defaultMode = 1;
 
@@ -14925,7 +14925,7 @@ message Io_K8s_Api_Core_V1_ConfigMapVolumeSource {
     bool optional = 4;
 }
 
-message Io_K8s_Api_Core_V1_Container {
+message IoK8sApiCoreV1Container {
     // Arguments to the entrypoint. The docker image's CMD is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
     repeated string args = 1;
 
@@ -14987,7 +14987,7 @@ message Io_K8s_Api_Core_V1_Container {
     string workingDir = 20;
 }
 
-message Io_K8s_Api_Core_V1_ContainerImage {
+message IoK8sApiCoreV1ContainerImage {
     // Names by which this image is known. e.g. ["gcr.io/google_containers/hyperkube:v1.0.7", "dockerhub.io/google_containers/hyperkube:v1.0.7"]
     repeated string names = 1;
 
@@ -14995,7 +14995,7 @@ message Io_K8s_Api_Core_V1_ContainerImage {
     int64 sizeBytes = 2;
 }
 
-message Io_K8s_Api_Core_V1_ContainerPort {
+message IoK8sApiCoreV1ContainerPort {
     // Number of port to expose on the pod's IP address. This must be a valid port number, 0 < x < 65536.
     int32 containerPort = 1;
 
@@ -15012,7 +15012,7 @@ message Io_K8s_Api_Core_V1_ContainerPort {
     string protocol = 5;
 }
 
-message Io_K8s_Api_Core_V1_ContainerState {
+message IoK8sApiCoreV1ContainerState {
     // Details about a running container
     Io_K8s_Api_Core_V1_ContainerStateRunning running = 1;
 
@@ -15023,12 +15023,12 @@ message Io_K8s_Api_Core_V1_ContainerState {
     Io_K8s_Api_Core_V1_ContainerStateWaiting waiting = 3;
 }
 
-message Io_K8s_Api_Core_V1_ContainerStateRunning {
+message IoK8sApiCoreV1ContainerStateRunning {
     // Time at which the container was last (re-)started
     string startedAt = 1;
 }
 
-message Io_K8s_Api_Core_V1_ContainerStateTerminated {
+message IoK8sApiCoreV1ContainerStateTerminated {
     // Container's ID in the format 'docker://<container_id>'
     string containerID = 1;
 
@@ -15051,7 +15051,7 @@ message Io_K8s_Api_Core_V1_ContainerStateTerminated {
     string startedAt = 7;
 }
 
-message Io_K8s_Api_Core_V1_ContainerStateWaiting {
+message IoK8sApiCoreV1ContainerStateWaiting {
     // Message regarding why the container is not yet running.
     string message = 1;
 
@@ -15059,7 +15059,7 @@ message Io_K8s_Api_Core_V1_ContainerStateWaiting {
     string reason = 2;
 }
 
-message Io_K8s_Api_Core_V1_ContainerStatus {
+message IoK8sApiCoreV1ContainerStatus {
     // Container's ID in the format 'docker://<container_id>'.
     string containerID = 1;
 
@@ -15085,17 +15085,17 @@ message Io_K8s_Api_Core_V1_ContainerStatus {
     Io_K8s_Api_Core_V1_ContainerState state = 8;
 }
 
-message Io_K8s_Api_Core_V1_DaemonEndpoint {
+message IoK8sApiCoreV1DaemonEndpoint {
     // Port number of the given endpoint.
     int32 Port = 1;
 }
 
-message Io_K8s_Api_Core_V1_DownwardAPIProjection {
+message IoK8sApiCoreV1DownwardAPIProjection {
     // Items is a list of DownwardAPIVolume file
     repeated Io_K8s_Api_Core_V1_DownwardAPIVolumeFile items = 1;
 }
 
-message Io_K8s_Api_Core_V1_DownwardAPIVolumeFile {
+message IoK8sApiCoreV1DownwardAPIVolumeFile {
     // Required: Selects a field of the pod: only annotations, labels, name and namespace are supported.
     Io_K8s_Api_Core_V1_ObjectFieldSelector fieldRef = 1;
 
@@ -15109,7 +15109,7 @@ message Io_K8s_Api_Core_V1_DownwardAPIVolumeFile {
     Io_K8s_Api_Core_V1_ResourceFieldSelector resourceFieldRef = 4;
 }
 
-message Io_K8s_Api_Core_V1_DownwardAPIVolumeSource {
+message IoK8sApiCoreV1DownwardAPIVolumeSource {
     // Optional: mode bits to use on created files by default. Must be a value between 0 and 0777. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
     int32 defaultMode = 1;
 
@@ -15117,7 +15117,7 @@ message Io_K8s_Api_Core_V1_DownwardAPIVolumeSource {
     repeated Io_K8s_Api_Core_V1_DownwardAPIVolumeFile items = 2;
 }
 
-message Io_K8s_Api_Core_V1_EmptyDirVolumeSource {
+message IoK8sApiCoreV1EmptyDirVolumeSource {
     // What type of storage medium should back this directory. The default is "" which means to use the node's default medium. Must be an empty string (default) or Memory. More info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir
     string medium = 1;
 
@@ -15125,7 +15125,7 @@ message Io_K8s_Api_Core_V1_EmptyDirVolumeSource {
     string sizeLimit = 2;
 }
 
-message Io_K8s_Api_Core_V1_EndpointAddress {
+message IoK8sApiCoreV1EndpointAddress {
     // The Hostname of this endpoint
     string hostname = 1;
 
@@ -15139,7 +15139,7 @@ message Io_K8s_Api_Core_V1_EndpointAddress {
     Io_K8s_Api_Core_V1_ObjectReference targetRef = 4;
 }
 
-message Io_K8s_Api_Core_V1_EndpointPort {
+message IoK8sApiCoreV1EndpointPort {
     // The name of this port (corresponds to ServicePort.Name). Must be a DNS_LABEL. Optional only if one port is defined.
     string name = 1;
 
@@ -15150,7 +15150,7 @@ message Io_K8s_Api_Core_V1_EndpointPort {
     string protocol = 3;
 }
 
-message Io_K8s_Api_Core_V1_EndpointSubset {
+message IoK8sApiCoreV1EndpointSubset {
     // IP addresses which offer the related ports that are marked as ready. These endpoints should be considered safe for load balancers and clients to utilize.
     repeated Io_K8s_Api_Core_V1_EndpointAddress addresses = 1;
 
@@ -15161,7 +15161,7 @@ message Io_K8s_Api_Core_V1_EndpointSubset {
     repeated Io_K8s_Api_Core_V1_EndpointPort ports = 3;
 }
 
-message Io_K8s_Api_Core_V1_Endpoints {
+message IoK8sApiCoreV1Endpoints {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15175,7 +15175,7 @@ message Io_K8s_Api_Core_V1_Endpoints {
     repeated Io_K8s_Api_Core_V1_EndpointSubset subsets = 4;
 }
 
-message Io_K8s_Api_Core_V1_EndpointsList {
+message IoK8sApiCoreV1EndpointsList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15189,7 +15189,7 @@ message Io_K8s_Api_Core_V1_EndpointsList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_EnvFromSource {
+message IoK8sApiCoreV1EnvFromSource {
     // The ConfigMap to select from
     Io_K8s_Api_Core_V1_ConfigMapEnvSource configMapRef = 1;
 
@@ -15200,7 +15200,7 @@ message Io_K8s_Api_Core_V1_EnvFromSource {
     Io_K8s_Api_Core_V1_SecretEnvSource secretRef = 3;
 }
 
-message Io_K8s_Api_Core_V1_EnvVar {
+message IoK8sApiCoreV1EnvVar {
     // Name of the environment variable. Must be a C_IDENTIFIER.
     string name = 1;
 
@@ -15211,7 +15211,7 @@ message Io_K8s_Api_Core_V1_EnvVar {
     Io_K8s_Api_Core_V1_EnvVarSource valueFrom = 3;
 }
 
-message Io_K8s_Api_Core_V1_EnvVarSource {
+message IoK8sApiCoreV1EnvVarSource {
     // Selects a key of a ConfigMap.
     Io_K8s_Api_Core_V1_ConfigMapKeySelector configMapKeyRef = 1;
 
@@ -15225,7 +15225,7 @@ message Io_K8s_Api_Core_V1_EnvVarSource {
     Io_K8s_Api_Core_V1_SecretKeySelector secretKeyRef = 4;
 }
 
-message Io_K8s_Api_Core_V1_Event {
+message IoK8sApiCoreV1Event {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15260,7 +15260,7 @@ message Io_K8s_Api_Core_V1_Event {
     string type = 11;
 }
 
-message Io_K8s_Api_Core_V1_EventList {
+message IoK8sApiCoreV1EventList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15274,7 +15274,7 @@ message Io_K8s_Api_Core_V1_EventList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_EventSource {
+message IoK8sApiCoreV1EventSource {
     // Component from which the event is generated.
     string component = 1;
 
@@ -15282,12 +15282,12 @@ message Io_K8s_Api_Core_V1_EventSource {
     string host = 2;
 }
 
-message Io_K8s_Api_Core_V1_ExecAction {
+message IoK8sApiCoreV1ExecAction {
     // Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
     repeated string command = 1;
 }
 
-message Io_K8s_Api_Core_V1_FCVolumeSource {
+message IoK8sApiCoreV1FCVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -15304,7 +15304,7 @@ message Io_K8s_Api_Core_V1_FCVolumeSource {
     repeated string wwids = 5;
 }
 
-message Io_K8s_Api_Core_V1_FlexVolumeSource {
+message IoK8sApiCoreV1FlexVolumeSource {
     // Driver is the name of the driver to use for this volume.
     string driver = 1;
 
@@ -15321,7 +15321,7 @@ message Io_K8s_Api_Core_V1_FlexVolumeSource {
     Io_K8s_Api_Core_V1_LocalObjectReference secretRef = 5;
 }
 
-message Io_K8s_Api_Core_V1_FlockerVolumeSource {
+message IoK8sApiCoreV1FlockerVolumeSource {
     // Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated
     string datasetName = 1;
 
@@ -15329,7 +15329,7 @@ message Io_K8s_Api_Core_V1_FlockerVolumeSource {
     string datasetUUID = 2;
 }
 
-message Io_K8s_Api_Core_V1_GCEPersistentDiskVolumeSource {
+message IoK8sApiCoreV1GCEPersistentDiskVolumeSource {
     // Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk
     string fsType = 1;
 
@@ -15343,7 +15343,7 @@ message Io_K8s_Api_Core_V1_GCEPersistentDiskVolumeSource {
     bool readOnly = 4;
 }
 
-message Io_K8s_Api_Core_V1_GitRepoVolumeSource {
+message IoK8sApiCoreV1GitRepoVolumeSource {
     // Target directory name. Must not contain or start with '..'.  If '.' is supplied, the volume directory will be the git repository.  Otherwise, if specified, the volume will contain the git repository in the subdirectory with the given name.
     string directory = 1;
 
@@ -15354,7 +15354,7 @@ message Io_K8s_Api_Core_V1_GitRepoVolumeSource {
     string revision = 3;
 }
 
-message Io_K8s_Api_Core_V1_GlusterfsVolumeSource {
+message IoK8sApiCoreV1GlusterfsVolumeSource {
     // EndpointsName is the endpoint name that details Glusterfs topology. More info: https://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod
     string endpoints = 1;
 
@@ -15365,7 +15365,7 @@ message Io_K8s_Api_Core_V1_GlusterfsVolumeSource {
     bool readOnly = 3;
 }
 
-message Io_K8s_Api_Core_V1_HTTPGetAction {
+message IoK8sApiCoreV1HTTPGetAction {
     // Host name to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead.
     string host = 1;
 
@@ -15382,7 +15382,7 @@ message Io_K8s_Api_Core_V1_HTTPGetAction {
     string scheme = 5;
 }
 
-message Io_K8s_Api_Core_V1_HTTPHeader {
+message IoK8sApiCoreV1HTTPHeader {
     // The header field name
     string name = 1;
 
@@ -15390,7 +15390,7 @@ message Io_K8s_Api_Core_V1_HTTPHeader {
     string value = 2;
 }
 
-message Io_K8s_Api_Core_V1_Handler {
+message IoK8sApiCoreV1Handler {
     // One and only one of the following should be specified. Exec specifies the action to take.
     Io_K8s_Api_Core_V1_ExecAction exec = 1;
 
@@ -15401,7 +15401,7 @@ message Io_K8s_Api_Core_V1_Handler {
     Io_K8s_Api_Core_V1_TCPSocketAction tcpSocket = 3;
 }
 
-message Io_K8s_Api_Core_V1_HostAlias {
+message IoK8sApiCoreV1HostAlias {
     // Hostnames for the above IP address.
     repeated string hostnames = 1;
 
@@ -15409,7 +15409,7 @@ message Io_K8s_Api_Core_V1_HostAlias {
     string ip = 2;
 }
 
-message Io_K8s_Api_Core_V1_HostPathVolumeSource {
+message IoK8sApiCoreV1HostPathVolumeSource {
     // Path of the directory on the host. If the path is a symlink, it will follow the link to the real path. More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath
     string path = 1;
 
@@ -15417,7 +15417,7 @@ message Io_K8s_Api_Core_V1_HostPathVolumeSource {
     string type = 2;
 }
 
-message Io_K8s_Api_Core_V1_ISCSIVolumeSource {
+message IoK8sApiCoreV1ISCSIVolumeSource {
     // whether support iSCSI Discovery CHAP authentication
     bool chapAuthDiscovery = 1;
 
@@ -15452,7 +15452,7 @@ message Io_K8s_Api_Core_V1_ISCSIVolumeSource {
     string targetPortal = 11;
 }
 
-message Io_K8s_Api_Core_V1_KeyToPath {
+message IoK8sApiCoreV1KeyToPath {
     // The key to project.
     string key = 1;
 
@@ -15463,7 +15463,7 @@ message Io_K8s_Api_Core_V1_KeyToPath {
     string path = 3;
 }
 
-message Io_K8s_Api_Core_V1_Lifecycle {
+message IoK8sApiCoreV1Lifecycle {
     // PostStart is called immediately after a container is created. If the handler fails, the container is terminated and restarted according to its restart policy. Other management of the container blocks until the hook completes. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
     Io_K8s_Api_Core_V1_Handler postStart = 1;
 
@@ -15471,7 +15471,7 @@ message Io_K8s_Api_Core_V1_Lifecycle {
     Io_K8s_Api_Core_V1_Handler preStop = 2;
 }
 
-message Io_K8s_Api_Core_V1_LimitRange {
+message IoK8sApiCoreV1LimitRange {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15485,7 +15485,7 @@ message Io_K8s_Api_Core_V1_LimitRange {
     Io_K8s_Api_Core_V1_LimitRangeSpec spec = 4;
 }
 
-message Io_K8s_Api_Core_V1_LimitRangeItem {
+message IoK8sApiCoreV1LimitRangeItem {
     // Default resource requirement limit value by resource name if resource limit is omitted.
     map<string, string> default = 1;
 
@@ -15505,7 +15505,7 @@ message Io_K8s_Api_Core_V1_LimitRangeItem {
     string type = 6;
 }
 
-message Io_K8s_Api_Core_V1_LimitRangeList {
+message IoK8sApiCoreV1LimitRangeList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15519,12 +15519,12 @@ message Io_K8s_Api_Core_V1_LimitRangeList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_LimitRangeSpec {
+message IoK8sApiCoreV1LimitRangeSpec {
     // Limits is the list of LimitRangeItem objects that are enforced.
     repeated Io_K8s_Api_Core_V1_LimitRangeItem limits = 1;
 }
 
-message Io_K8s_Api_Core_V1_LoadBalancerIngress {
+message IoK8sApiCoreV1LoadBalancerIngress {
     // Hostname is set for load-balancer ingress points that are DNS based (typically AWS load-balancers)
     string hostname = 1;
 
@@ -15532,22 +15532,22 @@ message Io_K8s_Api_Core_V1_LoadBalancerIngress {
     string ip = 2;
 }
 
-message Io_K8s_Api_Core_V1_LoadBalancerStatus {
+message IoK8sApiCoreV1LoadBalancerStatus {
     // Ingress is a list containing ingress points for the load-balancer. Traffic intended for the service should be sent to these ingress points.
     repeated Io_K8s_Api_Core_V1_LoadBalancerIngress ingress = 1;
 }
 
-message Io_K8s_Api_Core_V1_LocalObjectReference {
+message IoK8sApiCoreV1LocalObjectReference {
     // Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
     string name = 1;
 }
 
-message Io_K8s_Api_Core_V1_LocalVolumeSource {
+message IoK8sApiCoreV1LocalVolumeSource {
     // The full path to the volume on the node For alpha, this path must be a directory Once block as a source is supported, then this path can point to a block device
     string path = 1;
 }
 
-message Io_K8s_Api_Core_V1_NFSVolumeSource {
+message IoK8sApiCoreV1NFSVolumeSource {
     // Path that is exported by the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
     string path = 1;
 
@@ -15558,7 +15558,7 @@ message Io_K8s_Api_Core_V1_NFSVolumeSource {
     string server = 3;
 }
 
-message Io_K8s_Api_Core_V1_Namespace {
+message IoK8sApiCoreV1Namespace {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15575,7 +15575,7 @@ message Io_K8s_Api_Core_V1_Namespace {
     Io_K8s_Api_Core_V1_NamespaceStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_NamespaceList {
+message IoK8sApiCoreV1NamespaceList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15589,17 +15589,17 @@ message Io_K8s_Api_Core_V1_NamespaceList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_NamespaceSpec {
+message IoK8sApiCoreV1NamespaceSpec {
     // Finalizers is an opaque list of values that must be empty to permanently remove object from storage. More info: https://git.k8s.io/community/contributors/design-proposals/namespaces.md#finalizers
     repeated string finalizers = 1;
 }
 
-message Io_K8s_Api_Core_V1_NamespaceStatus {
+message IoK8sApiCoreV1NamespaceStatus {
     // Phase is the current lifecycle phase of the namespace. More info: https://git.k8s.io/community/contributors/design-proposals/namespaces.md#phases
     string phase = 1;
 }
 
-message Io_K8s_Api_Core_V1_Node {
+message IoK8sApiCoreV1Node {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15616,7 +15616,7 @@ message Io_K8s_Api_Core_V1_Node {
     Io_K8s_Api_Core_V1_NodeStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_NodeAddress {
+message IoK8sApiCoreV1NodeAddress {
     // The node address.
     string address = 1;
 
@@ -15624,7 +15624,7 @@ message Io_K8s_Api_Core_V1_NodeAddress {
     string type = 2;
 }
 
-message Io_K8s_Api_Core_V1_NodeAffinity {
+message IoK8sApiCoreV1NodeAffinity {
     // The scheduler will prefer to schedule pods to nodes that satisfy the affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding "weight" to the sum if the node matches the corresponding matchExpressions; the node(s) with the highest sum are the most preferred.
     repeated Io_K8s_Api_Core_V1_PreferredSchedulingTerm preferredDuringSchedulingIgnoredDuringExecution = 1;
 
@@ -15632,7 +15632,7 @@ message Io_K8s_Api_Core_V1_NodeAffinity {
     Io_K8s_Api_Core_V1_NodeSelector requiredDuringSchedulingIgnoredDuringExecution = 2;
 }
 
-message Io_K8s_Api_Core_V1_NodeCondition {
+message IoK8sApiCoreV1NodeCondition {
     // Last time we got an update on a given condition.
     string lastHeartbeatTime = 1;
 
@@ -15652,7 +15652,7 @@ message Io_K8s_Api_Core_V1_NodeCondition {
     string type = 6;
 }
 
-message Io_K8s_Api_Core_V1_NodeConfigSource {
+message IoK8sApiCoreV1NodeConfigSource {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
     Io_K8s_Api_Core_V1_ObjectReference configMapRef = 2;
@@ -15661,12 +15661,12 @@ message Io_K8s_Api_Core_V1_NodeConfigSource {
     string kind = 3;
 }
 
-message Io_K8s_Api_Core_V1_NodeDaemonEndpoints {
+message IoK8sApiCoreV1NodeDaemonEndpoints {
     // Endpoint on which Kubelet is listening.
     Io_K8s_Api_Core_V1_DaemonEndpoint kubeletEndpoint = 1;
 }
 
-message Io_K8s_Api_Core_V1_NodeList {
+message IoK8sApiCoreV1NodeList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15680,12 +15680,12 @@ message Io_K8s_Api_Core_V1_NodeList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_NodeSelector {
+message IoK8sApiCoreV1NodeSelector {
     // Required. A list of node selector terms. The terms are ORed.
     repeated Io_K8s_Api_Core_V1_NodeSelectorTerm nodeSelectorTerms = 1;
 }
 
-message Io_K8s_Api_Core_V1_NodeSelectorRequirement {
+message IoK8sApiCoreV1NodeSelectorRequirement {
     // The label key that the selector applies to.
     string key = 1;
 
@@ -15696,12 +15696,12 @@ message Io_K8s_Api_Core_V1_NodeSelectorRequirement {
     repeated string values = 3;
 }
 
-message Io_K8s_Api_Core_V1_NodeSelectorTerm {
+message IoK8sApiCoreV1NodeSelectorTerm {
     // Required. A list of node selector requirements. The requirements are ANDed.
     repeated Io_K8s_Api_Core_V1_NodeSelectorRequirement matchExpressions = 1;
 }
 
-message Io_K8s_Api_Core_V1_NodeSpec {
+message IoK8sApiCoreV1NodeSpec {
     // If specified, the source to get node configuration from The DynamicKubeletConfig feature gate must be enabled for the Kubelet to use this field
     Io_K8s_Api_Core_V1_NodeConfigSource configSource = 1;
 
@@ -15721,7 +15721,7 @@ message Io_K8s_Api_Core_V1_NodeSpec {
     bool unschedulable = 6;
 }
 
-message Io_K8s_Api_Core_V1_NodeStatus {
+message IoK8sApiCoreV1NodeStatus {
     // List of addresses reachable to the node. Queried from cloud provider, if available. More info: https://kubernetes.io/docs/concepts/nodes/node/#addresses
     repeated Io_K8s_Api_Core_V1_NodeAddress addresses = 1;
 
@@ -15753,7 +15753,7 @@ message Io_K8s_Api_Core_V1_NodeStatus {
     repeated string volumesInUse = 10;
 }
 
-message Io_K8s_Api_Core_V1_NodeSystemInfo {
+message IoK8sApiCoreV1NodeSystemInfo {
     // The Architecture reported by the node
     string architecture = 1;
 
@@ -15785,7 +15785,7 @@ message Io_K8s_Api_Core_V1_NodeSystemInfo {
     string systemUUID = 10;
 }
 
-message Io_K8s_Api_Core_V1_ObjectFieldSelector {
+message IoK8sApiCoreV1ObjectFieldSelector {
     // Version of the schema the FieldPath is written in terms of, defaults to "v1".
     string apiVersion = 1;
 
@@ -15793,7 +15793,7 @@ message Io_K8s_Api_Core_V1_ObjectFieldSelector {
     string fieldPath = 2;
 }
 
-message Io_K8s_Api_Core_V1_ObjectReference {
+message IoK8sApiCoreV1ObjectReference {
     // API version of the referent.
     string apiVersion = 1;
 
@@ -15816,7 +15816,7 @@ message Io_K8s_Api_Core_V1_ObjectReference {
     string uid = 7;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolume {
+message IoK8sApiCoreV1PersistentVolume {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15833,7 +15833,7 @@ message Io_K8s_Api_Core_V1_PersistentVolume {
     Io_K8s_Api_Core_V1_PersistentVolumeStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeClaim {
+message IoK8sApiCoreV1PersistentVolumeClaim {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15850,7 +15850,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeClaim {
     Io_K8s_Api_Core_V1_PersistentVolumeClaimStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeClaimCondition {
+message IoK8sApiCoreV1PersistentVolumeClaimCondition {
     // Last time we probed the condition.
     string lastProbeTime = 1;
 
@@ -15866,7 +15866,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeClaimCondition {
     string type = 6;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeClaimList {
+message IoK8sApiCoreV1PersistentVolumeClaimList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15880,7 +15880,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeClaimList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeClaimSpec {
+message IoK8sApiCoreV1PersistentVolumeClaimSpec {
     // AccessModes contains the desired access modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
     repeated string accessModes = 1;
 
@@ -15897,7 +15897,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeClaimSpec {
     string volumeName = 5;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeClaimStatus {
+message IoK8sApiCoreV1PersistentVolumeClaimStatus {
     // AccessModes contains the actual access modes the volume backing the PVC has. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
     repeated string accessModes = 1;
 
@@ -15911,7 +15911,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeClaimStatus {
     string phase = 4;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeClaimVolumeSource {
+message IoK8sApiCoreV1PersistentVolumeClaimVolumeSource {
     // ClaimName is the name of a PersistentVolumeClaim in the same namespace as the pod using this volume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
     string claimName = 1;
 
@@ -15919,7 +15919,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeClaimVolumeSource {
     bool readOnly = 2;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeList {
+message IoK8sApiCoreV1PersistentVolumeList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -15933,7 +15933,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeSpec {
+message IoK8sApiCoreV1PersistentVolumeSpec {
     // AccessModes contains all ways the volume can be mounted. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes
     repeated string accessModes = 1;
 
@@ -16016,7 +16016,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeSpec {
     Io_K8s_Api_Core_V1_VsphereVirtualDiskVolumeSource vsphereVolume = 27;
 }
 
-message Io_K8s_Api_Core_V1_PersistentVolumeStatus {
+message IoK8sApiCoreV1PersistentVolumeStatus {
     // A human-readable message indicating details about why the volume is in this state.
     string message = 1;
 
@@ -16027,7 +16027,7 @@ message Io_K8s_Api_Core_V1_PersistentVolumeStatus {
     string reason = 3;
 }
 
-message Io_K8s_Api_Core_V1_PhotonPersistentDiskVolumeSource {
+message IoK8sApiCoreV1PhotonPersistentDiskVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -16035,7 +16035,7 @@ message Io_K8s_Api_Core_V1_PhotonPersistentDiskVolumeSource {
     string pdID = 2;
 }
 
-message Io_K8s_Api_Core_V1_Pod {
+message IoK8sApiCoreV1Pod {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16052,7 +16052,7 @@ message Io_K8s_Api_Core_V1_Pod {
     Io_K8s_Api_Core_V1_PodStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_PodAffinity {
+message IoK8sApiCoreV1PodAffinity {
     // The scheduler will prefer to schedule pods to nodes that satisfy the affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the node(s) with the highest sum are the most preferred.
     repeated Io_K8s_Api_Core_V1_WeightedPodAffinityTerm preferredDuringSchedulingIgnoredDuringExecution = 1;
 
@@ -16060,7 +16060,7 @@ message Io_K8s_Api_Core_V1_PodAffinity {
     repeated Io_K8s_Api_Core_V1_PodAffinityTerm requiredDuringSchedulingIgnoredDuringExecution = 2;
 }
 
-message Io_K8s_Api_Core_V1_PodAffinityTerm {
+message IoK8sApiCoreV1PodAffinityTerm {
     // A label query over a set of resources, in this case pods.
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelector labelSelector = 1;
 
@@ -16071,7 +16071,7 @@ message Io_K8s_Api_Core_V1_PodAffinityTerm {
     string topologyKey = 3;
 }
 
-message Io_K8s_Api_Core_V1_PodAntiAffinity {
+message IoK8sApiCoreV1PodAntiAffinity {
     // The scheduler will prefer to schedule pods to nodes that satisfy the anti-affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling anti-affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the node(s) with the highest sum are the most preferred.
     repeated Io_K8s_Api_Core_V1_WeightedPodAffinityTerm preferredDuringSchedulingIgnoredDuringExecution = 1;
 
@@ -16079,7 +16079,7 @@ message Io_K8s_Api_Core_V1_PodAntiAffinity {
     repeated Io_K8s_Api_Core_V1_PodAffinityTerm requiredDuringSchedulingIgnoredDuringExecution = 2;
 }
 
-message Io_K8s_Api_Core_V1_PodCondition {
+message IoK8sApiCoreV1PodCondition {
     // Last time we probed the condition.
     string lastProbeTime = 1;
 
@@ -16099,7 +16099,7 @@ message Io_K8s_Api_Core_V1_PodCondition {
     string type = 6;
 }
 
-message Io_K8s_Api_Core_V1_PodList {
+message IoK8sApiCoreV1PodList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16113,7 +16113,7 @@ message Io_K8s_Api_Core_V1_PodList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_PodSecurityContext {
+message IoK8sApiCoreV1PodSecurityContext {
     // A special supplemental group that applies to all containers in a pod. Some volume types allow the Kubelet to change the ownership of that volume to be owned by the pod:
     // 
     // 1. The owning GID will be the FSGroup 2. The setgid bit is set (new files created in the volume will be owned by FSGroup) 3. The permission bits are OR'd with rw-rw----
@@ -16134,7 +16134,7 @@ message Io_K8s_Api_Core_V1_PodSecurityContext {
     repeated int64 supplementalGroups = 5;
 }
 
-message Io_K8s_Api_Core_V1_PodSpec {
+message IoK8sApiCoreV1PodSpec {
     // Optional duration in seconds the pod may be active on the node relative to StartTime before the system will actively try to mark it failed and kill associated containers. Value must be a positive integer.
     int64 activeDeadlineSeconds = 1;
 
@@ -16211,7 +16211,7 @@ message Io_K8s_Api_Core_V1_PodSpec {
     repeated Io_K8s_Api_Core_V1_Volume volumes = 25;
 }
 
-message Io_K8s_Api_Core_V1_PodStatus {
+message IoK8sApiCoreV1PodStatus {
     // Current service state of pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions
     repeated Io_K8s_Api_Core_V1_PodCondition conditions = 1;
 
@@ -16243,7 +16243,7 @@ message Io_K8s_Api_Core_V1_PodStatus {
     string startTime = 10;
 }
 
-message Io_K8s_Api_Core_V1_PodTemplate {
+message IoK8sApiCoreV1PodTemplate {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16257,7 +16257,7 @@ message Io_K8s_Api_Core_V1_PodTemplate {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 4;
 }
 
-message Io_K8s_Api_Core_V1_PodTemplateList {
+message IoK8sApiCoreV1PodTemplateList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16271,7 +16271,7 @@ message Io_K8s_Api_Core_V1_PodTemplateList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_PodTemplateSpec {
+message IoK8sApiCoreV1PodTemplateSpec {
     // Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ObjectMeta metadata = 1;
 
@@ -16279,7 +16279,7 @@ message Io_K8s_Api_Core_V1_PodTemplateSpec {
     Io_K8s_Api_Core_V1_PodSpec spec = 2;
 }
 
-message Io_K8s_Api_Core_V1_PortworxVolumeSource {
+message IoK8sApiCoreV1PortworxVolumeSource {
     // FSType represents the filesystem type to mount Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -16290,7 +16290,7 @@ message Io_K8s_Api_Core_V1_PortworxVolumeSource {
     string volumeID = 3;
 }
 
-message Io_K8s_Api_Core_V1_PreferredSchedulingTerm {
+message IoK8sApiCoreV1PreferredSchedulingTerm {
     // A node selector term, associated with the corresponding weight.
     Io_K8s_Api_Core_V1_NodeSelectorTerm preference = 1;
 
@@ -16298,7 +16298,7 @@ message Io_K8s_Api_Core_V1_PreferredSchedulingTerm {
     int32 weight = 2;
 }
 
-message Io_K8s_Api_Core_V1_Probe {
+message IoK8sApiCoreV1Probe {
     // One and only one of the following should be specified. Exec specifies the action to take.
     Io_K8s_Api_Core_V1_ExecAction exec = 1;
 
@@ -16324,7 +16324,7 @@ message Io_K8s_Api_Core_V1_Probe {
     int32 timeoutSeconds = 8;
 }
 
-message Io_K8s_Api_Core_V1_ProjectedVolumeSource {
+message IoK8sApiCoreV1ProjectedVolumeSource {
     // Mode bits to use on created files by default. Must be a value between 0 and 0777. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
     int32 defaultMode = 1;
 
@@ -16332,7 +16332,7 @@ message Io_K8s_Api_Core_V1_ProjectedVolumeSource {
     repeated Io_K8s_Api_Core_V1_VolumeProjection sources = 2;
 }
 
-message Io_K8s_Api_Core_V1_QuobyteVolumeSource {
+message IoK8sApiCoreV1QuobyteVolumeSource {
     // Group to map volume access to Default is no group
     string group = 1;
 
@@ -16349,7 +16349,7 @@ message Io_K8s_Api_Core_V1_QuobyteVolumeSource {
     string volume = 5;
 }
 
-message Io_K8s_Api_Core_V1_RBDVolumeSource {
+message IoK8sApiCoreV1RBDVolumeSource {
     // Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#rbd
     string fsType = 1;
 
@@ -16375,7 +16375,7 @@ message Io_K8s_Api_Core_V1_RBDVolumeSource {
     string user = 8;
 }
 
-message Io_K8s_Api_Core_V1_ReplicationController {
+message IoK8sApiCoreV1ReplicationController {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16392,7 +16392,7 @@ message Io_K8s_Api_Core_V1_ReplicationController {
     Io_K8s_Api_Core_V1_ReplicationControllerStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_ReplicationControllerCondition {
+message IoK8sApiCoreV1ReplicationControllerCondition {
     // The last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -16409,7 +16409,7 @@ message Io_K8s_Api_Core_V1_ReplicationControllerCondition {
     string type = 5;
 }
 
-message Io_K8s_Api_Core_V1_ReplicationControllerList {
+message IoK8sApiCoreV1ReplicationControllerList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16423,7 +16423,7 @@ message Io_K8s_Api_Core_V1_ReplicationControllerList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ReplicationControllerSpec {
+message IoK8sApiCoreV1ReplicationControllerSpec {
     // Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
     int32 minReadySeconds = 1;
 
@@ -16437,7 +16437,7 @@ message Io_K8s_Api_Core_V1_ReplicationControllerSpec {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 4;
 }
 
-message Io_K8s_Api_Core_V1_ReplicationControllerStatus {
+message IoK8sApiCoreV1ReplicationControllerStatus {
     // The number of available replicas (ready for at least minReadySeconds) for this replication controller.
     int32 availableReplicas = 1;
 
@@ -16457,7 +16457,7 @@ message Io_K8s_Api_Core_V1_ReplicationControllerStatus {
     int32 replicas = 6;
 }
 
-message Io_K8s_Api_Core_V1_ResourceFieldSelector {
+message IoK8sApiCoreV1ResourceFieldSelector {
     // Container name: required for volumes, optional for env vars
     string containerName = 1;
 
@@ -16468,7 +16468,7 @@ message Io_K8s_Api_Core_V1_ResourceFieldSelector {
     string resource = 3;
 }
 
-message Io_K8s_Api_Core_V1_ResourceQuota {
+message IoK8sApiCoreV1ResourceQuota {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16485,7 +16485,7 @@ message Io_K8s_Api_Core_V1_ResourceQuota {
     Io_K8s_Api_Core_V1_ResourceQuotaStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_ResourceQuotaList {
+message IoK8sApiCoreV1ResourceQuotaList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16499,7 +16499,7 @@ message Io_K8s_Api_Core_V1_ResourceQuotaList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ResourceQuotaSpec {
+message IoK8sApiCoreV1ResourceQuotaSpec {
     // Hard is the set of desired hard limits for each named resource. More info: https://git.k8s.io/community/contributors/design-proposals/admission_control_resource_quota.md
     map<string, string> hard = 1;
 
@@ -16507,7 +16507,7 @@ message Io_K8s_Api_Core_V1_ResourceQuotaSpec {
     repeated string scopes = 2;
 }
 
-message Io_K8s_Api_Core_V1_ResourceQuotaStatus {
+message IoK8sApiCoreV1ResourceQuotaStatus {
     // Hard is the set of enforced hard limits for each named resource. More info: https://git.k8s.io/community/contributors/design-proposals/admission_control_resource_quota.md
     map<string, string> hard = 1;
 
@@ -16515,7 +16515,7 @@ message Io_K8s_Api_Core_V1_ResourceQuotaStatus {
     map<string, string> used = 2;
 }
 
-message Io_K8s_Api_Core_V1_ResourceRequirements {
+message IoK8sApiCoreV1ResourceRequirements {
     // Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     map<string, string> limits = 1;
 
@@ -16523,7 +16523,7 @@ message Io_K8s_Api_Core_V1_ResourceRequirements {
     map<string, string> requests = 2;
 }
 
-message Io_K8s_Api_Core_V1_SELinuxOptions {
+message IoK8sApiCoreV1SELinuxOptions {
     // Level is SELinux level label that applies to the container.
     string level = 1;
 
@@ -16537,7 +16537,7 @@ message Io_K8s_Api_Core_V1_SELinuxOptions {
     string user = 4;
 }
 
-message Io_K8s_Api_Core_V1_ScaleIOPersistentVolumeSource {
+message IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -16569,7 +16569,7 @@ message Io_K8s_Api_Core_V1_ScaleIOPersistentVolumeSource {
     string volumeName = 10;
 }
 
-message Io_K8s_Api_Core_V1_ScaleIOVolumeSource {
+message IoK8sApiCoreV1ScaleIOVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -16601,7 +16601,7 @@ message Io_K8s_Api_Core_V1_ScaleIOVolumeSource {
     string volumeName = 10;
 }
 
-message Io_K8s_Api_Core_V1_Secret {
+message IoK8sApiCoreV1Secret {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16621,7 +16621,7 @@ message Io_K8s_Api_Core_V1_Secret {
     string type = 6;
 }
 
-message Io_K8s_Api_Core_V1_SecretEnvSource {
+message IoK8sApiCoreV1SecretEnvSource {
     // Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
     string name = 1;
 
@@ -16629,7 +16629,7 @@ message Io_K8s_Api_Core_V1_SecretEnvSource {
     bool optional = 2;
 }
 
-message Io_K8s_Api_Core_V1_SecretKeySelector {
+message IoK8sApiCoreV1SecretKeySelector {
     // The key of the secret to select from.  Must be a valid secret key.
     string key = 1;
 
@@ -16640,7 +16640,7 @@ message Io_K8s_Api_Core_V1_SecretKeySelector {
     bool optional = 3;
 }
 
-message Io_K8s_Api_Core_V1_SecretList {
+message IoK8sApiCoreV1SecretList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16654,7 +16654,7 @@ message Io_K8s_Api_Core_V1_SecretList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_SecretProjection {
+message IoK8sApiCoreV1SecretProjection {
     // If unspecified, each key-value pair in the Data field of the referenced Secret will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the Secret, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'.
     repeated Io_K8s_Api_Core_V1_KeyToPath items = 1;
 
@@ -16665,7 +16665,7 @@ message Io_K8s_Api_Core_V1_SecretProjection {
     bool optional = 3;
 }
 
-message Io_K8s_Api_Core_V1_SecretReference {
+message IoK8sApiCoreV1SecretReference {
     // Name is unique within a namespace to reference a secret resource.
     string name = 1;
 
@@ -16673,7 +16673,7 @@ message Io_K8s_Api_Core_V1_SecretReference {
     string namespace = 2;
 }
 
-message Io_K8s_Api_Core_V1_SecretVolumeSource {
+message IoK8sApiCoreV1SecretVolumeSource {
     // Optional: mode bits to use on created files by default. Must be a value between 0 and 0777. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
     int32 defaultMode = 1;
 
@@ -16687,7 +16687,7 @@ message Io_K8s_Api_Core_V1_SecretVolumeSource {
     string secretName = 4;
 }
 
-message Io_K8s_Api_Core_V1_SecurityContext {
+message IoK8sApiCoreV1SecurityContext {
     // AllowPrivilegeEscalation controls whether a process can gain more privileges than its parent process. This bool directly controls if the no_new_privs flag will be set on the container process. AllowPrivilegeEscalation is true always when the container is: 1) run as Privileged 2) has CAP_SYS_ADMIN
     bool allowPrivilegeEscalation = 1;
 
@@ -16710,7 +16710,7 @@ message Io_K8s_Api_Core_V1_SecurityContext {
     Io_K8s_Api_Core_V1_SELinuxOptions seLinuxOptions = 7;
 }
 
-message Io_K8s_Api_Core_V1_Service {
+message IoK8sApiCoreV1Service {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16727,7 +16727,7 @@ message Io_K8s_Api_Core_V1_Service {
     Io_K8s_Api_Core_V1_ServiceStatus status = 5;
 }
 
-message Io_K8s_Api_Core_V1_ServiceAccount {
+message IoK8sApiCoreV1ServiceAccount {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16747,7 +16747,7 @@ message Io_K8s_Api_Core_V1_ServiceAccount {
     repeated Io_K8s_Api_Core_V1_ObjectReference secrets = 6;
 }
 
-message Io_K8s_Api_Core_V1_ServiceAccountList {
+message IoK8sApiCoreV1ServiceAccountList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16761,7 +16761,7 @@ message Io_K8s_Api_Core_V1_ServiceAccountList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ServiceList {
+message IoK8sApiCoreV1ServiceList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -16775,7 +16775,7 @@ message Io_K8s_Api_Core_V1_ServiceList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Core_V1_ServicePort {
+message IoK8sApiCoreV1ServicePort {
     // The name of this port within the service. This must be a DNS_LABEL. All ports within a ServiceSpec must have unique names. This maps to the 'Name' field in EndpointPort objects. Optional if only one ServicePort is defined on this service.
     string name = 1;
 
@@ -16792,7 +16792,7 @@ message Io_K8s_Api_Core_V1_ServicePort {
     string targetPort = 5;
 }
 
-message Io_K8s_Api_Core_V1_ServiceSpec {
+message IoK8sApiCoreV1ServiceSpec {
     // clusterIP is the IP address of the service and is usually assigned randomly by the master. If an address is specified manually and is not in use by others, it will be allocated to the service; otherwise, creation of the service will fail. This field can not be changed through updates. Valid values are "None", empty string (""), or a valid IP address. "None" can be specified for headless services when proxying is not required. Only applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if type is ExternalName. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     string clusterIP = 1;
 
@@ -16833,17 +16833,17 @@ message Io_K8s_Api_Core_V1_ServiceSpec {
     string type = 13;
 }
 
-message Io_K8s_Api_Core_V1_ServiceStatus {
+message IoK8sApiCoreV1ServiceStatus {
     // LoadBalancer contains the current status of the load-balancer, if one is present.
     Io_K8s_Api_Core_V1_LoadBalancerStatus loadBalancer = 1;
 }
 
-message Io_K8s_Api_Core_V1_SessionAffinityConfig {
+message IoK8sApiCoreV1SessionAffinityConfig {
     // clientIP contains the configurations of Client IP based session affinity.
     Io_K8s_Api_Core_V1_ClientIPConfig clientIP = 1;
 }
 
-message Io_K8s_Api_Core_V1_StorageOSPersistentVolumeSource {
+message IoK8sApiCoreV1StorageOSPersistentVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -16860,7 +16860,7 @@ message Io_K8s_Api_Core_V1_StorageOSPersistentVolumeSource {
     string volumeNamespace = 5;
 }
 
-message Io_K8s_Api_Core_V1_StorageOSVolumeSource {
+message IoK8sApiCoreV1StorageOSVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -16877,7 +16877,7 @@ message Io_K8s_Api_Core_V1_StorageOSVolumeSource {
     string volumeNamespace = 5;
 }
 
-message Io_K8s_Api_Core_V1_TCPSocketAction {
+message IoK8sApiCoreV1TCPSocketAction {
     // Optional: Host name to connect to, defaults to the pod IP.
     string host = 1;
 
@@ -16885,7 +16885,7 @@ message Io_K8s_Api_Core_V1_TCPSocketAction {
     string port = 2;
 }
 
-message Io_K8s_Api_Core_V1_Taint {
+message IoK8sApiCoreV1Taint {
     // Required. The effect of the taint on pods that do not tolerate the taint. Valid effects are NoSchedule, PreferNoSchedule and NoExecute.
     string effect = 1;
 
@@ -16899,7 +16899,7 @@ message Io_K8s_Api_Core_V1_Taint {
     string value = 4;
 }
 
-message Io_K8s_Api_Core_V1_Toleration {
+message IoK8sApiCoreV1Toleration {
     // Effect indicates the taint effect to match. Empty means match all taint effects. When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.
     string effect = 1;
 
@@ -16916,7 +16916,7 @@ message Io_K8s_Api_Core_V1_Toleration {
     string value = 5;
 }
 
-message Io_K8s_Api_Core_V1_Volume {
+message IoK8sApiCoreV1Volume {
     // AWSElasticBlockStore represents an AWS Disk resource that is attached to a kubelet's host machine and then exposed to the pod. More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore
     Io_K8s_Api_Core_V1_AWSElasticBlockStoreVolumeSource awsElasticBlockStore = 1;
 
@@ -17002,7 +17002,7 @@ message Io_K8s_Api_Core_V1_Volume {
     Io_K8s_Api_Core_V1_VsphereVirtualDiskVolumeSource vsphereVolume = 28;
 }
 
-message Io_K8s_Api_Core_V1_VolumeMount {
+message IoK8sApiCoreV1VolumeMount {
     // Path within the container at which the volume should be mounted.  Must not contain ':'.
     string mountPath = 1;
 
@@ -17019,7 +17019,7 @@ message Io_K8s_Api_Core_V1_VolumeMount {
     string subPath = 5;
 }
 
-message Io_K8s_Api_Core_V1_VolumeProjection {
+message IoK8sApiCoreV1VolumeProjection {
     // information about the configMap data to project
     Io_K8s_Api_Core_V1_ConfigMapProjection configMap = 1;
 
@@ -17030,7 +17030,7 @@ message Io_K8s_Api_Core_V1_VolumeProjection {
     Io_K8s_Api_Core_V1_SecretProjection secret = 3;
 }
 
-message Io_K8s_Api_Core_V1_VsphereVirtualDiskVolumeSource {
+message IoK8sApiCoreV1VsphereVirtualDiskVolumeSource {
     // Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
     string fsType = 1;
 
@@ -17044,7 +17044,7 @@ message Io_K8s_Api_Core_V1_VsphereVirtualDiskVolumeSource {
     string volumePath = 4;
 }
 
-message Io_K8s_Api_Core_V1_WeightedPodAffinityTerm {
+message IoK8sApiCoreV1WeightedPodAffinityTerm {
     // Required. A pod affinity term, associated with the corresponding weight.
     Io_K8s_Api_Core_V1_PodAffinityTerm podAffinityTerm = 1;
 
@@ -17052,14 +17052,14 @@ message Io_K8s_Api_Core_V1_WeightedPodAffinityTerm {
     int32 weight = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_AllowedHostPath {
+message IoK8sApiExtensionsV1beta1AllowedHostPath {
     // is the path prefix that the host volume must match. It does not support `*`. Trailing slashes are trimmed when validating the path prefix with a host path.
     // 
     // Examples: `/foo` would allow `/foo`, `/foo/` and `/foo/bar` `/foo` would not allow `/food` or `/etc/foo`
     string pathPrefix = 1;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DaemonSet {
+message IoK8sApiExtensionsV1beta1DaemonSet {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17076,7 +17076,7 @@ message Io_K8s_Api_Extensions_V1beta1_DaemonSet {
     Io_K8s_Api_Extensions_V1beta1_DaemonSetStatus status = 5;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DaemonSetList {
+message IoK8sApiExtensionsV1beta1DaemonSetList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17090,7 +17090,7 @@ message Io_K8s_Api_Extensions_V1beta1_DaemonSetList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DaemonSetSpec {
+message IoK8sApiExtensionsV1beta1DaemonSetSpec {
     // The minimum number of seconds for which a newly created DaemonSet pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready).
     int32 minReadySeconds = 1;
 
@@ -17110,7 +17110,7 @@ message Io_K8s_Api_Extensions_V1beta1_DaemonSetSpec {
     Io_K8s_Api_Extensions_V1beta1_DaemonSetUpdateStrategy updateStrategy = 6;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DaemonSetStatus {
+message IoK8sApiExtensionsV1beta1DaemonSetStatus {
     // Count of hash collisions for the DaemonSet. The DaemonSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
     int32 collisionCount = 1;
 
@@ -17139,7 +17139,7 @@ message Io_K8s_Api_Extensions_V1beta1_DaemonSetStatus {
     int32 updatedNumberScheduled = 9;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DaemonSetUpdateStrategy {
+message IoK8sApiExtensionsV1beta1DaemonSetUpdateStrategy {
     // Rolling update config params. Present only if type = "RollingUpdate".
     Io_K8s_Api_Extensions_V1beta1_RollingUpdateDaemonSet rollingUpdate = 1;
 
@@ -17147,7 +17147,7 @@ message Io_K8s_Api_Extensions_V1beta1_DaemonSetUpdateStrategy {
     string type = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_Deployment {
+message IoK8sApiExtensionsV1beta1Deployment {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17164,7 +17164,7 @@ message Io_K8s_Api_Extensions_V1beta1_Deployment {
     Io_K8s_Api_Extensions_V1beta1_DeploymentStatus status = 5;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DeploymentCondition {
+message IoK8sApiExtensionsV1beta1DeploymentCondition {
     // Last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -17184,7 +17184,7 @@ message Io_K8s_Api_Extensions_V1beta1_DeploymentCondition {
     string type = 6;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DeploymentList {
+message IoK8sApiExtensionsV1beta1DeploymentList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17198,7 +17198,7 @@ message Io_K8s_Api_Extensions_V1beta1_DeploymentList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DeploymentRollback {
+message IoK8sApiExtensionsV1beta1DeploymentRollback {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17215,7 +17215,7 @@ message Io_K8s_Api_Extensions_V1beta1_DeploymentRollback {
     map<string, string> updatedAnnotations = 5;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DeploymentSpec {
+message IoK8sApiExtensionsV1beta1DeploymentSpec {
     // Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
     int32 minReadySeconds = 1;
 
@@ -17244,7 +17244,7 @@ message Io_K8s_Api_Extensions_V1beta1_DeploymentSpec {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 9;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DeploymentStatus {
+message IoK8sApiExtensionsV1beta1DeploymentStatus {
     // Total number of available pods (ready for at least minReadySeconds) targeted by this deployment.
     int32 availableReplicas = 1;
 
@@ -17270,7 +17270,7 @@ message Io_K8s_Api_Extensions_V1beta1_DeploymentStatus {
     int32 updatedReplicas = 8;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_DeploymentStrategy {
+message IoK8sApiExtensionsV1beta1DeploymentStrategy {
     // Rolling update config params. Present only if DeploymentStrategyType = RollingUpdate.
     Io_K8s_Api_Extensions_V1beta1_RollingUpdateDeployment rollingUpdate = 1;
 
@@ -17278,7 +17278,7 @@ message Io_K8s_Api_Extensions_V1beta1_DeploymentStrategy {
     string type = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_FSGroupStrategyOptions {
+message IoK8sApiExtensionsV1beta1FSGroupStrategyOptions {
     // Ranges are the allowed ranges of fs groups.  If you would like to force a single fs group then supply a single range with the same start and end.
     repeated Io_K8s_Api_Extensions_V1beta1_IDRange ranges = 1;
 
@@ -17286,7 +17286,7 @@ message Io_K8s_Api_Extensions_V1beta1_FSGroupStrategyOptions {
     string rule = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_HTTPIngressPath {
+message IoK8sApiExtensionsV1beta1HTTPIngressPath {
     // Backend defines the referenced service endpoint to which the traffic will be forwarded to.
     Io_K8s_Api_Extensions_V1beta1_IngressBackend backend = 1;
 
@@ -17294,12 +17294,12 @@ message Io_K8s_Api_Extensions_V1beta1_HTTPIngressPath {
     string path = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_HTTPIngressRuleValue {
+message IoK8sApiExtensionsV1beta1HTTPIngressRuleValue {
     // A collection of paths that map requests to backends.
     repeated Io_K8s_Api_Extensions_V1beta1_HTTPIngressPath paths = 1;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_HostPortRange {
+message IoK8sApiExtensionsV1beta1HostPortRange {
     // max is the end of the range, inclusive.
     int32 max = 1;
 
@@ -17307,7 +17307,7 @@ message Io_K8s_Api_Extensions_V1beta1_HostPortRange {
     int32 min = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IDRange {
+message IoK8sApiExtensionsV1beta1IDRange {
     // Max is the end of the range, inclusive.
     int64 max = 1;
 
@@ -17315,7 +17315,7 @@ message Io_K8s_Api_Extensions_V1beta1_IDRange {
     int64 min = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IPBlock {
+message IoK8sApiExtensionsV1beta1IPBlock {
     // CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24"
     string cidr = 1;
 
@@ -17323,7 +17323,7 @@ message Io_K8s_Api_Extensions_V1beta1_IPBlock {
     repeated string except = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_Ingress {
+message IoK8sApiExtensionsV1beta1Ingress {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17340,7 +17340,7 @@ message Io_K8s_Api_Extensions_V1beta1_Ingress {
     Io_K8s_Api_Extensions_V1beta1_IngressStatus status = 5;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IngressBackend {
+message IoK8sApiExtensionsV1beta1IngressBackend {
     // Specifies the name of the referenced service.
     string serviceName = 1;
 
@@ -17348,7 +17348,7 @@ message Io_K8s_Api_Extensions_V1beta1_IngressBackend {
     string servicePort = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IngressList {
+message IoK8sApiExtensionsV1beta1IngressList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17362,7 +17362,7 @@ message Io_K8s_Api_Extensions_V1beta1_IngressList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IngressRule {
+message IoK8sApiExtensionsV1beta1IngressRule {
     // Host is the fully qualified domain name of a network host, as defined by RFC 3986. Note the following deviations from the "host" part of the URI as defined in the RFC: 1. IPs are not allowed. Currently an IngressRuleValue can only apply to the
     // 	  IP in the Spec of the parent Ingress.
     // 2. The `:` delimiter is not respected because ports are not allowed.
@@ -17373,7 +17373,7 @@ message Io_K8s_Api_Extensions_V1beta1_IngressRule {
     Io_K8s_Api_Extensions_V1beta1_HTTPIngressRuleValue http = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IngressSpec {
+message IoK8sApiExtensionsV1beta1IngressSpec {
     // A default backend capable of servicing requests that don't match any rule. At least one of 'backend' or 'rules' must be specified. This field is optional to allow the loadbalancer controller or defaulting logic to specify a global default.
     Io_K8s_Api_Extensions_V1beta1_IngressBackend backend = 1;
 
@@ -17384,12 +17384,12 @@ message Io_K8s_Api_Extensions_V1beta1_IngressSpec {
     repeated Io_K8s_Api_Extensions_V1beta1_IngressTLS tls = 3;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IngressStatus {
+message IoK8sApiExtensionsV1beta1IngressStatus {
     // LoadBalancer contains the current status of the load-balancer.
     Io_K8s_Api_Core_V1_LoadBalancerStatus loadBalancer = 1;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_IngressTLS {
+message IoK8sApiExtensionsV1beta1IngressTLS {
     // Hosts are a list of hosts included in the TLS certificate. The values in this list must match the name/s used in the tlsSecret. Defaults to the wildcard host setting for the loadbalancer controller fulfilling this Ingress, if left unspecified.
     repeated string hosts = 1;
 
@@ -17397,7 +17397,7 @@ message Io_K8s_Api_Extensions_V1beta1_IngressTLS {
     string secretName = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_NetworkPolicy {
+message IoK8sApiExtensionsV1beta1NetworkPolicy {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17411,7 +17411,7 @@ message Io_K8s_Api_Extensions_V1beta1_NetworkPolicy {
     Io_K8s_Api_Extensions_V1beta1_NetworkPolicySpec spec = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyEgressRule {
+message IoK8sApiExtensionsV1beta1NetworkPolicyEgressRule {
     // List of destination ports for outgoing traffic. Each item in this list is combined using a logical OR. If this field is empty or missing, this rule matches all ports (traffic not restricted by port). If this field is present and contains at least one item, then this rule allows traffic only if the traffic matches at least one port in the list.
     repeated Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPort ports = 1;
 
@@ -17419,7 +17419,7 @@ message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyEgressRule {
     repeated Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPeer to = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyIngressRule {
+message IoK8sApiExtensionsV1beta1NetworkPolicyIngressRule {
     // List of sources which should be able to access the pods selected for this rule. Items in this list are combined using a logical OR operation. If this field is empty or missing, this rule matches all sources (traffic not restricted by source). If this field is present and contains at least on item, this rule allows traffic only if the traffic matches at least one item in the from list.
     repeated Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPeer from = 1;
 
@@ -17427,7 +17427,7 @@ message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyIngressRule {
     repeated Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPort ports = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyList {
+message IoK8sApiExtensionsV1beta1NetworkPolicyList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17441,7 +17441,7 @@ message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPeer {
+message IoK8sApiExtensionsV1beta1NetworkPolicyPeer {
     // IPBlock defines policy on a particular IPBlock
     Io_K8s_Api_Extensions_V1beta1_IPBlock ipBlock = 1;
 
@@ -17452,7 +17452,7 @@ message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPeer {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelector podSelector = 3;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPort {
+message IoK8sApiExtensionsV1beta1NetworkPolicyPort {
     // If specified, the port on the given protocol.  This can either be a numerical or named port on a pod.  If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched.
     string port = 1;
 
@@ -17460,7 +17460,7 @@ message Io_K8s_Api_Extensions_V1beta1_NetworkPolicyPort {
     string protocol = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_NetworkPolicySpec {
+message IoK8sApiExtensionsV1beta1NetworkPolicySpec {
     // List of egress rules to be applied to the selected pods. Outgoing traffic is allowed if there are no NetworkPolicies selecting the pod (and cluster policy otherwise allows the traffic), OR if the traffic matches at least one egress rule across all of the NetworkPolicy objects whose podSelector matches the pod. If this field is empty then this NetworkPolicy limits all outgoing traffic (and serves solely to ensure that the pods it selects are isolated by default). This field is beta-level in 1.8
     repeated Io_K8s_Api_Extensions_V1beta1_NetworkPolicyEgressRule egress = 1;
 
@@ -17474,7 +17474,7 @@ message Io_K8s_Api_Extensions_V1beta1_NetworkPolicySpec {
     repeated string policyTypes = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_PodSecurityPolicy {
+message IoK8sApiExtensionsV1beta1PodSecurityPolicy {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17488,7 +17488,7 @@ message Io_K8s_Api_Extensions_V1beta1_PodSecurityPolicy {
     Io_K8s_Api_Extensions_V1beta1_PodSecurityPolicySpec spec = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_PodSecurityPolicyList {
+message IoK8sApiExtensionsV1beta1PodSecurityPolicyList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17502,7 +17502,7 @@ message Io_K8s_Api_Extensions_V1beta1_PodSecurityPolicyList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_PodSecurityPolicySpec {
+message IoK8sApiExtensionsV1beta1PodSecurityPolicySpec {
     // AllowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true.
     bool allowPrivilegeEscalation = 1;
 
@@ -17555,7 +17555,7 @@ message Io_K8s_Api_Extensions_V1beta1_PodSecurityPolicySpec {
     repeated string volumes = 17;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_ReplicaSet {
+message IoK8sApiExtensionsV1beta1ReplicaSet {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17572,7 +17572,7 @@ message Io_K8s_Api_Extensions_V1beta1_ReplicaSet {
     Io_K8s_Api_Extensions_V1beta1_ReplicaSetStatus status = 5;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_ReplicaSetCondition {
+message IoK8sApiExtensionsV1beta1ReplicaSetCondition {
     // The last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -17589,7 +17589,7 @@ message Io_K8s_Api_Extensions_V1beta1_ReplicaSetCondition {
     string type = 5;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_ReplicaSetList {
+message IoK8sApiExtensionsV1beta1ReplicaSetList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17603,7 +17603,7 @@ message Io_K8s_Api_Extensions_V1beta1_ReplicaSetList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_ReplicaSetSpec {
+message IoK8sApiExtensionsV1beta1ReplicaSetSpec {
     // Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
     int32 minReadySeconds = 1;
 
@@ -17617,7 +17617,7 @@ message Io_K8s_Api_Extensions_V1beta1_ReplicaSetSpec {
     Io_K8s_Api_Core_V1_PodTemplateSpec template = 4;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_ReplicaSetStatus {
+message IoK8sApiExtensionsV1beta1ReplicaSetStatus {
     // The number of available replicas (ready for at least minReadySeconds) for this replica set.
     int32 availableReplicas = 1;
 
@@ -17637,17 +17637,17 @@ message Io_K8s_Api_Extensions_V1beta1_ReplicaSetStatus {
     int32 replicas = 6;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_RollbackConfig {
+message IoK8sApiExtensionsV1beta1RollbackConfig {
     // The revision to rollback to. If set to 0, rollback to the last revision.
     int64 revision = 1;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_RollingUpdateDaemonSet {
+message IoK8sApiExtensionsV1beta1RollingUpdateDaemonSet {
     // The maximum number of DaemonSet pods that can be unavailable during the update. Value can be an absolute number (ex: 5) or a percentage of total number of DaemonSet pods at the start of the update (ex: 10%). Absolute number is calculated from percentage by rounding up. This cannot be 0. Default value is 1. Example: when this is set to 30%, at most 30% of the total number of nodes that should be running the daemon pod (i.e. status.desiredNumberScheduled) can have their pods stopped for an update at any given time. The update starts by stopping at most 30% of those DaemonSet pods and then brings up new DaemonSet pods in their place. Once the new pods are available, it then proceeds onto other DaemonSet pods, thus ensuring that at least 70% of original number of DaemonSet pods are available at all times during the update.
     string maxUnavailable = 1;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_RollingUpdateDeployment {
+message IoK8sApiExtensionsV1beta1RollingUpdateDeployment {
     // The maximum number of pods that can be scheduled above the desired number of pods. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). This can not be 0 if MaxUnavailable is 0. Absolute number is calculated from percentage by rounding up. By default, a value of 1 is used. Example: when this is set to 30%, the new RC can be scaled up immediately when the rolling update starts, such that the total number of old and new pods do not exceed 130% of desired pods. Once old pods have been killed, new RC can be scaled up further, ensuring that total number of pods running at any time during the update is atmost 130% of desired pods.
     string maxSurge = 1;
 
@@ -17655,7 +17655,7 @@ message Io_K8s_Api_Extensions_V1beta1_RollingUpdateDeployment {
     string maxUnavailable = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_RunAsUserStrategyOptions {
+message IoK8sApiExtensionsV1beta1RunAsUserStrategyOptions {
     // Ranges are the allowed ranges of uids that may be used.
     repeated Io_K8s_Api_Extensions_V1beta1_IDRange ranges = 1;
 
@@ -17663,7 +17663,7 @@ message Io_K8s_Api_Extensions_V1beta1_RunAsUserStrategyOptions {
     string rule = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_SELinuxStrategyOptions {
+message IoK8sApiExtensionsV1beta1SELinuxStrategyOptions {
     // type is the strategy that will dictate the allowable labels that may be set.
     string rule = 1;
 
@@ -17671,7 +17671,7 @@ message Io_K8s_Api_Extensions_V1beta1_SELinuxStrategyOptions {
     Io_K8s_Api_Core_V1_SELinuxOptions seLinuxOptions = 2;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_Scale {
+message IoK8sApiExtensionsV1beta1Scale {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17688,12 +17688,12 @@ message Io_K8s_Api_Extensions_V1beta1_Scale {
     Io_K8s_Api_Extensions_V1beta1_ScaleStatus status = 5;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_ScaleSpec {
+message IoK8sApiExtensionsV1beta1ScaleSpec {
     // desired number of instances for the scaled object.
     int32 replicas = 1;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_ScaleStatus {
+message IoK8sApiExtensionsV1beta1ScaleStatus {
     // actual number of observed instances of the scaled object.
     int32 replicas = 1;
 
@@ -17704,7 +17704,7 @@ message Io_K8s_Api_Extensions_V1beta1_ScaleStatus {
     string targetSelector = 3;
 }
 
-message Io_K8s_Api_Extensions_V1beta1_SupplementalGroupsStrategyOptions {
+message IoK8sApiExtensionsV1beta1SupplementalGroupsStrategyOptions {
     // Ranges are the allowed ranges of supplemental groups.  If you would like to force a single supplemental group then supply a single range with the same start and end.
     repeated Io_K8s_Api_Extensions_V1beta1_IDRange ranges = 1;
 
@@ -17712,7 +17712,7 @@ message Io_K8s_Api_Extensions_V1beta1_SupplementalGroupsStrategyOptions {
     string rule = 2;
 }
 
-message Io_K8s_Api_Networking_V1_IPBlock {
+message IoK8sApiNetworkingV1IPBlock {
     // CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24"
     string cidr = 1;
 
@@ -17720,7 +17720,7 @@ message Io_K8s_Api_Networking_V1_IPBlock {
     repeated string except = 2;
 }
 
-message Io_K8s_Api_Networking_V1_NetworkPolicy {
+message IoK8sApiNetworkingV1NetworkPolicy {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17734,7 +17734,7 @@ message Io_K8s_Api_Networking_V1_NetworkPolicy {
     Io_K8s_Api_Networking_V1_NetworkPolicySpec spec = 4;
 }
 
-message Io_K8s_Api_Networking_V1_NetworkPolicyEgressRule {
+message IoK8sApiNetworkingV1NetworkPolicyEgressRule {
     // List of destination ports for outgoing traffic. Each item in this list is combined using a logical OR. If this field is empty or missing, this rule matches all ports (traffic not restricted by port). If this field is present and contains at least one item, then this rule allows traffic only if the traffic matches at least one port in the list.
     repeated Io_K8s_Api_Networking_V1_NetworkPolicyPort ports = 1;
 
@@ -17742,7 +17742,7 @@ message Io_K8s_Api_Networking_V1_NetworkPolicyEgressRule {
     repeated Io_K8s_Api_Networking_V1_NetworkPolicyPeer to = 2;
 }
 
-message Io_K8s_Api_Networking_V1_NetworkPolicyIngressRule {
+message IoK8sApiNetworkingV1NetworkPolicyIngressRule {
     // List of sources which should be able to access the pods selected for this rule. Items in this list are combined using a logical OR operation. If this field is empty or missing, this rule matches all sources (traffic not restricted by source). If this field is present and contains at least on item, this rule allows traffic only if the traffic matches at least one item in the from list.
     repeated Io_K8s_Api_Networking_V1_NetworkPolicyPeer from = 1;
 
@@ -17750,7 +17750,7 @@ message Io_K8s_Api_Networking_V1_NetworkPolicyIngressRule {
     repeated Io_K8s_Api_Networking_V1_NetworkPolicyPort ports = 2;
 }
 
-message Io_K8s_Api_Networking_V1_NetworkPolicyList {
+message IoK8sApiNetworkingV1NetworkPolicyList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17764,7 +17764,7 @@ message Io_K8s_Api_Networking_V1_NetworkPolicyList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Networking_V1_NetworkPolicyPeer {
+message IoK8sApiNetworkingV1NetworkPolicyPeer {
     // IPBlock defines policy on a particular IPBlock
     Io_K8s_Api_Networking_V1_IPBlock ipBlock = 1;
 
@@ -17775,7 +17775,7 @@ message Io_K8s_Api_Networking_V1_NetworkPolicyPeer {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelector podSelector = 3;
 }
 
-message Io_K8s_Api_Networking_V1_NetworkPolicyPort {
+message IoK8sApiNetworkingV1NetworkPolicyPort {
     // The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers.
     string port = 1;
 
@@ -17783,7 +17783,7 @@ message Io_K8s_Api_Networking_V1_NetworkPolicyPort {
     string protocol = 2;
 }
 
-message Io_K8s_Api_Networking_V1_NetworkPolicySpec {
+message IoK8sApiNetworkingV1NetworkPolicySpec {
     // List of egress rules to be applied to the selected pods. Outgoing traffic is allowed if there are no NetworkPolicies selecting the pod (and cluster policy otherwise allows the traffic), OR if the traffic matches at least one egress rule across all of the NetworkPolicy objects whose podSelector matches the pod. If this field is empty then this NetworkPolicy limits all outgoing traffic (and serves solely to ensure that the pods it selects are isolated by default). This field is beta-level in 1.8
     repeated Io_K8s_Api_Networking_V1_NetworkPolicyEgressRule egress = 1;
 
@@ -17797,7 +17797,7 @@ message Io_K8s_Api_Networking_V1_NetworkPolicySpec {
     repeated string policyTypes = 4;
 }
 
-message Io_K8s_Api_Policy_V1beta1_Eviction {
+message IoK8sApiPolicyV1beta1Eviction {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17811,7 +17811,7 @@ message Io_K8s_Api_Policy_V1beta1_Eviction {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ObjectMeta metadata = 4;
 }
 
-message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudget {
+message IoK8sApiPolicyV1beta1PodDisruptionBudget {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17826,7 +17826,7 @@ message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudget {
     Io_K8s_Api_Policy_V1beta1_PodDisruptionBudgetStatus status = 5;
 }
 
-message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudgetList {
+message IoK8sApiPolicyV1beta1PodDisruptionBudgetList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
     repeated Io_K8s_Api_Policy_V1beta1_PodDisruptionBudget items = 2;
@@ -17836,7 +17836,7 @@ message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudgetList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudgetSpec {
+message IoK8sApiPolicyV1beta1PodDisruptionBudgetSpec {
     // An eviction is allowed if at most "maxUnavailable" pods selected by "selector" are unavailable after the eviction, i.e. even in absence of the evicted pod. For example, one can prevent all voluntary evictions by specifying 0. This is a mutually exclusive setting with "minAvailable".
     string maxUnavailable = 1;
 
@@ -17847,7 +17847,7 @@ message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudgetSpec {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelector selector = 3;
 }
 
-message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudgetStatus {
+message IoK8sApiPolicyV1beta1PodDisruptionBudgetStatus {
     // current number of healthy pods
     int32 currentHealthy = 1;
 
@@ -17867,7 +17867,7 @@ message Io_K8s_Api_Policy_V1beta1_PodDisruptionBudgetStatus {
     int64 observedGeneration = 6;
 }
 
-message Io_K8s_Api_Rbac_V1_ClusterRole {
+message IoK8sApiRbacV1ClusterRole {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17881,7 +17881,7 @@ message Io_K8s_Api_Rbac_V1_ClusterRole {
     repeated Io_K8s_Api_Rbac_V1_PolicyRule rules = 4;
 }
 
-message Io_K8s_Api_Rbac_V1_ClusterRoleBinding {
+message IoK8sApiRbacV1ClusterRoleBinding {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17898,7 +17898,7 @@ message Io_K8s_Api_Rbac_V1_ClusterRoleBinding {
     repeated Io_K8s_Api_Rbac_V1_Subject subjects = 5;
 }
 
-message Io_K8s_Api_Rbac_V1_ClusterRoleBindingList {
+message IoK8sApiRbacV1ClusterRoleBindingList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17912,7 +17912,7 @@ message Io_K8s_Api_Rbac_V1_ClusterRoleBindingList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1_ClusterRoleList {
+message IoK8sApiRbacV1ClusterRoleList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17926,7 +17926,7 @@ message Io_K8s_Api_Rbac_V1_ClusterRoleList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1_PolicyRule {
+message IoK8sApiRbacV1PolicyRule {
     // APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed.
     repeated string apiGroups = 1;
 
@@ -17943,7 +17943,7 @@ message Io_K8s_Api_Rbac_V1_PolicyRule {
     repeated string verbs = 5;
 }
 
-message Io_K8s_Api_Rbac_V1_Role {
+message IoK8sApiRbacV1Role {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17957,7 +17957,7 @@ message Io_K8s_Api_Rbac_V1_Role {
     repeated Io_K8s_Api_Rbac_V1_PolicyRule rules = 4;
 }
 
-message Io_K8s_Api_Rbac_V1_RoleBinding {
+message IoK8sApiRbacV1RoleBinding {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17974,7 +17974,7 @@ message Io_K8s_Api_Rbac_V1_RoleBinding {
     repeated Io_K8s_Api_Rbac_V1_Subject subjects = 5;
 }
 
-message Io_K8s_Api_Rbac_V1_RoleBindingList {
+message IoK8sApiRbacV1RoleBindingList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -17988,7 +17988,7 @@ message Io_K8s_Api_Rbac_V1_RoleBindingList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1_RoleList {
+message IoK8sApiRbacV1RoleList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18002,7 +18002,7 @@ message Io_K8s_Api_Rbac_V1_RoleList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1_RoleRef {
+message IoK8sApiRbacV1RoleRef {
     // APIGroup is the group for the resource being referenced
     string apiGroup = 1;
 
@@ -18013,7 +18013,7 @@ message Io_K8s_Api_Rbac_V1_RoleRef {
     string name = 3;
 }
 
-message Io_K8s_Api_Rbac_V1_Subject {
+message IoK8sApiRbacV1Subject {
     // APIGroup holds the API group of the referenced subject. Defaults to "" for ServiceAccount subjects. Defaults to "rbac.authorization.k8s.io" for User and Group subjects.
     string apiGroup = 1;
 
@@ -18027,7 +18027,7 @@ message Io_K8s_Api_Rbac_V1_Subject {
     string namespace = 4;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_ClusterRole {
+message IoK8sApiRbacV1beta1ClusterRole {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18041,7 +18041,7 @@ message Io_K8s_Api_Rbac_V1beta1_ClusterRole {
     repeated Io_K8s_Api_Rbac_V1beta1_PolicyRule rules = 4;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_ClusterRoleBinding {
+message IoK8sApiRbacV1beta1ClusterRoleBinding {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18058,7 +18058,7 @@ message Io_K8s_Api_Rbac_V1beta1_ClusterRoleBinding {
     repeated Io_K8s_Api_Rbac_V1beta1_Subject subjects = 5;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_ClusterRoleBindingList {
+message IoK8sApiRbacV1beta1ClusterRoleBindingList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18072,7 +18072,7 @@ message Io_K8s_Api_Rbac_V1beta1_ClusterRoleBindingList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_ClusterRoleList {
+message IoK8sApiRbacV1beta1ClusterRoleList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18086,7 +18086,7 @@ message Io_K8s_Api_Rbac_V1beta1_ClusterRoleList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_PolicyRule {
+message IoK8sApiRbacV1beta1PolicyRule {
     // APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed.
     repeated string apiGroups = 1;
 
@@ -18103,7 +18103,7 @@ message Io_K8s_Api_Rbac_V1beta1_PolicyRule {
     repeated string verbs = 5;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_Role {
+message IoK8sApiRbacV1beta1Role {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18117,7 +18117,7 @@ message Io_K8s_Api_Rbac_V1beta1_Role {
     repeated Io_K8s_Api_Rbac_V1beta1_PolicyRule rules = 4;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_RoleBinding {
+message IoK8sApiRbacV1beta1RoleBinding {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18134,7 +18134,7 @@ message Io_K8s_Api_Rbac_V1beta1_RoleBinding {
     repeated Io_K8s_Api_Rbac_V1beta1_Subject subjects = 5;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_RoleBindingList {
+message IoK8sApiRbacV1beta1RoleBindingList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18148,7 +18148,7 @@ message Io_K8s_Api_Rbac_V1beta1_RoleBindingList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_RoleList {
+message IoK8sApiRbacV1beta1RoleList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18162,7 +18162,7 @@ message Io_K8s_Api_Rbac_V1beta1_RoleList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_RoleRef {
+message IoK8sApiRbacV1beta1RoleRef {
     // APIGroup is the group for the resource being referenced
     string apiGroup = 1;
 
@@ -18173,7 +18173,7 @@ message Io_K8s_Api_Rbac_V1beta1_RoleRef {
     string name = 3;
 }
 
-message Io_K8s_Api_Rbac_V1beta1_Subject {
+message IoK8sApiRbacV1beta1Subject {
     // APIGroup holds the API group of the referenced subject. Defaults to "" for ServiceAccount subjects. Defaults to "rbac.authorization.k8s.io" for User and Group subjects.
     string apiGroup = 1;
 
@@ -18187,7 +18187,7 @@ message Io_K8s_Api_Rbac_V1beta1_Subject {
     string namespace = 4;
 }
 
-message Io_K8s_Api_Storage_V1_StorageClass {
+message IoK8sApiStorageV1StorageClass {
     // AllowVolumeExpansion shows whether the storage class allow volume expand
     bool allowVolumeExpansion = 1;
 
@@ -18213,7 +18213,7 @@ message Io_K8s_Api_Storage_V1_StorageClass {
     string reclaimPolicy = 8;
 }
 
-message Io_K8s_Api_Storage_V1_StorageClassList {
+message IoK8sApiStorageV1StorageClassList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18227,7 +18227,7 @@ message Io_K8s_Api_Storage_V1_StorageClassList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Api_Storage_V1beta1_StorageClass {
+message IoK8sApiStorageV1beta1StorageClass {
     // AllowVolumeExpansion shows whether the storage class allow volume expand
     bool allowVolumeExpansion = 1;
 
@@ -18253,7 +18253,7 @@ message Io_K8s_Api_Storage_V1beta1_StorageClass {
     string reclaimPolicy = 8;
 }
 
-message Io_K8s_Api_Storage_V1beta1_StorageClassList {
+message IoK8sApiStorageV1beta1StorageClassList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18267,7 +18267,7 @@ message Io_K8s_Api_Storage_V1beta1_StorageClassList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinition {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1CustomResourceDefinition {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18282,7 +18282,7 @@ message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomReso
     Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionStatus status = 5;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionCondition {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1CustomResourceDefinitionCondition {
     // Last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -18299,7 +18299,7 @@ message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomReso
     string type = 5;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionList {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1CustomResourceDefinitionList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18311,7 +18311,7 @@ message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomReso
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionNames {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1CustomResourceDefinitionNames {
     // Kind is the serialized kind of the resource.  It is normally CamelCase and singular.
     string kind = 1;
 
@@ -18328,7 +18328,7 @@ message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomReso
     string singular = 5;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionSpec {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1CustomResourceDefinitionSpec {
     // Group is the group this resource belongs in
     string group = 1;
 
@@ -18345,7 +18345,7 @@ message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomReso
     string version = 5;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionStatus {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1CustomResourceDefinitionStatus {
     // AcceptedNames are the names that are actually being used to serve discovery They may be different than the names in spec.
     Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionNames acceptedNames = 1;
 
@@ -18353,21 +18353,21 @@ message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomReso
     repeated Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceDefinitionCondition conditions = 2;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_CustomResourceValidation {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1CustomResourceValidation {
     // OpenAPIV3Schema is the OpenAPI v3 schema to be validated against.
     Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaProps openAPIV3Schema = 1;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_ExternalDocumentation {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1ExternalDocumentation {
     string description = 1;
     string url = 2;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSON {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1JSON {
     bytes Raw = 1;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaProps {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1JSONSchemaProps {
     string _ref = 1;
     string _schema = 2;
     Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaPropsOrBool additionalItems = 3;
@@ -18404,22 +18404,22 @@ message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchema
     bool uniqueItems = 34;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaPropsOrArray {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1JSONSchemaPropsOrArray {
     repeated Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaProps JSONSchemas = 1;
     Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaProps Schema = 2;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaPropsOrBool {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1JSONSchemaPropsOrBool {
     bool Allows = 1;
     Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaProps Schema = 2;
 }
 
-message Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaPropsOrStringArray {
+message IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1JSONSchemaPropsOrStringArray {
     repeated string Property = 1;
     Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1_JSONSchemaProps Schema = 2;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIGroup {
+message IoK8sApimachineryPkgApisMetaV1APIGroup {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18439,7 +18439,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIGroup {
     repeated Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_GroupVersionForDiscovery versions = 6;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIGroupList {
+message IoK8sApimachineryPkgApisMetaV1APIGroupList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18450,7 +18450,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIGroupList {
     string kind = 3;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIResource {
+message IoK8sApimachineryPkgApisMetaV1APIResource {
     // categories is a list of the grouped resources this resource belongs to (e.g. 'all')
     repeated string categories = 1;
 
@@ -18479,7 +18479,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIResource {
     string version = 9;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIResourceList {
+message IoK8sApimachineryPkgApisMetaV1APIResourceList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18493,7 +18493,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIResourceList {
     repeated Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIResource resources = 4;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIVersions {
+message IoK8sApimachineryPkgApisMetaV1APIVersions {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18507,7 +18507,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_APIVersions {
     repeated string versions = 4;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_DeleteOptions {
+message IoK8sApimachineryPkgApisMetaV1DeleteOptions {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18527,7 +18527,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_DeleteOptions {
     string propagationPolicy = 6;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_GroupVersionForDiscovery {
+message IoK8sApimachineryPkgApisMetaV1GroupVersionForDiscovery {
     // groupVersion specifies the API group and version in the form "group/version"
     string groupVersion = 1;
 
@@ -18535,12 +18535,12 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_GroupVersionForDiscovery {
     string version = 2;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Initializer {
+message IoK8sApimachineryPkgApisMetaV1Initializer {
     // name of the process that is responsible for initializing this object.
     string name = 1;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Initializers {
+message IoK8sApimachineryPkgApisMetaV1Initializers {
     // Pending is a list of initializers that must execute in order before this object is visible. When the last pending initializer is removed, and no failing result is set, the initializers struct will be set to nil and the object is considered as initialized and visible to all clients.
     repeated Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Initializer pending = 1;
 
@@ -18548,7 +18548,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Initializers {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Status result = 2;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelector {
+message IoK8sApimachineryPkgApisMetaV1LabelSelector {
     // matchExpressions is a list of label selector requirements. The requirements are ANDed.
     repeated Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelectorRequirement matchExpressions = 1;
 
@@ -18556,7 +18556,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelector {
     map<string, string> matchLabels = 2;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelectorRequirement {
+message IoK8sApimachineryPkgApisMetaV1LabelSelectorRequirement {
     // key is the label key that the selector applies to.
     string key = 1;
 
@@ -18567,7 +18567,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_LabelSelectorRequirement {
     repeated string values = 3;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta {
+message IoK8sApimachineryPkgApisMetaV1ListMeta {
     // continue may be set if the user set a limit on the number of items returned, and indicates that the server has more data available. The value is opaque and may be used to issue another request to the endpoint that served this list to retrieve the next set of available objects. Continuing a list may not be possible if the server configuration has changed or more than a few minutes have passed. The resourceVersion field returned when using this continue value will be identical to the value in the first response.
     string continue = 1;
 
@@ -18578,7 +18578,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta {
     string selfLink = 3;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ObjectMeta {
+message IoK8sApimachineryPkgApisMetaV1ObjectMeta {
     // Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations
     map<string, string> annotations = 1;
 
@@ -18644,7 +18644,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ObjectMeta {
     string uid = 16;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_OwnerReference {
+message IoK8sApimachineryPkgApisMetaV1OwnerReference {
     // API version of the referent.
     string apiVersion = 1;
 
@@ -18664,15 +18664,15 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_OwnerReference {
     string uid = 6;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Patch {
+message IoK8sApimachineryPkgApisMetaV1Patch {
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Preconditions {
+message IoK8sApimachineryPkgApisMetaV1Preconditions {
     // Specifies the target UID.
     string uid = 1;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ServerAddressByClientCIDR {
+message IoK8sApimachineryPkgApisMetaV1ServerAddressByClientCIDR {
     // The CIDR with which clients can match their IP to figure out the server address that they should use.
     string clientCIDR = 1;
 
@@ -18680,7 +18680,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ServerAddressByClientCIDR {
     string serverAddress = 2;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Status {
+message IoK8sApimachineryPkgApisMetaV1Status {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18706,7 +18706,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_Status {
     string status = 8;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_StatusCause {
+message IoK8sApimachineryPkgApisMetaV1StatusCause {
     // The field of the resource that has caused this error, as named by its JSON serialization. May include dot and postfix notation for nested attributes. Arrays are zero-indexed.  Fields may appear more than once in an array of causes due to fields having multiple errors. Optional.
     // 
     // Examples:
@@ -18721,7 +18721,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_StatusCause {
     string reason = 3;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_StatusDetails {
+message IoK8sApimachineryPkgApisMetaV1StatusDetails {
     // The Causes array includes more details associated with the StatusReason failure. Not all StatusReasons may provide detailed causes.
     repeated Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_StatusCause causes = 1;
 
@@ -18741,7 +18741,7 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_StatusDetails {
     string uid = 6;
 }
 
-message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_WatchEvent {
+message IoK8sApimachineryPkgApisMetaV1WatchEvent {
     // Object is:
     //  * If Type is Added or Modified: the new state of the object.
     //  * If Type is Deleted: the state of the object immediately before deletion.
@@ -18751,12 +18751,12 @@ message Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_WatchEvent {
     string type = 2;
 }
 
-message Io_K8s_Apimachinery_Pkg_Runtime_RawExtension {
+message IoK8sApimachineryPkgRuntimeRawExtension {
     // Raw is the underlying serialization of this object.
     bytes Raw = 1;
 }
 
-message Io_K8s_Apimachinery_Pkg_Version_Info {
+message IoK8sApimachineryPkgVersionInfo {
     string buildDate = 1;
     string compiler = 2;
     string gitCommit = 3;
@@ -18768,7 +18768,7 @@ message Io_K8s_Apimachinery_Pkg_Version_Info {
     string platform = 9;
 }
 
-message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIService {
+message IoK8sKubeAggregatorPkgApisApiregistrationV1beta1APIService {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
 
@@ -18783,7 +18783,7 @@ message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIService {
     Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceStatus status = 5;
 }
 
-message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceCondition {
+message IoK8sKubeAggregatorPkgApisApiregistrationV1beta1APIServiceCondition {
     // Last time the condition transitioned from one status to another.
     string lastTransitionTime = 1;
 
@@ -18800,7 +18800,7 @@ message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceCondit
     string type = 5;
 }
 
-message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceList {
+message IoK8sKubeAggregatorPkgApisApiregistrationV1beta1APIServiceList {
     // APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
     string apiVersion = 1;
     repeated Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIService items = 2;
@@ -18810,7 +18810,7 @@ message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceList {
     Io_K8s_Apimachinery_Pkg_Apis_Meta_V1_ListMeta metadata = 4;
 }
 
-message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceSpec {
+message IoK8sKubeAggregatorPkgApisApiregistrationV1beta1APIServiceSpec {
     // CABundle is a PEM encoded CA bundle which will be used to validate an API server's serving certificate.
     bytes caBundle = 1;
 
@@ -18833,12 +18833,12 @@ message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceSpec {
     int32 versionPriority = 7;
 }
 
-message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceStatus {
+message IoK8sKubeAggregatorPkgApisApiregistrationV1beta1APIServiceStatus {
     // Current service state of apiService.
     repeated Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_APIServiceCondition conditions = 1;
 }
 
-message Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1_ServiceReference {
+message IoK8sKubeAggregatorPkgApisApiregistrationV1beta1ServiceReference {
     // Name is the name of the service
     string name = 1;
 
