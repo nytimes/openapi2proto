@@ -18848,151 +18848,151 @@ message IoK8sKubeAggregatorPkgApisApiregistrationV1beta1ServiceReference {
 
 service KubernetesService {
     // get available API versions
-    rpc GetCoreAPIVersions(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetCoreAPIVersions(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetCoreV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetCoreV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list objects of kind ComponentStatus
-    rpc ListCoreV1ComponentStatus(ListCoreV1ComponentStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1ComponentStatus(ListCoreV1ComponentStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // read the specified ComponentStatus
-    rpc ReadCoreV1ComponentStatus(ReadCoreV1ComponentStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1ComponentStatus(ReadCoreV1ComponentStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind ConfigMap
-    rpc ListCoreV1ConfigMapForAllNamespaces(ListCoreV1ConfigMapForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1ConfigMapForAllNamespaces(ListCoreV1ConfigMapForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Endpoints
-    rpc ListCoreV1EndpointsForAllNamespaces(ListCoreV1EndpointsForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1EndpointsForAllNamespaces(ListCoreV1EndpointsForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Event
-    rpc ListCoreV1EventForAllNamespaces(ListCoreV1EventForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1EventForAllNamespaces(ListCoreV1EventForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind LimitRange
-    rpc ListCoreV1LimitRangeForAllNamespaces(ListCoreV1LimitRangeForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1LimitRangeForAllNamespaces(ListCoreV1LimitRangeForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Namespace
-    rpc ListCoreV1Namespace(ListCoreV1NamespaceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1Namespace(ListCoreV1NamespaceRequest) returns (IoK8sApiCoreV1) {}
 
     // create a Namespace
-    rpc CreateCoreV1Namespace(CreateCoreV1NamespaceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1Namespace(CreateCoreV1NamespaceRequest) returns (IoK8sApiCoreV1) {}
 
     // create a Binding
-    rpc CreateCoreV1NamespacedBinding(CreateCoreV1NamespacedBindingRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedBinding(CreateCoreV1NamespacedBindingRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind ConfigMap
-    rpc ListCoreV1NamespacedConfigMap(ListCoreV1NamespacedConfigMapRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedConfigMap(ListCoreV1NamespacedConfigMapRequest) returns (IoK8sApiCoreV1) {}
 
     // create a ConfigMap
-    rpc CreateCoreV1NamespacedConfigMap(CreateCoreV1NamespacedConfigMapRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedConfigMap(CreateCoreV1NamespacedConfigMapRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of ConfigMap
-    rpc DeleteCoreV1CollectionNamespacedConfigMap(DeleteCoreV1CollectionNamespacedConfigMapRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedConfigMap(DeleteCoreV1CollectionNamespacedConfigMapRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ConfigMap
-    rpc ReadCoreV1NamespacedConfigMap(ReadCoreV1NamespacedConfigMapRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedConfigMap(ReadCoreV1NamespacedConfigMapRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified ConfigMap
-    rpc ReplaceCoreV1NamespacedConfigMap(ReplaceCoreV1NamespacedConfigMapRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedConfigMap(ReplaceCoreV1NamespacedConfigMapRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a ConfigMap
-    rpc DeleteCoreV1NamespacedConfigMap(DeleteCoreV1NamespacedConfigMapRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedConfigMap(DeleteCoreV1NamespacedConfigMapRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind Endpoints
-    rpc ListCoreV1NamespacedEndpoints(ListCoreV1NamespacedEndpointsRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedEndpoints(ListCoreV1NamespacedEndpointsRequest) returns (IoK8sApiCoreV1) {}
 
     // create Endpoints
-    rpc CreateCoreV1NamespacedEndpoints(CreateCoreV1NamespacedEndpointsRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedEndpoints(CreateCoreV1NamespacedEndpointsRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of Endpoints
-    rpc DeleteCoreV1CollectionNamespacedEndpoints(DeleteCoreV1CollectionNamespacedEndpointsRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedEndpoints(DeleteCoreV1CollectionNamespacedEndpointsRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Endpoints
-    rpc ReadCoreV1NamespacedEndpoints(ReadCoreV1NamespacedEndpointsRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedEndpoints(ReadCoreV1NamespacedEndpointsRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified Endpoints
-    rpc ReplaceCoreV1NamespacedEndpoints(ReplaceCoreV1NamespacedEndpointsRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedEndpoints(ReplaceCoreV1NamespacedEndpointsRequest) returns (IoK8sApiCoreV1) {}
 
     // delete Endpoints
-    rpc DeleteCoreV1NamespacedEndpoints(DeleteCoreV1NamespacedEndpointsRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedEndpoints(DeleteCoreV1NamespacedEndpointsRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind Event
-    rpc ListCoreV1NamespacedEvent(ListCoreV1NamespacedEventRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedEvent(ListCoreV1NamespacedEventRequest) returns (IoK8sApiCoreV1) {}
 
     // create an Event
-    rpc CreateCoreV1NamespacedEvent(CreateCoreV1NamespacedEventRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedEvent(CreateCoreV1NamespacedEventRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of Event
-    rpc DeleteCoreV1CollectionNamespacedEvent(DeleteCoreV1CollectionNamespacedEventRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedEvent(DeleteCoreV1CollectionNamespacedEventRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Event
-    rpc ReadCoreV1NamespacedEvent(ReadCoreV1NamespacedEventRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedEvent(ReadCoreV1NamespacedEventRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified Event
-    rpc ReplaceCoreV1NamespacedEvent(ReplaceCoreV1NamespacedEventRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedEvent(ReplaceCoreV1NamespacedEventRequest) returns (IoK8sApiCoreV1) {}
 
     // delete an Event
-    rpc DeleteCoreV1NamespacedEvent(DeleteCoreV1NamespacedEventRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedEvent(DeleteCoreV1NamespacedEventRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind LimitRange
-    rpc ListCoreV1NamespacedLimitRange(ListCoreV1NamespacedLimitRangeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedLimitRange(ListCoreV1NamespacedLimitRangeRequest) returns (IoK8sApiCoreV1) {}
 
     // create a LimitRange
-    rpc CreateCoreV1NamespacedLimitRange(CreateCoreV1NamespacedLimitRangeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedLimitRange(CreateCoreV1NamespacedLimitRangeRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of LimitRange
-    rpc DeleteCoreV1CollectionNamespacedLimitRange(DeleteCoreV1CollectionNamespacedLimitRangeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedLimitRange(DeleteCoreV1CollectionNamespacedLimitRangeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified LimitRange
-    rpc ReadCoreV1NamespacedLimitRange(ReadCoreV1NamespacedLimitRangeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedLimitRange(ReadCoreV1NamespacedLimitRangeRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified LimitRange
-    rpc ReplaceCoreV1NamespacedLimitRange(ReplaceCoreV1NamespacedLimitRangeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedLimitRange(ReplaceCoreV1NamespacedLimitRangeRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a LimitRange
-    rpc DeleteCoreV1NamespacedLimitRange(DeleteCoreV1NamespacedLimitRangeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedLimitRange(DeleteCoreV1NamespacedLimitRangeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind PersistentVolumeClaim
-    rpc ListCoreV1NamespacedPersistentVolumeClaim(ListCoreV1NamespacedPersistentVolumeClaimRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedPersistentVolumeClaim(ListCoreV1NamespacedPersistentVolumeClaimRequest) returns (IoK8sApiCoreV1) {}
 
     // create a PersistentVolumeClaim
-    rpc CreateCoreV1NamespacedPersistentVolumeClaim(CreateCoreV1NamespacedPersistentVolumeClaimRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedPersistentVolumeClaim(CreateCoreV1NamespacedPersistentVolumeClaimRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of PersistentVolumeClaim
-    rpc DeleteCoreV1CollectionNamespacedPersistentVolumeClaim(DeleteCoreV1CollectionNamespacedPersistentVolumeClaimRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedPersistentVolumeClaim(DeleteCoreV1CollectionNamespacedPersistentVolumeClaimRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified PersistentVolumeClaim
-    rpc ReadCoreV1NamespacedPersistentVolumeClaim(ReadCoreV1NamespacedPersistentVolumeClaimRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedPersistentVolumeClaim(ReadCoreV1NamespacedPersistentVolumeClaimRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified PersistentVolumeClaim
-    rpc ReplaceCoreV1NamespacedPersistentVolumeClaim(ReplaceCoreV1NamespacedPersistentVolumeClaimRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedPersistentVolumeClaim(ReplaceCoreV1NamespacedPersistentVolumeClaimRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a PersistentVolumeClaim
-    rpc DeleteCoreV1NamespacedPersistentVolumeClaim(DeleteCoreV1NamespacedPersistentVolumeClaimRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedPersistentVolumeClaim(DeleteCoreV1NamespacedPersistentVolumeClaimRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified PersistentVolumeClaim
-    rpc ReadCoreV1NamespacedPersistentVolumeClaimStatus(ReadCoreV1NamespacedPersistentVolumeClaimStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedPersistentVolumeClaimStatus(ReadCoreV1NamespacedPersistentVolumeClaimStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified PersistentVolumeClaim
-    rpc ReplaceCoreV1NamespacedPersistentVolumeClaimStatus(ReplaceCoreV1NamespacedPersistentVolumeClaimStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedPersistentVolumeClaimStatus(ReplaceCoreV1NamespacedPersistentVolumeClaimStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Pod
-    rpc ListCoreV1NamespacedPod(ListCoreV1NamespacedPodRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedPod(ListCoreV1NamespacedPodRequest) returns (IoK8sApiCoreV1) {}
 
     // create a Pod
-    rpc CreateCoreV1NamespacedPod(CreateCoreV1NamespacedPodRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedPod(CreateCoreV1NamespacedPodRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of Pod
-    rpc DeleteCoreV1CollectionNamespacedPod(DeleteCoreV1CollectionNamespacedPodRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedPod(DeleteCoreV1CollectionNamespacedPodRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Pod
-    rpc ReadCoreV1NamespacedPod(ReadCoreV1NamespacedPodRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedPod(ReadCoreV1NamespacedPodRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified Pod
-    rpc ReplaceCoreV1NamespacedPod(ReplaceCoreV1NamespacedPodRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedPod(ReplaceCoreV1NamespacedPodRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a Pod
-    rpc DeleteCoreV1NamespacedPod(DeleteCoreV1NamespacedPodRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedPod(DeleteCoreV1NamespacedPodRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // connect GET requests to attach of Pod
     rpc ConnectCoreV1GetNamespacedPodAttach(ConnectCoreV1GetNamespacedPodAttachRequest) returns (google.protobuf.Empty) {}
@@ -19001,10 +19001,10 @@ service KubernetesService {
     rpc ConnectCoreV1PostNamespacedPodAttach(ConnectCoreV1PostNamespacedPodAttachRequest) returns (google.protobuf.Empty) {}
 
     // create binding of a Pod
-    rpc CreateCoreV1NamespacedPodBinding(CreateCoreV1NamespacedPodBindingRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedPodBinding(CreateCoreV1NamespacedPodBindingRequest) returns (IoK8sApiCoreV1) {}
 
     // create eviction of a Pod
-    rpc CreateCoreV1NamespacedPodEviction(CreateCoreV1NamespacedPodEvictionRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc CreateCoreV1NamespacedPodEviction(CreateCoreV1NamespacedPodEvictionRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // connect GET requests to exec of Pod
     rpc ConnectCoreV1GetNamespacedPodExec(ConnectCoreV1GetNamespacedPodExecRequest) returns (google.protobuf.Empty) {}
@@ -19046,133 +19046,133 @@ service KubernetesService {
     rpc ConnectCoreV1DeleteNamespacedPodProxyWithPath(ConnectCoreV1DeleteNamespacedPodProxyWithPathRequest) returns (google.protobuf.Empty) {}
 
     // read status of the specified Pod
-    rpc ReadCoreV1NamespacedPodStatus(ReadCoreV1NamespacedPodStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedPodStatus(ReadCoreV1NamespacedPodStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified Pod
-    rpc ReplaceCoreV1NamespacedPodStatus(ReplaceCoreV1NamespacedPodStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedPodStatus(ReplaceCoreV1NamespacedPodStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind PodTemplate
-    rpc ListCoreV1NamespacedPodTemplate(ListCoreV1NamespacedPodTemplateRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedPodTemplate(ListCoreV1NamespacedPodTemplateRequest) returns (IoK8sApiCoreV1) {}
 
     // create a PodTemplate
-    rpc CreateCoreV1NamespacedPodTemplate(CreateCoreV1NamespacedPodTemplateRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedPodTemplate(CreateCoreV1NamespacedPodTemplateRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of PodTemplate
-    rpc DeleteCoreV1CollectionNamespacedPodTemplate(DeleteCoreV1CollectionNamespacedPodTemplateRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedPodTemplate(DeleteCoreV1CollectionNamespacedPodTemplateRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified PodTemplate
-    rpc ReadCoreV1NamespacedPodTemplate(ReadCoreV1NamespacedPodTemplateRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedPodTemplate(ReadCoreV1NamespacedPodTemplateRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified PodTemplate
-    rpc ReplaceCoreV1NamespacedPodTemplate(ReplaceCoreV1NamespacedPodTemplateRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedPodTemplate(ReplaceCoreV1NamespacedPodTemplateRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a PodTemplate
-    rpc DeleteCoreV1NamespacedPodTemplate(DeleteCoreV1NamespacedPodTemplateRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedPodTemplate(DeleteCoreV1NamespacedPodTemplateRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ReplicationController
-    rpc ListCoreV1NamespacedReplicationController(ListCoreV1NamespacedReplicationControllerRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedReplicationController(ListCoreV1NamespacedReplicationControllerRequest) returns (IoK8sApiCoreV1) {}
 
     // create a ReplicationController
-    rpc CreateCoreV1NamespacedReplicationController(CreateCoreV1NamespacedReplicationControllerRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedReplicationController(CreateCoreV1NamespacedReplicationControllerRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of ReplicationController
-    rpc DeleteCoreV1CollectionNamespacedReplicationController(DeleteCoreV1CollectionNamespacedReplicationControllerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedReplicationController(DeleteCoreV1CollectionNamespacedReplicationControllerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ReplicationController
-    rpc ReadCoreV1NamespacedReplicationController(ReadCoreV1NamespacedReplicationControllerRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedReplicationController(ReadCoreV1NamespacedReplicationControllerRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified ReplicationController
-    rpc ReplaceCoreV1NamespacedReplicationController(ReplaceCoreV1NamespacedReplicationControllerRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedReplicationController(ReplaceCoreV1NamespacedReplicationControllerRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a ReplicationController
-    rpc DeleteCoreV1NamespacedReplicationController(DeleteCoreV1NamespacedReplicationControllerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedReplicationController(DeleteCoreV1NamespacedReplicationControllerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read scale of the specified ReplicationController
-    rpc ReadCoreV1NamespacedReplicationControllerScale(ReadCoreV1NamespacedReplicationControllerScaleRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ReadCoreV1NamespacedReplicationControllerScale(ReadCoreV1NamespacedReplicationControllerScaleRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // replace scale of the specified ReplicationController
-    rpc ReplaceCoreV1NamespacedReplicationControllerScale(ReplaceCoreV1NamespacedReplicationControllerScaleRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ReplaceCoreV1NamespacedReplicationControllerScale(ReplaceCoreV1NamespacedReplicationControllerScaleRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // read status of the specified ReplicationController
-    rpc ReadCoreV1NamespacedReplicationControllerStatus(ReadCoreV1NamespacedReplicationControllerStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedReplicationControllerStatus(ReadCoreV1NamespacedReplicationControllerStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified ReplicationController
-    rpc ReplaceCoreV1NamespacedReplicationControllerStatus(ReplaceCoreV1NamespacedReplicationControllerStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedReplicationControllerStatus(ReplaceCoreV1NamespacedReplicationControllerStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind ResourceQuota
-    rpc ListCoreV1NamespacedResourceQuota(ListCoreV1NamespacedResourceQuotaRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedResourceQuota(ListCoreV1NamespacedResourceQuotaRequest) returns (IoK8sApiCoreV1) {}
 
     // create a ResourceQuota
-    rpc CreateCoreV1NamespacedResourceQuota(CreateCoreV1NamespacedResourceQuotaRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedResourceQuota(CreateCoreV1NamespacedResourceQuotaRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of ResourceQuota
-    rpc DeleteCoreV1CollectionNamespacedResourceQuota(DeleteCoreV1CollectionNamespacedResourceQuotaRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedResourceQuota(DeleteCoreV1CollectionNamespacedResourceQuotaRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ResourceQuota
-    rpc ReadCoreV1NamespacedResourceQuota(ReadCoreV1NamespacedResourceQuotaRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedResourceQuota(ReadCoreV1NamespacedResourceQuotaRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified ResourceQuota
-    rpc ReplaceCoreV1NamespacedResourceQuota(ReplaceCoreV1NamespacedResourceQuotaRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedResourceQuota(ReplaceCoreV1NamespacedResourceQuotaRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a ResourceQuota
-    rpc DeleteCoreV1NamespacedResourceQuota(DeleteCoreV1NamespacedResourceQuotaRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedResourceQuota(DeleteCoreV1NamespacedResourceQuotaRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified ResourceQuota
-    rpc ReadCoreV1NamespacedResourceQuotaStatus(ReadCoreV1NamespacedResourceQuotaStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedResourceQuotaStatus(ReadCoreV1NamespacedResourceQuotaStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified ResourceQuota
-    rpc ReplaceCoreV1NamespacedResourceQuotaStatus(ReplaceCoreV1NamespacedResourceQuotaStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedResourceQuotaStatus(ReplaceCoreV1NamespacedResourceQuotaStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Secret
-    rpc ListCoreV1NamespacedSecret(ListCoreV1NamespacedSecretRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedSecret(ListCoreV1NamespacedSecretRequest) returns (IoK8sApiCoreV1) {}
 
     // create a Secret
-    rpc CreateCoreV1NamespacedSecret(CreateCoreV1NamespacedSecretRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedSecret(CreateCoreV1NamespacedSecretRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of Secret
-    rpc DeleteCoreV1CollectionNamespacedSecret(DeleteCoreV1CollectionNamespacedSecretRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedSecret(DeleteCoreV1CollectionNamespacedSecretRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Secret
-    rpc ReadCoreV1NamespacedSecret(ReadCoreV1NamespacedSecretRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedSecret(ReadCoreV1NamespacedSecretRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified Secret
-    rpc ReplaceCoreV1NamespacedSecret(ReplaceCoreV1NamespacedSecretRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedSecret(ReplaceCoreV1NamespacedSecretRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a Secret
-    rpc DeleteCoreV1NamespacedSecret(DeleteCoreV1NamespacedSecretRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedSecret(DeleteCoreV1NamespacedSecretRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ServiceAccount
-    rpc ListCoreV1NamespacedServiceAccount(ListCoreV1NamespacedServiceAccountRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedServiceAccount(ListCoreV1NamespacedServiceAccountRequest) returns (IoK8sApiCoreV1) {}
 
     // create a ServiceAccount
-    rpc CreateCoreV1NamespacedServiceAccount(CreateCoreV1NamespacedServiceAccountRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedServiceAccount(CreateCoreV1NamespacedServiceAccountRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of ServiceAccount
-    rpc DeleteCoreV1CollectionNamespacedServiceAccount(DeleteCoreV1CollectionNamespacedServiceAccountRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNamespacedServiceAccount(DeleteCoreV1CollectionNamespacedServiceAccountRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ServiceAccount
-    rpc ReadCoreV1NamespacedServiceAccount(ReadCoreV1NamespacedServiceAccountRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedServiceAccount(ReadCoreV1NamespacedServiceAccountRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified ServiceAccount
-    rpc ReplaceCoreV1NamespacedServiceAccount(ReplaceCoreV1NamespacedServiceAccountRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedServiceAccount(ReplaceCoreV1NamespacedServiceAccountRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a ServiceAccount
-    rpc DeleteCoreV1NamespacedServiceAccount(DeleteCoreV1NamespacedServiceAccountRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedServiceAccount(DeleteCoreV1NamespacedServiceAccountRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind Service
-    rpc ListCoreV1NamespacedService(ListCoreV1NamespacedServiceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1NamespacedService(ListCoreV1NamespacedServiceRequest) returns (IoK8sApiCoreV1) {}
 
     // create a Service
-    rpc CreateCoreV1NamespacedService(CreateCoreV1NamespacedServiceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1NamespacedService(CreateCoreV1NamespacedServiceRequest) returns (IoK8sApiCoreV1) {}
 
     // read the specified Service
-    rpc ReadCoreV1NamespacedService(ReadCoreV1NamespacedServiceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedService(ReadCoreV1NamespacedServiceRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified Service
-    rpc ReplaceCoreV1NamespacedService(ReplaceCoreV1NamespacedServiceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedService(ReplaceCoreV1NamespacedServiceRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a Service
-    rpc DeleteCoreV1NamespacedService(DeleteCoreV1NamespacedServiceRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1NamespacedService(DeleteCoreV1NamespacedServiceRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // connect GET requests to proxy of Service
     rpc ConnectCoreV1GetNamespacedServiceProxy(ConnectCoreV1GetNamespacedServiceProxyRequest) returns (google.protobuf.Empty) {}
@@ -19199,46 +19199,46 @@ service KubernetesService {
     rpc ConnectCoreV1DeleteNamespacedServiceProxyWithPath(ConnectCoreV1DeleteNamespacedServiceProxyWithPathRequest) returns (google.protobuf.Empty) {}
 
     // read status of the specified Service
-    rpc ReadCoreV1NamespacedServiceStatus(ReadCoreV1NamespacedServiceStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespacedServiceStatus(ReadCoreV1NamespacedServiceStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified Service
-    rpc ReplaceCoreV1NamespacedServiceStatus(ReplaceCoreV1NamespacedServiceStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespacedServiceStatus(ReplaceCoreV1NamespacedServiceStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // read the specified Namespace
-    rpc ReadCoreV1Namespace(ReadCoreV1NamespaceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1Namespace(ReadCoreV1NamespaceRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified Namespace
-    rpc ReplaceCoreV1Namespace(ReplaceCoreV1NamespaceRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1Namespace(ReplaceCoreV1NamespaceRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a Namespace
-    rpc DeleteCoreV1Namespace(DeleteCoreV1NamespaceRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1Namespace(DeleteCoreV1NamespaceRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // replace finalize of the specified Namespace
-    rpc ReplaceCoreV1NamespaceFinalize(ReplaceCoreV1NamespaceFinalizeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespaceFinalize(ReplaceCoreV1NamespaceFinalizeRequest) returns (IoK8sApiCoreV1) {}
 
     // read status of the specified Namespace
-    rpc ReadCoreV1NamespaceStatus(ReadCoreV1NamespaceStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NamespaceStatus(ReadCoreV1NamespaceStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified Namespace
-    rpc ReplaceCoreV1NamespaceStatus(ReplaceCoreV1NamespaceStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NamespaceStatus(ReplaceCoreV1NamespaceStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Node
-    rpc ListCoreV1Node(ListCoreV1NodeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1Node(ListCoreV1NodeRequest) returns (IoK8sApiCoreV1) {}
 
     // create a Node
-    rpc CreateCoreV1Node(CreateCoreV1NodeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1Node(CreateCoreV1NodeRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of Node
-    rpc DeleteCoreV1CollectionNode(DeleteCoreV1CollectionNodeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionNode(DeleteCoreV1CollectionNodeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Node
-    rpc ReadCoreV1Node(ReadCoreV1NodeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1Node(ReadCoreV1NodeRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified Node
-    rpc ReplaceCoreV1Node(ReplaceCoreV1NodeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1Node(ReplaceCoreV1NodeRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a Node
-    rpc DeleteCoreV1Node(DeleteCoreV1NodeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1Node(DeleteCoreV1NodeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // connect GET requests to proxy of Node
     rpc ConnectCoreV1GetNodeProxy(ConnectCoreV1GetNodeProxyRequest) returns (google.protobuf.Empty) {}
@@ -19265,43 +19265,43 @@ service KubernetesService {
     rpc ConnectCoreV1DeleteNodeProxyWithPath(ConnectCoreV1DeleteNodeProxyWithPathRequest) returns (google.protobuf.Empty) {}
 
     // read status of the specified Node
-    rpc ReadCoreV1NodeStatus(ReadCoreV1NodeStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1NodeStatus(ReadCoreV1NodeStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified Node
-    rpc ReplaceCoreV1NodeStatus(ReplaceCoreV1NodeStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1NodeStatus(ReplaceCoreV1NodeStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind PersistentVolumeClaim
-    rpc ListCoreV1PersistentVolumeClaimForAllNamespaces(ListCoreV1PersistentVolumeClaimForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1PersistentVolumeClaimForAllNamespaces(ListCoreV1PersistentVolumeClaimForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind PersistentVolume
-    rpc ListCoreV1PersistentVolume(ListCoreV1PersistentVolumeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1PersistentVolume(ListCoreV1PersistentVolumeRequest) returns (IoK8sApiCoreV1) {}
 
     // create a PersistentVolume
-    rpc CreateCoreV1PersistentVolume(CreateCoreV1PersistentVolumeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc CreateCoreV1PersistentVolume(CreateCoreV1PersistentVolumeRequest) returns (IoK8sApiCoreV1) {}
 
     // delete collection of PersistentVolume
-    rpc DeleteCoreV1CollectionPersistentVolume(DeleteCoreV1CollectionPersistentVolumeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1CollectionPersistentVolume(DeleteCoreV1CollectionPersistentVolumeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified PersistentVolume
-    rpc ReadCoreV1PersistentVolume(ReadCoreV1PersistentVolumeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1PersistentVolume(ReadCoreV1PersistentVolumeRequest) returns (IoK8sApiCoreV1) {}
 
     // replace the specified PersistentVolume
-    rpc ReplaceCoreV1PersistentVolume(ReplaceCoreV1PersistentVolumeRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1PersistentVolume(ReplaceCoreV1PersistentVolumeRequest) returns (IoK8sApiCoreV1) {}
 
     // delete a PersistentVolume
-    rpc DeleteCoreV1PersistentVolume(DeleteCoreV1PersistentVolumeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCoreV1PersistentVolume(DeleteCoreV1PersistentVolumeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified PersistentVolume
-    rpc ReadCoreV1PersistentVolumeStatus(ReadCoreV1PersistentVolumeStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReadCoreV1PersistentVolumeStatus(ReadCoreV1PersistentVolumeStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // replace status of the specified PersistentVolume
-    rpc ReplaceCoreV1PersistentVolumeStatus(ReplaceCoreV1PersistentVolumeStatusRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ReplaceCoreV1PersistentVolumeStatus(ReplaceCoreV1PersistentVolumeStatusRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Pod
-    rpc ListCoreV1PodForAllNamespaces(ListCoreV1PodForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1PodForAllNamespaces(ListCoreV1PodForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind PodTemplate
-    rpc ListCoreV1PodTemplateForAllNamespaces(ListCoreV1PodTemplateForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1PodTemplateForAllNamespaces(ListCoreV1PodTemplateForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // proxy GET requests to Pod
     rpc ProxyCoreV1GETNamespacedPod(ProxyCoreV1GETNamespacedPodRequest) returns (google.protobuf.Empty) {}
@@ -19376,1368 +19376,1368 @@ service KubernetesService {
     rpc ProxyCoreV1DELETENodeWithPath(ProxyCoreV1DELETENodeWithPathRequest) returns (google.protobuf.Empty) {}
 
     // list or watch objects of kind ReplicationController
-    rpc ListCoreV1ReplicationControllerForAllNamespaces(ListCoreV1ReplicationControllerForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1ReplicationControllerForAllNamespaces(ListCoreV1ReplicationControllerForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind ResourceQuota
-    rpc ListCoreV1ResourceQuotaForAllNamespaces(ListCoreV1ResourceQuotaForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1ResourceQuotaForAllNamespaces(ListCoreV1ResourceQuotaForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Secret
-    rpc ListCoreV1SecretForAllNamespaces(ListCoreV1SecretForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1SecretForAllNamespaces(ListCoreV1SecretForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind ServiceAccount
-    rpc ListCoreV1ServiceAccountForAllNamespaces(ListCoreV1ServiceAccountForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1ServiceAccountForAllNamespaces(ListCoreV1ServiceAccountForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // list or watch objects of kind Service
-    rpc ListCoreV1ServiceForAllNamespaces(ListCoreV1ServiceForAllNamespacesRequest) returns (Io_K8s_Api_Core_V1) {}
+    rpc ListCoreV1ServiceForAllNamespaces(ListCoreV1ServiceForAllNamespacesRequest) returns (IoK8sApiCoreV1) {}
 
     // watch individual changes to a list of ConfigMap
-    rpc WatchCoreV1ConfigMapListForAllNamespaces(WatchCoreV1ConfigMapListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1ConfigMapListForAllNamespaces(WatchCoreV1ConfigMapListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Endpoints
-    rpc WatchCoreV1EndpointsListForAllNamespaces(WatchCoreV1EndpointsListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1EndpointsListForAllNamespaces(WatchCoreV1EndpointsListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Event
-    rpc WatchCoreV1EventListForAllNamespaces(WatchCoreV1EventListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1EventListForAllNamespaces(WatchCoreV1EventListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of LimitRange
-    rpc WatchCoreV1LimitRangeListForAllNamespaces(WatchCoreV1LimitRangeListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1LimitRangeListForAllNamespaces(WatchCoreV1LimitRangeListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Namespace
-    rpc WatchCoreV1NamespaceList(WatchCoreV1NamespaceListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespaceList(WatchCoreV1NamespaceListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ConfigMap
-    rpc WatchCoreV1NamespacedConfigMapList(WatchCoreV1NamespacedConfigMapListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedConfigMapList(WatchCoreV1NamespacedConfigMapListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ConfigMap
-    rpc WatchCoreV1NamespacedConfigMap(WatchCoreV1NamespacedConfigMapRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedConfigMap(WatchCoreV1NamespacedConfigMapRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Endpoints
-    rpc WatchCoreV1NamespacedEndpointsList(WatchCoreV1NamespacedEndpointsListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedEndpointsList(WatchCoreV1NamespacedEndpointsListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Endpoints
-    rpc WatchCoreV1NamespacedEndpoints(WatchCoreV1NamespacedEndpointsRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedEndpoints(WatchCoreV1NamespacedEndpointsRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Event
-    rpc WatchCoreV1NamespacedEventList(WatchCoreV1NamespacedEventListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedEventList(WatchCoreV1NamespacedEventListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Event
-    rpc WatchCoreV1NamespacedEvent(WatchCoreV1NamespacedEventRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedEvent(WatchCoreV1NamespacedEventRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of LimitRange
-    rpc WatchCoreV1NamespacedLimitRangeList(WatchCoreV1NamespacedLimitRangeListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedLimitRangeList(WatchCoreV1NamespacedLimitRangeListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind LimitRange
-    rpc WatchCoreV1NamespacedLimitRange(WatchCoreV1NamespacedLimitRangeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedLimitRange(WatchCoreV1NamespacedLimitRangeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of PersistentVolumeClaim
-    rpc WatchCoreV1NamespacedPersistentVolumeClaimList(WatchCoreV1NamespacedPersistentVolumeClaimListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedPersistentVolumeClaimList(WatchCoreV1NamespacedPersistentVolumeClaimListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind PersistentVolumeClaim
-    rpc WatchCoreV1NamespacedPersistentVolumeClaim(WatchCoreV1NamespacedPersistentVolumeClaimRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedPersistentVolumeClaim(WatchCoreV1NamespacedPersistentVolumeClaimRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Pod
-    rpc WatchCoreV1NamespacedPodList(WatchCoreV1NamespacedPodListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedPodList(WatchCoreV1NamespacedPodListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Pod
-    rpc WatchCoreV1NamespacedPod(WatchCoreV1NamespacedPodRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedPod(WatchCoreV1NamespacedPodRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of PodTemplate
-    rpc WatchCoreV1NamespacedPodTemplateList(WatchCoreV1NamespacedPodTemplateListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedPodTemplateList(WatchCoreV1NamespacedPodTemplateListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind PodTemplate
-    rpc WatchCoreV1NamespacedPodTemplate(WatchCoreV1NamespacedPodTemplateRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedPodTemplate(WatchCoreV1NamespacedPodTemplateRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ReplicationController
-    rpc WatchCoreV1NamespacedReplicationControllerList(WatchCoreV1NamespacedReplicationControllerListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedReplicationControllerList(WatchCoreV1NamespacedReplicationControllerListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ReplicationController
-    rpc WatchCoreV1NamespacedReplicationController(WatchCoreV1NamespacedReplicationControllerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedReplicationController(WatchCoreV1NamespacedReplicationControllerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ResourceQuota
-    rpc WatchCoreV1NamespacedResourceQuotaList(WatchCoreV1NamespacedResourceQuotaListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedResourceQuotaList(WatchCoreV1NamespacedResourceQuotaListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ResourceQuota
-    rpc WatchCoreV1NamespacedResourceQuota(WatchCoreV1NamespacedResourceQuotaRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedResourceQuota(WatchCoreV1NamespacedResourceQuotaRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Secret
-    rpc WatchCoreV1NamespacedSecretList(WatchCoreV1NamespacedSecretListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedSecretList(WatchCoreV1NamespacedSecretListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Secret
-    rpc WatchCoreV1NamespacedSecret(WatchCoreV1NamespacedSecretRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedSecret(WatchCoreV1NamespacedSecretRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ServiceAccount
-    rpc WatchCoreV1NamespacedServiceAccountList(WatchCoreV1NamespacedServiceAccountListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedServiceAccountList(WatchCoreV1NamespacedServiceAccountListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ServiceAccount
-    rpc WatchCoreV1NamespacedServiceAccount(WatchCoreV1NamespacedServiceAccountRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedServiceAccount(WatchCoreV1NamespacedServiceAccountRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Service
-    rpc WatchCoreV1NamespacedServiceList(WatchCoreV1NamespacedServiceListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedServiceList(WatchCoreV1NamespacedServiceListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Service
-    rpc WatchCoreV1NamespacedService(WatchCoreV1NamespacedServiceRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NamespacedService(WatchCoreV1NamespacedServiceRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Namespace
-    rpc WatchCoreV1Namespace(WatchCoreV1NamespaceRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1Namespace(WatchCoreV1NamespaceRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Node
-    rpc WatchCoreV1NodeList(WatchCoreV1NodeListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1NodeList(WatchCoreV1NodeListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Node
-    rpc WatchCoreV1Node(WatchCoreV1NodeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1Node(WatchCoreV1NodeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of PersistentVolumeClaim
-    rpc WatchCoreV1PersistentVolumeClaimListForAllNamespaces(WatchCoreV1PersistentVolumeClaimListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1PersistentVolumeClaimListForAllNamespaces(WatchCoreV1PersistentVolumeClaimListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of PersistentVolume
-    rpc WatchCoreV1PersistentVolumeList(WatchCoreV1PersistentVolumeListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1PersistentVolumeList(WatchCoreV1PersistentVolumeListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind PersistentVolume
-    rpc WatchCoreV1PersistentVolume(WatchCoreV1PersistentVolumeRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1PersistentVolume(WatchCoreV1PersistentVolumeRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Pod
-    rpc WatchCoreV1PodListForAllNamespaces(WatchCoreV1PodListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1PodListForAllNamespaces(WatchCoreV1PodListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of PodTemplate
-    rpc WatchCoreV1PodTemplateListForAllNamespaces(WatchCoreV1PodTemplateListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1PodTemplateListForAllNamespaces(WatchCoreV1PodTemplateListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ReplicationController
-    rpc WatchCoreV1ReplicationControllerListForAllNamespaces(WatchCoreV1ReplicationControllerListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1ReplicationControllerListForAllNamespaces(WatchCoreV1ReplicationControllerListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ResourceQuota
-    rpc WatchCoreV1ResourceQuotaListForAllNamespaces(WatchCoreV1ResourceQuotaListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1ResourceQuotaListForAllNamespaces(WatchCoreV1ResourceQuotaListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Secret
-    rpc WatchCoreV1SecretListForAllNamespaces(WatchCoreV1SecretListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1SecretListForAllNamespaces(WatchCoreV1SecretListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ServiceAccount
-    rpc WatchCoreV1ServiceAccountListForAllNamespaces(WatchCoreV1ServiceAccountListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1ServiceAccountListForAllNamespaces(WatchCoreV1ServiceAccountListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Service
-    rpc WatchCoreV1ServiceListForAllNamespaces(WatchCoreV1ServiceListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCoreV1ServiceListForAllNamespaces(WatchCoreV1ServiceListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available API versions
-    rpc GetAPIVersions(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAPIVersions(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetApiextensionsAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetApiextensionsAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetApiextensionsV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetApiextensionsV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind CustomResourceDefinition
-    rpc ListApiextensionsV1beta1CustomResourceDefinition(ListApiextensionsV1beta1CustomResourceDefinitionRequest) returns (Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1) {}
+    rpc ListApiextensionsV1beta1CustomResourceDefinition(ListApiextensionsV1beta1CustomResourceDefinitionRequest) returns (IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1) {}
 
     // create a CustomResourceDefinition
-    rpc CreateApiextensionsV1beta1CustomResourceDefinition(CreateApiextensionsV1beta1CustomResourceDefinitionRequest) returns (Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1) {}
+    rpc CreateApiextensionsV1beta1CustomResourceDefinition(CreateApiextensionsV1beta1CustomResourceDefinitionRequest) returns (IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1) {}
 
     // delete collection of CustomResourceDefinition
-    rpc DeleteApiextensionsV1beta1CollectionCustomResourceDefinition(DeleteApiextensionsV1beta1CollectionCustomResourceDefinitionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteApiextensionsV1beta1CollectionCustomResourceDefinition(DeleteApiextensionsV1beta1CollectionCustomResourceDefinitionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified CustomResourceDefinition
-    rpc ReadApiextensionsV1beta1CustomResourceDefinition(ReadApiextensionsV1beta1CustomResourceDefinitionRequest) returns (Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1) {}
+    rpc ReadApiextensionsV1beta1CustomResourceDefinition(ReadApiextensionsV1beta1CustomResourceDefinitionRequest) returns (IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1) {}
 
     // replace the specified CustomResourceDefinition
-    rpc ReplaceApiextensionsV1beta1CustomResourceDefinition(ReplaceApiextensionsV1beta1CustomResourceDefinitionRequest) returns (Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1) {}
+    rpc ReplaceApiextensionsV1beta1CustomResourceDefinition(ReplaceApiextensionsV1beta1CustomResourceDefinitionRequest) returns (IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1) {}
 
     // delete a CustomResourceDefinition
-    rpc DeleteApiextensionsV1beta1CustomResourceDefinition(DeleteApiextensionsV1beta1CustomResourceDefinitionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteApiextensionsV1beta1CustomResourceDefinition(DeleteApiextensionsV1beta1CustomResourceDefinitionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // replace status of the specified CustomResourceDefinition
-    rpc ReplaceApiextensionsV1beta1CustomResourceDefinitionStatus(ReplaceApiextensionsV1beta1CustomResourceDefinitionStatusRequest) returns (Io_K8s_Apiextensions_Apiserver_Pkg_Apis_Apiextensions_V1beta1) {}
+    rpc ReplaceApiextensionsV1beta1CustomResourceDefinitionStatus(ReplaceApiextensionsV1beta1CustomResourceDefinitionStatusRequest) returns (IoK8sApiextensionsApiserverPkgApisApiextensionsV1beta1) {}
 
     // watch individual changes to a list of CustomResourceDefinition
-    rpc WatchApiextensionsV1beta1CustomResourceDefinitionList(WatchApiextensionsV1beta1CustomResourceDefinitionListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchApiextensionsV1beta1CustomResourceDefinitionList(WatchApiextensionsV1beta1CustomResourceDefinitionListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind CustomResourceDefinition
-    rpc WatchApiextensionsV1beta1CustomResourceDefinition(WatchApiextensionsV1beta1CustomResourceDefinitionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchApiextensionsV1beta1CustomResourceDefinition(WatchApiextensionsV1beta1CustomResourceDefinitionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetApiregistrationAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetApiregistrationAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetApiregistrationV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetApiregistrationV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind APIService
-    rpc ListApiregistrationV1beta1APIService(ListApiregistrationV1beta1APIServiceRequest) returns (Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1) {}
+    rpc ListApiregistrationV1beta1APIService(ListApiregistrationV1beta1APIServiceRequest) returns (IoK8sKubeAggregatorPkgApisApiregistrationV1beta1) {}
 
     // create an APIService
-    rpc CreateApiregistrationV1beta1APIService(CreateApiregistrationV1beta1APIServiceRequest) returns (Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1) {}
+    rpc CreateApiregistrationV1beta1APIService(CreateApiregistrationV1beta1APIServiceRequest) returns (IoK8sKubeAggregatorPkgApisApiregistrationV1beta1) {}
 
     // delete collection of APIService
-    rpc DeleteApiregistrationV1beta1CollectionAPIService(DeleteApiregistrationV1beta1CollectionAPIServiceRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteApiregistrationV1beta1CollectionAPIService(DeleteApiregistrationV1beta1CollectionAPIServiceRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified APIService
-    rpc ReadApiregistrationV1beta1APIService(ReadApiregistrationV1beta1APIServiceRequest) returns (Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1) {}
+    rpc ReadApiregistrationV1beta1APIService(ReadApiregistrationV1beta1APIServiceRequest) returns (IoK8sKubeAggregatorPkgApisApiregistrationV1beta1) {}
 
     // replace the specified APIService
-    rpc ReplaceApiregistrationV1beta1APIService(ReplaceApiregistrationV1beta1APIServiceRequest) returns (Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1) {}
+    rpc ReplaceApiregistrationV1beta1APIService(ReplaceApiregistrationV1beta1APIServiceRequest) returns (IoK8sKubeAggregatorPkgApisApiregistrationV1beta1) {}
 
     // delete an APIService
-    rpc DeleteApiregistrationV1beta1APIService(DeleteApiregistrationV1beta1APIServiceRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteApiregistrationV1beta1APIService(DeleteApiregistrationV1beta1APIServiceRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // replace status of the specified APIService
-    rpc ReplaceApiregistrationV1beta1APIServiceStatus(ReplaceApiregistrationV1beta1APIServiceStatusRequest) returns (Io_K8s_Kube_Aggregator_Pkg_Apis_Apiregistration_V1beta1) {}
+    rpc ReplaceApiregistrationV1beta1APIServiceStatus(ReplaceApiregistrationV1beta1APIServiceStatusRequest) returns (IoK8sKubeAggregatorPkgApisApiregistrationV1beta1) {}
 
     // watch individual changes to a list of APIService
-    rpc WatchApiregistrationV1beta1APIServiceList(WatchApiregistrationV1beta1APIServiceListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchApiregistrationV1beta1APIServiceList(WatchApiregistrationV1beta1APIServiceListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind APIService
-    rpc WatchApiregistrationV1beta1APIService(WatchApiregistrationV1beta1APIServiceRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchApiregistrationV1beta1APIService(WatchApiregistrationV1beta1APIServiceRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetAppsAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAppsAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetAppsV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAppsV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ControllerRevision
-    rpc ListAppsV1beta1ControllerRevisionForAllNamespaces(ListAppsV1beta1ControllerRevisionForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ListAppsV1beta1ControllerRevisionForAllNamespaces(ListAppsV1beta1ControllerRevisionForAllNamespacesRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // list or watch objects of kind Deployment
-    rpc ListAppsV1beta1DeploymentForAllNamespaces(ListAppsV1beta1DeploymentForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ListAppsV1beta1DeploymentForAllNamespaces(ListAppsV1beta1DeploymentForAllNamespacesRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // list or watch objects of kind ControllerRevision
-    rpc ListAppsV1beta1NamespacedControllerRevision(ListAppsV1beta1NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ListAppsV1beta1NamespacedControllerRevision(ListAppsV1beta1NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // create a ControllerRevision
-    rpc CreateAppsV1beta1NamespacedControllerRevision(CreateAppsV1beta1NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc CreateAppsV1beta1NamespacedControllerRevision(CreateAppsV1beta1NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // delete collection of ControllerRevision
-    rpc DeleteAppsV1beta1CollectionNamespacedControllerRevision(DeleteAppsV1beta1CollectionNamespacedControllerRevisionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta1CollectionNamespacedControllerRevision(DeleteAppsV1beta1CollectionNamespacedControllerRevisionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ControllerRevision
-    rpc ReadAppsV1beta1NamespacedControllerRevision(ReadAppsV1beta1NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReadAppsV1beta1NamespacedControllerRevision(ReadAppsV1beta1NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // replace the specified ControllerRevision
-    rpc ReplaceAppsV1beta1NamespacedControllerRevision(ReplaceAppsV1beta1NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReplaceAppsV1beta1NamespacedControllerRevision(ReplaceAppsV1beta1NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // delete a ControllerRevision
-    rpc DeleteAppsV1beta1NamespacedControllerRevision(DeleteAppsV1beta1NamespacedControllerRevisionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta1NamespacedControllerRevision(DeleteAppsV1beta1NamespacedControllerRevisionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind Deployment
-    rpc ListAppsV1beta1NamespacedDeployment(ListAppsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ListAppsV1beta1NamespacedDeployment(ListAppsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // create a Deployment
-    rpc CreateAppsV1beta1NamespacedDeployment(CreateAppsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc CreateAppsV1beta1NamespacedDeployment(CreateAppsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // delete collection of Deployment
-    rpc DeleteAppsV1beta1CollectionNamespacedDeployment(DeleteAppsV1beta1CollectionNamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta1CollectionNamespacedDeployment(DeleteAppsV1beta1CollectionNamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Deployment
-    rpc ReadAppsV1beta1NamespacedDeployment(ReadAppsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReadAppsV1beta1NamespacedDeployment(ReadAppsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // replace the specified Deployment
-    rpc ReplaceAppsV1beta1NamespacedDeployment(ReplaceAppsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReplaceAppsV1beta1NamespacedDeployment(ReplaceAppsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // delete a Deployment
-    rpc DeleteAppsV1beta1NamespacedDeployment(DeleteAppsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta1NamespacedDeployment(DeleteAppsV1beta1NamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // create rollback of a Deployment
-    rpc CreateAppsV1beta1NamespacedDeploymentRollback(CreateAppsV1beta1NamespacedDeploymentRollbackRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc CreateAppsV1beta1NamespacedDeploymentRollback(CreateAppsV1beta1NamespacedDeploymentRollbackRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // read scale of the specified Deployment
-    rpc ReadAppsV1beta1NamespacedDeploymentScale(ReadAppsV1beta1NamespacedDeploymentScaleRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReadAppsV1beta1NamespacedDeploymentScale(ReadAppsV1beta1NamespacedDeploymentScaleRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // replace scale of the specified Deployment
-    rpc ReplaceAppsV1beta1NamespacedDeploymentScale(ReplaceAppsV1beta1NamespacedDeploymentScaleRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReplaceAppsV1beta1NamespacedDeploymentScale(ReplaceAppsV1beta1NamespacedDeploymentScaleRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // read status of the specified Deployment
-    rpc ReadAppsV1beta1NamespacedDeploymentStatus(ReadAppsV1beta1NamespacedDeploymentStatusRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReadAppsV1beta1NamespacedDeploymentStatus(ReadAppsV1beta1NamespacedDeploymentStatusRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // replace status of the specified Deployment
-    rpc ReplaceAppsV1beta1NamespacedDeploymentStatus(ReplaceAppsV1beta1NamespacedDeploymentStatusRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReplaceAppsV1beta1NamespacedDeploymentStatus(ReplaceAppsV1beta1NamespacedDeploymentStatusRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // list or watch objects of kind StatefulSet
-    rpc ListAppsV1beta1NamespacedStatefulSet(ListAppsV1beta1NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ListAppsV1beta1NamespacedStatefulSet(ListAppsV1beta1NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // create a StatefulSet
-    rpc CreateAppsV1beta1NamespacedStatefulSet(CreateAppsV1beta1NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc CreateAppsV1beta1NamespacedStatefulSet(CreateAppsV1beta1NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // delete collection of StatefulSet
-    rpc DeleteAppsV1beta1CollectionNamespacedStatefulSet(DeleteAppsV1beta1CollectionNamespacedStatefulSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta1CollectionNamespacedStatefulSet(DeleteAppsV1beta1CollectionNamespacedStatefulSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified StatefulSet
-    rpc ReadAppsV1beta1NamespacedStatefulSet(ReadAppsV1beta1NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReadAppsV1beta1NamespacedStatefulSet(ReadAppsV1beta1NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // replace the specified StatefulSet
-    rpc ReplaceAppsV1beta1NamespacedStatefulSet(ReplaceAppsV1beta1NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReplaceAppsV1beta1NamespacedStatefulSet(ReplaceAppsV1beta1NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // delete a StatefulSet
-    rpc DeleteAppsV1beta1NamespacedStatefulSet(DeleteAppsV1beta1NamespacedStatefulSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta1NamespacedStatefulSet(DeleteAppsV1beta1NamespacedStatefulSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read scale of the specified StatefulSet
-    rpc ReadAppsV1beta1NamespacedStatefulSetScale(ReadAppsV1beta1NamespacedStatefulSetScaleRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReadAppsV1beta1NamespacedStatefulSetScale(ReadAppsV1beta1NamespacedStatefulSetScaleRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // replace scale of the specified StatefulSet
-    rpc ReplaceAppsV1beta1NamespacedStatefulSetScale(ReplaceAppsV1beta1NamespacedStatefulSetScaleRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReplaceAppsV1beta1NamespacedStatefulSetScale(ReplaceAppsV1beta1NamespacedStatefulSetScaleRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // read status of the specified StatefulSet
-    rpc ReadAppsV1beta1NamespacedStatefulSetStatus(ReadAppsV1beta1NamespacedStatefulSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReadAppsV1beta1NamespacedStatefulSetStatus(ReadAppsV1beta1NamespacedStatefulSetStatusRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // replace status of the specified StatefulSet
-    rpc ReplaceAppsV1beta1NamespacedStatefulSetStatus(ReplaceAppsV1beta1NamespacedStatefulSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ReplaceAppsV1beta1NamespacedStatefulSetStatus(ReplaceAppsV1beta1NamespacedStatefulSetStatusRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // list or watch objects of kind StatefulSet
-    rpc ListAppsV1beta1StatefulSetForAllNamespaces(ListAppsV1beta1StatefulSetForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta1) {}
+    rpc ListAppsV1beta1StatefulSetForAllNamespaces(ListAppsV1beta1StatefulSetForAllNamespacesRequest) returns (IoK8sApiAppsV1beta1) {}
 
     // watch individual changes to a list of ControllerRevision
-    rpc WatchAppsV1beta1ControllerRevisionListForAllNamespaces(WatchAppsV1beta1ControllerRevisionListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1ControllerRevisionListForAllNamespaces(WatchAppsV1beta1ControllerRevisionListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Deployment
-    rpc WatchAppsV1beta1DeploymentListForAllNamespaces(WatchAppsV1beta1DeploymentListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1DeploymentListForAllNamespaces(WatchAppsV1beta1DeploymentListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ControllerRevision
-    rpc WatchAppsV1beta1NamespacedControllerRevisionList(WatchAppsV1beta1NamespacedControllerRevisionListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1NamespacedControllerRevisionList(WatchAppsV1beta1NamespacedControllerRevisionListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ControllerRevision
-    rpc WatchAppsV1beta1NamespacedControllerRevision(WatchAppsV1beta1NamespacedControllerRevisionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1NamespacedControllerRevision(WatchAppsV1beta1NamespacedControllerRevisionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Deployment
-    rpc WatchAppsV1beta1NamespacedDeploymentList(WatchAppsV1beta1NamespacedDeploymentListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1NamespacedDeploymentList(WatchAppsV1beta1NamespacedDeploymentListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Deployment
-    rpc WatchAppsV1beta1NamespacedDeployment(WatchAppsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1NamespacedDeployment(WatchAppsV1beta1NamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of StatefulSet
-    rpc WatchAppsV1beta1NamespacedStatefulSetList(WatchAppsV1beta1NamespacedStatefulSetListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1NamespacedStatefulSetList(WatchAppsV1beta1NamespacedStatefulSetListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind StatefulSet
-    rpc WatchAppsV1beta1NamespacedStatefulSet(WatchAppsV1beta1NamespacedStatefulSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1NamespacedStatefulSet(WatchAppsV1beta1NamespacedStatefulSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of StatefulSet
-    rpc WatchAppsV1beta1StatefulSetListForAllNamespaces(WatchAppsV1beta1StatefulSetListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta1StatefulSetListForAllNamespaces(WatchAppsV1beta1StatefulSetListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetAppsV1beta2APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAppsV1beta2APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ControllerRevision
-    rpc ListAppsV1beta2ControllerRevisionForAllNamespaces(ListAppsV1beta2ControllerRevisionForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2ControllerRevisionForAllNamespaces(ListAppsV1beta2ControllerRevisionForAllNamespacesRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind DaemonSet
-    rpc ListAppsV1beta2DaemonSetForAllNamespaces(ListAppsV1beta2DaemonSetForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2DaemonSetForAllNamespaces(ListAppsV1beta2DaemonSetForAllNamespacesRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind Deployment
-    rpc ListAppsV1beta2DeploymentForAllNamespaces(ListAppsV1beta2DeploymentForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2DeploymentForAllNamespaces(ListAppsV1beta2DeploymentForAllNamespacesRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind ControllerRevision
-    rpc ListAppsV1beta2NamespacedControllerRevision(ListAppsV1beta2NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2NamespacedControllerRevision(ListAppsV1beta2NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // create a ControllerRevision
-    rpc CreateAppsV1beta2NamespacedControllerRevision(CreateAppsV1beta2NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc CreateAppsV1beta2NamespacedControllerRevision(CreateAppsV1beta2NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete collection of ControllerRevision
-    rpc DeleteAppsV1beta2CollectionNamespacedControllerRevision(DeleteAppsV1beta2CollectionNamespacedControllerRevisionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2CollectionNamespacedControllerRevision(DeleteAppsV1beta2CollectionNamespacedControllerRevisionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ControllerRevision
-    rpc ReadAppsV1beta2NamespacedControllerRevision(ReadAppsV1beta2NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedControllerRevision(ReadAppsV1beta2NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace the specified ControllerRevision
-    rpc ReplaceAppsV1beta2NamespacedControllerRevision(ReplaceAppsV1beta2NamespacedControllerRevisionRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedControllerRevision(ReplaceAppsV1beta2NamespacedControllerRevisionRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete a ControllerRevision
-    rpc DeleteAppsV1beta2NamespacedControllerRevision(DeleteAppsV1beta2NamespacedControllerRevisionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2NamespacedControllerRevision(DeleteAppsV1beta2NamespacedControllerRevisionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind DaemonSet
-    rpc ListAppsV1beta2NamespacedDaemonSet(ListAppsV1beta2NamespacedDaemonSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2NamespacedDaemonSet(ListAppsV1beta2NamespacedDaemonSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // create a DaemonSet
-    rpc CreateAppsV1beta2NamespacedDaemonSet(CreateAppsV1beta2NamespacedDaemonSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc CreateAppsV1beta2NamespacedDaemonSet(CreateAppsV1beta2NamespacedDaemonSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete collection of DaemonSet
-    rpc DeleteAppsV1beta2CollectionNamespacedDaemonSet(DeleteAppsV1beta2CollectionNamespacedDaemonSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2CollectionNamespacedDaemonSet(DeleteAppsV1beta2CollectionNamespacedDaemonSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified DaemonSet
-    rpc ReadAppsV1beta2NamespacedDaemonSet(ReadAppsV1beta2NamespacedDaemonSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedDaemonSet(ReadAppsV1beta2NamespacedDaemonSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace the specified DaemonSet
-    rpc ReplaceAppsV1beta2NamespacedDaemonSet(ReplaceAppsV1beta2NamespacedDaemonSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedDaemonSet(ReplaceAppsV1beta2NamespacedDaemonSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete a DaemonSet
-    rpc DeleteAppsV1beta2NamespacedDaemonSet(DeleteAppsV1beta2NamespacedDaemonSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2NamespacedDaemonSet(DeleteAppsV1beta2NamespacedDaemonSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified DaemonSet
-    rpc ReadAppsV1beta2NamespacedDaemonSetStatus(ReadAppsV1beta2NamespacedDaemonSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedDaemonSetStatus(ReadAppsV1beta2NamespacedDaemonSetStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace status of the specified DaemonSet
-    rpc ReplaceAppsV1beta2NamespacedDaemonSetStatus(ReplaceAppsV1beta2NamespacedDaemonSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedDaemonSetStatus(ReplaceAppsV1beta2NamespacedDaemonSetStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind Deployment
-    rpc ListAppsV1beta2NamespacedDeployment(ListAppsV1beta2NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2NamespacedDeployment(ListAppsV1beta2NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // create a Deployment
-    rpc CreateAppsV1beta2NamespacedDeployment(CreateAppsV1beta2NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc CreateAppsV1beta2NamespacedDeployment(CreateAppsV1beta2NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete collection of Deployment
-    rpc DeleteAppsV1beta2CollectionNamespacedDeployment(DeleteAppsV1beta2CollectionNamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2CollectionNamespacedDeployment(DeleteAppsV1beta2CollectionNamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Deployment
-    rpc ReadAppsV1beta2NamespacedDeployment(ReadAppsV1beta2NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedDeployment(ReadAppsV1beta2NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace the specified Deployment
-    rpc ReplaceAppsV1beta2NamespacedDeployment(ReplaceAppsV1beta2NamespacedDeploymentRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedDeployment(ReplaceAppsV1beta2NamespacedDeploymentRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete a Deployment
-    rpc DeleteAppsV1beta2NamespacedDeployment(DeleteAppsV1beta2NamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2NamespacedDeployment(DeleteAppsV1beta2NamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read scale of the specified Deployment
-    rpc ReadAppsV1beta2NamespacedDeploymentScale(ReadAppsV1beta2NamespacedDeploymentScaleRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedDeploymentScale(ReadAppsV1beta2NamespacedDeploymentScaleRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace scale of the specified Deployment
-    rpc ReplaceAppsV1beta2NamespacedDeploymentScale(ReplaceAppsV1beta2NamespacedDeploymentScaleRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedDeploymentScale(ReplaceAppsV1beta2NamespacedDeploymentScaleRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // read status of the specified Deployment
-    rpc ReadAppsV1beta2NamespacedDeploymentStatus(ReadAppsV1beta2NamespacedDeploymentStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedDeploymentStatus(ReadAppsV1beta2NamespacedDeploymentStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace status of the specified Deployment
-    rpc ReplaceAppsV1beta2NamespacedDeploymentStatus(ReplaceAppsV1beta2NamespacedDeploymentStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedDeploymentStatus(ReplaceAppsV1beta2NamespacedDeploymentStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind ReplicaSet
-    rpc ListAppsV1beta2NamespacedReplicaSet(ListAppsV1beta2NamespacedReplicaSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2NamespacedReplicaSet(ListAppsV1beta2NamespacedReplicaSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // create a ReplicaSet
-    rpc CreateAppsV1beta2NamespacedReplicaSet(CreateAppsV1beta2NamespacedReplicaSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc CreateAppsV1beta2NamespacedReplicaSet(CreateAppsV1beta2NamespacedReplicaSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete collection of ReplicaSet
-    rpc DeleteAppsV1beta2CollectionNamespacedReplicaSet(DeleteAppsV1beta2CollectionNamespacedReplicaSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2CollectionNamespacedReplicaSet(DeleteAppsV1beta2CollectionNamespacedReplicaSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ReplicaSet
-    rpc ReadAppsV1beta2NamespacedReplicaSet(ReadAppsV1beta2NamespacedReplicaSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedReplicaSet(ReadAppsV1beta2NamespacedReplicaSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace the specified ReplicaSet
-    rpc ReplaceAppsV1beta2NamespacedReplicaSet(ReplaceAppsV1beta2NamespacedReplicaSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedReplicaSet(ReplaceAppsV1beta2NamespacedReplicaSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete a ReplicaSet
-    rpc DeleteAppsV1beta2NamespacedReplicaSet(DeleteAppsV1beta2NamespacedReplicaSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2NamespacedReplicaSet(DeleteAppsV1beta2NamespacedReplicaSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read scale of the specified ReplicaSet
-    rpc ReadAppsV1beta2NamespacedReplicaSetScale(ReadAppsV1beta2NamespacedReplicaSetScaleRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedReplicaSetScale(ReadAppsV1beta2NamespacedReplicaSetScaleRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace scale of the specified ReplicaSet
-    rpc ReplaceAppsV1beta2NamespacedReplicaSetScale(ReplaceAppsV1beta2NamespacedReplicaSetScaleRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedReplicaSetScale(ReplaceAppsV1beta2NamespacedReplicaSetScaleRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // read status of the specified ReplicaSet
-    rpc ReadAppsV1beta2NamespacedReplicaSetStatus(ReadAppsV1beta2NamespacedReplicaSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedReplicaSetStatus(ReadAppsV1beta2NamespacedReplicaSetStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace status of the specified ReplicaSet
-    rpc ReplaceAppsV1beta2NamespacedReplicaSetStatus(ReplaceAppsV1beta2NamespacedReplicaSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedReplicaSetStatus(ReplaceAppsV1beta2NamespacedReplicaSetStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind StatefulSet
-    rpc ListAppsV1beta2NamespacedStatefulSet(ListAppsV1beta2NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2NamespacedStatefulSet(ListAppsV1beta2NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // create a StatefulSet
-    rpc CreateAppsV1beta2NamespacedStatefulSet(CreateAppsV1beta2NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc CreateAppsV1beta2NamespacedStatefulSet(CreateAppsV1beta2NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete collection of StatefulSet
-    rpc DeleteAppsV1beta2CollectionNamespacedStatefulSet(DeleteAppsV1beta2CollectionNamespacedStatefulSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2CollectionNamespacedStatefulSet(DeleteAppsV1beta2CollectionNamespacedStatefulSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified StatefulSet
-    rpc ReadAppsV1beta2NamespacedStatefulSet(ReadAppsV1beta2NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedStatefulSet(ReadAppsV1beta2NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace the specified StatefulSet
-    rpc ReplaceAppsV1beta2NamespacedStatefulSet(ReplaceAppsV1beta2NamespacedStatefulSetRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedStatefulSet(ReplaceAppsV1beta2NamespacedStatefulSetRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // delete a StatefulSet
-    rpc DeleteAppsV1beta2NamespacedStatefulSet(DeleteAppsV1beta2NamespacedStatefulSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAppsV1beta2NamespacedStatefulSet(DeleteAppsV1beta2NamespacedStatefulSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read scale of the specified StatefulSet
-    rpc ReadAppsV1beta2NamespacedStatefulSetScale(ReadAppsV1beta2NamespacedStatefulSetScaleRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedStatefulSetScale(ReadAppsV1beta2NamespacedStatefulSetScaleRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace scale of the specified StatefulSet
-    rpc ReplaceAppsV1beta2NamespacedStatefulSetScale(ReplaceAppsV1beta2NamespacedStatefulSetScaleRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedStatefulSetScale(ReplaceAppsV1beta2NamespacedStatefulSetScaleRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // read status of the specified StatefulSet
-    rpc ReadAppsV1beta2NamespacedStatefulSetStatus(ReadAppsV1beta2NamespacedStatefulSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReadAppsV1beta2NamespacedStatefulSetStatus(ReadAppsV1beta2NamespacedStatefulSetStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // replace status of the specified StatefulSet
-    rpc ReplaceAppsV1beta2NamespacedStatefulSetStatus(ReplaceAppsV1beta2NamespacedStatefulSetStatusRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ReplaceAppsV1beta2NamespacedStatefulSetStatus(ReplaceAppsV1beta2NamespacedStatefulSetStatusRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind ReplicaSet
-    rpc ListAppsV1beta2ReplicaSetForAllNamespaces(ListAppsV1beta2ReplicaSetForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2ReplicaSetForAllNamespaces(ListAppsV1beta2ReplicaSetForAllNamespacesRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // list or watch objects of kind StatefulSet
-    rpc ListAppsV1beta2StatefulSetForAllNamespaces(ListAppsV1beta2StatefulSetForAllNamespacesRequest) returns (Io_K8s_Api_Apps_V1beta2) {}
+    rpc ListAppsV1beta2StatefulSetForAllNamespaces(ListAppsV1beta2StatefulSetForAllNamespacesRequest) returns (IoK8sApiAppsV1beta2) {}
 
     // watch individual changes to a list of ControllerRevision
-    rpc WatchAppsV1beta2ControllerRevisionListForAllNamespaces(WatchAppsV1beta2ControllerRevisionListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2ControllerRevisionListForAllNamespaces(WatchAppsV1beta2ControllerRevisionListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of DaemonSet
-    rpc WatchAppsV1beta2DaemonSetListForAllNamespaces(WatchAppsV1beta2DaemonSetListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2DaemonSetListForAllNamespaces(WatchAppsV1beta2DaemonSetListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Deployment
-    rpc WatchAppsV1beta2DeploymentListForAllNamespaces(WatchAppsV1beta2DeploymentListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2DeploymentListForAllNamespaces(WatchAppsV1beta2DeploymentListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ControllerRevision
-    rpc WatchAppsV1beta2NamespacedControllerRevisionList(WatchAppsV1beta2NamespacedControllerRevisionListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedControllerRevisionList(WatchAppsV1beta2NamespacedControllerRevisionListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ControllerRevision
-    rpc WatchAppsV1beta2NamespacedControllerRevision(WatchAppsV1beta2NamespacedControllerRevisionRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedControllerRevision(WatchAppsV1beta2NamespacedControllerRevisionRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of DaemonSet
-    rpc WatchAppsV1beta2NamespacedDaemonSetList(WatchAppsV1beta2NamespacedDaemonSetListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedDaemonSetList(WatchAppsV1beta2NamespacedDaemonSetListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind DaemonSet
-    rpc WatchAppsV1beta2NamespacedDaemonSet(WatchAppsV1beta2NamespacedDaemonSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedDaemonSet(WatchAppsV1beta2NamespacedDaemonSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Deployment
-    rpc WatchAppsV1beta2NamespacedDeploymentList(WatchAppsV1beta2NamespacedDeploymentListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedDeploymentList(WatchAppsV1beta2NamespacedDeploymentListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Deployment
-    rpc WatchAppsV1beta2NamespacedDeployment(WatchAppsV1beta2NamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedDeployment(WatchAppsV1beta2NamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ReplicaSet
-    rpc WatchAppsV1beta2NamespacedReplicaSetList(WatchAppsV1beta2NamespacedReplicaSetListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedReplicaSetList(WatchAppsV1beta2NamespacedReplicaSetListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ReplicaSet
-    rpc WatchAppsV1beta2NamespacedReplicaSet(WatchAppsV1beta2NamespacedReplicaSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedReplicaSet(WatchAppsV1beta2NamespacedReplicaSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of StatefulSet
-    rpc WatchAppsV1beta2NamespacedStatefulSetList(WatchAppsV1beta2NamespacedStatefulSetListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedStatefulSetList(WatchAppsV1beta2NamespacedStatefulSetListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind StatefulSet
-    rpc WatchAppsV1beta2NamespacedStatefulSet(WatchAppsV1beta2NamespacedStatefulSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2NamespacedStatefulSet(WatchAppsV1beta2NamespacedStatefulSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ReplicaSet
-    rpc WatchAppsV1beta2ReplicaSetListForAllNamespaces(WatchAppsV1beta2ReplicaSetListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2ReplicaSetListForAllNamespaces(WatchAppsV1beta2ReplicaSetListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of StatefulSet
-    rpc WatchAppsV1beta2StatefulSetListForAllNamespaces(WatchAppsV1beta2StatefulSetListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAppsV1beta2StatefulSetListForAllNamespaces(WatchAppsV1beta2StatefulSetListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetAuthenticationAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAuthenticationAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetAuthenticationV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAuthenticationV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // create a TokenReview
-    rpc CreateAuthenticationV1TokenReview(CreateAuthenticationV1TokenReviewRequest) returns (Io_K8s_Api_Authentication_V1) {}
+    rpc CreateAuthenticationV1TokenReview(CreateAuthenticationV1TokenReviewRequest) returns (IoK8sApiAuthenticationV1) {}
 
     // get available resources
-    rpc GetAuthenticationV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAuthenticationV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // create a TokenReview
-    rpc CreateAuthenticationV1beta1TokenReview(CreateAuthenticationV1beta1TokenReviewRequest) returns (Io_K8s_Api_Authentication_V1beta1) {}
+    rpc CreateAuthenticationV1beta1TokenReview(CreateAuthenticationV1beta1TokenReviewRequest) returns (IoK8sApiAuthenticationV1beta1) {}
 
     // get information of a group
-    rpc GetAuthorizationAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAuthorizationAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetAuthorizationV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAuthorizationV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // create a LocalSubjectAccessReview
-    rpc CreateAuthorizationV1NamespacedLocalSubjectAccessReview(CreateAuthorizationV1NamespacedLocalSubjectAccessReviewRequest) returns (Io_K8s_Api_Authorization_V1) {}
+    rpc CreateAuthorizationV1NamespacedLocalSubjectAccessReview(CreateAuthorizationV1NamespacedLocalSubjectAccessReviewRequest) returns (IoK8sApiAuthorizationV1) {}
 
     // create a SelfSubjectAccessReview
-    rpc CreateAuthorizationV1SelfSubjectAccessReview(CreateAuthorizationV1SelfSubjectAccessReviewRequest) returns (Io_K8s_Api_Authorization_V1) {}
+    rpc CreateAuthorizationV1SelfSubjectAccessReview(CreateAuthorizationV1SelfSubjectAccessReviewRequest) returns (IoK8sApiAuthorizationV1) {}
 
     // create a SelfSubjectRulesReview
-    rpc CreateAuthorizationV1SelfSubjectRulesReview(CreateAuthorizationV1SelfSubjectRulesReviewRequest) returns (Io_K8s_Api_Authorization_V1) {}
+    rpc CreateAuthorizationV1SelfSubjectRulesReview(CreateAuthorizationV1SelfSubjectRulesReviewRequest) returns (IoK8sApiAuthorizationV1) {}
 
     // create a SubjectAccessReview
-    rpc CreateAuthorizationV1SubjectAccessReview(CreateAuthorizationV1SubjectAccessReviewRequest) returns (Io_K8s_Api_Authorization_V1) {}
+    rpc CreateAuthorizationV1SubjectAccessReview(CreateAuthorizationV1SubjectAccessReviewRequest) returns (IoK8sApiAuthorizationV1) {}
 
     // get available resources
-    rpc GetAuthorizationV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAuthorizationV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // create a LocalSubjectAccessReview
-    rpc CreateAuthorizationV1beta1NamespacedLocalSubjectAccessReview(CreateAuthorizationV1beta1NamespacedLocalSubjectAccessReviewRequest) returns (Io_K8s_Api_Authorization_V1beta1) {}
+    rpc CreateAuthorizationV1beta1NamespacedLocalSubjectAccessReview(CreateAuthorizationV1beta1NamespacedLocalSubjectAccessReviewRequest) returns (IoK8sApiAuthorizationV1beta1) {}
 
     // create a SelfSubjectAccessReview
-    rpc CreateAuthorizationV1beta1SelfSubjectAccessReview(CreateAuthorizationV1beta1SelfSubjectAccessReviewRequest) returns (Io_K8s_Api_Authorization_V1beta1) {}
+    rpc CreateAuthorizationV1beta1SelfSubjectAccessReview(CreateAuthorizationV1beta1SelfSubjectAccessReviewRequest) returns (IoK8sApiAuthorizationV1beta1) {}
 
     // create a SelfSubjectRulesReview
-    rpc CreateAuthorizationV1beta1SelfSubjectRulesReview(CreateAuthorizationV1beta1SelfSubjectRulesReviewRequest) returns (Io_K8s_Api_Authorization_V1beta1) {}
+    rpc CreateAuthorizationV1beta1SelfSubjectRulesReview(CreateAuthorizationV1beta1SelfSubjectRulesReviewRequest) returns (IoK8sApiAuthorizationV1beta1) {}
 
     // create a SubjectAccessReview
-    rpc CreateAuthorizationV1beta1SubjectAccessReview(CreateAuthorizationV1beta1SubjectAccessReviewRequest) returns (Io_K8s_Api_Authorization_V1beta1) {}
+    rpc CreateAuthorizationV1beta1SubjectAccessReview(CreateAuthorizationV1beta1SubjectAccessReviewRequest) returns (IoK8sApiAuthorizationV1beta1) {}
 
     // get information of a group
-    rpc GetAutoscalingAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAutoscalingAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetAutoscalingV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAutoscalingV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind HorizontalPodAutoscaler
-    rpc ListAutoscalingV1HorizontalPodAutoscalerForAllNamespaces(ListAutoscalingV1HorizontalPodAutoscalerForAllNamespacesRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ListAutoscalingV1HorizontalPodAutoscalerForAllNamespaces(ListAutoscalingV1HorizontalPodAutoscalerForAllNamespacesRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // list or watch objects of kind HorizontalPodAutoscaler
-    rpc ListAutoscalingV1NamespacedHorizontalPodAutoscaler(ListAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ListAutoscalingV1NamespacedHorizontalPodAutoscaler(ListAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // create a HorizontalPodAutoscaler
-    rpc CreateAutoscalingV1NamespacedHorizontalPodAutoscaler(CreateAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc CreateAutoscalingV1NamespacedHorizontalPodAutoscaler(CreateAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // delete collection of HorizontalPodAutoscaler
-    rpc DeleteAutoscalingV1CollectionNamespacedHorizontalPodAutoscaler(DeleteAutoscalingV1CollectionNamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAutoscalingV1CollectionNamespacedHorizontalPodAutoscaler(DeleteAutoscalingV1CollectionNamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified HorizontalPodAutoscaler
-    rpc ReadAutoscalingV1NamespacedHorizontalPodAutoscaler(ReadAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ReadAutoscalingV1NamespacedHorizontalPodAutoscaler(ReadAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // replace the specified HorizontalPodAutoscaler
-    rpc ReplaceAutoscalingV1NamespacedHorizontalPodAutoscaler(ReplaceAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ReplaceAutoscalingV1NamespacedHorizontalPodAutoscaler(ReplaceAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // delete a HorizontalPodAutoscaler
-    rpc DeleteAutoscalingV1NamespacedHorizontalPodAutoscaler(DeleteAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAutoscalingV1NamespacedHorizontalPodAutoscaler(DeleteAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified HorizontalPodAutoscaler
-    rpc ReadAutoscalingV1NamespacedHorizontalPodAutoscalerStatus(ReadAutoscalingV1NamespacedHorizontalPodAutoscalerStatusRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ReadAutoscalingV1NamespacedHorizontalPodAutoscalerStatus(ReadAutoscalingV1NamespacedHorizontalPodAutoscalerStatusRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // replace status of the specified HorizontalPodAutoscaler
-    rpc ReplaceAutoscalingV1NamespacedHorizontalPodAutoscalerStatus(ReplaceAutoscalingV1NamespacedHorizontalPodAutoscalerStatusRequest) returns (Io_K8s_Api_Autoscaling_V1) {}
+    rpc ReplaceAutoscalingV1NamespacedHorizontalPodAutoscalerStatus(ReplaceAutoscalingV1NamespacedHorizontalPodAutoscalerStatusRequest) returns (IoK8sApiAutoscalingV1) {}
 
     // watch individual changes to a list of HorizontalPodAutoscaler
-    rpc WatchAutoscalingV1HorizontalPodAutoscalerListForAllNamespaces(WatchAutoscalingV1HorizontalPodAutoscalerListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAutoscalingV1HorizontalPodAutoscalerListForAllNamespaces(WatchAutoscalingV1HorizontalPodAutoscalerListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of HorizontalPodAutoscaler
-    rpc WatchAutoscalingV1NamespacedHorizontalPodAutoscalerList(WatchAutoscalingV1NamespacedHorizontalPodAutoscalerListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAutoscalingV1NamespacedHorizontalPodAutoscalerList(WatchAutoscalingV1NamespacedHorizontalPodAutoscalerListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind HorizontalPodAutoscaler
-    rpc WatchAutoscalingV1NamespacedHorizontalPodAutoscaler(WatchAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAutoscalingV1NamespacedHorizontalPodAutoscaler(WatchAutoscalingV1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetAutoscalingV2beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetAutoscalingV2beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind HorizontalPodAutoscaler
-    rpc ListAutoscalingV2beta1HorizontalPodAutoscalerForAllNamespaces(ListAutoscalingV2beta1HorizontalPodAutoscalerForAllNamespacesRequest) returns (Io_K8s_Api_Autoscaling_V2beta1) {}
+    rpc ListAutoscalingV2beta1HorizontalPodAutoscalerForAllNamespaces(ListAutoscalingV2beta1HorizontalPodAutoscalerForAllNamespacesRequest) returns (IoK8sApiAutoscalingV2beta1) {}
 
     // list or watch objects of kind HorizontalPodAutoscaler
-    rpc ListAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(ListAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V2beta1) {}
+    rpc ListAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(ListAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV2beta1) {}
 
     // create a HorizontalPodAutoscaler
-    rpc CreateAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(CreateAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V2beta1) {}
+    rpc CreateAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(CreateAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV2beta1) {}
 
     // delete collection of HorizontalPodAutoscaler
-    rpc DeleteAutoscalingV2beta1CollectionNamespacedHorizontalPodAutoscaler(DeleteAutoscalingV2beta1CollectionNamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAutoscalingV2beta1CollectionNamespacedHorizontalPodAutoscaler(DeleteAutoscalingV2beta1CollectionNamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified HorizontalPodAutoscaler
-    rpc ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V2beta1) {}
+    rpc ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV2beta1) {}
 
     // replace the specified HorizontalPodAutoscaler
-    rpc ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Api_Autoscaling_V2beta1) {}
+    rpc ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApiAutoscalingV2beta1) {}
 
     // delete a HorizontalPodAutoscaler
-    rpc DeleteAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(DeleteAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(DeleteAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified HorizontalPodAutoscaler
-    rpc ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatus(ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatusRequest) returns (Io_K8s_Api_Autoscaling_V2beta1) {}
+    rpc ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatus(ReadAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatusRequest) returns (IoK8sApiAutoscalingV2beta1) {}
 
     // replace status of the specified HorizontalPodAutoscaler
-    rpc ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatus(ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatusRequest) returns (Io_K8s_Api_Autoscaling_V2beta1) {}
+    rpc ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatus(ReplaceAutoscalingV2beta1NamespacedHorizontalPodAutoscalerStatusRequest) returns (IoK8sApiAutoscalingV2beta1) {}
 
     // watch individual changes to a list of HorizontalPodAutoscaler
-    rpc WatchAutoscalingV2beta1HorizontalPodAutoscalerListForAllNamespaces(WatchAutoscalingV2beta1HorizontalPodAutoscalerListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAutoscalingV2beta1HorizontalPodAutoscalerListForAllNamespaces(WatchAutoscalingV2beta1HorizontalPodAutoscalerListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of HorizontalPodAutoscaler
-    rpc WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscalerList(WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscalerListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscalerList(WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscalerListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind HorizontalPodAutoscaler
-    rpc WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscaler(WatchAutoscalingV2beta1NamespacedHorizontalPodAutoscalerRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetBatchAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetBatchAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetBatchV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetBatchV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind Job
-    rpc ListBatchV1JobForAllNamespaces(ListBatchV1JobForAllNamespacesRequest) returns (Io_K8s_Api_Batch_V1) {}
+    rpc ListBatchV1JobForAllNamespaces(ListBatchV1JobForAllNamespacesRequest) returns (IoK8sApiBatchV1) {}
 
     // list or watch objects of kind Job
-    rpc ListBatchV1NamespacedJob(ListBatchV1NamespacedJobRequest) returns (Io_K8s_Api_Batch_V1) {}
+    rpc ListBatchV1NamespacedJob(ListBatchV1NamespacedJobRequest) returns (IoK8sApiBatchV1) {}
 
     // create a Job
-    rpc CreateBatchV1NamespacedJob(CreateBatchV1NamespacedJobRequest) returns (Io_K8s_Api_Batch_V1) {}
+    rpc CreateBatchV1NamespacedJob(CreateBatchV1NamespacedJobRequest) returns (IoK8sApiBatchV1) {}
 
     // delete collection of Job
-    rpc DeleteBatchV1CollectionNamespacedJob(DeleteBatchV1CollectionNamespacedJobRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteBatchV1CollectionNamespacedJob(DeleteBatchV1CollectionNamespacedJobRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Job
-    rpc ReadBatchV1NamespacedJob(ReadBatchV1NamespacedJobRequest) returns (Io_K8s_Api_Batch_V1) {}
+    rpc ReadBatchV1NamespacedJob(ReadBatchV1NamespacedJobRequest) returns (IoK8sApiBatchV1) {}
 
     // replace the specified Job
-    rpc ReplaceBatchV1NamespacedJob(ReplaceBatchV1NamespacedJobRequest) returns (Io_K8s_Api_Batch_V1) {}
+    rpc ReplaceBatchV1NamespacedJob(ReplaceBatchV1NamespacedJobRequest) returns (IoK8sApiBatchV1) {}
 
     // delete a Job
-    rpc DeleteBatchV1NamespacedJob(DeleteBatchV1NamespacedJobRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteBatchV1NamespacedJob(DeleteBatchV1NamespacedJobRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified Job
-    rpc ReadBatchV1NamespacedJobStatus(ReadBatchV1NamespacedJobStatusRequest) returns (Io_K8s_Api_Batch_V1) {}
+    rpc ReadBatchV1NamespacedJobStatus(ReadBatchV1NamespacedJobStatusRequest) returns (IoK8sApiBatchV1) {}
 
     // replace status of the specified Job
-    rpc ReplaceBatchV1NamespacedJobStatus(ReplaceBatchV1NamespacedJobStatusRequest) returns (Io_K8s_Api_Batch_V1) {}
+    rpc ReplaceBatchV1NamespacedJobStatus(ReplaceBatchV1NamespacedJobStatusRequest) returns (IoK8sApiBatchV1) {}
 
     // watch individual changes to a list of Job
-    rpc WatchBatchV1JobListForAllNamespaces(WatchBatchV1JobListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchBatchV1JobListForAllNamespaces(WatchBatchV1JobListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Job
-    rpc WatchBatchV1NamespacedJobList(WatchBatchV1NamespacedJobListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchBatchV1NamespacedJobList(WatchBatchV1NamespacedJobListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Job
-    rpc WatchBatchV1NamespacedJob(WatchBatchV1NamespacedJobRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchBatchV1NamespacedJob(WatchBatchV1NamespacedJobRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetBatchV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetBatchV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind CronJob
-    rpc ListBatchV1beta1CronJobForAllNamespaces(ListBatchV1beta1CronJobForAllNamespacesRequest) returns (Io_K8s_Api_Batch_V1beta1) {}
+    rpc ListBatchV1beta1CronJobForAllNamespaces(ListBatchV1beta1CronJobForAllNamespacesRequest) returns (IoK8sApiBatchV1beta1) {}
 
     // list or watch objects of kind CronJob
-    rpc ListBatchV1beta1NamespacedCronJob(ListBatchV1beta1NamespacedCronJobRequest) returns (Io_K8s_Api_Batch_V1beta1) {}
+    rpc ListBatchV1beta1NamespacedCronJob(ListBatchV1beta1NamespacedCronJobRequest) returns (IoK8sApiBatchV1beta1) {}
 
     // create a CronJob
-    rpc CreateBatchV1beta1NamespacedCronJob(CreateBatchV1beta1NamespacedCronJobRequest) returns (Io_K8s_Api_Batch_V1beta1) {}
+    rpc CreateBatchV1beta1NamespacedCronJob(CreateBatchV1beta1NamespacedCronJobRequest) returns (IoK8sApiBatchV1beta1) {}
 
     // delete collection of CronJob
-    rpc DeleteBatchV1beta1CollectionNamespacedCronJob(DeleteBatchV1beta1CollectionNamespacedCronJobRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteBatchV1beta1CollectionNamespacedCronJob(DeleteBatchV1beta1CollectionNamespacedCronJobRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified CronJob
-    rpc ReadBatchV1beta1NamespacedCronJob(ReadBatchV1beta1NamespacedCronJobRequest) returns (Io_K8s_Api_Batch_V1beta1) {}
+    rpc ReadBatchV1beta1NamespacedCronJob(ReadBatchV1beta1NamespacedCronJobRequest) returns (IoK8sApiBatchV1beta1) {}
 
     // replace the specified CronJob
-    rpc ReplaceBatchV1beta1NamespacedCronJob(ReplaceBatchV1beta1NamespacedCronJobRequest) returns (Io_K8s_Api_Batch_V1beta1) {}
+    rpc ReplaceBatchV1beta1NamespacedCronJob(ReplaceBatchV1beta1NamespacedCronJobRequest) returns (IoK8sApiBatchV1beta1) {}
 
     // delete a CronJob
-    rpc DeleteBatchV1beta1NamespacedCronJob(DeleteBatchV1beta1NamespacedCronJobRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteBatchV1beta1NamespacedCronJob(DeleteBatchV1beta1NamespacedCronJobRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified CronJob
-    rpc ReadBatchV1beta1NamespacedCronJobStatus(ReadBatchV1beta1NamespacedCronJobStatusRequest) returns (Io_K8s_Api_Batch_V1beta1) {}
+    rpc ReadBatchV1beta1NamespacedCronJobStatus(ReadBatchV1beta1NamespacedCronJobStatusRequest) returns (IoK8sApiBatchV1beta1) {}
 
     // replace status of the specified CronJob
-    rpc ReplaceBatchV1beta1NamespacedCronJobStatus(ReplaceBatchV1beta1NamespacedCronJobStatusRequest) returns (Io_K8s_Api_Batch_V1beta1) {}
+    rpc ReplaceBatchV1beta1NamespacedCronJobStatus(ReplaceBatchV1beta1NamespacedCronJobStatusRequest) returns (IoK8sApiBatchV1beta1) {}
 
     // watch individual changes to a list of CronJob
-    rpc WatchBatchV1beta1CronJobListForAllNamespaces(WatchBatchV1beta1CronJobListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchBatchV1beta1CronJobListForAllNamespaces(WatchBatchV1beta1CronJobListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of CronJob
-    rpc WatchBatchV1beta1NamespacedCronJobList(WatchBatchV1beta1NamespacedCronJobListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchBatchV1beta1NamespacedCronJobList(WatchBatchV1beta1NamespacedCronJobListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind CronJob
-    rpc WatchBatchV1beta1NamespacedCronJob(WatchBatchV1beta1NamespacedCronJobRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchBatchV1beta1NamespacedCronJob(WatchBatchV1beta1NamespacedCronJobRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetCertificatesAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetCertificatesAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetCertificatesV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetCertificatesV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind CertificateSigningRequest
-    rpc ListCertificatesV1beta1CertificateSigningRequest(ListCertificatesV1beta1CertificateSigningRequestRequest) returns (Io_K8s_Api_Certificates_V1beta1) {}
+    rpc ListCertificatesV1beta1CertificateSigningRequest(ListCertificatesV1beta1CertificateSigningRequestRequest) returns (IoK8sApiCertificatesV1beta1) {}
 
     // create a CertificateSigningRequest
-    rpc CreateCertificatesV1beta1CertificateSigningRequest(CreateCertificatesV1beta1CertificateSigningRequestRequest) returns (Io_K8s_Api_Certificates_V1beta1) {}
+    rpc CreateCertificatesV1beta1CertificateSigningRequest(CreateCertificatesV1beta1CertificateSigningRequestRequest) returns (IoK8sApiCertificatesV1beta1) {}
 
     // delete collection of CertificateSigningRequest
-    rpc DeleteCertificatesV1beta1CollectionCertificateSigningRequest(DeleteCertificatesV1beta1CollectionCertificateSigningRequestRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCertificatesV1beta1CollectionCertificateSigningRequest(DeleteCertificatesV1beta1CollectionCertificateSigningRequestRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified CertificateSigningRequest
-    rpc ReadCertificatesV1beta1CertificateSigningRequest(ReadCertificatesV1beta1CertificateSigningRequestRequest) returns (Io_K8s_Api_Certificates_V1beta1) {}
+    rpc ReadCertificatesV1beta1CertificateSigningRequest(ReadCertificatesV1beta1CertificateSigningRequestRequest) returns (IoK8sApiCertificatesV1beta1) {}
 
     // replace the specified CertificateSigningRequest
-    rpc ReplaceCertificatesV1beta1CertificateSigningRequest(ReplaceCertificatesV1beta1CertificateSigningRequestRequest) returns (Io_K8s_Api_Certificates_V1beta1) {}
+    rpc ReplaceCertificatesV1beta1CertificateSigningRequest(ReplaceCertificatesV1beta1CertificateSigningRequestRequest) returns (IoK8sApiCertificatesV1beta1) {}
 
     // delete a CertificateSigningRequest
-    rpc DeleteCertificatesV1beta1CertificateSigningRequest(DeleteCertificatesV1beta1CertificateSigningRequestRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteCertificatesV1beta1CertificateSigningRequest(DeleteCertificatesV1beta1CertificateSigningRequestRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // replace approval of the specified CertificateSigningRequest
-    rpc ReplaceCertificatesV1beta1CertificateSigningRequestApproval(ReplaceCertificatesV1beta1CertificateSigningRequestApprovalRequest) returns (Io_K8s_Api_Certificates_V1beta1) {}
+    rpc ReplaceCertificatesV1beta1CertificateSigningRequestApproval(ReplaceCertificatesV1beta1CertificateSigningRequestApprovalRequest) returns (IoK8sApiCertificatesV1beta1) {}
 
     // replace status of the specified CertificateSigningRequest
-    rpc ReplaceCertificatesV1beta1CertificateSigningRequestStatus(ReplaceCertificatesV1beta1CertificateSigningRequestStatusRequest) returns (Io_K8s_Api_Certificates_V1beta1) {}
+    rpc ReplaceCertificatesV1beta1CertificateSigningRequestStatus(ReplaceCertificatesV1beta1CertificateSigningRequestStatusRequest) returns (IoK8sApiCertificatesV1beta1) {}
 
     // watch individual changes to a list of CertificateSigningRequest
-    rpc WatchCertificatesV1beta1CertificateSigningRequestList(WatchCertificatesV1beta1CertificateSigningRequestListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCertificatesV1beta1CertificateSigningRequestList(WatchCertificatesV1beta1CertificateSigningRequestListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind CertificateSigningRequest
-    rpc WatchCertificatesV1beta1CertificateSigningRequest(WatchCertificatesV1beta1CertificateSigningRequestRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchCertificatesV1beta1CertificateSigningRequest(WatchCertificatesV1beta1CertificateSigningRequestRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetExtensionsAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetExtensionsAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetExtensionsV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetExtensionsV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind DaemonSet
-    rpc ListExtensionsV1beta1DaemonSetForAllNamespaces(ListExtensionsV1beta1DaemonSetForAllNamespacesRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1DaemonSetForAllNamespaces(ListExtensionsV1beta1DaemonSetForAllNamespacesRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind Deployment
-    rpc ListExtensionsV1beta1DeploymentForAllNamespaces(ListExtensionsV1beta1DeploymentForAllNamespacesRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1DeploymentForAllNamespaces(ListExtensionsV1beta1DeploymentForAllNamespacesRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind Ingress
-    rpc ListExtensionsV1beta1IngressForAllNamespaces(ListExtensionsV1beta1IngressForAllNamespacesRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1IngressForAllNamespaces(ListExtensionsV1beta1IngressForAllNamespacesRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind DaemonSet
-    rpc ListExtensionsV1beta1NamespacedDaemonSet(ListExtensionsV1beta1NamespacedDaemonSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1NamespacedDaemonSet(ListExtensionsV1beta1NamespacedDaemonSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // create a DaemonSet
-    rpc CreateExtensionsV1beta1NamespacedDaemonSet(CreateExtensionsV1beta1NamespacedDaemonSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc CreateExtensionsV1beta1NamespacedDaemonSet(CreateExtensionsV1beta1NamespacedDaemonSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete collection of DaemonSet
-    rpc DeleteExtensionsV1beta1CollectionNamespacedDaemonSet(DeleteExtensionsV1beta1CollectionNamespacedDaemonSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1CollectionNamespacedDaemonSet(DeleteExtensionsV1beta1CollectionNamespacedDaemonSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified DaemonSet
-    rpc ReadExtensionsV1beta1NamespacedDaemonSet(ReadExtensionsV1beta1NamespacedDaemonSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedDaemonSet(ReadExtensionsV1beta1NamespacedDaemonSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace the specified DaemonSet
-    rpc ReplaceExtensionsV1beta1NamespacedDaemonSet(ReplaceExtensionsV1beta1NamespacedDaemonSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedDaemonSet(ReplaceExtensionsV1beta1NamespacedDaemonSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete a DaemonSet
-    rpc DeleteExtensionsV1beta1NamespacedDaemonSet(DeleteExtensionsV1beta1NamespacedDaemonSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1NamespacedDaemonSet(DeleteExtensionsV1beta1NamespacedDaemonSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified DaemonSet
-    rpc ReadExtensionsV1beta1NamespacedDaemonSetStatus(ReadExtensionsV1beta1NamespacedDaemonSetStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedDaemonSetStatus(ReadExtensionsV1beta1NamespacedDaemonSetStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace status of the specified DaemonSet
-    rpc ReplaceExtensionsV1beta1NamespacedDaemonSetStatus(ReplaceExtensionsV1beta1NamespacedDaemonSetStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedDaemonSetStatus(ReplaceExtensionsV1beta1NamespacedDaemonSetStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind Deployment
-    rpc ListExtensionsV1beta1NamespacedDeployment(ListExtensionsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1NamespacedDeployment(ListExtensionsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // create a Deployment
-    rpc CreateExtensionsV1beta1NamespacedDeployment(CreateExtensionsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc CreateExtensionsV1beta1NamespacedDeployment(CreateExtensionsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete collection of Deployment
-    rpc DeleteExtensionsV1beta1CollectionNamespacedDeployment(DeleteExtensionsV1beta1CollectionNamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1CollectionNamespacedDeployment(DeleteExtensionsV1beta1CollectionNamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Deployment
-    rpc ReadExtensionsV1beta1NamespacedDeployment(ReadExtensionsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedDeployment(ReadExtensionsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace the specified Deployment
-    rpc ReplaceExtensionsV1beta1NamespacedDeployment(ReplaceExtensionsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedDeployment(ReplaceExtensionsV1beta1NamespacedDeploymentRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete a Deployment
-    rpc DeleteExtensionsV1beta1NamespacedDeployment(DeleteExtensionsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1NamespacedDeployment(DeleteExtensionsV1beta1NamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // create rollback of a Deployment
-    rpc CreateExtensionsV1beta1NamespacedDeploymentRollback(CreateExtensionsV1beta1NamespacedDeploymentRollbackRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc CreateExtensionsV1beta1NamespacedDeploymentRollback(CreateExtensionsV1beta1NamespacedDeploymentRollbackRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // read scale of the specified Deployment
-    rpc ReadExtensionsV1beta1NamespacedDeploymentScale(ReadExtensionsV1beta1NamespacedDeploymentScaleRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedDeploymentScale(ReadExtensionsV1beta1NamespacedDeploymentScaleRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace scale of the specified Deployment
-    rpc ReplaceExtensionsV1beta1NamespacedDeploymentScale(ReplaceExtensionsV1beta1NamespacedDeploymentScaleRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedDeploymentScale(ReplaceExtensionsV1beta1NamespacedDeploymentScaleRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // read status of the specified Deployment
-    rpc ReadExtensionsV1beta1NamespacedDeploymentStatus(ReadExtensionsV1beta1NamespacedDeploymentStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedDeploymentStatus(ReadExtensionsV1beta1NamespacedDeploymentStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace status of the specified Deployment
-    rpc ReplaceExtensionsV1beta1NamespacedDeploymentStatus(ReplaceExtensionsV1beta1NamespacedDeploymentStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedDeploymentStatus(ReplaceExtensionsV1beta1NamespacedDeploymentStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind Ingress
-    rpc ListExtensionsV1beta1NamespacedIngress(ListExtensionsV1beta1NamespacedIngressRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1NamespacedIngress(ListExtensionsV1beta1NamespacedIngressRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // create an Ingress
-    rpc CreateExtensionsV1beta1NamespacedIngress(CreateExtensionsV1beta1NamespacedIngressRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc CreateExtensionsV1beta1NamespacedIngress(CreateExtensionsV1beta1NamespacedIngressRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete collection of Ingress
-    rpc DeleteExtensionsV1beta1CollectionNamespacedIngress(DeleteExtensionsV1beta1CollectionNamespacedIngressRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1CollectionNamespacedIngress(DeleteExtensionsV1beta1CollectionNamespacedIngressRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Ingress
-    rpc ReadExtensionsV1beta1NamespacedIngress(ReadExtensionsV1beta1NamespacedIngressRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedIngress(ReadExtensionsV1beta1NamespacedIngressRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace the specified Ingress
-    rpc ReplaceExtensionsV1beta1NamespacedIngress(ReplaceExtensionsV1beta1NamespacedIngressRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedIngress(ReplaceExtensionsV1beta1NamespacedIngressRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete an Ingress
-    rpc DeleteExtensionsV1beta1NamespacedIngress(DeleteExtensionsV1beta1NamespacedIngressRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1NamespacedIngress(DeleteExtensionsV1beta1NamespacedIngressRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified Ingress
-    rpc ReadExtensionsV1beta1NamespacedIngressStatus(ReadExtensionsV1beta1NamespacedIngressStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedIngressStatus(ReadExtensionsV1beta1NamespacedIngressStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace status of the specified Ingress
-    rpc ReplaceExtensionsV1beta1NamespacedIngressStatus(ReplaceExtensionsV1beta1NamespacedIngressStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedIngressStatus(ReplaceExtensionsV1beta1NamespacedIngressStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind NetworkPolicy
-    rpc ListExtensionsV1beta1NamespacedNetworkPolicy(ListExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1NamespacedNetworkPolicy(ListExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // create a NetworkPolicy
-    rpc CreateExtensionsV1beta1NamespacedNetworkPolicy(CreateExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc CreateExtensionsV1beta1NamespacedNetworkPolicy(CreateExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete collection of NetworkPolicy
-    rpc DeleteExtensionsV1beta1CollectionNamespacedNetworkPolicy(DeleteExtensionsV1beta1CollectionNamespacedNetworkPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1CollectionNamespacedNetworkPolicy(DeleteExtensionsV1beta1CollectionNamespacedNetworkPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified NetworkPolicy
-    rpc ReadExtensionsV1beta1NamespacedNetworkPolicy(ReadExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedNetworkPolicy(ReadExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace the specified NetworkPolicy
-    rpc ReplaceExtensionsV1beta1NamespacedNetworkPolicy(ReplaceExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedNetworkPolicy(ReplaceExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete a NetworkPolicy
-    rpc DeleteExtensionsV1beta1NamespacedNetworkPolicy(DeleteExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1NamespacedNetworkPolicy(DeleteExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ReplicaSet
-    rpc ListExtensionsV1beta1NamespacedReplicaSet(ListExtensionsV1beta1NamespacedReplicaSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1NamespacedReplicaSet(ListExtensionsV1beta1NamespacedReplicaSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // create a ReplicaSet
-    rpc CreateExtensionsV1beta1NamespacedReplicaSet(CreateExtensionsV1beta1NamespacedReplicaSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc CreateExtensionsV1beta1NamespacedReplicaSet(CreateExtensionsV1beta1NamespacedReplicaSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete collection of ReplicaSet
-    rpc DeleteExtensionsV1beta1CollectionNamespacedReplicaSet(DeleteExtensionsV1beta1CollectionNamespacedReplicaSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1CollectionNamespacedReplicaSet(DeleteExtensionsV1beta1CollectionNamespacedReplicaSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ReplicaSet
-    rpc ReadExtensionsV1beta1NamespacedReplicaSet(ReadExtensionsV1beta1NamespacedReplicaSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedReplicaSet(ReadExtensionsV1beta1NamespacedReplicaSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace the specified ReplicaSet
-    rpc ReplaceExtensionsV1beta1NamespacedReplicaSet(ReplaceExtensionsV1beta1NamespacedReplicaSetRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedReplicaSet(ReplaceExtensionsV1beta1NamespacedReplicaSetRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete a ReplicaSet
-    rpc DeleteExtensionsV1beta1NamespacedReplicaSet(DeleteExtensionsV1beta1NamespacedReplicaSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1NamespacedReplicaSet(DeleteExtensionsV1beta1NamespacedReplicaSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read scale of the specified ReplicaSet
-    rpc ReadExtensionsV1beta1NamespacedReplicaSetScale(ReadExtensionsV1beta1NamespacedReplicaSetScaleRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedReplicaSetScale(ReadExtensionsV1beta1NamespacedReplicaSetScaleRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace scale of the specified ReplicaSet
-    rpc ReplaceExtensionsV1beta1NamespacedReplicaSetScale(ReplaceExtensionsV1beta1NamespacedReplicaSetScaleRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedReplicaSetScale(ReplaceExtensionsV1beta1NamespacedReplicaSetScaleRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // read status of the specified ReplicaSet
-    rpc ReadExtensionsV1beta1NamespacedReplicaSetStatus(ReadExtensionsV1beta1NamespacedReplicaSetStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedReplicaSetStatus(ReadExtensionsV1beta1NamespacedReplicaSetStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace status of the specified ReplicaSet
-    rpc ReplaceExtensionsV1beta1NamespacedReplicaSetStatus(ReplaceExtensionsV1beta1NamespacedReplicaSetStatusRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedReplicaSetStatus(ReplaceExtensionsV1beta1NamespacedReplicaSetStatusRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // read scale of the specified ReplicationControllerDummy
-    rpc ReadExtensionsV1beta1NamespacedReplicationControllerDummyScale(ReadExtensionsV1beta1NamespacedReplicationControllerDummyScaleRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1NamespacedReplicationControllerDummyScale(ReadExtensionsV1beta1NamespacedReplicationControllerDummyScaleRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace scale of the specified ReplicationControllerDummy
-    rpc ReplaceExtensionsV1beta1NamespacedReplicationControllerDummyScale(ReplaceExtensionsV1beta1NamespacedReplicationControllerDummyScaleRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1NamespacedReplicationControllerDummyScale(ReplaceExtensionsV1beta1NamespacedReplicationControllerDummyScaleRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind NetworkPolicy
-    rpc ListExtensionsV1beta1NetworkPolicyForAllNamespaces(ListExtensionsV1beta1NetworkPolicyForAllNamespacesRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1NetworkPolicyForAllNamespaces(ListExtensionsV1beta1NetworkPolicyForAllNamespacesRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // list or watch objects of kind PodSecurityPolicy
-    rpc ListExtensionsV1beta1PodSecurityPolicy(ListExtensionsV1beta1PodSecurityPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1PodSecurityPolicy(ListExtensionsV1beta1PodSecurityPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // create a PodSecurityPolicy
-    rpc CreateExtensionsV1beta1PodSecurityPolicy(CreateExtensionsV1beta1PodSecurityPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc CreateExtensionsV1beta1PodSecurityPolicy(CreateExtensionsV1beta1PodSecurityPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete collection of PodSecurityPolicy
-    rpc DeleteExtensionsV1beta1CollectionPodSecurityPolicy(DeleteExtensionsV1beta1CollectionPodSecurityPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1CollectionPodSecurityPolicy(DeleteExtensionsV1beta1CollectionPodSecurityPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified PodSecurityPolicy
-    rpc ReadExtensionsV1beta1PodSecurityPolicy(ReadExtensionsV1beta1PodSecurityPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReadExtensionsV1beta1PodSecurityPolicy(ReadExtensionsV1beta1PodSecurityPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // replace the specified PodSecurityPolicy
-    rpc ReplaceExtensionsV1beta1PodSecurityPolicy(ReplaceExtensionsV1beta1PodSecurityPolicyRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ReplaceExtensionsV1beta1PodSecurityPolicy(ReplaceExtensionsV1beta1PodSecurityPolicyRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // delete a PodSecurityPolicy
-    rpc DeleteExtensionsV1beta1PodSecurityPolicy(DeleteExtensionsV1beta1PodSecurityPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteExtensionsV1beta1PodSecurityPolicy(DeleteExtensionsV1beta1PodSecurityPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ReplicaSet
-    rpc ListExtensionsV1beta1ReplicaSetForAllNamespaces(ListExtensionsV1beta1ReplicaSetForAllNamespacesRequest) returns (Io_K8s_Api_Extensions_V1beta1) {}
+    rpc ListExtensionsV1beta1ReplicaSetForAllNamespaces(ListExtensionsV1beta1ReplicaSetForAllNamespacesRequest) returns (IoK8sApiExtensionsV1beta1) {}
 
     // watch individual changes to a list of DaemonSet
-    rpc WatchExtensionsV1beta1DaemonSetListForAllNamespaces(WatchExtensionsV1beta1DaemonSetListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1DaemonSetListForAllNamespaces(WatchExtensionsV1beta1DaemonSetListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Deployment
-    rpc WatchExtensionsV1beta1DeploymentListForAllNamespaces(WatchExtensionsV1beta1DeploymentListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1DeploymentListForAllNamespaces(WatchExtensionsV1beta1DeploymentListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Ingress
-    rpc WatchExtensionsV1beta1IngressListForAllNamespaces(WatchExtensionsV1beta1IngressListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1IngressListForAllNamespaces(WatchExtensionsV1beta1IngressListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of DaemonSet
-    rpc WatchExtensionsV1beta1NamespacedDaemonSetList(WatchExtensionsV1beta1NamespacedDaemonSetListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedDaemonSetList(WatchExtensionsV1beta1NamespacedDaemonSetListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind DaemonSet
-    rpc WatchExtensionsV1beta1NamespacedDaemonSet(WatchExtensionsV1beta1NamespacedDaemonSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedDaemonSet(WatchExtensionsV1beta1NamespacedDaemonSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Deployment
-    rpc WatchExtensionsV1beta1NamespacedDeploymentList(WatchExtensionsV1beta1NamespacedDeploymentListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedDeploymentList(WatchExtensionsV1beta1NamespacedDeploymentListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Deployment
-    rpc WatchExtensionsV1beta1NamespacedDeployment(WatchExtensionsV1beta1NamespacedDeploymentRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedDeployment(WatchExtensionsV1beta1NamespacedDeploymentRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Ingress
-    rpc WatchExtensionsV1beta1NamespacedIngressList(WatchExtensionsV1beta1NamespacedIngressListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedIngressList(WatchExtensionsV1beta1NamespacedIngressListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Ingress
-    rpc WatchExtensionsV1beta1NamespacedIngress(WatchExtensionsV1beta1NamespacedIngressRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedIngress(WatchExtensionsV1beta1NamespacedIngressRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of NetworkPolicy
-    rpc WatchExtensionsV1beta1NamespacedNetworkPolicyList(WatchExtensionsV1beta1NamespacedNetworkPolicyListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedNetworkPolicyList(WatchExtensionsV1beta1NamespacedNetworkPolicyListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind NetworkPolicy
-    rpc WatchExtensionsV1beta1NamespacedNetworkPolicy(WatchExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedNetworkPolicy(WatchExtensionsV1beta1NamespacedNetworkPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ReplicaSet
-    rpc WatchExtensionsV1beta1NamespacedReplicaSetList(WatchExtensionsV1beta1NamespacedReplicaSetListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedReplicaSetList(WatchExtensionsV1beta1NamespacedReplicaSetListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ReplicaSet
-    rpc WatchExtensionsV1beta1NamespacedReplicaSet(WatchExtensionsV1beta1NamespacedReplicaSetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NamespacedReplicaSet(WatchExtensionsV1beta1NamespacedReplicaSetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of NetworkPolicy
-    rpc WatchExtensionsV1beta1NetworkPolicyListForAllNamespaces(WatchExtensionsV1beta1NetworkPolicyListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1NetworkPolicyListForAllNamespaces(WatchExtensionsV1beta1NetworkPolicyListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of PodSecurityPolicy
-    rpc WatchExtensionsV1beta1PodSecurityPolicyList(WatchExtensionsV1beta1PodSecurityPolicyListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1PodSecurityPolicyList(WatchExtensionsV1beta1PodSecurityPolicyListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind PodSecurityPolicy
-    rpc WatchExtensionsV1beta1PodSecurityPolicy(WatchExtensionsV1beta1PodSecurityPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1PodSecurityPolicy(WatchExtensionsV1beta1PodSecurityPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ReplicaSet
-    rpc WatchExtensionsV1beta1ReplicaSetListForAllNamespaces(WatchExtensionsV1beta1ReplicaSetListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchExtensionsV1beta1ReplicaSetListForAllNamespaces(WatchExtensionsV1beta1ReplicaSetListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetNetworkingAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetNetworkingAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetNetworkingV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetNetworkingV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind NetworkPolicy
-    rpc ListNetworkingV1NamespacedNetworkPolicy(ListNetworkingV1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Networking_V1) {}
+    rpc ListNetworkingV1NamespacedNetworkPolicy(ListNetworkingV1NamespacedNetworkPolicyRequest) returns (IoK8sApiNetworkingV1) {}
 
     // create a NetworkPolicy
-    rpc CreateNetworkingV1NamespacedNetworkPolicy(CreateNetworkingV1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Networking_V1) {}
+    rpc CreateNetworkingV1NamespacedNetworkPolicy(CreateNetworkingV1NamespacedNetworkPolicyRequest) returns (IoK8sApiNetworkingV1) {}
 
     // delete collection of NetworkPolicy
-    rpc DeleteNetworkingV1CollectionNamespacedNetworkPolicy(DeleteNetworkingV1CollectionNamespacedNetworkPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteNetworkingV1CollectionNamespacedNetworkPolicy(DeleteNetworkingV1CollectionNamespacedNetworkPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified NetworkPolicy
-    rpc ReadNetworkingV1NamespacedNetworkPolicy(ReadNetworkingV1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Networking_V1) {}
+    rpc ReadNetworkingV1NamespacedNetworkPolicy(ReadNetworkingV1NamespacedNetworkPolicyRequest) returns (IoK8sApiNetworkingV1) {}
 
     // replace the specified NetworkPolicy
-    rpc ReplaceNetworkingV1NamespacedNetworkPolicy(ReplaceNetworkingV1NamespacedNetworkPolicyRequest) returns (Io_K8s_Api_Networking_V1) {}
+    rpc ReplaceNetworkingV1NamespacedNetworkPolicy(ReplaceNetworkingV1NamespacedNetworkPolicyRequest) returns (IoK8sApiNetworkingV1) {}
 
     // delete a NetworkPolicy
-    rpc DeleteNetworkingV1NamespacedNetworkPolicy(DeleteNetworkingV1NamespacedNetworkPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteNetworkingV1NamespacedNetworkPolicy(DeleteNetworkingV1NamespacedNetworkPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind NetworkPolicy
-    rpc ListNetworkingV1NetworkPolicyForAllNamespaces(ListNetworkingV1NetworkPolicyForAllNamespacesRequest) returns (Io_K8s_Api_Networking_V1) {}
+    rpc ListNetworkingV1NetworkPolicyForAllNamespaces(ListNetworkingV1NetworkPolicyForAllNamespacesRequest) returns (IoK8sApiNetworkingV1) {}
 
     // watch individual changes to a list of NetworkPolicy
-    rpc WatchNetworkingV1NamespacedNetworkPolicyList(WatchNetworkingV1NamespacedNetworkPolicyListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchNetworkingV1NamespacedNetworkPolicyList(WatchNetworkingV1NamespacedNetworkPolicyListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind NetworkPolicy
-    rpc WatchNetworkingV1NamespacedNetworkPolicy(WatchNetworkingV1NamespacedNetworkPolicyRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchNetworkingV1NamespacedNetworkPolicy(WatchNetworkingV1NamespacedNetworkPolicyRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of NetworkPolicy
-    rpc WatchNetworkingV1NetworkPolicyListForAllNamespaces(WatchNetworkingV1NetworkPolicyListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchNetworkingV1NetworkPolicyListForAllNamespaces(WatchNetworkingV1NetworkPolicyListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetPolicyAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetPolicyAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetPolicyV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetPolicyV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind PodDisruptionBudget
-    rpc ListPolicyV1beta1NamespacedPodDisruptionBudget(ListPolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc ListPolicyV1beta1NamespacedPodDisruptionBudget(ListPolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // create a PodDisruptionBudget
-    rpc CreatePolicyV1beta1NamespacedPodDisruptionBudget(CreatePolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc CreatePolicyV1beta1NamespacedPodDisruptionBudget(CreatePolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // delete collection of PodDisruptionBudget
-    rpc DeletePolicyV1beta1CollectionNamespacedPodDisruptionBudget(DeletePolicyV1beta1CollectionNamespacedPodDisruptionBudgetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeletePolicyV1beta1CollectionNamespacedPodDisruptionBudget(DeletePolicyV1beta1CollectionNamespacedPodDisruptionBudgetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified PodDisruptionBudget
-    rpc ReadPolicyV1beta1NamespacedPodDisruptionBudget(ReadPolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc ReadPolicyV1beta1NamespacedPodDisruptionBudget(ReadPolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // replace the specified PodDisruptionBudget
-    rpc ReplacePolicyV1beta1NamespacedPodDisruptionBudget(ReplacePolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc ReplacePolicyV1beta1NamespacedPodDisruptionBudget(ReplacePolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // delete a PodDisruptionBudget
-    rpc DeletePolicyV1beta1NamespacedPodDisruptionBudget(DeletePolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeletePolicyV1beta1NamespacedPodDisruptionBudget(DeletePolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read status of the specified PodDisruptionBudget
-    rpc ReadPolicyV1beta1NamespacedPodDisruptionBudgetStatus(ReadPolicyV1beta1NamespacedPodDisruptionBudgetStatusRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc ReadPolicyV1beta1NamespacedPodDisruptionBudgetStatus(ReadPolicyV1beta1NamespacedPodDisruptionBudgetStatusRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // replace status of the specified PodDisruptionBudget
-    rpc ReplacePolicyV1beta1NamespacedPodDisruptionBudgetStatus(ReplacePolicyV1beta1NamespacedPodDisruptionBudgetStatusRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc ReplacePolicyV1beta1NamespacedPodDisruptionBudgetStatus(ReplacePolicyV1beta1NamespacedPodDisruptionBudgetStatusRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // list or watch objects of kind PodDisruptionBudget
-    rpc ListPolicyV1beta1PodDisruptionBudgetForAllNamespaces(ListPolicyV1beta1PodDisruptionBudgetForAllNamespacesRequest) returns (Io_K8s_Api_Policy_V1beta1) {}
+    rpc ListPolicyV1beta1PodDisruptionBudgetForAllNamespaces(ListPolicyV1beta1PodDisruptionBudgetForAllNamespacesRequest) returns (IoK8sApiPolicyV1beta1) {}
 
     // watch individual changes to a list of PodDisruptionBudget
-    rpc WatchPolicyV1beta1NamespacedPodDisruptionBudgetList(WatchPolicyV1beta1NamespacedPodDisruptionBudgetListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchPolicyV1beta1NamespacedPodDisruptionBudgetList(WatchPolicyV1beta1NamespacedPodDisruptionBudgetListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind PodDisruptionBudget
-    rpc WatchPolicyV1beta1NamespacedPodDisruptionBudget(WatchPolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchPolicyV1beta1NamespacedPodDisruptionBudget(WatchPolicyV1beta1NamespacedPodDisruptionBudgetRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of PodDisruptionBudget
-    rpc WatchPolicyV1beta1PodDisruptionBudgetListForAllNamespaces(WatchPolicyV1beta1PodDisruptionBudgetListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchPolicyV1beta1PodDisruptionBudgetListForAllNamespaces(WatchPolicyV1beta1PodDisruptionBudgetListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetRbacAuthorizationAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetRbacAuthorizationAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetRbacAuthorizationV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetRbacAuthorizationV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ClusterRoleBinding
-    rpc ListRbacAuthorizationV1ClusterRoleBinding(ListRbacAuthorizationV1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ListRbacAuthorizationV1ClusterRoleBinding(ListRbacAuthorizationV1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // create a ClusterRoleBinding
-    rpc CreateRbacAuthorizationV1ClusterRoleBinding(CreateRbacAuthorizationV1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc CreateRbacAuthorizationV1ClusterRoleBinding(CreateRbacAuthorizationV1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // delete collection of ClusterRoleBinding
-    rpc DeleteRbacAuthorizationV1CollectionClusterRoleBinding(DeleteRbacAuthorizationV1CollectionClusterRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1CollectionClusterRoleBinding(DeleteRbacAuthorizationV1CollectionClusterRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ClusterRoleBinding
-    rpc ReadRbacAuthorizationV1ClusterRoleBinding(ReadRbacAuthorizationV1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReadRbacAuthorizationV1ClusterRoleBinding(ReadRbacAuthorizationV1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // replace the specified ClusterRoleBinding
-    rpc ReplaceRbacAuthorizationV1ClusterRoleBinding(ReplaceRbacAuthorizationV1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReplaceRbacAuthorizationV1ClusterRoleBinding(ReplaceRbacAuthorizationV1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // delete a ClusterRoleBinding
-    rpc DeleteRbacAuthorizationV1ClusterRoleBinding(DeleteRbacAuthorizationV1ClusterRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1ClusterRoleBinding(DeleteRbacAuthorizationV1ClusterRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ClusterRole
-    rpc ListRbacAuthorizationV1ClusterRole(ListRbacAuthorizationV1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ListRbacAuthorizationV1ClusterRole(ListRbacAuthorizationV1ClusterRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // create a ClusterRole
-    rpc CreateRbacAuthorizationV1ClusterRole(CreateRbacAuthorizationV1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc CreateRbacAuthorizationV1ClusterRole(CreateRbacAuthorizationV1ClusterRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // delete collection of ClusterRole
-    rpc DeleteRbacAuthorizationV1CollectionClusterRole(DeleteRbacAuthorizationV1CollectionClusterRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1CollectionClusterRole(DeleteRbacAuthorizationV1CollectionClusterRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ClusterRole
-    rpc ReadRbacAuthorizationV1ClusterRole(ReadRbacAuthorizationV1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReadRbacAuthorizationV1ClusterRole(ReadRbacAuthorizationV1ClusterRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // replace the specified ClusterRole
-    rpc ReplaceRbacAuthorizationV1ClusterRole(ReplaceRbacAuthorizationV1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReplaceRbacAuthorizationV1ClusterRole(ReplaceRbacAuthorizationV1ClusterRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // delete a ClusterRole
-    rpc DeleteRbacAuthorizationV1ClusterRole(DeleteRbacAuthorizationV1ClusterRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1ClusterRole(DeleteRbacAuthorizationV1ClusterRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind RoleBinding
-    rpc ListRbacAuthorizationV1NamespacedRoleBinding(ListRbacAuthorizationV1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ListRbacAuthorizationV1NamespacedRoleBinding(ListRbacAuthorizationV1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // create a RoleBinding
-    rpc CreateRbacAuthorizationV1NamespacedRoleBinding(CreateRbacAuthorizationV1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc CreateRbacAuthorizationV1NamespacedRoleBinding(CreateRbacAuthorizationV1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // delete collection of RoleBinding
-    rpc DeleteRbacAuthorizationV1CollectionNamespacedRoleBinding(DeleteRbacAuthorizationV1CollectionNamespacedRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1CollectionNamespacedRoleBinding(DeleteRbacAuthorizationV1CollectionNamespacedRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified RoleBinding
-    rpc ReadRbacAuthorizationV1NamespacedRoleBinding(ReadRbacAuthorizationV1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReadRbacAuthorizationV1NamespacedRoleBinding(ReadRbacAuthorizationV1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // replace the specified RoleBinding
-    rpc ReplaceRbacAuthorizationV1NamespacedRoleBinding(ReplaceRbacAuthorizationV1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReplaceRbacAuthorizationV1NamespacedRoleBinding(ReplaceRbacAuthorizationV1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1) {}
 
     // delete a RoleBinding
-    rpc DeleteRbacAuthorizationV1NamespacedRoleBinding(DeleteRbacAuthorizationV1NamespacedRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1NamespacedRoleBinding(DeleteRbacAuthorizationV1NamespacedRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind Role
-    rpc ListRbacAuthorizationV1NamespacedRole(ListRbacAuthorizationV1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ListRbacAuthorizationV1NamespacedRole(ListRbacAuthorizationV1NamespacedRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // create a Role
-    rpc CreateRbacAuthorizationV1NamespacedRole(CreateRbacAuthorizationV1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc CreateRbacAuthorizationV1NamespacedRole(CreateRbacAuthorizationV1NamespacedRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // delete collection of Role
-    rpc DeleteRbacAuthorizationV1CollectionNamespacedRole(DeleteRbacAuthorizationV1CollectionNamespacedRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1CollectionNamespacedRole(DeleteRbacAuthorizationV1CollectionNamespacedRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Role
-    rpc ReadRbacAuthorizationV1NamespacedRole(ReadRbacAuthorizationV1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReadRbacAuthorizationV1NamespacedRole(ReadRbacAuthorizationV1NamespacedRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // replace the specified Role
-    rpc ReplaceRbacAuthorizationV1NamespacedRole(ReplaceRbacAuthorizationV1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ReplaceRbacAuthorizationV1NamespacedRole(ReplaceRbacAuthorizationV1NamespacedRoleRequest) returns (IoK8sApiRbacV1) {}
 
     // delete a Role
-    rpc DeleteRbacAuthorizationV1NamespacedRole(DeleteRbacAuthorizationV1NamespacedRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1NamespacedRole(DeleteRbacAuthorizationV1NamespacedRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind RoleBinding
-    rpc ListRbacAuthorizationV1RoleBindingForAllNamespaces(ListRbacAuthorizationV1RoleBindingForAllNamespacesRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ListRbacAuthorizationV1RoleBindingForAllNamespaces(ListRbacAuthorizationV1RoleBindingForAllNamespacesRequest) returns (IoK8sApiRbacV1) {}
 
     // list or watch objects of kind Role
-    rpc ListRbacAuthorizationV1RoleForAllNamespaces(ListRbacAuthorizationV1RoleForAllNamespacesRequest) returns (Io_K8s_Api_Rbac_V1) {}
+    rpc ListRbacAuthorizationV1RoleForAllNamespaces(ListRbacAuthorizationV1RoleForAllNamespacesRequest) returns (IoK8sApiRbacV1) {}
 
     // watch individual changes to a list of ClusterRoleBinding
-    rpc WatchRbacAuthorizationV1ClusterRoleBindingList(WatchRbacAuthorizationV1ClusterRoleBindingListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1ClusterRoleBindingList(WatchRbacAuthorizationV1ClusterRoleBindingListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ClusterRoleBinding
-    rpc WatchRbacAuthorizationV1ClusterRoleBinding(WatchRbacAuthorizationV1ClusterRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1ClusterRoleBinding(WatchRbacAuthorizationV1ClusterRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ClusterRole
-    rpc WatchRbacAuthorizationV1ClusterRoleList(WatchRbacAuthorizationV1ClusterRoleListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1ClusterRoleList(WatchRbacAuthorizationV1ClusterRoleListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ClusterRole
-    rpc WatchRbacAuthorizationV1ClusterRole(WatchRbacAuthorizationV1ClusterRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1ClusterRole(WatchRbacAuthorizationV1ClusterRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of RoleBinding
-    rpc WatchRbacAuthorizationV1NamespacedRoleBindingList(WatchRbacAuthorizationV1NamespacedRoleBindingListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1NamespacedRoleBindingList(WatchRbacAuthorizationV1NamespacedRoleBindingListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind RoleBinding
-    rpc WatchRbacAuthorizationV1NamespacedRoleBinding(WatchRbacAuthorizationV1NamespacedRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1NamespacedRoleBinding(WatchRbacAuthorizationV1NamespacedRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Role
-    rpc WatchRbacAuthorizationV1NamespacedRoleList(WatchRbacAuthorizationV1NamespacedRoleListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1NamespacedRoleList(WatchRbacAuthorizationV1NamespacedRoleListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Role
-    rpc WatchRbacAuthorizationV1NamespacedRole(WatchRbacAuthorizationV1NamespacedRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1NamespacedRole(WatchRbacAuthorizationV1NamespacedRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of RoleBinding
-    rpc WatchRbacAuthorizationV1RoleBindingListForAllNamespaces(WatchRbacAuthorizationV1RoleBindingListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1RoleBindingListForAllNamespaces(WatchRbacAuthorizationV1RoleBindingListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Role
-    rpc WatchRbacAuthorizationV1RoleListForAllNamespaces(WatchRbacAuthorizationV1RoleListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1RoleListForAllNamespaces(WatchRbacAuthorizationV1RoleListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetRbacAuthorizationV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetRbacAuthorizationV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ClusterRoleBinding
-    rpc ListRbacAuthorizationV1beta1ClusterRoleBinding(ListRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ListRbacAuthorizationV1beta1ClusterRoleBinding(ListRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // create a ClusterRoleBinding
-    rpc CreateRbacAuthorizationV1beta1ClusterRoleBinding(CreateRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc CreateRbacAuthorizationV1beta1ClusterRoleBinding(CreateRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete collection of ClusterRoleBinding
-    rpc DeleteRbacAuthorizationV1beta1CollectionClusterRoleBinding(DeleteRbacAuthorizationV1beta1CollectionClusterRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1CollectionClusterRoleBinding(DeleteRbacAuthorizationV1beta1CollectionClusterRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ClusterRoleBinding
-    rpc ReadRbacAuthorizationV1beta1ClusterRoleBinding(ReadRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReadRbacAuthorizationV1beta1ClusterRoleBinding(ReadRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // replace the specified ClusterRoleBinding
-    rpc ReplaceRbacAuthorizationV1beta1ClusterRoleBinding(ReplaceRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReplaceRbacAuthorizationV1beta1ClusterRoleBinding(ReplaceRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete a ClusterRoleBinding
-    rpc DeleteRbacAuthorizationV1beta1ClusterRoleBinding(DeleteRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1ClusterRoleBinding(DeleteRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind ClusterRole
-    rpc ListRbacAuthorizationV1beta1ClusterRole(ListRbacAuthorizationV1beta1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ListRbacAuthorizationV1beta1ClusterRole(ListRbacAuthorizationV1beta1ClusterRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // create a ClusterRole
-    rpc CreateRbacAuthorizationV1beta1ClusterRole(CreateRbacAuthorizationV1beta1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc CreateRbacAuthorizationV1beta1ClusterRole(CreateRbacAuthorizationV1beta1ClusterRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete collection of ClusterRole
-    rpc DeleteRbacAuthorizationV1beta1CollectionClusterRole(DeleteRbacAuthorizationV1beta1CollectionClusterRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1CollectionClusterRole(DeleteRbacAuthorizationV1beta1CollectionClusterRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified ClusterRole
-    rpc ReadRbacAuthorizationV1beta1ClusterRole(ReadRbacAuthorizationV1beta1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReadRbacAuthorizationV1beta1ClusterRole(ReadRbacAuthorizationV1beta1ClusterRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // replace the specified ClusterRole
-    rpc ReplaceRbacAuthorizationV1beta1ClusterRole(ReplaceRbacAuthorizationV1beta1ClusterRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReplaceRbacAuthorizationV1beta1ClusterRole(ReplaceRbacAuthorizationV1beta1ClusterRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete a ClusterRole
-    rpc DeleteRbacAuthorizationV1beta1ClusterRole(DeleteRbacAuthorizationV1beta1ClusterRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1ClusterRole(DeleteRbacAuthorizationV1beta1ClusterRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind RoleBinding
-    rpc ListRbacAuthorizationV1beta1NamespacedRoleBinding(ListRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ListRbacAuthorizationV1beta1NamespacedRoleBinding(ListRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // create a RoleBinding
-    rpc CreateRbacAuthorizationV1beta1NamespacedRoleBinding(CreateRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc CreateRbacAuthorizationV1beta1NamespacedRoleBinding(CreateRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete collection of RoleBinding
-    rpc DeleteRbacAuthorizationV1beta1CollectionNamespacedRoleBinding(DeleteRbacAuthorizationV1beta1CollectionNamespacedRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1CollectionNamespacedRoleBinding(DeleteRbacAuthorizationV1beta1CollectionNamespacedRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified RoleBinding
-    rpc ReadRbacAuthorizationV1beta1NamespacedRoleBinding(ReadRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReadRbacAuthorizationV1beta1NamespacedRoleBinding(ReadRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // replace the specified RoleBinding
-    rpc ReplaceRbacAuthorizationV1beta1NamespacedRoleBinding(ReplaceRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReplaceRbacAuthorizationV1beta1NamespacedRoleBinding(ReplaceRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete a RoleBinding
-    rpc DeleteRbacAuthorizationV1beta1NamespacedRoleBinding(DeleteRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1NamespacedRoleBinding(DeleteRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind Role
-    rpc ListRbacAuthorizationV1beta1NamespacedRole(ListRbacAuthorizationV1beta1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ListRbacAuthorizationV1beta1NamespacedRole(ListRbacAuthorizationV1beta1NamespacedRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // create a Role
-    rpc CreateRbacAuthorizationV1beta1NamespacedRole(CreateRbacAuthorizationV1beta1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc CreateRbacAuthorizationV1beta1NamespacedRole(CreateRbacAuthorizationV1beta1NamespacedRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete collection of Role
-    rpc DeleteRbacAuthorizationV1beta1CollectionNamespacedRole(DeleteRbacAuthorizationV1beta1CollectionNamespacedRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1CollectionNamespacedRole(DeleteRbacAuthorizationV1beta1CollectionNamespacedRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified Role
-    rpc ReadRbacAuthorizationV1beta1NamespacedRole(ReadRbacAuthorizationV1beta1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReadRbacAuthorizationV1beta1NamespacedRole(ReadRbacAuthorizationV1beta1NamespacedRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // replace the specified Role
-    rpc ReplaceRbacAuthorizationV1beta1NamespacedRole(ReplaceRbacAuthorizationV1beta1NamespacedRoleRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ReplaceRbacAuthorizationV1beta1NamespacedRole(ReplaceRbacAuthorizationV1beta1NamespacedRoleRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // delete a Role
-    rpc DeleteRbacAuthorizationV1beta1NamespacedRole(DeleteRbacAuthorizationV1beta1NamespacedRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteRbacAuthorizationV1beta1NamespacedRole(DeleteRbacAuthorizationV1beta1NamespacedRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind RoleBinding
-    rpc ListRbacAuthorizationV1beta1RoleBindingForAllNamespaces(ListRbacAuthorizationV1beta1RoleBindingForAllNamespacesRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ListRbacAuthorizationV1beta1RoleBindingForAllNamespaces(ListRbacAuthorizationV1beta1RoleBindingForAllNamespacesRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // list or watch objects of kind Role
-    rpc ListRbacAuthorizationV1beta1RoleForAllNamespaces(ListRbacAuthorizationV1beta1RoleForAllNamespacesRequest) returns (Io_K8s_Api_Rbac_V1beta1) {}
+    rpc ListRbacAuthorizationV1beta1RoleForAllNamespaces(ListRbacAuthorizationV1beta1RoleForAllNamespacesRequest) returns (IoK8sApiRbacV1beta1) {}
 
     // watch individual changes to a list of ClusterRoleBinding
-    rpc WatchRbacAuthorizationV1beta1ClusterRoleBindingList(WatchRbacAuthorizationV1beta1ClusterRoleBindingListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1ClusterRoleBindingList(WatchRbacAuthorizationV1beta1ClusterRoleBindingListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ClusterRoleBinding
-    rpc WatchRbacAuthorizationV1beta1ClusterRoleBinding(WatchRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1ClusterRoleBinding(WatchRbacAuthorizationV1beta1ClusterRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of ClusterRole
-    rpc WatchRbacAuthorizationV1beta1ClusterRoleList(WatchRbacAuthorizationV1beta1ClusterRoleListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1ClusterRoleList(WatchRbacAuthorizationV1beta1ClusterRoleListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind ClusterRole
-    rpc WatchRbacAuthorizationV1beta1ClusterRole(WatchRbacAuthorizationV1beta1ClusterRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1ClusterRole(WatchRbacAuthorizationV1beta1ClusterRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of RoleBinding
-    rpc WatchRbacAuthorizationV1beta1NamespacedRoleBindingList(WatchRbacAuthorizationV1beta1NamespacedRoleBindingListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1NamespacedRoleBindingList(WatchRbacAuthorizationV1beta1NamespacedRoleBindingListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind RoleBinding
-    rpc WatchRbacAuthorizationV1beta1NamespacedRoleBinding(WatchRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1NamespacedRoleBinding(WatchRbacAuthorizationV1beta1NamespacedRoleBindingRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Role
-    rpc WatchRbacAuthorizationV1beta1NamespacedRoleList(WatchRbacAuthorizationV1beta1NamespacedRoleListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1NamespacedRoleList(WatchRbacAuthorizationV1beta1NamespacedRoleListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind Role
-    rpc WatchRbacAuthorizationV1beta1NamespacedRole(WatchRbacAuthorizationV1beta1NamespacedRoleRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1NamespacedRole(WatchRbacAuthorizationV1beta1NamespacedRoleRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of RoleBinding
-    rpc WatchRbacAuthorizationV1beta1RoleBindingListForAllNamespaces(WatchRbacAuthorizationV1beta1RoleBindingListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1RoleBindingListForAllNamespaces(WatchRbacAuthorizationV1beta1RoleBindingListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of Role
-    rpc WatchRbacAuthorizationV1beta1RoleListForAllNamespaces(WatchRbacAuthorizationV1beta1RoleListForAllNamespacesRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchRbacAuthorizationV1beta1RoleListForAllNamespaces(WatchRbacAuthorizationV1beta1RoleListForAllNamespacesRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get information of a group
-    rpc GetStorageAPIGroup(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetStorageAPIGroup(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetStorageV1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetStorageV1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind StorageClass
-    rpc ListStorageV1StorageClass(ListStorageV1StorageClassRequest) returns (Io_K8s_Api_Storage_V1) {}
+    rpc ListStorageV1StorageClass(ListStorageV1StorageClassRequest) returns (IoK8sApiStorageV1) {}
 
     // create a StorageClass
-    rpc CreateStorageV1StorageClass(CreateStorageV1StorageClassRequest) returns (Io_K8s_Api_Storage_V1) {}
+    rpc CreateStorageV1StorageClass(CreateStorageV1StorageClassRequest) returns (IoK8sApiStorageV1) {}
 
     // delete collection of StorageClass
-    rpc DeleteStorageV1CollectionStorageClass(DeleteStorageV1CollectionStorageClassRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteStorageV1CollectionStorageClass(DeleteStorageV1CollectionStorageClassRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified StorageClass
-    rpc ReadStorageV1StorageClass(ReadStorageV1StorageClassRequest) returns (Io_K8s_Api_Storage_V1) {}
+    rpc ReadStorageV1StorageClass(ReadStorageV1StorageClassRequest) returns (IoK8sApiStorageV1) {}
 
     // replace the specified StorageClass
-    rpc ReplaceStorageV1StorageClass(ReplaceStorageV1StorageClassRequest) returns (Io_K8s_Api_Storage_V1) {}
+    rpc ReplaceStorageV1StorageClass(ReplaceStorageV1StorageClassRequest) returns (IoK8sApiStorageV1) {}
 
     // delete a StorageClass
-    rpc DeleteStorageV1StorageClass(DeleteStorageV1StorageClassRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteStorageV1StorageClass(DeleteStorageV1StorageClassRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of StorageClass
-    rpc WatchStorageV1StorageClassList(WatchStorageV1StorageClassListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchStorageV1StorageClassList(WatchStorageV1StorageClassListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind StorageClass
-    rpc WatchStorageV1StorageClass(WatchStorageV1StorageClassRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchStorageV1StorageClass(WatchStorageV1StorageClassRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // get available resources
-    rpc GetStorageV1beta1APIResources(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc GetStorageV1beta1APIResources(google.protobuf.Empty) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // list or watch objects of kind StorageClass
-    rpc ListStorageV1beta1StorageClass(ListStorageV1beta1StorageClassRequest) returns (Io_K8s_Api_Storage_V1beta1) {}
+    rpc ListStorageV1beta1StorageClass(ListStorageV1beta1StorageClassRequest) returns (IoK8sApiStorageV1beta1) {}
 
     // create a StorageClass
-    rpc CreateStorageV1beta1StorageClass(CreateStorageV1beta1StorageClassRequest) returns (Io_K8s_Api_Storage_V1beta1) {}
+    rpc CreateStorageV1beta1StorageClass(CreateStorageV1beta1StorageClassRequest) returns (IoK8sApiStorageV1beta1) {}
 
     // delete collection of StorageClass
-    rpc DeleteStorageV1beta1CollectionStorageClass(DeleteStorageV1beta1CollectionStorageClassRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteStorageV1beta1CollectionStorageClass(DeleteStorageV1beta1CollectionStorageClassRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // read the specified StorageClass
-    rpc ReadStorageV1beta1StorageClass(ReadStorageV1beta1StorageClassRequest) returns (Io_K8s_Api_Storage_V1beta1) {}
+    rpc ReadStorageV1beta1StorageClass(ReadStorageV1beta1StorageClassRequest) returns (IoK8sApiStorageV1beta1) {}
 
     // replace the specified StorageClass
-    rpc ReplaceStorageV1beta1StorageClass(ReplaceStorageV1beta1StorageClassRequest) returns (Io_K8s_Api_Storage_V1beta1) {}
+    rpc ReplaceStorageV1beta1StorageClass(ReplaceStorageV1beta1StorageClassRequest) returns (IoK8sApiStorageV1beta1) {}
 
     // delete a StorageClass
-    rpc DeleteStorageV1beta1StorageClass(DeleteStorageV1beta1StorageClassRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc DeleteStorageV1beta1StorageClass(DeleteStorageV1beta1StorageClassRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch individual changes to a list of StorageClass
-    rpc WatchStorageV1beta1StorageClassList(WatchStorageV1beta1StorageClassListRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchStorageV1beta1StorageClassList(WatchStorageV1beta1StorageClassListRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     // watch changes to an object of kind StorageClass
-    rpc WatchStorageV1beta1StorageClass(WatchStorageV1beta1StorageClassRequest) returns (Io_K8s_Apimachinery_Pkg_Apis_Meta_V1) {}
+    rpc WatchStorageV1beta1StorageClass(WatchStorageV1beta1StorageClassRequest) returns (IoK8sApimachineryPkgApisMetaV1) {}
 
     rpc LogFileListHandler(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 
     rpc LogFileHandler(LogFileHandlerRequest) returns (google.protobuf.Empty) {}
 
     // get the code version
-    rpc GetCodeVersion(google.protobuf.Empty) returns (Io_K8s_Apimachinery_Pkg_Version) {}
+    rpc GetCodeVersion(google.protobuf.Empty) returns (IoK8sApimachineryPkgVersion) {}
 }
