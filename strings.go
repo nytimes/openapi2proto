@@ -7,6 +7,39 @@ import (
 	"unicode"
 )
 
+// since we're not considering unicode here, we're not using unicode.*
+func isAlphaNum(r rune) bool {
+	return (r >= 0x41 && r <= 0x5a) || // A-Z
+		(r >= 0x61 && r <= 0x7a) || // a-z
+		(r >= 0x30 && r <= 0x39) // 0-9
+}
+
+func camelCase(s string) string {
+	var first = true
+	var wasUnderscore bool
+	var buf bytes.Buffer
+	for _, r := range s {
+		// replace all non-alpha-numeric characters with an underscore
+		if !isAlphaNum(r) {
+			r = '_'
+		}
+
+		if r == '_' {
+			wasUnderscore = true
+			continue
+		}
+
+		if first || wasUnderscore {
+			r = unicode.ToUpper(r)
+		}
+		first = false
+		wasUnderscore = false
+		buf.WriteRune(r)
+	}
+
+	return buf.String()
+}
+
 func cleanSpacing(output []byte) []byte {
 	re := regexp.MustCompile(`}\n*message `)
 	output = re.ReplaceAll(output, []byte("}\n\nmessage "))
@@ -54,11 +87,7 @@ func cleanCharacters(input string) string {
 	for _, r := range input {
 		// anything other than a-z, A-Z, 0-9 should be converted
 		// to an underscore
-		switch {
-		case r >= 0x41 && r <= 0x5a: // A-Z
-		case r >= 0x61 && r <= 0x7a: // a-z
-		case r >= 0x30 && r <= 0x39: // 0-9
-		default:
+		if !isAlphaNum(r) {
 			r = '_'
 		}
 		buf.WriteRune(r)

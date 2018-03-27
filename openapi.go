@@ -660,7 +660,7 @@ func messageProtobuf(dst io.Writer, m *Model, defs map[string]*Items) {
 	}
 
 	// Now write this proper indentation
-	fmt.Fprintf(&b, "message %s {", m.Name)
+	fmt.Fprintf(&b, "message %s {", camelCase(m.Name))
 	writeLinesWithPrefix(&b, &buf, indentStr, true)
 	fmt.Fprintf(&b, "\n}")
 
