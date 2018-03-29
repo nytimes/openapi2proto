@@ -7,7 +7,7 @@ import (
 
 type conversionCtx struct {
 	annotate    bool
-	definitions map[string]*protobuf.Message
+	definitions map[string]protobuf.Type
 	imports     map[string]struct{}
 	parents     []protobuf.Container
 	pkg         *protobuf.Package

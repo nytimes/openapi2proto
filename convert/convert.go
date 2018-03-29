@@ -35,7 +35,7 @@ func Convert(spec *openapi.Spec) (*protobuf.Package, error) {
 
 	c := &conversionCtx{
 		annotate:    true,
-		definitions: map[string]*protobuf.Message{},
+		definitions: map[string]protobuf.Type{},
 		imports:     map[string]struct{}{},
 		pkg:         p,
 		rpcs:        map[string]*protobuf.RPC{},
@@ -51,10 +51,11 @@ func Convert(spec *openapi.Spec) (*protobuf.Package, error) {
 
 	// convert all definitions
 	for ref, schema := range spec.Definitions {
-		_, err := c.compileSchema(camelCase(ref), schema)
+		m, err := c.compileSchema(camelCase(ref), schema)
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to compile #/definition/%s`, ref)
 		}
+		c.addDefinition("#/definitions/" + ref, m)
 	}
 
 	// convert the paths
@@ -166,6 +167,14 @@ func (c *conversionCtx) getType(name string) (protobuf.Type, error) {
 	return nil, errors.New(`not found`)
 }
 
+func (c *conversionCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
+	t, ok := c.definitions[ref]
+	if !ok {
+		return nil, errors.Errorf(`reference %s could not be resolved`, ref)
+	}
+	return t, nil
+}
+
 func (c *conversionCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
 	name = camelCase(name)
 	e := protobuf.NewEnum(name)
@@ -187,6 +196,14 @@ func (c *conversionCtx) compileSchema(name string, s *openapi.Schema) (protobuf.
 			log.Printf(" -> found pre-compiled type %s", v.Name())
 			return v, nil
 		}
+	}
+
+	if s.Ref != "" {
+		m, err := c.getTypeFromReference(s.Ref)
+		if err != nil {
+			return nil, errors.Wrapf(err, `failed to resolve reference %s`, s.Ref)
+		}
+		return m, nil
 	}
 
 	switch s.Type {
@@ -252,7 +269,7 @@ func (c *conversionCtx) compileProperty(name string, prop *openapi.Schema, index
 
 	var f *protobuf.Field
 	switch prop.Type {
-	case "object":
+	case "", "object":
 		child, err := c.compileSchema(name, prop)
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to conver property %s`, name)
@@ -350,39 +367,13 @@ func (c *conversionCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
 	p.AddType(t)
 }
 
-/*
-
-func (c *conversionCtx) addDefinition(ref string, m *protobuf.Message) {
+func (c *conversionCtx) addDefinition(ref string, t protobuf.Type) {
 	if _, ok := c.definitions[ref]; ok {
 		return
 	}
-
-	c.addTypeToParent(m, c.pkg)
-	c.definitions[ref] = m
+	log.Printf("adding definitions %s", ref)
+	c.definitions[ref] = t
 }
-
-func (c *conversionCtx) getType(name string) protobuf.Type {
-	parents := c.parents
-	for len(parents) > 0 {
-		p := parents[len(parents)-1]
-		log.Printf("looking for registered type under %s", p.Name())
-		m, ok := c.types[p]
-		if !ok {
-			m = map[protobuf.Type]struct{}{}
-			c.types[p] = m
-		}
-
-		for t := range m {
-			if t.Name() == name {
-				return t
-			}
-		}
-		parents = parents[:len(parents)-1]
-	}
-	return nil
-}
-
-*/
 
 func (c *conversionCtx) addRPC(r *protobuf.RPC) {
 	if _, ok := c.rpcs[r.Name()]; ok {
