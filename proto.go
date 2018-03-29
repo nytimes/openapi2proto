@@ -142,6 +142,18 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 // GenerateProto will attempt to generate an protobuf version 3
 // schema from the given OpenAPI definition.
 func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
+	// First, traverse through the APIDefinition object, and build a
+	// structure that can represent our protocol buffer definition
+
+	type ProtobufDefintion struct {
+		packageName string
+		enums    []*Enum // List of global enums
+		messages []*Message // List of message types
+		definitions map[string]
+	}
+
+
+
 	if api.Definitions == nil {
 		api.Definitions = map[string]*Items{}
 	}
