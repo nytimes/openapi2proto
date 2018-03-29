@@ -1,4 +1,4 @@
-package convert
+package compiler
 
 import (
 	"bytes"

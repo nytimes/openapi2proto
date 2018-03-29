@@ -12,10 +12,27 @@ import (
 	"github.com/pkg/errors"
 )
 
-func NewEncoder(dst io.Writer) *Encoder {
-	return &Encoder{
-		dst: dst,
+func NewEncoder(dst io.Writer, options ...Option) *Encoder {
+	indent := `    `
+	for _, o := range options {
+		switch o.Name() {
+		case optkeyIndent:
+			indent = o.Value().(string)
+		}
 	}
+
+	return &Encoder{
+		dst:    dst,
+		indent: indent,
+	}
+}
+
+// creates a new encoder that emits to a different destination,
+// but otherwise copies all attributes from the parent
+func (e *Encoder) subEncoder(dst io.Writer) *Encoder {
+	sub := *e
+	sub.dst = dst
+	return &sub
 }
 
 func (e *Encoder) Encode(v interface{}) error {
@@ -47,8 +64,8 @@ func prefix(dst io.Writer, src io.Reader, prefix string, applyEmptyLines bool) (
 	return buf.WriteTo(dst)
 }
 
-func indent(dst io.Writer, src io.Reader) (int64, error) {
-	return prefix(dst, src, `    `, false)
+func indent(dst io.Writer, src io.Reader, indentStr string) (int64, error) {
+	return prefix(dst, src, indentStr, false)
 }
 
 func (e *Encoder) comment(c string) (int64, error) {
@@ -70,7 +87,7 @@ func (e *Encoder) EncodeField(v *Field) error {
 
 func (e *Encoder) writeBlock(name string, src io.Reader) error {
 	fmt.Fprintf(e.dst, "\n%s {", name)
-	n, err := indent(e.dst, src)
+	n, err := indent(e.dst, src, e.indent)
 	if err != nil {
 		return errors.Wrap(err, `failed to indent block`)
 	}
@@ -85,13 +102,13 @@ func (e *Encoder) writeBlock(name string, src io.Reader) error {
 
 func (e *Encoder) EncodeMessage(v *Message) error {
 	var buf bytes.Buffer
-	subEncoder := NewEncoder(&buf)
+	subEncoder := e.subEncoder(&buf)
 	if err := subEncoder.encodeChildren(v); err != nil {
 		return errors.Wrap(err, `failed to encode message definitions`)
 	}
 
 	for _, field := range v.fields {
-		if len(field.comment) > 0  && buf.Len() > 0 {
+		if len(field.comment) > 0 && buf.Len() > 0 {
 			fmt.Fprintf(&buf, "\n")
 		}
 
@@ -137,7 +154,7 @@ func (e *Encoder) EncodeRPCOption(v interface{}) error {
 
 func (e *Encoder) EncodeRPC(r *RPC) error {
 	var buf bytes.Buffer
-	subEncoder := NewEncoder(&buf)
+	subEncoder := e.subEncoder(&buf)
 	for _, option := range r.options {
 		if err := subEncoder.EncodeRPCOption(option); err != nil {
 			return errors.Wrap(err, `failed to encode rpc options`)
@@ -160,7 +177,7 @@ func (e *Encoder) EncodeRPC(r *RPC) error {
 
 func (e *Encoder) EncodeService(s *Service) error {
 	var buf bytes.Buffer
-	subEncoder := NewEncoder(&buf)
+	subEncoder := e.subEncoder(&buf)
 
 	sort.Slice(s.rpcs, func(i, j int) bool {
 		return s.rpcs[i].Name() < s.rpcs[j].Name()

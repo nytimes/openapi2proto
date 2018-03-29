@@ -1,4 +1,4 @@
-package convert
+package compiler
 
 import (
 	"io/ioutil"
@@ -28,12 +28,12 @@ func init() {
 	}
 }
 
-func Convert(spec *openapi.Spec) (*protobuf.Package, error) {
+func Compile(spec *openapi.Spec) (*protobuf.Package, error) {
 	p := protobuf.New(packageName(spec.Info.Title))
 	svc := protobuf.NewService(serviceName(spec.Info.Title))
 	p.AddType(svc)
 
-	c := &conversionCtx{
+	c := &compileCtx{
 		annotate:    true,
 		definitions: map[string]protobuf.Type{},
 		imports:     map[string]struct{}{},
@@ -49,7 +49,7 @@ func Convert(spec *openapi.Spec) (*protobuf.Package, error) {
 		c.addImport("google/api/annotations.proto")
 	}
 
-	// convert all definitions
+	// compile all definitions
 	for ref, schema := range spec.Definitions {
 		m, err := c.compileSchema(camelCase(ref), schema)
 		if err != nil {
@@ -58,7 +58,7 @@ func Convert(spec *openapi.Spec) (*protobuf.Package, error) {
 		c.addDefinition("#/definitions/" + ref, m)
 	}
 
-	// convert the paths
+	// compile the paths
 	if err := c.compilePaths(spec.Paths); err != nil {
 		return nil, errors.Wrap(err, `failed to compile paths`)
 	}
@@ -66,7 +66,7 @@ func Convert(spec *openapi.Spec) (*protobuf.Package, error) {
 	return p, nil
 }
 
-func (c *conversionCtx) convertParametersToSchema(params openapi.Parameters) (*openapi.Schema, error) {
+func (c *compileCtx) compileParametersToSchema(params openapi.Parameters) (*openapi.Schema, error) {
 	var s openapi.Schema
 	s.Properties = make(map[string]*openapi.Schema)
 	for _, param := range params {
@@ -78,7 +78,7 @@ func (c *conversionCtx) convertParametersToSchema(params openapi.Parameters) (*o
 	return &s, nil
 }
 
-func (c *conversionCtx) compilePath(path string, p *openapi.Path) error {
+func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 	for _, e := range []*openapi.Endpoint{p.Get, p.Put, p.Post, p.Delete} {
 		if e == nil {
 			continue
@@ -94,14 +94,14 @@ func (c *conversionCtx) compilePath(path string, p *openapi.Path) error {
 		// parameters and treat them as a single schema
 		params := mergeParameters(p.Parameters, e.Parameters)
 		if len(params) > 0 {
-			reqSchema, err := c.convertParametersToSchema(params)
+			reqSchema, err := c.compileParametersToSchema(params)
 			if err != nil {
-				return errors.Wrap(err, `failed to convert parameters to schema`)
+				return errors.Wrap(err, `failed to compile parameters to schema`)
 			}
 			reqName := endpointName + "Request"
 			reqType, err := c.compileSchema(reqName, reqSchema)
 			if err != nil {
-				return errors.Wrapf(err, `failed to convert parameters for %s`, endpointName)
+				return errors.Wrapf(err, `failed to compile parameters for %s`, endpointName)
 			}
 			m, ok := reqType.(*protobuf.Message)
 			if !ok {
@@ -139,13 +139,13 @@ func (c *conversionCtx) compilePath(path string, p *openapi.Path) error {
 
 var builtinTypes = map[string]protobuf.Type{
 	"string":  protobuf.NewMessage("string"),
-	"integer": protobuf.NewMessage("integer"),
+	"integer": protobuf.NewMessage("int32"),
 	"boolean": protobuf.NewMessage("boolean"),
 }
 
 // Search for type by given name. looks up from the current scope (message,
 // if applicable), all the way up to package scope
-func (c *conversionCtx) getType(name string) (protobuf.Type, error) {
+func (c *compileCtx) getType(name string) (protobuf.Type, error) {
 	if t, ok := builtinTypes[name]; ok {
 		return t, nil
 	}
@@ -167,7 +167,7 @@ func (c *conversionCtx) getType(name string) (protobuf.Type, error) {
 	return nil, errors.New(`not found`)
 }
 
-func (c *conversionCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
+func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
 	t, ok := c.definitions[ref]
 	if !ok {
 		return nil, errors.Errorf(`reference %s could not be resolved`, ref)
@@ -175,7 +175,7 @@ func (c *conversionCtx) getTypeFromReference(ref string) (protobuf.Type, error) 
 	return t, nil
 }
 
-func (c *conversionCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
+func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
 	name = camelCase(name)
 	e := protobuf.NewEnum(name)
 	for _, enum := range elements {
@@ -185,7 +185,7 @@ func (c *conversionCtx) compileEnum(name string, elements []string) (*protobuf.E
 	return e, nil
 }
 
-func (c *conversionCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
+func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
 	log.Printf("compileSchema %s", name)
 
 	rawName := name
@@ -244,7 +244,7 @@ func (c *conversionCtx) compileSchema(name string, s *openapi.Schema) (protobuf.
 	}
 }
 
-func (c *conversionCtx) compileSchemaProperties(m *protobuf.Message, props map[string]*openapi.Schema) error {
+func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[string]*openapi.Schema) error {
 	var sortedProps []string
 	for k := range props {
 		sortedProps = append(sortedProps, k)
@@ -264,8 +264,10 @@ func (c *conversionCtx) compileSchemaProperties(m *protobuf.Message, props map[s
 	return nil
 }
 
-func (c *conversionCtx) compileProperty(name string, prop *openapi.Schema, index int) (*protobuf.Field, error) {
-	log.Printf("convert property %s", name)
+// compiles a single property to a field.
+// local-scoped messages are handled in the compilation for the field type.
+func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index int) (*protobuf.Field, error) {
+	log.Printf("compile property %s", name)
 
 	var f *protobuf.Field
 	switch prop.Type {
@@ -275,7 +277,7 @@ func (c *conversionCtx) compileProperty(name string, prop *openapi.Schema, index
 			return nil, errors.Wrapf(err, `failed to conver property %s`, name)
 		}
 
-		f = protobuf.NewField(child.Name(), child.Name(), index)
+		f = protobuf.NewField(child.Name(), snakeCase(child.Name()), index)
 	default:
 		// is this a known type?
 		typ, err := c.getType(prop.Type)
@@ -285,7 +287,7 @@ func (c *conversionCtx) compileProperty(name string, prop *openapi.Schema, index
 				return nil, errors.Wrapf(err, `failed to compile protobuf type`)
 			}
 		}
-		f = protobuf.NewField(typ.Name(), name, index)
+		f = protobuf.NewField(typ.Name(), snakeCase(name), index)
 	}
 
 	if prop.Type == "array" {
@@ -298,7 +300,7 @@ func (c *conversionCtx) compileProperty(name string, prop *openapi.Schema, index
 	return f, nil
 }
 
-func (c *conversionCtx) addImportForType(name string) {
+func (c *compileCtx) addImportForType(name string) {
 	lib, ok := knownImports[name]
 	if !ok {
 		return
@@ -307,7 +309,7 @@ func (c *conversionCtx) addImportForType(name string) {
 	c.addImport(lib)
 }
 
-func (c *conversionCtx) addImport(lib string) {
+func (c *compileCtx) addImport(lib string) {
 	if _, ok := c.imports[lib]; ok {
 		return
 	}
@@ -316,12 +318,12 @@ func (c *conversionCtx) addImport(lib string) {
 	c.imports[lib] = struct{}{}
 }
 
-func (c *conversionCtx) pushParent(v protobuf.Container) {
+func (c *compileCtx) pushParent(v protobuf.Container) {
 	log.Printf("pushing parent %s", v.Name())
 	c.parents = append(c.parents, v)
 }
 
-func (c *conversionCtx) popParent() {
+func (c *compileCtx) popParent() {
 	l := len(c.parents)
 	if l == 0 {
 		return
@@ -330,7 +332,7 @@ func (c *conversionCtx) popParent() {
 	c.parents = c.parents[:l-1]
 }
 
-func (c *conversionCtx) parent() protobuf.Container {
+func (c *compileCtx) parent() protobuf.Container {
 	l := len(c.parents)
 	if l == 0 {
 		return c.pkg
@@ -339,11 +341,11 @@ func (c *conversionCtx) parent() protobuf.Container {
 }
 
 // adds new type. dedupes, in case of multiple addition
-func (c *conversionCtx) addType(t protobuf.Type) {
+func (c *compileCtx) addType(t protobuf.Type) {
 	c.addTypeToParent(t, c.parent())
 }
 
-func (c *conversionCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
+func (c *compileCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
 	// check for global references...
 	if g, ok := c.types[c.pkg]; ok {
 		if _, ok := g[t]; ok {
@@ -367,7 +369,7 @@ func (c *conversionCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
 	p.AddType(t)
 }
 
-func (c *conversionCtx) addDefinition(ref string, t protobuf.Type) {
+func (c *compileCtx) addDefinition(ref string, t protobuf.Type) {
 	if _, ok := c.definitions[ref]; ok {
 		return
 	}
@@ -375,7 +377,7 @@ func (c *conversionCtx) addDefinition(ref string, t protobuf.Type) {
 	c.definitions[ref] = t
 }
 
-func (c *conversionCtx) addRPC(r *protobuf.RPC) {
+func (c *compileCtx) addRPC(r *protobuf.RPC) {
 	if _, ok := c.rpcs[r.Name()]; ok {
 		return
 	}
@@ -384,10 +386,10 @@ func (c *conversionCtx) addRPC(r *protobuf.RPC) {
 	c.addImportForType(r.Response().Name())
 
 	c.rpcs[r.Name()] = r
-	c.service.RPC(r)
+	c.service.AddRPC(r)
 }
 
-func (c *conversionCtx) compilePaths(paths map[string]*openapi.Path) error {
+func (c *compileCtx) compilePaths(paths map[string]*openapi.Path) error {
 	var sortedPaths []string
 	for path := range paths {
 		sortedPaths = append(sortedPaths, path)
@@ -423,7 +425,7 @@ func parseRef(s string) (string, string) {
 	return s, ""
 }
 
-func (c *conversionCtx) findRefName(i *openapi.Schema) string {
+func (c *compileCtx) findRefName(i *openapi.Schema) string {
 	log.Printf("findRefName  i.Name = %s, i.Ref = %s", i.Name, i.Ref)
 	if i.Name != "" {
 		return snakeCase(i.Name)
@@ -440,7 +442,7 @@ func (c *conversionCtx) findRefName(i *openapi.Schema) string {
 
 // Takes a complete reference name (e.g. #/definitions/FooBar) and
 // returns its corresponding protobuf.Type
-func (c *conversionCtx) resolveReference(ref string) (protobuf.Type, error) {
+func (c *compileCtx) resolveReference(ref string) (protobuf.Type, error) {
 	if m, ok := c.definitions[ref]; ok {
 		return m, nil
 	}
@@ -453,9 +455,9 @@ func (c *conversionCtx) resolveReference(ref string) (protobuf.Type, error) {
 
 	_ = raw
 
-	m, err := c.convertItemToMessage(camelCase(typ), item)
+	m, err := c.compileItemToMessage(camelCase(typ), item)
 	if err != nil {
-		return nil, errors.Wrapf(err, `failed to convert item %s to message`, ref)
+		return nil, errors.Wrapf(err, `failed to compile item %s to message`, ref)
 	}
 	c.addDefinition(ref, m)
 	log.Printf("resolved %s to %s", ref, m.Name())
@@ -464,7 +466,7 @@ func (c *conversionCtx) resolveReference(ref string) (protobuf.Type, error) {
 
 var stringType = protobuf.NewMessage("string")
 
-func (c *conversionCtx) convertSchema(parent, schema *openapi.Schema) (protobuf.Type, error) {
+func (c *compileCtx) compileSchema(parent, schema *openapi.Schema) (protobuf.Type, error) {
 	if ref := schema.Ref; ref != "" {
 		m, err := c.resolveReference(ref)
 		if err != nil {
@@ -478,8 +480,8 @@ func (c *conversionCtx) convertSchema(parent, schema *openapi.Schema) (protobuf.
 		m := protobuf.NewMessage(camelCase(parent.Name))
 		c.pushParent(m)
 		defer c.popParent()
-		if err := c.convertProperties(&parent.Model); err != nil {
-			return nil, errors.Wrap(err, `failed to convert nested prorperties`)
+		if err := c.compileProperties(&parent.Model); err != nil {
+			return nil, errors.Wrap(err, `failed to compile nested prorperties`)
 		}
 		return m, nil
 	default:
@@ -496,7 +498,7 @@ func (c *conversionCtx) convertSchema(parent, schema *openapi.Schema) (protobuf.
 	return nil, errors.New(`invalid`)
 }
 
-func (c *conversionCtx) getItemType(item *openapi.Schema) (t protobuf.Type, err error) {
+func (c *compileCtx) getItemType(item *openapi.Schema) (t protobuf.Type, err error) {
 	autoAdd := true
 	defer func() {
 		if !autoAdd {
@@ -514,7 +516,7 @@ func (c *conversionCtx) getItemType(item *openapi.Schema) (t protobuf.Type, err 
 	}()
 
 	if item.Schema != nil {
-		t, err := c.convertSchema(item, item.Schema)
+		t, err := c.compileSchema(item, item.Schema)
 		if err != nil {
 			return nil, errors.Wrap(err, `failed to conver schema`)
 		}
@@ -522,7 +524,7 @@ func (c *conversionCtx) getItemType(item *openapi.Schema) (t protobuf.Type, err 
 	}
 
 	if item.Schema != nil {
-		t, err := c.convertSchema(item, item.Schema)
+		t, err := c.compileSchema(item, item.Schema)
 		if err != nil {
 			return nil, errors.Wrap(err, `failed to conver schema`)
 		}
@@ -533,20 +535,20 @@ func (c *conversionCtx) getItemType(item *openapi.Schema) (t protobuf.Type, err 
 	return stringType, nil
 }
 
-func (c *conversionCtx) convertItemToMessage(name string, item *openapi.Schema) (*protobuf.Message, error) {
-	log.Printf("convertItemToMessage %s", name)
+func (c *compileCtx) compileItemToMessage(name string, item *openapi.Schema) (*protobuf.Message, error) {
+	log.Printf("compileItemToMessage %s", name)
 	m := protobuf.NewMessage(name)
 	c.pushParent(m)
 	defer c.popParent()
 
-	c.convertProperties(&item.Model)
+	c.compileProperties(&item.Model)
 	if len(item.Description) > 0 {
 		m.SetComment(item.Description)
 	}
 	return m, nil
 }
 
-func (c *conversionCtx) convertParameters(name string, parameters openapi.Parameters) (protobuf.Type, error) {
+func (c *compileCtx) compileParameters(name string, parameters openapi.Parameters) (protobuf.Type, error) {
 	m := protobuf.NewMessage(name)
 	c.pushParent(m)
 	defer c.popParent()
@@ -590,7 +592,7 @@ func makeSchema(params openapi.Parameters) *openapi.Schema {
 	return &s
 }
 
-func (c *conversionCtx) convertPath(name string, p *openapi.Path) error {
+func (c *compileCtx) compilePath(name string, p *openapi.Path) error {
 	for _, e := range endpoints {
 		endpointName := pathMethodToName(name, e.verb, e.OperationID)
 		log.Printf("endpoint %s", endpointName)
@@ -604,9 +606,9 @@ func (c *conversionCtx) convertPath(name string, p *openapi.Path) error {
 		if len(params) > 0 {
 			reqSchema := makeSchema(params)
 			reqName := endpointName + "Request"
-			reqType, err := c.convertItemToMessage(reqName, reqSchema)
+			reqType, err := c.compileItemToMessage(reqName, reqSchema)
 			if err != nil {
-				return errors.Wrapf(err, `failed to convert parameters for %s`, endpointName)
+				return errors.Wrapf(err, `failed to compile parameters for %s`, endpointName)
 			}
 			m, ok := reqType.(*protobuf.Message)
 			if !ok {

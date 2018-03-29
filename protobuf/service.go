@@ -58,7 +58,6 @@ func (s *Service) Name() string {
 	return s.name
 }
 
-func (s *Service) RPC(r *RPC) *Service {
+func (s *Service) AddRPC(r *RPC) {
 	s.rpcs = append(s.rpcs, r)
-	return s
 }

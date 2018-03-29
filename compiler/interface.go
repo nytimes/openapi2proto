@@ -1,11 +1,11 @@
-package convert
+package compiler
 
 import (
 	"github.com/NYTimes/openapi2proto/openapi"
 	"github.com/NYTimes/openapi2proto/protobuf"
 )
 
-type conversionCtx struct {
+type compileCtx struct {
 	annotate    bool
 	definitions map[string]protobuf.Type
 	imports     map[string]struct{}

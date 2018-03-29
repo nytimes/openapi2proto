@@ -10,30 +10,36 @@ import (
 
 func TestEncoder(t *testing.T) {
 	p := protobuf.New("helloworld")
-	p.Import("google/protobuf/empty.proto")
+	p.AddImport("google/protobuf/empty.proto")
 
-	m1 := protobuf.NewMessage("Hello").
-		Field(protobuf.NewField("string", "message", 1))
+	m1 := protobuf.NewMessage("Hello")
+	m1.AddField(protobuf.NewField("string", "message", 1))
 
-	m2 := protobuf.NewMessage("World").
-		Field(protobuf.NewField("int32", "count", 1))
+	m2 := protobuf.NewMessage("World")
+	m2.AddField(protobuf.NewField("int32", "count", 1))
 
-	m1.Type(m2)
+	m1.AddType(m2)
 
 	m3 := protobuf.NewMessage("HelloWorldRequest")
 	m4 := protobuf.NewMessage("HelloWorldResponse")
 
-	p.Type(m1).Type(m3)
+	p.AddType(m1)
+	p.AddType(m3)
 
-	svc1 := protobuf.NewService("HelloWorldService").
-		RPC(
-			protobuf.NewRPC("NoOp").
-				Comment("Does absolutely nothing").
-				Option(protobuf.NewHTTPAnnotation("get", "/v1/hello_world")),
-		).
-		RPC(protobuf.NewRPC("HelloWorld").Parameter(m3).Response(m4).Comment("Says 'Hello, World!'"))
+	svc1 := protobuf.NewService("HelloWorldService")
 
-	p.Type(svc1)
+	rpc1 := protobuf.NewRPC("NoOp")
+	rpc1.SetComment("Does absolutely nothing")
+	rpc1.AddOption(protobuf.NewHTTPAnnotation("get", "/v1/hello_world"))
+	svc1.AddRPC(rpc1)
+
+	rpc2 := protobuf.NewRPC("HelloWorld")
+	rpc2.SetParameter(m3)
+	rpc2.SetResponse(m4)
+	rpc2.SetComment("Says 'Hello, World!'")
+	svc1.AddRPC(rpc2)
+
+	p.AddType(svc1)
 		
 	var buf bytes.Buffer
 	if err := protobuf.NewEncoder(&buf).Encode(p); err != nil {
@@ -57,15 +63,15 @@ message Hello {
 message HelloWorldRequest {}
 
 service HelloWorldService {
+    // Says 'Hello, World!'
+    rpc HelloWorld (HelloWorldRequest) returns (HelloWorldResponse) {}
+
     // Does absolutely nothing
     rpc NoOp (google.protobuf.Empty) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             get: "/v1/hello_world"
         }
     }
-
-    // Says 'Hello, World!'
-    rpc HelloWorld (HelloWorldRequest) returns (HelloWorldResponse) {}
 }`
 
 	if expected != buf.String() {

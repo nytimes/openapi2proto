@@ -15,6 +15,7 @@ var (
 
 type Encoder struct {
 	dst io.Writer
+	indent string
 }
 
 // A protocol buffers definition is in itself one big message type,
