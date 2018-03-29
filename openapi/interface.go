@@ -16,6 +16,18 @@ type Spec struct {
 	Paths       map[string]*Path   `yaml:"paths" json:"paths"`
 	Definitions map[string]*Schema `yaml:"definitions" json:"definitions"`
 	Parameters  map[string]*Schema `yaml:"parameters" json:"parameters"`
+	Extensions  []*Extension       `yaml:"x-extensions" json:"x-extensions"`
+}
+
+type Extension struct {
+	Base   string            `json:"base" yaml:"base"`
+	Fields []*ExtensionField `json:"fields" yaml:"fields"`
+}
+
+type ExtensionField struct {
+	Name   string `yaml:"name" json:"name"`
+	Type   string `yaml:"type" json:"type"`
+	Number int    `yaml:"number" json:"number"`
 }
 
 // Path represents all of the endpoints and parameters available for a single
@@ -48,14 +60,15 @@ type Response struct {
 
 // Endpoint represents an endpoint for a path in an OpenAPI spec.
 type Endpoint struct {
-	Path        string               `yaml:"-" json:"-"` // this is added internally
-	Verb        string               `yaml:"-" json:"-"` // this is added internally
-	Summary     string               `yaml:"summary" json:"summary"`
-	Description string               `yaml:"description" json:"description"`
-	Parameters  Parameters           `yaml:"parameters" json:"parameters"`
-	Tags        []string             `yaml:"tags" json:"tags"`
-	Responses   map[string]*Response `yaml:"responses" json:"responses"`
-	OperationID string               `yaml:"operationId" json:"operationId"`
+	Path          string                 `yaml:"-" json:"-"` // this is added internally
+	Verb          string                 `yaml:"-" json:"-"` // this is added internally
+	Summary       string                 `yaml:"summary" json:"summary"`
+	Description   string                 `yaml:"description" json:"description"`
+	Parameters    Parameters             `yaml:"parameters" json:"parameters"`
+	Tags          []string               `yaml:"tags" json:"tags"`
+	Responses     map[string]*Response   `yaml:"responses" json:"responses"`
+	OperationID   string                 `yaml:"operationId" json:"operationId"`
+	CustomOptions map[string]interface{} `yaml:"x-options" json:"x-options"`
 }
 
 // Model represents a model definition from an OpenAPI spec.
@@ -74,7 +87,7 @@ type Schema struct {
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 	// scalar
 	// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#schemaObject
-	Type   string `yaml:"type" json:"type"`
+	Type   string      `yaml:"type" json:"type"`
 	Format interface{} `yaml:"format,omitempty" json:"format,omitempty"`
 	Enum   []string    `yaml:"enum,omitempty" json:"enum,omitempty"`
 

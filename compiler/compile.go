@@ -13,9 +13,10 @@ import (
 )
 
 var knownImports = map[string]string{
-	"google.protobuf.Any":       "google/protobuf/any.proto",
-	"google.protobuf.Empty":     "google/protobuf/empty.proto",
-	"google.protobuf.NullValue": "google/protobuf/struct.proto",
+	"google.protobuf.Any":           "google/protobuf/any.proto",
+	"google.protobuf.Empty":         "google/protobuf/empty.proto",
+	"google.protobuf.NullValue":     "google/protobuf/struct.proto",
+	"google.protobuf.MethodOptions": "google/protobuf/descriptor.proto",
 }
 
 func init() {
@@ -55,7 +56,16 @@ func Compile(spec *openapi.Spec) (*protobuf.Package, error) {
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to compile #/definition/%s`, ref)
 		}
-		c.addDefinition("#/definitions/" + ref, m)
+		c.addDefinition("#/definitions/"+ref, m)
+	}
+
+	// compile extensions
+	for _, ext := range spec.Extensions {
+		e, err := c.compileExtension(ext)
+		if err != nil {
+			return nil, errors.Wrap(err, `failed to compile extension`)
+		}
+		p.AddType(e)
 	}
 
 	// compile the paths
@@ -64,6 +74,19 @@ func Compile(spec *openapi.Spec) (*protobuf.Package, error) {
 	}
 
 	return p, nil
+}
+
+func (c *compileCtx) compileExtension(ext *openapi.Extension) (*protobuf.Extension, error) {
+	e := protobuf.NewExtension(ext.Base)
+	for _, f := range ext.Fields {
+		pf := protobuf.NewExtensionField(f.Name, f.Type, f.Number)
+		e.AddField(pf)
+
+	}
+
+	// this type that is being referred might come from the outside
+	c.addImportForType(ext.Base)
+	return e, nil
 }
 
 func (c *compileCtx) compileParametersToSchema(params openapi.Parameters) (*openapi.Schema, error) {
@@ -142,10 +165,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			// check if we have a "in: body" parameter
 			var bodyParam string
 			for _, p := range params {
-				log.Printf("p.Name %s", p.Name)
-				log.Printf("p.In %s", p.In)
 				if p.In == "body" {
-					log.Printf("set bodyParam")
 					bodyParam = p.Name
 					break
 				}
@@ -153,10 +173,13 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 
 			a := protobuf.NewHTTPAnnotation(e.Verb, path)
 			if bodyParam != "" {
-				log.Printf("setBody")
 				a.SetBody(bodyParam)
 			}
 			rpc.AddOption(a)
+		}
+
+		for optName, optValue := range e.CustomOptions {
+			rpc.AddOption(protobuf.NewRPCOption(optName, optValue))
 		}
 
 		c.addRPC(rpc)
@@ -167,6 +190,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 var builtinTypes = map[string]protobuf.Type{
 	"string":  protobuf.NewMessage("string"),
 	"integer": protobuf.NewMessage("int32"),
+	"number":  protobuf.NewMessage("float"),
 	"boolean": protobuf.NewMessage("boolean"),
 }
 

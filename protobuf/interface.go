@@ -14,7 +14,7 @@ var (
 )
 
 type Encoder struct {
-	dst io.Writer
+	dst    io.Writer
 	indent string
 }
 
@@ -56,7 +56,16 @@ type Field struct {
 	typ      string
 }
 
-type Extension interface{}
+type ExtensionField struct {
+	name   string
+	typ    string
+	number int
+}
+
+type Extension struct {
+	base   string
+	fields []*ExtensionField
+}
 
 // RPC represents an RPC call associated with a Service
 type RPC struct {
@@ -78,4 +87,9 @@ type HTTPAnnotation struct {
 	method string
 	path   string
 	body   string
+}
+
+type RPCOption struct {
+	name string
+	value interface{}
 }

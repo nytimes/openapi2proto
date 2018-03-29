@@ -140,12 +140,49 @@ func (e *Encoder) EncodeHTTPAnnotation(a *HTTPAnnotation) error {
 	return nil
 }
 
+func stringify(v interface{}) string {
+	switch v := v.(type) {
+	case string:
+		return v
+	case int:
+		return strconv.FormatInt(int64(v), 10)
+	case int64:
+		return strconv.FormatInt(int64(v), 10)
+	case int32:
+		return strconv.FormatInt(int64(v), 10)
+	case int16:
+		return strconv.FormatInt(int64(v), 10)
+	case int8:
+		return strconv.FormatInt(int64(v), 10)
+	case uint:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint64:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint32:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint16:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint8:
+		return strconv.FormatUint(uint64(v), 10)
+	case float32:
+		return strconv.FormatFloat(float64(v), 'f', -1, 64)
+	case float64:
+		return strconv.FormatFloat(float64(v), 'f', -1, 64)
+	case bool:
+		return strconv.FormatBool(v)
+	}
+
+	return `(invalid)`
+}
+
 func (e *Encoder) EncodeRPCOption(v interface{}) error {
 	switch x := v.(type) {
 	case *HTTPAnnotation:
 		if err := e.EncodeHTTPAnnotation(x); err != nil {
 			return errors.Wrap(err, `failed to encode http annotation`)
 		}
+	case *RPCOption:
+		fmt.Fprintf(e.dst, "\noption (%s) = %s;", x.name, stringify(x.value))
 	default:
 		return errors.Errorf(`unknown rpc option %T`, v)
 	}
@@ -155,7 +192,26 @@ func (e *Encoder) EncodeRPCOption(v interface{}) error {
 func (e *Encoder) EncodeRPC(r *RPC) error {
 	var buf bytes.Buffer
 	subEncoder := e.subEncoder(&buf)
+
+	var sortedOptions []interface{}
 	for _, option := range r.options {
+		sortedOptions = append(sortedOptions, option)
+	}
+	sort.Slice(sortedOptions, func(i, j int) bool {
+		switch sortedOptions[i].(type) {
+		case *HTTPAnnotation:
+			return true
+		}
+
+		switch sortedOptions[j].(type) {
+		case *HTTPAnnotation:
+			return false
+		}
+
+		return sortedOptions[i].(*RPCOption).name < sortedOptions[j].(*RPCOption).name
+	})
+
+	for _, option := range sortedOptions {
 		if err := subEncoder.EncodeRPCOption(option); err != nil {
 			return errors.Wrap(err, `failed to encode rpc options`)
 		}
@@ -227,8 +283,32 @@ func (e *Encoder) EncodeType(v Type) error {
 		if err := e.EncodeService(x); err != nil {
 			return errors.Wrap(err, `failed to encode service`)
 		}
+	case *Extension:
+		if err := e.EncodeExtension(x); err != nil {
+			return errors.Wrap(err, `failed to encode extension`)
+		}
 	default:
 		return errors.Errorf(`unknown type %T`, v)
+	}
+	return nil
+}
+
+func (e *Encoder) EncodeExtensionField(f *ExtensionField) error {
+	fmt.Fprintf(e.dst, "\n%s %s = %d;", f.typ, f.name, f.number)
+	return nil
+}
+
+func (e *Encoder) EncodeExtension(ext *Extension) error {
+	var buf bytes.Buffer
+	subEncoder := e.subEncoder(&buf)
+	for _, f := range ext.fields {
+		if err := subEncoder.EncodeExtensionField(f); err != nil {
+			return errors.Wrap(err, `failed to encode extension field`)
+		}
+	}
+
+	if err := e.writeBlock("extend "+ext.base, &buf); err != nil {
+		return errors.Wrap(err, `failed to write extension block`)
 	}
 	return nil
 }
