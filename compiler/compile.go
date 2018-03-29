@@ -111,6 +111,33 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			rpc.SetParameter(m)
 		}
 
+		// we can only take one response type, first one from 200/201 wins
+		var resType protobuf.Type
+		for _, code := range []string{`200`, `201`} {
+			resp, ok := e.Responses[code]
+			if !ok {
+				continue
+			}
+
+			if resp.Schema != nil {
+				resName := endpointName + "Response"
+				typ, err := c.compileSchema(resName, resp.Schema)
+				if err != nil {
+					return errors.Wrapf(err, `failed to compile response for %s`, endpointName)
+				}
+				resType = typ
+			}
+
+			if resType != nil {
+				m, ok := resType.(*protobuf.Message)
+				if !ok {
+					return errors.Errorf(`got non-message type in response for %s`, endpointName)
+				}
+				rpc.SetResponse(m)
+				break // break out of the for loop
+			}
+		}
+
 		if c.annotate {
 			// check if we have a "in: body" parameter
 			var bodyParam string
