@@ -1,9 +1,12 @@
 package compiler
 
 import (
+	"github.com/NYTimes/openapi2proto/internal/option"
 	"github.com/NYTimes/openapi2proto/openapi"
 	"github.com/NYTimes/openapi2proto/protobuf"
 )
+
+type Option = option.Option
 
 type compileCtx struct {
 	annotate    bool

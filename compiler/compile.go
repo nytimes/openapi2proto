@@ -29,13 +29,21 @@ func init() {
 	}
 }
 
-func Compile(spec *openapi.Spec) (*protobuf.Package, error) {
+func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	p := protobuf.New(packageName(spec.Info.Title))
 	svc := protobuf.NewService(serviceName(spec.Info.Title))
 	p.AddType(svc)
 
+	var annotate bool
+	for _, o := range options {
+		switch o.Name() {
+		case optkeyAnnotation:
+			annotate = o.Value().(bool)
+		}
+	}
+
 	c := &compileCtx{
-		annotate:    true,
+		annotate:    annotate,
 		definitions: map[string]protobuf.Type{},
 		imports:     map[string]struct{}{},
 		pkg:         p,

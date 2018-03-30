@@ -1,5 +1,9 @@
 package openapi
 
+type Decoder interface {
+	Decode(interface{}) error
+}
+
 // Spec is the base struct for containing OpenAPI spec declarations.
 type Spec struct {
 	FileName string // internal use to pass file path

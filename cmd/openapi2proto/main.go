@@ -3,39 +3,29 @@ package main
 import (
 	"bytes"
 	"flag"
+	"fmt"
 	"io"
-	"log"
 	"os"
 
+	"github.com/NYTimes/openapi2proto"
 	"github.com/NYTimes/openapi2proto/compiler"
-	"github.com/NYTimes/openapi2proto/openapi"
 	"github.com/NYTimes/openapi2proto/protobuf"
 	"github.com/pkg/errors"
 )
 
 func main() {
 	if err := _main(); err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "error: %s", err)
+		os.Exit(1)
 	}
 }
 
 func _main() error {
 	specPath := flag.String("spec", "../../spec.yaml", "location of the swagger spec file")
-	annotate := flag.Bool("options", false, "include (google.api.http) options for grpc-gateway")
+	annotate := flag.Bool("annotate", false, "include (google.api.http) options for grpc-gateway")
 	outfile := flag.String("out", "", "the file to output the result to. Defaults to stdout if not set")
 	indent := flag.Int("indent", 4, "number of spaces used for indentation")
 	flag.Parse()
-	_ = annotate
-
-	spec, err := openapi.LoadFile(*specPath)
-	if err != nil {
-		return errors.Wrap(err, "unable to load spec")
-	}
-
-	p, err := compiler.Compile(spec)
-	if err != nil {
-		return errors.Wrap(err, `failed to compile OpenAPI spec to Protobuf`)
-	}
 
 	var dst io.Writer = os.Stdout
 	if *outfile != "" {
@@ -47,17 +37,35 @@ func _main() error {
 		dst = f
 	}
 
-	var options []protobuf.Option
+	var options []openapi2proto.Option
+	var encoderOptions []protobuf.Option
+	var compilerOptions []compiler.Option
+
+	compilerOptions = append(compilerOptions, compiler.WithAnnotation(*annotate))
 
 	if *indent > 0 {
 		var indentStr bytes.Buffer
 		for i := 0; i < *indent; i++ {
 			indentStr.WriteByte(' ')
 		}
-		options = append(options, protobuf.WithIndent(indentStr.String()))
+		encoderOptions = append(encoderOptions, protobuf.WithIndent(indentStr.String()))
 	}
-	if err := protobuf.NewEncoder(dst, options...).Encode(p); err != nil {
-		return errors.Wrap(err, `unable to write output to destination`)
+
+	if len(compilerOptions) > 0 {
+		options = append(options, openapi2proto.WithCompilerOptions(compilerOptions...))
+	}
+
+	if len(encoderOptions) > 0 {
+		options = append(options, openapi2proto.WithEncoderOptions(encoderOptions...))
+	}
+
+	src, err := os.Open(*specPath)
+	if err != nil {
+		return errors.Wrapf(err, `unable to open file %s`, *specPath)
+	}
+
+	if err := openapi2proto.Transpile(dst, src, options...); err != nil {
+		return errors.Wrap(err, `failed to transpile`)
 	}
 	return nil
 }

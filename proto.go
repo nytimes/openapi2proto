@@ -144,16 +144,6 @@ func LoadDefinition(pth string) (*APIDefinition, error) {
 func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	// First, traverse through the APIDefinition object, and build a
 	// structure that can represent our protocol buffer definition
-
-	type ProtobufDefintion struct {
-		packageName string
-		enums    []*Enum // List of global enums
-		messages []*Message // List of message types
-		definitions map[string]
-	}
-
-
-
 	if api.Definitions == nil {
 		api.Definitions = map[string]*Items{}
 	}
@@ -258,7 +248,7 @@ func GenerateProto(api *APIDefinition, annotate bool) ([]byte, error) {
 	if len(api.GlobalOptions) > 0 {
 		fmt.Fprintf(&out, "\n")
 		for optName, optValue := range api.GlobalOptions {
-			fmt.Fprintf(&out, "\n%s", option(optName, optValue, true, ""))
+			fmt.Fprintf(&out, "\n%s", optionValue(optName, optValue, true, ""))
 		}
 	}
 
@@ -483,7 +473,7 @@ func extraImports(body string) []string {
 	return imports
 }
 
-func option(name, value interface{}, global bool, indent string) string {
+func optionValue(name, value interface{}, global bool, indent string) string {
 	var vstr string
 
 	switch v := value.(type) {

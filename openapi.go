@@ -485,7 +485,7 @@ func (e *Endpoint) protoEndpoint(dst io.Writer, annotate bool, parentParams Para
 	} else {
 		sort.Strings(optkeys)
 		for _, k := range optkeys {
-			fmt.Fprintf(&b, "%s", option(k, options[k], false, annotationIndentStr))
+			fmt.Fprintf(&b, "%s", optionValue(k, options[k], false, annotationIndentStr))
 		}
 		fmt.Fprintf(&b, "\n}")
 	}

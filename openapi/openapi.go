@@ -3,18 +3,64 @@ package openapi
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/pkg/errors"
 	yaml "gopkg.in/yaml.v2"
 )
 
-func fetchRemoteContent(u string) ([]byte, error) {
+type decoder struct {
+	isYAML bool
+	src    *bytes.Buffer
+}
+
+func NewDecoder(src io.Reader) Decoder {
+	var buf bytes.Buffer
+	_, err := io.Copy(&buf, src)
+	if err != nil {
+		fmt.Printf("io.Copy err = %s\n", err)
+	}
+
+	var isYAML bool
+	switch src := src.(type) {
+	case *os.File:
+		// if it's a file, we can guess the payload formatting
+		// from the name of the file
+		switch filepath.Ext(src.Name()) {
+		case ".yaml", ".yml":
+			isYAML = true
+		}
+	default:
+		// Otherwise, we sniff the content.
+		b := bytes.TrimSpace(buf.Bytes())
+		if len(b) > 0 && b[0] != '{' { // if we don't have a JSON map, assume YAML
+			isYAML = true
+		}
+	}
+
+	return &decoder{
+		src:    &buf,
+		isYAML: isYAML,
+	}
+}
+
+func (d *decoder) Decode(v interface{}) error {
+	if d.src.Len() == 0 {
+		return errors.New(`empty source`)
+	}
+
+	if d.isYAML {
+		return yaml.Unmarshal(d.src.Bytes(), v)
+	}
+	return json.Unmarshal(d.src.Bytes(), v)
+}
+
+func fetchRemoteContent(u string) (io.Reader, error) {
 	res, err := http.Get(u)
 	if err != nil {
 		return nil, errors.Wrap(err, `failed to get remote content`)
@@ -31,57 +77,21 @@ func fetchRemoteContent(u string) ([]byte, error) {
 		return nil, errors.Wrap(err, `failed to read remote content`)
 	}
 
-	return buf.Bytes(), nil
+	return &buf, nil
 }
 
-func fetchContent(name string) ([]byte, error) {
-	if u, err := url.Parse(name); err == nil && (u.Scheme == `http` || u.Scheme == `https`) {
-		buf, err := fetchRemoteContent(name)
-		if err != nil {
-			return nil, errors.Wrapf(err, `failed to fetch remote content %s`, name)
-		}
-		return buf, nil
-	}
-
-	f, err := os.Open(name)
-	if err != nil {
-		return nil, errors.Wrapf(err, `failed to open file %s`, name)
-	}
-	defer f.Close()
-
-	var buf bytes.Buffer
-	if _, err := io.Copy(&buf, f); err != nil {
-		return nil, errors.Wrap(err, `failed to read from local file`)
-	}
-
-	return buf.Bytes(), nil
-}
-
-func LoadFile(fn string) (*Spec, error) {
+func Load(src io.Reader) (*Spec, error) {
 	var spec Spec
 
-	src, err := fetchContent(fn)
-	if err != nil {
-		return nil, errors.Wrap(err, `failed to fetch content`)
-	}
-
-	var unmarshal func([]byte, interface{}) error
-
-	switch filepath.Ext(fn) {
-	case ".yaml", ".yml":
-		unmarshal = yaml.Unmarshal
-	default:
-		unmarshal = json.Unmarshal
-	}
-
-	if err := unmarshal(src, &spec); err != nil {
-		return nil, errors.Wrap(err, `failed to decode spec`)
+	dec := NewDecoder(src)
+	if err := dec.Decode(&spec); err != nil {
+		return nil, errors.Wrap(err, `failed to decode content`)
 	}
 
 	// no paths or defs declared? check if this is a plain map[name]*Schema (definitions)
 	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
 		var defs map[string]*Schema
-		if err := unmarshal(src, &defs); err == nil {
+		if err := dec.Decode(&defs); err == nil {
 			if _, nok := defs["type"]; !nok {
 				spec.Definitions = defs
 			}
@@ -92,9 +102,9 @@ func LoadFile(fn string) (*Spec, error) {
 	// check if its just an *Item
 	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
 		var item Schema
-		if err := unmarshal(src, &item); err == nil {
+		if err := dec.Decode(&item); err == nil {
 			spec.Definitions = map[string]*Schema{
-				strings.TrimSuffix(filepath.Base(fn), filepath.Ext(fn)): &item,
+				"TODO": &item,
 			}
 		}
 	}
@@ -121,7 +131,25 @@ func LoadFile(fn string) (*Spec, error) {
 		}
 	}
 
-	spec.FileName = fn
-
 	return &spec, nil
+}
+
+func LoadFile(fn string) (*Spec, error) {
+	var src io.Reader
+	if u, err := url.Parse(fn); err == nil && (u.Scheme == `http` || u.Scheme == `https`) {
+		rdr, err := fetchRemoteContent(u.String())
+		if err != nil {
+			return nil, errors.Wrapf(err, `failed to fetch remote content %s`, fn)
+		}
+		src = rdr
+	} else {
+		f, err := os.Open(fn)
+		if err != nil {
+			return nil, errors.Wrapf(err, `failed to open file %s`, fn)
+		}
+		defer f.Close()
+		src = f
+	}
+
+	return Load(src)
 }
