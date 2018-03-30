@@ -10,6 +10,17 @@ const (
 )
 
 var (
+	BoolType   = NewMessage("bool")
+	BytesType  = NewMessage("bytes")
+	DoubleType = NewMessage("double")
+	FloatType  = NewMessage("float")
+	Int32Type  = NewMessage("int32")
+	Int64Type  = NewMessage("int64")
+	NullType   = NewMessage("google.protobuf.NullValue")
+	StringType = NewMessage("string")
+)
+
+var (
 	emptyMessage = NewMessage("google.protobuf.Empty")
 )
 

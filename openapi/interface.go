@@ -47,10 +47,14 @@ type Path struct {
 // Parameter is a partial representation of OpenAPI parameter type
 // (https://swagger.io/specification/#parameterObject)
 type Parameter struct {
-	Name     string  `yaml:"name" json:"name"`
-	In       string  `yaml:"in,omitempty" json:"in,omitempty"`
-	Schema   *Schema `yaml:"schema" json:"schema"`
-	Required bool    `yaml:"required,omitempty" json:"required,omitempty"`
+	Name        string  `yaml:"name" json:"name"`
+	Description string  `yaml:"description" json:"description"`
+	Format      string  `yaml:"format,omitempty", json:"format,omitempty"`
+	In          string  `yaml:"in,omitempty" json:"in,omitempty"`
+	Items       *Schema `yaml:"items,omitempty" json:"items,omitempty"`
+	Required    bool    `yaml:"required,omitempty" json:"required,omitempty"`
+	Schema      *Schema `yaml:"schema,omitempty" json:"schema,omitempty"` // if in == "body", then schema is present
+	Type        string  `yaml:"type,omitempty" json:"type,omitempty"`
 }
 
 // Parameters is a slice of request parameters for a single endpoint.
@@ -91,9 +95,9 @@ type Schema struct {
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 	// scalar
 	// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#schemaObject
-	Type   string      `yaml:"type" json:"type"`
-	Format interface{} `yaml:"format,omitempty" json:"format,omitempty"`
-	Enum   []string    `yaml:"enum,omitempty" json:"enum,omitempty"`
+	Type   string   `yaml:"type" json:"type"`
+	Format string   `yaml:"format,omitempty" json:"format,omitempty"`
+	Enum   []string `yaml:"enum,omitempty" json:"enum,omitempty"`
 
 	ProtoTag int `yaml:"x-proto-tag" json:"x-proto-tag"`
 

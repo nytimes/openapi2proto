@@ -67,14 +67,8 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	// compile all definitions
-	c.phase = phaseCompileDefinitions
-
-	for ref, schema := range spec.Definitions {
-		m, err := c.compileSchema(camelCase(ref), schema)
-		if err != nil {
-			return nil, errors.Wrapf(err, `failed to compile #/definition/%s`, ref)
-		}
-		c.addDefinition("#/definitions/"+ref, m)
+	if err := c.compileDefinitions(spec.Definitions); err != nil {
+		return nil, errors.Wrap(err, `failed to compile definitions`)
 	}
 
 	p2, err := protobuf.Resolve(p, c.getTypeFromReference)
@@ -102,6 +96,19 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	return p, nil
 }
 
+func (c *compileCtx) compileDefinitions(definitions map[string]*openapi.Schema) error {
+	c.phase = phaseCompileDefinitions
+	for ref, schema := range definitions {
+		log.Printf("compiling %s", ref)
+		m, err := c.compileSchema(camelCase(ref), schema)
+		if err != nil {
+			return errors.Wrapf(err, `failed to compile #/definition/%s`, ref)
+		}
+		c.addDefinition("#/definitions/"+ref, m)
+	}
+	return nil
+}
+
 func (c *compileCtx) compileExtension(ext *openapi.Extension) (*protobuf.Extension, error) {
 	e := protobuf.NewExtension(ext.Base)
 	for _, f := range ext.Fields {
@@ -119,10 +126,23 @@ func (c *compileCtx) compileParametersToSchema(params openapi.Parameters) (*open
 	var s openapi.Schema
 	s.Properties = make(map[string]*openapi.Schema)
 	for _, param := range params {
-		if param.Schema == nil {
-			continue
+		if param.Schema != nil {
+			s2 := *param.Schema
+			s2.Description = param.Description
+			s.Properties[snakeCase(param.Name)] = &s2
+		} else if param.Type == "array" {
+			s.Properties[snakeCase(param.Name)] = &openapi.Schema{
+				Type:        "array",
+				Items:       param.Items,
+				Description: param.Description,
+			}
+		} else {
+			s.Properties[snakeCase(param.Name)] = &openapi.Schema{
+				Type:        param.Type,
+				Format:      param.Format,
+				Description: param.Description,
+			}
 		}
-		s.Properties[snakeCase(param.Name)] = param.Schema
 	}
 	return &s, nil
 }
@@ -218,8 +238,8 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 
 var builtinTypes = map[string]protobuf.Type{
 	"string":  protobuf.NewMessage("string"),
-	"integer": protobuf.NewMessage("int32"),
-	"number":  protobuf.NewMessage("float"),
+	"integer": protobuf.NewMessage("integer"),
+	"number":  protobuf.NewMessage("number"),
 	"boolean": protobuf.NewMessage("boolean"),
 }
 
@@ -272,16 +292,6 @@ func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum
 func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
 	log.Printf("compileSchema %s", name)
 
-	rawName := name
-	name = camelCase(name)
-	// could be a builtin... try as-is once, then the camel cased
-	for _, n := range []string{rawName, name} {
-		if v, err := c.getType(n); err == nil {
-			log.Printf(" -> found pre-compiled type %s", v.Name())
-			return v, nil
-		}
-	}
-
 	if s.Ref != "" {
 		m, err := c.getTypeFromReference(s.Ref)
 		if err != nil {
@@ -299,6 +309,16 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 			return nil, errors.Wrapf(err, `failed to resolve reference %s`, s.Ref)
 		}
 		return m, nil
+	}
+
+	rawName := name
+	name = camelCase(name)
+	// could be a builtin... try as-is once, then the camel cased
+	for _, n := range []string{rawName, name} {
+		if v, err := c.getType(n); err == nil {
+			log.Printf(" -> found pre-compiled type %s", v.Name())
+			return v, nil
+		}
 	}
 
 	switch s.Type {
@@ -340,6 +360,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 }
 
 func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[string]*openapi.Schema) error {
+	log.Printf("compileSchemaProperties %#v", props)
 	var sortedProps []string
 	for k := range props {
 		sortedProps = append(sortedProps, k)
@@ -359,17 +380,63 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 	return nil
 }
 
+func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.Type) {
+	log.Printf("applyBuiltinFormat %s (%s)", t.Name(), f)
+	defer func() {
+		log.Printf("applied format: %s", rt.Name())
+	}()
+
+	switch t.Name() {
+	case "bytes":
+		return protobuf.BytesType
+	case "boolean":
+		return protobuf.BoolType
+	case "null":
+		return protobuf.NullType
+	case "string":
+		if f == "byte" {
+			return protobuf.BytesType
+		}
+		return protobuf.StringType
+	case "integer":
+		if f == "int64" {
+			return protobuf.Int64Type
+		}
+		return protobuf.Int32Type
+	case "number":
+		// #62 type: number + format: long -> int64,
+		//     type: number + format: integer -> int32
+		switch f {
+		case "":
+			return protobuf.DoubleType
+		case "int64", "long":
+			return protobuf.Int64Type
+		case "integer":
+			return protobuf.Int32Type
+		default:
+			return protobuf.FloatType
+		}
+	}
+	return t
+}
+
 // compiles a single property to a field.
 // local-scoped messages are handled in the compilation for the field type.
 func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index int) (*protobuf.Field, error) {
-	log.Printf("compile property %s", name)
-
+	log.Printf("compile property %s %#v", name, prop)
 	var f *protobuf.Field
 	switch prop.Type {
 	case "", "object":
 		child, err := c.compileSchema(name, prop)
 		if err != nil {
-			return nil, errors.Wrapf(err, `failed to conver property %s`, name)
+			return nil, errors.Wrapf(err, `failed to compile object property %s`, name)
+		}
+
+		f = protobuf.NewField(child, snakeCase(name), index)
+	case  "array":
+		child, err := c.compileSchema(name, prop.Items)
+		if err != nil {
+			return nil, errors.Wrapf(err, `failed to compile array property %s`, name)
 		}
 
 		f = protobuf.NewField(child, snakeCase(name), index)
@@ -382,6 +449,12 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 				return nil, errors.Wrapf(err, `failed to compile protobuf type`)
 			}
 		}
+
+		if prop.Format != "" {
+			log.Printf("applying builtin format for %s", name)
+			typ = c.applyBuiltinFormat(typ, prop.Format)
+		}
+
 		f = protobuf.NewField(typ, snakeCase(name), index)
 	}
 
@@ -472,7 +545,7 @@ func (c *compileCtx) addDefinition(ref string, t protobuf.Type) {
 	if _, ok := c.definitions[ref]; ok {
 		return
 	}
-	log.Printf("adding definitions %s", ref)
+	log.Printf("adding definition %s: %#v", ref, t)
 	c.definitions[ref] = t
 }
 

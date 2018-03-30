@@ -5,6 +5,21 @@ package cats;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
+message Cat {
+    string breed = 1;
+    google.protobuf.Timestamp dateOfBirth = 2;
+    int64 id = 3;
+    string name = 4;
+}
+
+message Cats {
+    repeated Cats cats = 1;
+}
+
+message Error {
+    string Message = 1;
+}
+
 message GetCatIdProtoJSONRequest {
     // The transport to respond with (Protobuf or JSON)
     string ProtoJSON = 1;
@@ -27,21 +42,6 @@ message PutCatsProtojsonRequest {
 
     // The transport to respond with (Protobuf or JSON)
     string protojson = 2;
-}
-
-message Cat {
-    string breed = 1;
-    google.protobuf.Timestamp dateOfBirth = 2;
-    int64 id = 3;
-    string name = 4;
-}
-
-message Cats {
-    repeated Cats cats = 1;
-}
-
-message Error {
-    string Message = 1;
 }
 
 service CatsService {
