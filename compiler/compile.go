@@ -17,11 +17,18 @@ var knownImports = map[string]string{
 	"google.protobuf.Empty":         "google/protobuf/empty.proto",
 	"google.protobuf.NullValue":     "google/protobuf/struct.proto",
 	"google.protobuf.MethodOptions": "google/protobuf/descriptor.proto",
+	"google.protobuf.Timestamp":     "google/protobuf/timestamp.proto",
 }
+
+var knownDefinitions = map[string]protobuf.Type{}
 
 func init() {
 	for _, wrap := range []string{"String", "Bytes", "Bool", "Int64", "Int32", "UInt64", "UInt32", "Float", "Double"} {
 		knownImports[`google.protobuf.`+wrap+`Value`] = "google/protobuf/wrappers.proto"
+	}
+
+	for msg, lib := range knownImports {
+		knownDefinitions[lib+"#/"+msg] = protobuf.NewMessage(msg)
 	}
 
 	if b, err := strconv.ParseBool(os.Getenv("OPENAPI2PROTO_DEBUG")); err != nil || !b {
@@ -43,14 +50,15 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	c := &compileCtx{
-		annotate:    annotate,
-		definitions: map[string]protobuf.Type{},
-		imports:     map[string]struct{}{},
-		pkg:         p,
-		rpcs:        map[string]*protobuf.RPC{},
-		spec:        spec,
-		service:     svc,
-		types:       map[protobuf.Container]map[protobuf.Type]struct{}{},
+		annotate:        annotate,
+		definitions:     map[string]protobuf.Type{},
+		imports:         map[string]struct{}{},
+		pkg:             p,
+		rpcs:            map[string]*protobuf.RPC{},
+		spec:            spec,
+		service:         svc,
+		types:           map[protobuf.Container]map[protobuf.Type]struct{}{},
+		unfulfilledRefs: map[string]struct{}{},
 	}
 	c.pushParent(p)
 
@@ -59,6 +67,8 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	// compile all definitions
+	c.phase = phaseCompileDefinitions
+
 	for ref, schema := range spec.Definitions {
 		m, err := c.compileSchema(camelCase(ref), schema)
 		if err != nil {
@@ -67,7 +77,14 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 		c.addDefinition("#/definitions/"+ref, m)
 	}
 
+	p2, err := protobuf.Resolve(p, c.getTypeFromReference)
+	if err != nil {
+		return nil, errors.Wrap(err, `failed to resolve references`)
+	}
+	*p = *(p2.(*protobuf.Package))
+
 	// compile extensions
+	c.phase = phaseCompileExtensions
 	for _, ext := range spec.Extensions {
 		e, err := c.compileExtension(ext)
 		if err != nil {
@@ -77,6 +94,7 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	// compile the paths
+	c.phase = phaseCompilePaths
 	if err := c.compilePaths(spec.Paths); err != nil {
 		return nil, errors.Wrap(err, `failed to compile paths`)
 	}
@@ -118,6 +136,9 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 		endpointName := compileEndpointName(e)
 		log.Printf("endpoint %s", endpointName)
 		rpc := protobuf.NewRPC(endpointName)
+		if comment := e.Description; len(comment) > 0 {
+			rpc.SetComment(comment)
+		}
 
 		// protobuf Request and Response values must be created.
 		// Parameters are given as a list of schemas, but since protobuf
@@ -227,11 +248,15 @@ func (c *compileCtx) getType(name string) (protobuf.Type, error) {
 }
 
 func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
-	t, ok := c.definitions[ref]
-	if !ok {
-		return nil, errors.Errorf(`reference %s could not be resolved`, ref)
+	if t, ok := knownDefinitions[ref]; ok {
+		return t, nil
 	}
-	return t, nil
+
+	if t, ok := c.definitions[ref]; ok {
+		return t, nil
+	}
+
+	return nil, errors.Errorf(`reference %s could not be resolved`, ref)
 }
 
 func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
@@ -260,6 +285,17 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 	if s.Ref != "" {
 		m, err := c.getTypeFromReference(s.Ref)
 		if err != nil {
+			// bummer, we couldn't resolve this reference. But how we treat
+			// this error is different from 1) during compilation of definitions
+			// and 2) the rest of the spec
+			//
+			// if it's the former, then we can tolorate this error, and return
+			// a "promise" to be fulfilled at a later time. Otherwise, it's a
+			// fatal error.
+			if c.phase == phaseCompileDefinitions {
+				r := protobuf.NewReference(s.Ref, c.getTypeFromReference)
+				return r, nil
+			}
 			return nil, errors.Wrapf(err, `failed to resolve reference %s`, s.Ref)
 		}
 		return m, nil
@@ -336,7 +372,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 			return nil, errors.Wrapf(err, `failed to conver property %s`, name)
 		}
 
-		f = protobuf.NewField(child.Name(), snakeCase(child.Name()), index)
+		f = protobuf.NewField(child, snakeCase(name), index)
 	default:
 		// is this a known type?
 		typ, err := c.getType(prop.Type)
@@ -346,7 +382,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 				return nil, errors.Wrapf(err, `failed to compile protobuf type`)
 			}
 		}
-		f = protobuf.NewField(typ.Name(), snakeCase(name), index)
+		f = protobuf.NewField(typ, snakeCase(name), index)
 	}
 
 	if prop.Type == "array" {
@@ -356,7 +392,11 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 	if v := prop.Description; len(v) > 0 {
 		f.SetComment(v)
 	}
+
+	// finally, make sure that this type is registered, if need be.
+	c.addImportForType(f.Type().Name())
 	return f, nil
+
 }
 
 func (c *compileCtx) addImportForType(name string) {

@@ -1,6 +1,25 @@
 package protobuf
 
-func NewField(typ, name string, index int) *Field {
+func NewReference(name string, resolver func(string) (Type, error)) *Reference {
+	return &Reference{
+		name:     name,
+		resolver: resolver,
+	}
+}
+
+func (r *Reference) Resolve() (Type, error) {
+	return r.resolver(r.name)
+}
+
+func (r *Reference) Name() string {
+	return r.name
+}
+
+func (r *Reference) Priority() int {
+	return -1
+}
+
+func NewField(typ Type, name string, index int) *Field {
 	return &Field{
 		typ:   typ,
 		name:  name,
@@ -12,7 +31,7 @@ func (f *Field) Name() string {
 	return f.name
 }
 
-func (f *Field) Type() string {
+func (f *Field) Type() Type {
 	return f.typ
 }
 

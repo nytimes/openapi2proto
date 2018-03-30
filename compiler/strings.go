@@ -32,12 +32,17 @@ func allCaps(s string) string {
 
 func snakeCase(s string) string {
 	var buf bytes.Buffer
+	var wasUnderscore bool
 	for _, r := range s {
 		// replace all non-alpha-numeric characters with an underscore
 		if !isAlphaNum(r) {
 			r = '_'
+			wasUnderscore = true
 		} else {
-			r = unicode.ToLower(r)
+			if wasUnderscore {
+				r = unicode.ToLower(r)
+			}
+			wasUnderscore = false
 		}
 		buf.WriteRune(r)
 	}

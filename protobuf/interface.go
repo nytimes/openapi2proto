@@ -34,6 +34,7 @@ type Type interface {
 type Container interface {
 	Type
 	AddType(Type)
+	Children() []Type
 }
 
 type Enum struct {
@@ -53,7 +54,7 @@ type Field struct {
 	index    int
 	name     string
 	repeated bool
-	typ      string
+	typ      Type
 }
 
 type ExtensionField struct {
@@ -90,6 +91,16 @@ type HTTPAnnotation struct {
 }
 
 type RPCOption struct {
-	name string
+	name  string
 	value interface{}
+}
+
+// Reference is a special type of Type that can pass the
+// protobuf.Type system, but requires that  it be resolved
+// at runtime to get the actual Type behind it. This is
+// used to resolve circular dependencies that are found
+// during compilation phase
+type Reference struct {
+	name     string
+	resolver func(string) (Type, error)
 }

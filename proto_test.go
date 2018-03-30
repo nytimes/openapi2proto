@@ -265,6 +265,7 @@ func TestGenerateProto(t *testing.T) {
 		{
 			fixturePath: "fixtures/cats.yaml",
 		},
+/*
 		{
 			fixturePath: "fixtures/catsanddogs.yaml",
 		},
@@ -337,6 +338,7 @@ func TestGenerateProto(t *testing.T) {
 			options:     true,
 			fixturePath: "fixtures/custom_options.yaml",
 		},
+*/
 	}
 	testGenProto(t, tests...)
 }

@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -81,7 +82,7 @@ func (e *Encoder) EncodeField(v *Field) error {
 	if v.repeated {
 		fmt.Fprintf(e.dst, "repeated ")
 	}
-	fmt.Fprintf(e.dst, "%s %s = %d;", v.Type(), v.Name(), v.Index())
+	fmt.Fprintf(e.dst, "%s %s = %d;", v.Type().Name(), v.Name(), v.Index())
 	return nil
 }
 
@@ -101,6 +102,8 @@ func (e *Encoder) writeBlock(name string, src io.Reader) error {
 }
 
 func (e *Encoder) EncodeMessage(v *Message) error {
+	log.Printf("Encoding %s", v.Name())
+
 	var buf bytes.Buffer
 	subEncoder := e.subEncoder(&buf)
 	if err := subEncoder.encodeChildren(v); err != nil {
@@ -224,7 +227,7 @@ func (e *Encoder) EncodeRPC(r *RPC) error {
 		}
 	}
 
-	name := fmt.Sprintf("rpc %s (%s) returns (%s)", r.name, r.parameter.name, r.response.name)
+	name := fmt.Sprintf("rpc %s(%s) returns (%s)", r.name, r.parameter.name, r.response.name)
 	if err := e.writeBlock(name, &buf); err != nil {
 		return errors.Wrap(err, `failed to write rpc block`)
 	}
@@ -318,6 +321,8 @@ func (e *Encoder) EncodePackage(p *Package) error {
 	fmt.Fprintf(e.dst, "\n")
 	fmt.Fprintf(e.dst, "\npackage %s;", p.name)
 	fmt.Fprintf(e.dst, "\n")
+
+	sort.Strings(p.imports)
 	for _, lib := range p.imports {
 		fmt.Fprintf(e.dst, "\nimport %s;", strconv.Quote(lib))
 	}
@@ -344,25 +349,32 @@ func getChildren(v interface{}) []Type {
 }
 
 func (e *Encoder) encodeChildren(t Type) error {
-	if children := getChildren(t); children != nil {
-		sort.Slice(children, func(i, j int) bool {
-			ci := children[i]
-			cj := children[j]
-			if ci.Priority() == cj.Priority() {
-				return ci.Name() < cj.Name()
-			}
+	children := getChildren(t)
+	if len(children) == 0 {
+		return nil
+	}
 
-			return ci.Priority() < cj.Priority()
-		})
-
-		for i, child := range children {
-			if i > 0 {
-				fmt.Fprintf(e.dst, "\n")
-			}
-			if err := e.EncodeType(child); err != nil {
-				return errors.Wrapf(err, `failed to encode %s`, child.Name())
-			}
+	sort.Slice(children, func(i, j int) bool {
+		ci := children[i]
+		cj := children[j]
+		if ci.Priority() == cj.Priority() {
+			return ci.Name() < cj.Name()
 		}
+
+		return ci.Priority() < cj.Priority()
+	})
+
+	// Don't recurse if we have already
+	processed := 0
+	for _, child := range children {
+		if processed > 0 {
+			fmt.Fprintf(e.dst, "\n")
+		}
+
+		if err := e.EncodeType(child); err != nil {
+			return errors.Wrapf(err, `failed to encode %s`, child.Name())
+		}
+		processed++
 	}
 
 	return nil
