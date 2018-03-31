@@ -162,8 +162,8 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 		}
 		var name = param.Name
 		if name == "" {
-			if i := strings.IndexByte(param.Ref, '/'); i > -1 {
-				name = param.Ref[i:]
+			if i := strings.LastIndexByte(param.Ref, '/'); i > -1 {
+				name = param.Ref[i+1:]
 			}
 		}
 		return name, &openapi.Schema{
