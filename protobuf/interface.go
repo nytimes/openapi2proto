@@ -16,8 +16,17 @@ var (
 	FloatType  = NewMessage("float")
 	Int32Type  = NewMessage("int32")
 	Int64Type  = NewMessage("int64")
-	NullType   = NewMessage("google.protobuf.NullValue")
 	StringType = NewMessage("string")
+
+	// Boxed types
+	AnyType         = NewMessage("google.protobuf.Any")
+	BoolValueType   = NewMessage("google.protobuf.BoolValue")
+	BytesValueType  = NewMessage("google.protobuf.BytesValue")
+	DoubleValueType = NewMessage("google.protobuf.DoubleValue")
+	FloatValueType  = NewMessage("google.protobuf.FloatValue")
+	Int32ValueType  = NewMessage("google.protobuf.Int32Value")
+	Int64ValueType  = NewMessage("google.protobuf.Int64Value")
+	NullValueType   = NewMessage("google.protobuf.NullValue")
 )
 
 var (

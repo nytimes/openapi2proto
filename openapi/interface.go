@@ -13,14 +13,14 @@ type Spec struct {
 		Description string `yaml:"description" json:"description"`
 		Version     string `yaml:"version" json:"version"`
 	} `yaml:"info" json:"info"`
-	Host        string             `yaml:"host" json:"host"`
-	Schemes     []string           `yaml:"schemes" json:"schemes"`
-	BasePath    string             `yaml:"basePath" json:"basePath"`
-	Produces    []string           `yaml:"produces" json:"produces"`
-	Paths       map[string]*Path   `yaml:"paths" json:"paths"`
-	Definitions map[string]*Schema `yaml:"definitions" json:"definitions"`
-	Parameters  map[string]*Schema `yaml:"parameters" json:"parameters"`
-	Extensions  []*Extension       `yaml:"x-extensions" json:"x-extensions"`
+	Host        string                `yaml:"host" json:"host"`
+	Schemes     []string              `yaml:"schemes" json:"schemes"`
+	BasePath    string                `yaml:"basePath" json:"basePath"`
+	Produces    []string              `yaml:"produces" json:"produces"`
+	Paths       map[string]*Path      `yaml:"paths" json:"paths"`
+	Definitions map[string]*Schema    `yaml:"definitions" json:"definitions"`
+	Parameters  map[string]*Parameter `yaml:"parameters" json:"parameters"`
+	Extensions  []*Extension          `yaml:"x-extensions" json:"x-extensions"`
 }
 
 type Extension struct {
@@ -52,6 +52,7 @@ type Parameter struct {
 	Format      string  `yaml:"format,omitempty", json:"format,omitempty"`
 	In          string  `yaml:"in,omitempty" json:"in,omitempty"`
 	Items       *Schema `yaml:"items,omitempty" json:"items,omitempty"`
+	Ref         string  `yaml:"$ref" json:"$ref"`
 	Required    bool    `yaml:"required,omitempty" json:"required,omitempty"`
 	Schema      *Schema `yaml:"schema,omitempty" json:"schema,omitempty"` // if in == "body", then schema is present
 	Type        string  `yaml:"type,omitempty" json:"type,omitempty"`
@@ -86,6 +87,8 @@ type Model struct {
 	Depth      int
 }
 
+type SchemaType []string
+
 // Schema represent Model properties in an OpenAPI spec.
 type Schema struct {
 	// if this schema refers to a definition found elsewhere, this value
@@ -95,9 +98,9 @@ type Schema struct {
 	Description string `yaml:"description,omitempty" json:"description,omitempty"`
 	// scalar
 	// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#schemaObject
-	Type   string   `yaml:"type" json:"type"`
-	Format string   `yaml:"format,omitempty" json:"format,omitempty"`
-	Enum   []string `yaml:"enum,omitempty" json:"enum,omitempty"`
+	Type   SchemaType `yaml:"type" json:"type"`
+	Format string     `yaml:"format,omitempty" json:"format,omitempty"`
+	Enum   []string   `yaml:"enum,omitempty" json:"enum,omitempty"`
 
 	ProtoTag int `yaml:"x-proto-tag" json:"x-proto-tag"`
 

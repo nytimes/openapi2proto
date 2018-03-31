@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -83,11 +84,13 @@ func fetchRemoteContent(u string) (io.Reader, error) {
 func Load(src io.Reader) (*Spec, error) {
 	var spec Spec
 
+	log.Printf("decode attempt #1")
 	dec := NewDecoder(src)
 	if err := dec.Decode(&spec); err != nil {
 		return nil, errors.Wrap(err, `failed to decode content`)
 	}
 
+	log.Printf("decode attempt #2")
 	// no paths or defs declared? check if this is a plain map[name]*Schema (definitions)
 	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
 		var defs map[string]*Schema
@@ -98,6 +101,7 @@ func Load(src io.Reader) (*Spec, error) {
 		}
 	}
 
+	log.Printf("decode attempt #3")
 	// _still_ no defs? try to see if this is a single item
 	// check if its just an *Item
 	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
@@ -152,4 +156,64 @@ func LoadFile(fn string) (*Spec, error) {
 	}
 
 	return Load(src)
+}
+
+func (s *SchemaType) UnmarshalJSON(data []byte) error {
+	var str string
+	if err := json.Unmarshal(data, &str); err == nil {
+		*s = []string{str}
+		return nil
+	}
+
+	var l []string
+	if err := json.Unmarshal(data, &l); err == nil {
+		*s = l
+		return nil
+	}
+
+	return errors.Errorf(`invalid type '%s'`, data)
+}
+
+func (s *SchemaType) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var str string
+	if err := unmarshal(&str); err == nil {
+		if str == "" {
+			*s = []string(nil)
+		} else {
+			*s = []string{str}
+		}
+		return nil
+	}
+
+	var l []string
+	if err := unmarshal(&l); err == nil {
+		*s = l
+		return nil
+	}
+
+	return errors.New(`invalid type for schema type`)
+}
+
+func (s *SchemaType) Empty() bool {
+	return len(*s) == 0
+}
+
+func (s *SchemaType) Contains(t string) bool {
+	for _, v := range *s {
+		if v == t {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *SchemaType) Len() int {
+	return len(*s)
+}
+
+func (s *SchemaType) First() string {
+	if !s.Empty() {
+		return (*s)[0]
+	}
+	return ""
 }

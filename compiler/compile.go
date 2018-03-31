@@ -6,11 +6,22 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/NYTimes/openapi2proto/openapi"
 	"github.com/NYTimes/openapi2proto/protobuf"
 	"github.com/pkg/errors"
 )
+
+var builtinTypes = map[string]protobuf.Type{
+	"bytes":               protobuf.BytesType,
+	"string":              protobuf.StringType,
+	"integer":             protobuf.NewMessage("pseudo:integer"),
+	"float":               protobuf.NewMessage("pseudo:number"),
+	"number":              protobuf.NewMessage("pseudo:number"),
+	"boolean":             protobuf.NewMessage("pseudo:boolean"),
+	"google.protobuf.Any": protobuf.AnyType,
+}
 
 var knownImports = map[string]string{
 	"google.protobuf.Any":           "google/protobuf/any.proto",
@@ -70,6 +81,9 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	if err := c.compileDefinitions(spec.Definitions); err != nil {
 		return nil, errors.Wrap(err, `failed to compile definitions`)
 	}
+	if err := c.compileParameters(spec.Parameters); err != nil {
+		return nil, errors.Wrap(err, `failed to compile parameters`)
+	}
 
 	p2, err := protobuf.Resolve(p, c.getTypeFromReference)
 	if err != nil {
@@ -109,6 +123,22 @@ func (c *compileCtx) compileDefinitions(definitions map[string]*openapi.Schema) 
 	return nil
 }
 
+// Note: compiles GLOBAL parameters. not to be used for compiling
+// actual parameters
+func (c *compileCtx) compileParameters(parameters map[string]*openapi.Parameter) error {
+	c.phase = phaseCompileDefinitions
+	for ref, param := range parameters {
+		log.Printf("compiling %s", ref)
+		_, s, err := c.compileParameterToSchema(param)
+		m, err := c.compileSchema(camelCase(ref), s)
+		if err != nil {
+			return errors.Wrapf(err, `failed to compile #/parameters/%s`, ref)
+		}
+		c.addDefinition("#/parameters/"+ref, m)
+	}
+	return nil
+}
+
 func (c *compileCtx) compileExtension(ext *openapi.Extension) (*protobuf.Extension, error) {
 	e := protobuf.NewExtension(ext.Base)
 	for _, f := range ext.Fields {
@@ -122,27 +152,51 @@ func (c *compileCtx) compileExtension(ext *openapi.Extension) (*protobuf.Extensi
 	return e, nil
 }
 
+// compiles one schema into "name" and "schema"
+func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string, *openapi.Schema, error) {
+	switch {
+	case param.Ref != "":
+		_, err := c.getTypeFromReference(param.Ref)
+		if err != nil {
+			return "", nil, errors.Wrapf(err, `failed to get type for reference %s`, param.Ref)
+		}
+		var name = param.Name
+		if name == "" {
+			if i := strings.IndexByte(param.Ref, '/'); i > -1 {
+				name = param.Ref[i:]
+			}
+		}
+		return name, &openapi.Schema{
+			Ref: param.Ref,
+		}, nil
+	case param.Schema != nil:
+		s2 := *param.Schema
+		s2.Description = param.Description
+		return snakeCase(param.Name), &s2, nil
+	case param.Type == "array":
+		return snakeCase(param.Name), &openapi.Schema{
+			Type:        openapi.SchemaType{"array"},
+			Items:       param.Items,
+			Description: param.Description,
+		}, nil
+	default:
+		return snakeCase(param.Name), &openapi.Schema{
+			Type:        openapi.SchemaType{param.Type},
+			Format:      param.Format,
+			Description: param.Description,
+		}, nil
+	}
+}
+
 func (c *compileCtx) compileParametersToSchema(params openapi.Parameters) (*openapi.Schema, error) {
 	var s openapi.Schema
 	s.Properties = make(map[string]*openapi.Schema)
 	for _, param := range params {
-		if param.Schema != nil {
-			s2 := *param.Schema
-			s2.Description = param.Description
-			s.Properties[snakeCase(param.Name)] = &s2
-		} else if param.Type == "array" {
-			s.Properties[snakeCase(param.Name)] = &openapi.Schema{
-				Type:        "array",
-				Items:       param.Items,
-				Description: param.Description,
-			}
-		} else {
-			s.Properties[snakeCase(param.Name)] = &openapi.Schema{
-				Type:        param.Type,
-				Format:      param.Format,
-				Description: param.Description,
-			}
+		name, schema, err := c.compileParameterToSchema(param)
+		if err != nil {
+			return nil, errors.Wrap(err, `failed to compile parameter to schema`)
 		}
+		s.Properties[name] = schema
 	}
 	return &s, nil
 }
@@ -236,13 +290,6 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 	return nil
 }
 
-var builtinTypes = map[string]protobuf.Type{
-	"string":  protobuf.NewMessage("string"),
-	"integer": protobuf.NewMessage("integer"),
-	"number":  protobuf.NewMessage("number"),
-	"boolean": protobuf.NewMessage("boolean"),
-}
-
 // Search for type by given name. looks up from the current scope (message,
 // if applicable), all the way up to package scope
 func (c *compileCtx) getType(name string) (protobuf.Type, error) {
@@ -264,7 +311,26 @@ func (c *compileCtx) getType(name string) (protobuf.Type, error) {
 		}
 	}
 
-	return nil, errors.New(`not found`)
+	return nil, errors.Errorf(`failed to find type %s`, name)
+}
+
+func (c *compileCtx) getBoxedType(t protobuf.Type) protobuf.Type {
+	switch t {
+	case protobuf.BoolType:
+		return protobuf.BoolValueType
+	case protobuf.BytesType:
+		return protobuf.BytesValueType
+	case protobuf.DoubleType:
+		return protobuf.DoubleValueType
+	case protobuf.FloatType:
+		return protobuf.FloatValueType
+	case protobuf.Int32Type:
+		return protobuf.Int32ValueType
+	case protobuf.Int64Type:
+		return protobuf.Int64ValueType
+	default:
+		return t
+	}
 }
 
 func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
@@ -287,6 +353,30 @@ func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum
 	}
 
 	return e, nil
+}
+
+func (c *compileCtx) compileSchemaMultiType(name string, s *openapi.Schema) (protobuf.Type, error) {
+	var hasNull bool
+	var types []string // everything except for "null"
+	for _, t := range s.Type {
+		if strings.ToLower(t) == "null" {
+			hasNull = true
+			continue
+		}
+		types = append(types, t)
+	}
+
+	// 1. non-nullable fields with multiple types
+	// 2. has no type
+	if (!hasNull || len(types) > 1) || len(types) == 0 {
+		return c.getType("google.protobuf.Any")
+	}
+
+	v, err := c.getType(types[0])
+	if err != nil {
+		return nil, errors.Wrapf(err, `failed to get type for %s`, types[0])
+	}
+	return c.getBoxedType(v), nil
 }
 
 func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
@@ -321,8 +411,16 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 		}
 	}
 
-	switch s.Type {
-	case "", "object":
+	if s.Type.Len() > 1 {
+		v, err := c.compileSchemaMultiType(name, s)
+		if err != nil {
+			return nil, errors.Wrap(err, `failed to compile schema with multiple types`)
+		}
+		return v, nil
+	}
+
+	switch {
+	case s.Type.Empty() || s.Type.Contains("object"):
 		m := protobuf.NewMessage(name)
 		if len(s.Description) > 0 {
 			m.SetComment(s.Description)
@@ -337,7 +435,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 
 		c.addType(m)
 		return m, nil
-	case "array":
+	case s.Type.Contains("array"):
 		// if it's an array, we need to compile the "items" field
 		m, err := c.compileSchema(name, s.Items)
 		if err != nil {
@@ -345,7 +443,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 		}
 		c.addType(m)
 		return m, nil
-	case "string", "integer":
+	case s.Type.Contains("string") || s.Type.Contains("integer"):
 		if len(s.Enum) > 0 {
 			t, err := c.compileEnum(name, s.Enum)
 			if err != nil {
@@ -353,7 +451,19 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 			}
 			return t, nil
 		}
-		fallthrough
+
+		typ, err := c.getType(s.Type.First())
+		if err != nil {
+			typ, err = c.compileSchema(name, s)
+			if err != nil {
+				return nil, errors.Wrapf(err, `failed to compile protobuf type`)
+			}
+		}
+
+		log.Printf("applying builtin format for %s", name)
+		typ = c.applyBuiltinFormat(typ, s.Format)
+
+		return typ, nil
 	default:
 		return nil, errors.Errorf(`don't know how to handle schema type '%s'`, s.Type)
 	}
@@ -389,21 +499,21 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 	switch t.Name() {
 	case "bytes":
 		return protobuf.BytesType
-	case "boolean":
+	case "pseudo:boolean":
 		return protobuf.BoolType
 	case "null":
-		return protobuf.NullType
+		return protobuf.NullValueType
 	case "string":
 		if f == "byte" {
 			return protobuf.BytesType
 		}
 		return protobuf.StringType
-	case "integer":
+	case "pseudo:integer":
 		if f == "int64" {
 			return protobuf.Int64Type
 		}
 		return protobuf.Int32Type
-	case "number":
+	case "pseudo:number":
 		// #62 type: number + format: long -> int64,
 		//     type: number + format: integer -> int32
 		switch f {
@@ -425,15 +535,15 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index int) (*protobuf.Field, error) {
 	log.Printf("compile property %s %#v", name, prop)
 	var f *protobuf.Field
-	switch prop.Type {
-	case "", "object":
+	switch {
+	case prop.Type.Empty() || prop.Type.Contains("object"):
 		child, err := c.compileSchema(name, prop)
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to compile object property %s`, name)
 		}
 
 		f = protobuf.NewField(child, snakeCase(name), index)
-	case  "array":
+	case prop.Type.Contains("array"):
 		child, err := c.compileSchema(name, prop.Items)
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to compile array property %s`, name)
@@ -441,24 +551,30 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 
 		f = protobuf.NewField(child, snakeCase(name), index)
 	default:
-		// is this a known type?
-		typ, err := c.getType(prop.Type)
-		if err != nil {
-			typ, err = c.compileSchema(name, prop)
+		var err error
+		var typ protobuf.Type
+		if prop.Type.Len() > 1 {
+			typ, err = c.compileSchemaMultiType(name, prop)
 			if err != nil {
-				return nil, errors.Wrapf(err, `failed to compile protobuf type`)
+				return nil, errors.Wrap(err, `failed to compile schema with multiple types`)
+			}
+		} else {
+			typ, err = c.getType(prop.Type.First())
+			if err != nil {
+				typ, err = c.compileSchema(name, prop)
+				if err != nil {
+					return nil, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
+				}
 			}
 		}
 
-		if prop.Format != "" {
-			log.Printf("applying builtin format for %s", name)
-			typ = c.applyBuiltinFormat(typ, prop.Format)
-		}
+		log.Printf("applying builtin format for %s", name)
+		typ = c.applyBuiltinFormat(typ, prop.Format)
 
 		f = protobuf.NewField(typ, snakeCase(name), index)
 	}
 
-	if prop.Type == "array" {
+	if prop.Type.Contains("array") {
 		f.SetRepeated(true)
 	}
 
@@ -751,93 +867,3 @@ func mergeParameters(p1, p2 openapi.Parameters) openapi.Parameters {
 	out = append(out, p2...)
 	return out
 }
-
-/*
-
-func makeSchema(params openapi.Parameters) *openapi.Schema {
-	var s openapi.Schema
-
-	for _, param := range params {
-
-	}
-
-	return &s
-}
-
-func (c *compileCtx) compilePath(name string, p *openapi.Path) error {
-	for _, e := range endpoints {
-		endpointName := pathMethodToName(name, e.verb, e.OperationID)
-		log.Printf("endpoint %s", endpointName)
-		rpc := protobuf.NewRPC(endpointName)
-
-		// protobuf Request and Response values must be created.
-		// Parameters are given as a list of schemas, but since protobuf
-		// only accepts one request per rpc call, we need to combine the
-		// parameters and treat them as a single schema
-		params := mergeParameters(p.Parameters, e.Parameters)
-		if len(params) > 0 {
-			reqSchema := makeSchema(params)
-			reqName := endpointName + "Request"
-			reqType, err := c.compileItemToMessage(reqName, reqSchema)
-			if err != nil {
-				return errors.Wrapf(err, `failed to compile parameters for %s`, endpointName)
-			}
-			m, ok := reqType.(*protobuf.Message)
-			if !ok {
-				return errors.Errorf(`type %s is not a message (%T)`, reqName, reqType)
-			}
-			c.addType(reqType)
-			rpc.SetParameter(m)
-		}
-
-//		var resName string
-//		for _, code := range []string{`200`, `201`} {
-//			resp, ok := e.Responses[code]
-//			if !ok {
-//				continue
-//			}
-//
-//			if resp.Schema != "" {
-//				switch resp.Schema.Type {
-//				case "object", "array":
-//					resName = endpointName + "Response"
-//				default:
-//					if resp.Schema.Ref != "" {
-//						resName = c.findRefName(resp)
-//					}
-//				}
-//			}
-//
-//			if resName != "" {
-//				c.get
-//				rpc.SetRe
-//			break
-//		}
-
-		if c.annotate {
-			// check if we have a "in: body" parameter
-			var bodyParam string
-			for _, p := range params {
-				log.Printf("p.Name %s", p.Name)
-				log.Printf("p.In %s", p.In)
-				if p.In == "body" {
-					log.Printf("set bodyParam")
-					bodyParam = p.Name
-					break
-				}
-			}
-
-			a := protobuf.NewHTTPAnnotation(e.verb, name)
-			if bodyParam != "" {
-				log.Printf("setBody")
-				a.SetBody(bodyParam)
-			}
-			rpc.AddOption(a)
-		}
-
-		c.addRPC(rpc)
-	}
-
-	return nil
-}
-*/

@@ -6,6 +6,86 @@ import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 
+message Concept {
+    message ArticleList {
+        message Result {
+            message Concepts {
+                repeated string nytd_des = 1;
+                repeated string nytd_org = 2;
+                repeated string nytd_per = 3;
+            }
+            string body = 1;
+            string byline = 2;
+            Concepts concepts = 3;
+            string date = 4;
+            string document_type = 5;
+            string title = 6;
+            string type_of_material = 7;
+            string url = 8;
+        }
+        repeated Result results = 1;
+        int32 total = 2;
+    }
+
+    message Combination {
+        string combination_note = 1;
+        int32 combination_source_concept_id = 2;
+        string combination_source_concept_name = 3;
+        string combination_source_concept_type = 4;
+        int32 combination_target_concept_id = 5;
+        string combination_target_concept_name = 6;
+        string combination_target_concept_type = 7;
+    }
+
+    message Link {
+        int32 concept_id = 1;
+        string concept_name = 2;
+        string concept_status = 3;
+        string concept_type = 4;
+        int32 is_times_tag = 5;
+        string link = 6;
+        int32 link_id = 7;
+        string link_type = 8;
+        string mapping_type = 9;
+        string relation = 10;
+    }
+
+    message ScopeNote {
+        string scope_note = 1;
+        string scope_note_name = 2;
+        string scope_note_type = 3;
+    }
+
+    message Taxonomy {
+        int32 source_concept_id = 1;
+        string source_concept_name = 2;
+        string source_concept_type = 3;
+        string source_concept_vernacular = 4;
+        int32 target_concept_id = 5;
+        string target_concept_name = 6;
+        string target_concept_type = 7;
+        string target_concept_vernacular = 8;
+        string taxonomic_relation = 9;
+        string taxonomic_verification_status = 10;
+    }
+    repeated ConceptRelation ancestors = 1;
+    Article_list article_list = 2;
+    repeated Combination combinations = 3;
+    string concept_created = 4;
+    int32 concept_id = 5;
+    string concept_name = 6;
+    string concept_status = 7;
+    string concept_type = 8;
+    string concept_updated = 9;
+    repeated ConceptRelation descendants = 10;
+    int32 is_times_tag = 11;
+    repeated Link links = 12;
+    repeated Scope_note scope_notes = 13;
+    string search_api_query = 14;
+    repeated Taxonomy taxonomy = 15;
+    string vernacular = 16;
+}
+
 message GetConceptSearchRequest {
     // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
     // 
@@ -88,82 +168,6 @@ message GetNameConceptTypeSpecificConceptResponse {
     int32 num_results = 2;
     repeated Concept results = 3;
     string status = 4;
-}
-
-message Concept {
-    repeated ConceptRelation ancestors = 1;
-    message ArticleList {
-        message Result {
-            string body = 1;
-            string byline = 2;
-            message Concepts {
-                repeated string nytd_des = 1;
-                repeated string nytd_org = 2;
-                repeated string nytd_per = 3;
-            }
-            Concepts concepts = 3;
-            string date = 4;
-            string document_type = 5;
-            string title = 6;
-            string type_of_material = 7;
-            string url = 8;
-        }
-        repeated Result results = 1;
-        int32 total = 2;
-    }
-    Article_list article_list = 2;
-    message Combination {
-        string combination_note = 1;
-        int32 combination_source_concept_id = 2;
-        string combination_source_concept_name = 3;
-        string combination_source_concept_type = 4;
-        int32 combination_target_concept_id = 5;
-        string combination_target_concept_name = 6;
-        string combination_target_concept_type = 7;
-    }
-    repeated Combination combinations = 3;
-    string concept_created = 4;
-    int32 concept_id = 5;
-    string concept_name = 6;
-    string concept_status = 7;
-    string concept_type = 8;
-    string concept_updated = 9;
-    repeated ConceptRelation descendants = 10;
-    int32 is_times_tag = 11;
-    message Link {
-        int32 concept_id = 1;
-        string concept_name = 2;
-        string concept_status = 3;
-        string concept_type = 4;
-        int32 is_times_tag = 5;
-        string link = 6;
-        int32 link_id = 7;
-        string link_type = 8;
-        string mapping_type = 9;
-        string relation = 10;
-    }
-    repeated Link links = 12;
-    message ScopeNote {
-        string scope_note = 1;
-        string scope_note_name = 2;
-        string scope_note_type = 3;
-    }
-    repeated Scope_note scope_notes = 13;
-    string search_api_query = 14;
-    message Taxonomy {
-        int32 source_concept_id = 1;
-        string source_concept_name = 2;
-        string source_concept_type = 3;
-        string source_concept_vernacular = 4;
-        int32 target_concept_id = 5;
-        string target_concept_name = 6;
-        string target_concept_type = 7;
-        string target_concept_vernacular = 8;
-        string taxonomic_relation = 9;
-        string taxonomic_verification_status = 10;
-    }
-    repeated Taxonomy taxonomy = 15;
-    string vernacular = 16;
 }
 
 message ConceptRelation {

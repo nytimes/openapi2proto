@@ -172,7 +172,6 @@ func OperationIDToName(operationID string) string {
 	var name string
 
 	operationID = strings.Replace(operationID, "-", " ", -1)
-	operationID = strings.Replace(operationID, "_", " ", -1)
 
 	re := regexp.MustCompile(`[\{\}\[\]()/\.]|\?.*`)
 	operationID = re.ReplaceAllString(operationID, "")

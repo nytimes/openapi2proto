@@ -268,10 +268,10 @@ func TestGenerateProto(t *testing.T) {
 		{
 			fixturePath: "fixtures/catsanddogs.yaml",
 		},
-/*
 		{
 			fixturePath: "fixtures/semantic_api.json",
 		},
+/*
 		{
 			fixturePath: "fixtures/most_popular.json",
 		},
