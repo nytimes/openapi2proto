@@ -10,13 +10,13 @@ const (
 )
 
 var (
-	BoolType   = NewMessage("bool")
-	BytesType  = NewMessage("bytes")
-	DoubleType = NewMessage("double")
-	FloatType  = NewMessage("float")
-	Int32Type  = NewMessage("int32")
-	Int64Type  = NewMessage("int64")
-	StringType = NewMessage("string")
+	BoolType   = newBuiltin("bool")
+	BytesType  = newBuiltin("bytes")
+	DoubleType = newBuiltin("double")
+	FloatType  = newBuiltin("float")
+	Int32Type  = newBuiltin("int32")
+	Int64Type  = newBuiltin("int64")
+	StringType = newBuiltin("string")
 
 	// Boxed types
 	AnyType         = NewMessage("google.protobuf.Any")
@@ -62,6 +62,15 @@ type Enum struct {
 	elements []interface{}
 }
 
+type Map struct {
+	key Type
+	value Type
+}
+
+// Builtin
+type Builtin string
+
+// Message is a composite type
 type Message struct {
 	children []Type
 	comment  string

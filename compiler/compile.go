@@ -166,7 +166,7 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 				name = param.Ref[i+1:]
 			}
 		}
-		return name, &openapi.Schema{
+		return snakeCase(name), &openapi.Schema{
 			Ref: param.Ref,
 		}, nil
 	case param.Schema != nil:
@@ -379,24 +379,56 @@ func (c *compileCtx) compileSchemaMultiType(name string, s *openapi.Schema) (pro
 	return c.getBoxedType(v), nil
 }
 
+func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, error) {
+	var typ protobuf.Type
+
+	switch {
+	case s.Ref != "":
+		var err error
+		typ, err = c.compileReferenceSchema(name, s)
+		if err != nil {
+			return nil, errors.Wrapf(err, `failed to compile reference %s`, s.Ref)
+		}
+	case !s.Type.Empty():
+		var err error
+		typ, err = c.getType(s.Type.First())
+		if err != nil {
+			return nil, errors.Wrapf(err, `failed to get type %s`, s.Type)
+		}
+	default:
+		return nil, errors.New(`invalid schema type for map`)
+	}
+	// Note: Map of arrays is not currently supported.
+	return protobuf.NewMap(protobuf.StringType, typ), nil
+
+}
+
+func (c *compileCtx) compileReferenceSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
+	m, err := c.getTypeFromReference(s.Ref)
+	if err == nil {
+		return m, nil
+	}
+	// bummer, we couldn't resolve this reference. But how we treat
+	// this error is different from 1) during compilation of definitions
+	// and 2) the rest of the spec
+	//
+	// if it's the former, then we can tolorate this error, and return
+	// a "promise" to be fulfilled at a later time. Otherwise, it's a
+	// fatal error.
+	if c.phase == phaseCompileDefinitions {
+		r := protobuf.NewReference(s.Ref, c.getTypeFromReference)
+		return r, nil
+	}
+	return nil, errors.Wrapf(err, `failed to resolve reference %s`, s.Ref)
+}
+
 func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
 	log.Printf("compileSchema %s", name)
 
 	if s.Ref != "" {
-		m, err := c.getTypeFromReference(s.Ref)
+		m, err := c.compileReferenceSchema(name, s)
 		if err != nil {
-			// bummer, we couldn't resolve this reference. But how we treat
-			// this error is different from 1) during compilation of definitions
-			// and 2) the rest of the spec
-			//
-			// if it's the former, then we can tolorate this error, and return
-			// a "promise" to be fulfilled at a later time. Otherwise, it's a
-			// fatal error.
-			if c.phase == phaseCompileDefinitions {
-				r := protobuf.NewReference(s.Ref, c.getTypeFromReference)
-				return r, nil
-			}
-			return nil, errors.Wrapf(err, `failed to resolve reference %s`, s.Ref)
+			return nil, errors.Wrap(err, `failed to resolve reference`)
 		}
 		return m, nil
 	}
@@ -421,6 +453,10 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 
 	switch {
 	case s.Type.Empty() || s.Type.Contains("object"):
+		if ap := s.AdditionalProperties; ap != nil {
+			return c.compileMap(name, ap)
+		}
+
 		m := protobuf.NewMessage(name)
 		if len(s.Description) > 0 {
 			m.SetComment(s.Description)
@@ -533,7 +569,7 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 // compiles a single property to a field.
 // local-scoped messages are handled in the compilation for the field type.
 func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index int) (*protobuf.Field, error) {
-	log.Printf("compile property %s %#v", name, prop)
+	log.Printf("compile property %s", name)
 	var f *protobuf.Field
 	switch {
 	case prop.Type.Empty() || prop.Type.Contains("object"):
