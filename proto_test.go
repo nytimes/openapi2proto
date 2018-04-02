@@ -309,13 +309,13 @@ func TestGenerateProto(t *testing.T) {
 		{
 			fixturePath: "fixtures/includes_query.json",
 		},
-			{
-				fixturePath: "fixtures/lowercase_def.json",
-			},
+		{
+			fixturePath: "fixtures/lowercase_def.json",
+		},
+		{
+			fixturePath: "fixtures/missing_type.json",
+		},
 		/*
-			{
-				fixturePath: "fixtures/missing_type.json",
-			},
 			{
 				fixturePath: "fixtures/kubernetes.json",
 			},
