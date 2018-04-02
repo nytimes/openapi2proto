@@ -300,12 +300,13 @@ func TestGenerateProto(t *testing.T) {
 			fixturePath: "fixtures/spec.yaml",
 			wantProto:   "fixtures/spec-options.proto",
 		},
+		{
+			options:     true,
+			fixturePath: "fixtures/spec.json",
+			wantProto:   "fixtures/spec-options.proto",
+		},
 		/*
-			{
-				options:     true,
-				fixturePath: "fixtures/spec.json",
-				wantProto:   "fixtures/spec-options.proto",
-			},
+
 			{
 				fixturePath: "fixtures/includes_query.json",
 			},
