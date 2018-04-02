@@ -291,13 +291,31 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 				continue
 			}
 
+			resName := endpointName + "Response"
 			if resp.Schema != nil {
-				resName := endpointName + "Response"
-				typ, err := c.compileSchema(resName, resp.Schema)
-				if err != nil {
-					return errors.Wrapf(err, `failed to compile response for %s`, endpointName)
+				// Wow, this *sucks*! We need to special-case when resp.Schema
+				// is an array definition, because then we need to create
+				// a FooResponse { repeated Bar field } instead of what we
+				// do in the property definition, which is to compile the
+				// Items schema and slap a repeated on it
+				if resp.Schema.Items != nil {
+					typ, err := c.compileSchema(resName, resp.Schema.Items)
+					if err != nil {
+						return errors.Wrapf(err, `failed to compile array response for %s`, endpointName)
+					}
+					m := protobuf.NewMessage(resName)
+					f := protobuf.NewField(typ, "items", 1)
+					f.SetRepeated(true)
+					m.AddField(f)
+					resType = m
+				} else {
+					typ, err := c.compileSchema(resName, resp.Schema)
+					if err != nil {
+						return errors.Wrapf(err, `failed to compile response for %s`, endpointName)
+					}
+					resType = typ
 				}
-				resType = typ
+				log.Printf("compiled response schema as %#v", resType)
 			}
 
 			if resType != nil {
@@ -306,6 +324,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 					return errors.Errorf(`got non-message type in response for %s`, endpointName)
 				}
 				rpc.SetResponse(m)
+				c.addType(resType)
 				break // break out of the for loop
 			}
 		}
