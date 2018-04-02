@@ -134,6 +134,17 @@ func (c *compileCtx) compileParameters(parameters map[string]*openapi.Parameter)
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile #/parameters/%s`, ref)
 		}
+
+		// Now this is really really annoying, but sometimes the values in
+		// #/parameters/* contains a "name" field, which is the name used
+		// for parameters...
+		if pname := param.Name; pname != "" {
+			m = &Parameter{
+				Type:          m,
+				parameterName: pname,
+			}
+		}
+
 		c.addDefinition("#/parameters/"+ref, m)
 	}
 	return nil
@@ -173,22 +184,19 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 		s2 := *param.Schema
 		s2.Description = param.Description
 		return snakeCase(param.Name), &s2, nil
-	case param.Type == "array":
-		return snakeCase(param.Name), &openapi.Schema{
-			Type:        openapi.SchemaType{"array"},
-			Items:       param.Items,
-			Description: param.Description,
-		}, nil
 	default:
 		return snakeCase(param.Name), &openapi.Schema{
-			Description: param.Description,
+			Type:        param.Type,
 			Enum:        param.Enum,
 			Format:      param.Format,
-			Type:        openapi.SchemaType{param.Type},
+			Items:       param.Items,
+			Description: param.Description,
 		}, nil
 	}
 }
 
+// convert endpoint parameter list to a schema object so we can use compileSchema
+// to conver it to a message object.
 func (c *compileCtx) compileParametersToSchema(params openapi.Parameters) (*openapi.Schema, error) {
 	var s openapi.Schema
 	s.Properties = make(map[string]*openapi.Schema)
@@ -495,6 +503,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 			if err != nil {
 				return nil, errors.Wrapf(err, `failed to compile protobuf type`)
 			}
+			c.addType(typ)
 		}
 
 		log.Printf("applying builtin format for %s", name)
@@ -508,22 +517,52 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 
 func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[string]*openapi.Schema) error {
 	log.Printf("compileSchemaProperties %#v", props)
-	var sortedProps []string
-	for k := range props {
-		sortedProps = append(sortedProps, k)
-	}
-	sort.Strings(sortedProps)
 
-	for i, propName := range sortedProps {
-		prop := props[propName]
-		f, err := c.compileProperty(propName, prop, i+1)
+	var fields []struct {
+		comment  string
+		name     string
+		repeated bool
+		typ      protobuf.Type
+	}
+
+	for propName, prop := range props {
+		name, typ, err := c.compileProperty(propName, prop)
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile property %s`, propName)
 		}
 
-		m.AddField(f)
+		fields = append(fields, struct {
+			comment  string
+			name     string
+			repeated bool
+			typ      protobuf.Type
+		}{
+			comment:  prop.Description,
+			name:     name,
+			repeated: prop.Type.Contains("array"),
+			typ:      typ,
+		})
 	}
 
+	sort.Slice(fields, func(i, j int) bool {
+		return fields[i].name < fields[j].name
+	})
+
+	for i, field := range fields {
+		f := protobuf.NewField(field.typ, snakeCase(field.name), i+1)
+		if field.repeated {
+			f.SetRepeated(true)
+		}
+
+		if v := field.comment; len(v) > 0 {
+			f.SetComment(v)
+		}
+
+		// finally, make sure that this type is registered, if need be.
+		c.addImportForType(f.Type().Name())
+
+		m.AddField(f)
+	}
 	return nil
 }
 
@@ -569,31 +608,28 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 
 // compiles a single property to a field.
 // local-scoped messages are handled in the compilation for the field type.
-func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index int) (*protobuf.Field, error) {
+func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string, protobuf.Type, error) {
 	log.Printf("compile property %s", name)
-	var f *protobuf.Field
+	var typ protobuf.Type
 	switch {
 	case prop.Type.Empty() || prop.Type.Contains("object"):
 		child, err := c.compileSchema(name, prop)
 		if err != nil {
-			return nil, errors.Wrapf(err, `failed to compile object property %s`, name)
+			return "", nil, errors.Wrapf(err, `failed to compile object property %s`, name)
 		}
-
-		f = protobuf.NewField(child, snakeCase(name), index)
+		typ = child
 	case prop.Type.Contains("array"):
 		child, err := c.compileSchema(name, prop.Items)
 		if err != nil {
-			return nil, errors.Wrapf(err, `failed to compile array property %s`, name)
+			return "", nil, errors.Wrapf(err, `failed to compile array property %s`, name)
 		}
-
-		f = protobuf.NewField(child, snakeCase(name), index)
+		typ = child
 	default:
 		var err error
-		var typ protobuf.Type
 		if prop.Type.Len() > 1 {
 			typ, err = c.compileSchemaMultiType(name, prop)
 			if err != nil {
-				return nil, errors.Wrap(err, `failed to compile schema with multiple types`)
+				return "", nil, errors.Wrap(err, `failed to compile schema with multiple types`)
 			}
 		} else {
 			if len(prop.Enum) > 0 {
@@ -601,7 +637,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 				enumName := p.Name() + "_" + name
 				typ, err = c.compileEnum(enumName, prop.Enum)
 				if err != nil {
-					return nil, errors.Wrapf(err, `failed to compile enum for property %s`, name)
+					return "", nil, errors.Wrapf(err, `failed to compile enum for property %s`, name)
 				}
 				c.addType(typ)
 			} else {
@@ -609,7 +645,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 				if err != nil {
 					typ, err = c.compileSchema(name, prop)
 					if err != nil {
-						return nil, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
+						return "", nil, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
 					}
 				}
 			}
@@ -617,22 +653,14 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 
 		log.Printf("applying builtin format for %s", name)
 		typ = c.applyBuiltinFormat(typ, prop.Format)
-
-		f = protobuf.NewField(typ, snakeCase(name), index)
 	}
 
-	if prop.Type.Contains("array") {
-		f.SetRepeated(true)
+	if p, ok := typ.(*Parameter); ok {
+		name = p.ParameterName()
+		typ = p.ParameterType()
 	}
 
-	if v := prop.Description; len(v) > 0 {
-		f.SetComment(v)
-	}
-
-	// finally, make sure that this type is registered, if need be.
-	c.addImportForType(f.Type().Name())
-	return f, nil
-
+	return name, typ, nil
 }
 
 func (c *compileCtx) addImportForType(name string) {
