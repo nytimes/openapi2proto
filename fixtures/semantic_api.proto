@@ -109,19 +109,6 @@ message ConceptRelation {
 }
 
 message GetConceptSearchRequest {
-    // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
-    // 
-    // Optional fields are returned in result_set. They are briefly explained here:
-    // 
-    // pages: A list of topic pages associated with a specific concept.
-    // ticker_symbol: If this concept is a publicly traded company, this field contains the ticker symbol.
-    // links: A list of links from this concept to external data resources.
-    // taxonomy: For descriptor concepts, this field returns a list of taxonomic relations to other concepts.
-    // combinations: For descriptor concepts, this field returns a list of the specific meanings tis concept takes on when combined with other concepts.
-    // geocodes: For geographic concepts, the full GIS record from geonames.
-    // article_list: A list of up to 10 articles associated with this concept.
-    // scope_notes: Scope notes contains clarifications and meaning definitions that explicate the relationship between the concept and an article.
-    // search_api_query: Returns the request one would need to submit to the Article Search API to obtain a list of articles annotated with this concept.
     enum GetConceptSearchRequestFields {
         GETCONCEPTSEARCHREQUEST_FIELDS_ALL = 0;
         GETCONCEPTSEARCHREQUEST_FIELDS_PAGES = 1;
@@ -135,6 +122,19 @@ message GetConceptSearchRequest {
         GETCONCEPTSEARCHREQUEST_FIELDS_SEARCH_API_QUERY = 9;
     }
 
+    // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
+    // 
+    // Optional fields are returned in result_set. They are briefly explained here:
+    // 
+    // pages: A list of topic pages associated with a specific concept.
+    // ticker_symbol: If this concept is a publicly traded company, this field contains the ticker symbol.
+    // links: A list of links from this concept to external data resources.
+    // taxonomy: For descriptor concepts, this field returns a list of taxonomic relations to other concepts.
+    // combinations: For descriptor concepts, this field returns a list of the specific meanings tis concept takes on when combined with other concepts.
+    // geocodes: For geographic concepts, the full GIS record from geonames.
+    // article_list: A list of up to 10 articles associated with this concept.
+    // scope_notes: Scope notes contains clarifications and meaning definitions that explicate the relationship between the concept and an article.
+    // search_api_query: Returns the request one would need to submit to the Article Search API to obtain a list of articles annotated with this concept.
     GetConceptSearchRequestFields fields = 1;
 
     // Integer value for the index count from the first concept to the last concept, sorted alphabetically. Used in a Search Query. A Search Query will return up to 10 concepts in its results.
@@ -152,19 +152,6 @@ message GetConceptSearchResponse {
 }
 
 message GetNameConceptTypeSpecificConceptRequest {
-    // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
-    // 
-    // Optional fields are returned in result_set. They are briefly explained here:
-    // 
-    // pages: A list of topic pages associated with a specific concept.
-    // ticker_symbol: If this concept is a publicly traded company, this field contains the ticker symbol.
-    // links: A list of links from this concept to external data resources.
-    // taxonomy: For descriptor concepts, this field returns a list of taxonomic relations to other concepts.
-    // combinations: For descriptor concepts, this field returns a list of the specific meanings tis concept takes on when combined with other concepts.
-    // geocodes: For geographic concepts, the full GIS record from geonames.
-    // article_list: A list of up to 10 articles associated with this concept.
-    // scope_notes: Scope notes contains clarifications and meaning definitions that explicate the relationship between the concept and an article.
-    // search_api_query: Returns the request one would need to submit to the Article Search API to obtain a list of articles annotated with this concept.
     enum GetNameConceptTypeSpecificConceptRequestFields {
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_ALL = 0;
         GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_PAGES = 1;
@@ -179,6 +166,20 @@ message GetNameConceptTypeSpecificConceptRequest {
     }
 
     ConceptTypeParam concept_type = 1;
+
+    // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
+    // 
+    // Optional fields are returned in result_set. They are briefly explained here:
+    // 
+    // pages: A list of topic pages associated with a specific concept.
+    // ticker_symbol: If this concept is a publicly traded company, this field contains the ticker symbol.
+    // links: A list of links from this concept to external data resources.
+    // taxonomy: For descriptor concepts, this field returns a list of taxonomic relations to other concepts.
+    // combinations: For descriptor concepts, this field returns a list of the specific meanings tis concept takes on when combined with other concepts.
+    // geocodes: For geographic concepts, the full GIS record from geonames.
+    // article_list: A list of up to 10 articles associated with this concept.
+    // scope_notes: Scope notes contains clarifications and meaning definitions that explicate the relationship between the concept and an article.
+    // search_api_query: Returns the request one would need to submit to the Article Search API to obtain a list of articles annotated with this concept.
     GetNameConceptTypeSpecificConceptRequestFields fields = 2;
 
     // Precedes the search term string. Used in a Search Query. Except for <specific_concept_name>, Search Query will take the required parameters listed above (<concept_type>, <concept_uri>, <article_uri>) as an optional_parameter in addition to the query=<query_term>.

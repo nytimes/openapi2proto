@@ -603,13 +603,6 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 				if err != nil {
 					return nil, errors.Wrapf(err, `failed to compile enum for property %s`, name)
 				}
-				if d := prop.Description; d != "" {
-					if st, ok := typ.(interface {
-						SetComment(string)
-					}); ok {
-						st.SetComment(d)
-					}
-				}
 				c.addType(typ)
 			} else {
 				typ, err = c.getType(prop.Type.First())
