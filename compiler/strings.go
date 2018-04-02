@@ -168,6 +168,15 @@ func pathMethodToName(path, method, operationID string) string {
 	return cleanAndTitle(method) + name
 }
 
+func looksLikeInteger(s string) bool {
+	for _, r := range s {
+		if 0x30 > r || 0x39 < r {
+			return false
+		}
+	}
+	return true
+}
+
 func normalizeEnumName(s string) string {
 	var buf bytes.Buffer
 

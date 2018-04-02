@@ -67,7 +67,7 @@ message Article {
     string column = 3;
     DesFacet des_facet = 4;
     GeoFacet geo_facet = 5;
-    google.protobuf.Any media = 6;
+    repeated google.protobuf.Any media = 6;
     OrgFacet org_facet = 7;
     PerFacet per_facet = 8;
     string published_date = 9;

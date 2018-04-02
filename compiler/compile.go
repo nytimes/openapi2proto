@@ -404,7 +404,7 @@ func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum
 	e := protobuf.NewEnum(camelCase(name))
 	for _, enum := range elements {
 		ename := normalizeEnumName(enum)
-		if prefix {
+		if prefix || looksLikeInteger(ename) {
 			ename = name + "_" + ename
 		}
 
