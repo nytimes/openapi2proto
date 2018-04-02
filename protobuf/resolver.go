@@ -70,17 +70,22 @@ func (c *resolveCtx) resolve(t Type) (Type, error) {
 		m.children = children
 
 		for _, f := range m.fields {
-			typ, ok := f.Type().(*Reference)
-			if !ok {
-					continue
+			switch typ := f.Type().(type) {
+			case *Reference:
+				t2, err := c.resolveFunc(typ.Name())
+				if err != nil {
+					return nil, errors.Wrapf(err, `failed to resolve field type %s`, typ.Name())
+				}
+				f.typ = t2
+			case *Map:
+				t2, err := c.resolve(typ.value)
+				if err != nil {
+					return nil, errors.Wrapf(err, `failed to resolve map field type %s`, typ.value.Name())
+				}
+				typ.value = t2
 			}
-
-			t2, err := c.resolveFunc(typ.Name())
-			if err != nil {
-				return nil, errors.Wrap(err, `failed to resolve field type`)
-			}
-			f.typ = t2
 		}
+
 		return &m, nil
 	default:
 		return t, nil

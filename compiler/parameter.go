@@ -4,7 +4,8 @@ import "github.com/NYTimes/openapi2proto/protobuf"
 
 type Parameter struct {
 	protobuf.Type
-	parameterName string
+	parameterName   string
+	parameterNumber int
 }
 
 func (p *Parameter) ParameterType() protobuf.Type {
@@ -13,4 +14,8 @@ func (p *Parameter) ParameterType() protobuf.Type {
 
 func (p *Parameter) ParameterName() string {
 	return p.parameterName
+}
+
+func (p *Parameter) ParameterNumber() int {
+	return p.parameterNumber
 }

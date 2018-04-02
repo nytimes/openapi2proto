@@ -53,6 +53,7 @@ type Parameter struct {
 	Format      string     `yaml:"format,omitempty", json:"format,omitempty"`
 	In          string     `yaml:"in,omitempty" json:"in,omitempty"`
 	Items       *Schema    `yaml:"items,omitempty" json:"items,omitempty"`
+	ProtoTag    int        `yaml:"x-proto-tag" json:"x-proto-tag"`
 	Ref         string     `yaml:"$ref" json:"$ref"`
 	Required    bool       `yaml:"required,omitempty" json:"required,omitempty"`
 	Schema      *Schema    `yaml:"schema,omitempty" json:"schema,omitempty"` // if in == "body", then schema is present
@@ -88,6 +89,8 @@ type Model struct {
 	Depth      int
 }
 
+// SchemaType represents the "type" field. It may contain 0 or more
+// basic type names.
 type SchemaType []string
 
 // Schema represent Model properties in an OpenAPI spec.
@@ -103,7 +106,8 @@ type Schema struct {
 	Format string     `yaml:"format,omitempty" json:"format,omitempty"`
 	Enum   []string   `yaml:"enum,omitempty" json:"enum,omitempty"`
 
-	ProtoTag int `yaml:"x-proto-tag" json:"x-proto-tag"`
+	ProtoName string `yaml:"-" json:"-"`
+	ProtoTag  int    `yaml:"x-proto-tag" json:"x-proto-tag"`
 
 	// objects
 	Required             []string           `yaml:"required" json:"required"`

@@ -215,16 +215,16 @@ message TestModel {
 
     TestModelCategory category = 1;
     repeated Class class = 2;
-    google.protobuf.Any test_any_value = 3;
-    bool test_bool = 4;
-    google.protobuf.BoolValue test_bool_value = 5;
-    google.protobuf.BytesValue test_bytes_value = 6;
-    google.protobuf.DoubleValue test_num_value = 7;
-    google.protobuf.Any test_float_value = 7;
+    bool test_bool = 3;
+    google.protobuf.BoolValue test_bool_value = 4;
+    google.protobuf.DoubleValue test_num_value = 5;
     google.protobuf.DoubleValue test_numer_value = 6;
-    map<string, TestModel> test_map_object = 8;
-    map<string, string> test_map_scalar = 9;
-    google.protobuf.StringValue test_string_value = 12;
+    google.protobuf.FloatValue test_float_value = 7;
+    google.protobuf.StringValue test_string_value = 8;
+    google.protobuf.BytesValue test_bytes_value = 9;
+    google.protobuf.Any test_any_value = 10;
+    map<string, TestModel> test_map_object = 11;
+    map<string, string> test_map_scalar = 12;
 }
 
 service TheSemanticAPIService {

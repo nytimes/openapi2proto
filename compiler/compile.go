@@ -17,7 +17,7 @@ var builtinTypes = map[string]protobuf.Type{
 	"bytes":               protobuf.BytesType,
 	"string":              protobuf.StringType,
 	"integer":             protobuf.NewMessage("pseudo:integer"),
-	"float":               protobuf.NewMessage("pseudo:number"),
+	"float":               protobuf.NewMessage("pseudo:float"),
 	"number":              protobuf.NewMessage("pseudo:number"),
 	"boolean":             protobuf.NewMessage("pseudo:boolean"),
 	"google.protobuf.Any": protobuf.AnyType,
@@ -165,6 +165,7 @@ func (c *compileCtx) compileExtension(ext *openapi.Extension) (*protobuf.Extensi
 
 // compiles one schema into "name" and "schema"
 func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string, *openapi.Schema, error) {
+	log.Printf("%#v", param)
 	switch {
 	case param.Ref != "":
 		_, err := c.getTypeFromReference(param.Ref)
@@ -177,19 +178,27 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 				name = param.Ref[i+1:]
 			}
 		}
+		log.Printf("param.Name = %s", param.Name)
+		log.Printf("compile parameter to schema #1 (%s)", name)
 		return snakeCase(name), &openapi.Schema{
-			Ref: param.Ref,
+			ProtoName: name,
+			Ref:       param.Ref,
 		}, nil
 	case param.Schema != nil:
+		log.Printf("compile parameter to schema #2")
 		s2 := *param.Schema
+		s2.ProtoName = param.Name
 		s2.Description = param.Description
 		return snakeCase(param.Name), &s2, nil
 	default:
+		log.Printf("compile parameter to schema #3")
 		return snakeCase(param.Name), &openapi.Schema{
 			Type:        param.Type,
 			Enum:        param.Enum,
 			Format:      param.Format,
 			Items:       param.Items,
+			ProtoName:   param.Name,
+			ProtoTag:    param.ProtoTag,
 			Description: param.Description,
 		}, nil
 	}
@@ -337,6 +346,8 @@ func (c *compileCtx) getBoxedType(t protobuf.Type) protobuf.Type {
 		return protobuf.Int32ValueType
 	case protobuf.Int64Type:
 		return protobuf.Int64ValueType
+	case protobuf.StringType:	
+		return protobuf.StringValueType
 	default:
 		return t
 	}
@@ -366,7 +377,7 @@ func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum
 	for _, enum := range elements {
 		ename := enum
 		if prefix {
-			ename = name + "_" +  ename
+			ename = name + "_" + ename
 		}
 
 		e.AddElement(allCaps(ename))
@@ -396,10 +407,11 @@ func (c *compileCtx) compileSchemaMultiType(name string, s *openapi.Schema) (pro
 	if err != nil {
 		return nil, errors.Wrapf(err, `failed to get type for %s`, types[0])
 	}
-	return c.getBoxedType(v), nil
+	return c.getBoxedType(c.applyBuiltinFormat(v, s.Format)), nil
 }
 
 func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, error) {
+log.Printf("compileMap %s", name)
 	var typ protobuf.Type
 
 	switch {
@@ -409,6 +421,7 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to compile reference %s`, s.Ref)
 		}
+log.Printf("typ = %s", typ.Name())
 	case !s.Type.Empty():
 		var err error
 		typ, err = c.getType(s.Type.First())
@@ -418,14 +431,17 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 	default:
 		return nil, errors.New(`invalid schema type for map`)
 	}
+
 	// Note: Map of arrays is not currently supported.
 	return protobuf.NewMap(protobuf.StringType, typ), nil
 
 }
 
 func (c *compileCtx) compileReferenceSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
+log.Printf("compileReferenceSchema %s", name)
 	m, err := c.getTypeFromReference(s.Ref)
 	if err == nil {
+log.Printf("got type from reference %s", s.Ref)
 		return m, nil
 	}
 	// bummer, we couldn't resolve this reference. But how we treat
@@ -532,24 +548,27 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 
 	var fields []struct {
 		comment  string
+		index    int
 		name     string
 		repeated bool
 		typ      protobuf.Type
 	}
 
 	for propName, prop := range props {
-		name, typ, err := c.compileProperty(propName, prop)
+		name, typ, index, err := c.compileProperty(propName, prop)
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile property %s`, propName)
 		}
-
+		log.Printf("---------> property %s, index = %d", name, index)
 		fields = append(fields, struct {
 			comment  string
+			index    int
 			name     string
 			repeated bool
 			typ      protobuf.Type
 		}{
 			comment:  prop.Description,
+			index:    index,
 			name:     name,
 			repeated: prop.Type.Contains("array"),
 			typ:      typ,
@@ -557,11 +576,26 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 	}
 
 	sort.Slice(fields, func(i, j int) bool {
-		return fields[i].name < fields[j].name
+		if fields[i].index == fields[j].index {
+			return fields[i].name < fields[j].name
+		}
+
+		return fields[i].index == 0
 	})
 
-	for i, field := range fields {
-		f := protobuf.NewField(field.typ, snakeCase(field.name), i+1)
+	var taken = map[int]struct{}{}
+	serial := 1
+	for _, field := range fields {
+		index := field.index
+		if index == 0 {
+			for _, ok := taken[serial]; ok; _, ok = taken[serial] {
+				serial++
+			}
+			index = serial
+			taken[index] = struct{}{}
+		}
+
+		f := protobuf.NewField(field.typ, snakeCase(field.name), index)
 		if field.repeated {
 			f.SetRepeated(true)
 		}
@@ -572,7 +606,6 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 
 		// finally, make sure that this type is registered, if need be.
 		c.addImportForType(f.Type().Name())
-
 		m.AddField(f)
 	}
 	return nil
@@ -601,11 +634,13 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 			return protobuf.Int64Type
 		}
 		return protobuf.Int32Type
+	case "pseudo:float":
+		return protobuf.FloatType
 	case "pseudo:number":
 		// #62 type: number + format: long -> int64,
 		//     type: number + format: integer -> int32
 		switch f {
-		case "":
+		case "", "double":
 			return protobuf.DoubleType
 		case "int64", "long":
 			return protobuf.Int64Type
@@ -620,36 +655,40 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 
 // compiles a single property to a field.
 // local-scoped messages are handled in the compilation for the field type.
-func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string, protobuf.Type, error) {
-	log.Printf("compile property %s", name)
+func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string, protobuf.Type, int, error) {
+	log.Printf("compile property %s %#v", name, prop)
 	var typ protobuf.Type
-	switch {
-	case prop.Type.Empty() || prop.Type.Contains("object"):
-		child, err := c.compileSchema(name, prop)
+	var err error
+	var index int
+
+	if prop.Type.Len() > 1 {
+log.Printf("compile property multi type prop.Type %v", prop.Type)
+		typ, err = c.compileSchemaMultiType(name, prop)
 		if err != nil {
-			return "", nil, errors.Wrapf(err, `failed to compile object property %s`, name)
+			return "", nil, index, errors.Wrap(err, `failed to compile schema with multiple types`)
 		}
-		typ = child
-	case prop.Type.Contains("array"):
-		child, err := c.compileSchema(name, prop.Items)
-		if err != nil {
-			return "", nil, errors.Wrapf(err, `failed to compile array property %s`, name)
-		}
-		typ = child
-	default:
-		var err error
-		if prop.Type.Len() > 1 {
-			typ, err = c.compileSchemaMultiType(name, prop)
+log.Printf("compile property multi type %s", typ.Name())
+	} else {
+		switch {
+		case prop.Type.Empty() || prop.Type.Contains("object"):
+			child, err := c.compileSchema(name, prop)
 			if err != nil {
-				return "", nil, errors.Wrap(err, `failed to compile schema with multiple types`)
+				return "", nil, index, errors.Wrapf(err, `failed to compile object property %s`, name)
 			}
-		} else {
+			typ = child
+		case prop.Type.Contains("array"):
+			child, err := c.compileSchema(name, prop.Items)
+			if err != nil {
+				return "", nil, index, errors.Wrapf(err, `failed to compile array property %s`, name)
+			}
+			typ = child
+		default:
 			if len(prop.Enum) > 0 {
 				p := c.parent()
 				enumName := p.Name() + "_" + name
 				typ, err = c.compileEnum(enumName, prop.Enum)
 				if err != nil {
-					return "", nil, errors.Wrapf(err, `failed to compile enum for property %s`, name)
+					return "", nil, index, errors.Wrapf(err, `failed to compile enum for property %s`, name)
 				}
 				c.addType(typ)
 			} else {
@@ -657,22 +696,30 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 				if err != nil {
 					typ, err = c.compileSchema(name, prop)
 					if err != nil {
-						return "", nil, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
+						return "", nil, index, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
 					}
 				}
 			}
+
+			log.Printf("applying builtin format for %s", name)
+			typ = c.applyBuiltinFormat(typ, prop.Format)
 		}
-
-		log.Printf("applying builtin format for %s", name)
-		typ = c.applyBuiltinFormat(typ, prop.Format)
 	}
-
 	if p, ok := typ.(*Parameter); ok {
 		name = p.ParameterName()
 		typ = p.ParameterType()
+		index = p.ParameterNumber()
+	} else {
+
+		if v := prop.ProtoName; v != "" {
+			name = v
+		}
+		if v := prop.ProtoTag; v != 0 {
+			index = v
+		}
 	}
 
-	return name, typ, nil
+	return name, typ, index, nil
 }
 
 func (c *compileCtx) addImportForType(name string) {
@@ -779,174 +826,6 @@ func (c *compileCtx) compilePaths(paths map[string]*openapi.Path) error {
 
 	return nil
 }
-
-/*
-// {import path}#/["definitions"|"parameters"|"responses"]/{typeName}
-func parseRef(s string) (string, string) {
-	const (
-		prefixDefinitions = `definitions/`
-	)
-
-	if i := strings.Index(s, "#/"); i > -1 {
-		// cleanse second segment
-		r1, r2 := s[:i], s[i+2:]
-		switch {
-		case strings.HasPrefix(r2, prefixDefinitions):
-			r2 = r2[len(prefixDefinitions):]
-		}
-
-		return r1, r2
-	}
-	return s, ""
-}
-
-func (c *compileCtx) findRefName(i *openapi.Schema) string {
-	log.Printf("findRefName  i.Name = %s, i.Ref = %s", i.Name, i.Ref)
-	if i.Name != "" {
-		return snakeCase(i.Name)
-	}
-
-	itemType := strings.TrimPrefix(i.Ref, "#/parameters/")
-	t, ok := c.definitions[itemType]
-	if !ok {
-		return snakeCase(path.Base(itemType))
-	}
-
-	return snakeCase(t.Name())
-}
-
-// Takes a complete reference name (e.g. #/definitions/FooBar) and
-// returns its corresponding protobuf.Type
-func (c *compileCtx) resolveReference(ref string) (protobuf.Type, error) {
-	if m, ok := c.definitions[ref]; ok {
-		return m, nil
-	}
-
-	raw, typ := parseRef(ref)
-	item, ok := c.spec.Definitions[camelCase(typ)]
-	if !ok {
-		return nil, errors.Errorf(`could not find definition pointed by %s`, ref)
-	}
-
-	_ = raw
-
-	m, err := c.compileItemToMessage(camelCase(typ), item)
-	if err != nil {
-		return nil, errors.Wrapf(err, `failed to compile item %s to message`, ref)
-	}
-	c.addDefinition(ref, m)
-	log.Printf("resolved %s to %s", ref, m.Name())
-	return m, nil
-}
-
-var stringType = protobuf.NewMessage("string")
-
-func (c *compileCtx) compileSchema(parent, schema *openapi.Schema) (protobuf.Type, error) {
-	if ref := schema.Ref; ref != "" {
-		m, err := c.resolveReference(ref)
-		if err != nil {
-			return nil, errors.Wrapf(err, `failed to resolve reference %s`, ref)
-		}
-		return m, nil
-	}
-
-	switch schema.Type {
-	case "object":
-		m := protobuf.NewMessage(camelCase(parent.Name))
-		c.pushParent(m)
-		defer c.popParent()
-		if err := c.compileProperties(&parent.Model); err != nil {
-			return nil, errors.Wrap(err, `failed to compile nested prorperties`)
-		}
-		return m, nil
-	default:
-		if len(schema.Enum) > 0 {
-			e := protobuf.NewEnum(camelCase(parent.Name))
-			for _, enum := range schema.Enum {
-				e.AddElement(allCaps(parent.Name + "_" + enum))
-			}
-
-			return e, nil // TODO: this is not right
-		}
-	}
-
-	return nil, errors.New(`invalid`)
-}
-
-func (c *compileCtx) getItemType(item *openapi.Schema) (t protobuf.Type, err error) {
-	autoAdd := true
-	defer func() {
-		if !autoAdd {
-			return
-		}
-
-		if err != nil {
-			return
-		}
-
-		switch p := c.parent(); p.(type) {
-		case *protobuf.Message:
-			c.addType(t)
-		}
-	}()
-
-	if item.Schema != nil {
-		t, err := c.compileSchema(item, item.Schema)
-		if err != nil {
-			return nil, errors.Wrap(err, `failed to conver schema`)
-		}
-		return t, nil
-	}
-
-	if item.Schema != nil {
-		t, err := c.compileSchema(item, item.Schema)
-		if err != nil {
-			return nil, errors.Wrap(err, `failed to conver schema`)
-		}
-		return t, nil
-	}
-
-	autoAdd = false
-	return stringType, nil
-}
-
-func (c *compileCtx) compileItemToMessage(name string, item *openapi.Schema) (*protobuf.Message, error) {
-	log.Printf("compileItemToMessage %s", name)
-	m := protobuf.NewMessage(name)
-	c.pushParent(m)
-	defer c.popParent()
-
-	c.compileProperties(&item.Model)
-	if len(item.Description) > 0 {
-		m.SetComment(item.Description)
-	}
-	return m, nil
-}
-
-func (c *compileCtx) compileParameters(name string, parameters openapi.Parameters) (protobuf.Type, error) {
-	m := protobuf.NewMessage(name)
-	c.pushParent(m)
-	defer c.popParent()
-
-	for i, item := range parameters {
-		typ, err := c.getItemType(item)
-		if err != nil {
-			return nil, errors.Wrapf(err, `failed to get protobuf type for item`)
-		}
-
-		name := snakeCase(item.Model.Name)
-		if name == "" {
-			name = c.findRefName(item)
-		}
-		f := protobuf.NewField(typ.Name(), name, i+1)
-		if comment := item.Description; len(comment) > 0 {
-			f.SetComment(comment)
-		}
-		m.Field(f)
-	}
-	return m, nil
-}
-*/
 
 func mergeParameters(p1, p2 openapi.Parameters) openapi.Parameters {
 	var out openapi.Parameters

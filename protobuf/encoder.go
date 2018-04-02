@@ -110,6 +110,10 @@ func (e *Encoder) EncodeMessage(v *Message) error {
 		return errors.Wrap(err, `failed to encode message definitions`)
 	}
 
+	sort.Slice(v.fields, func(i, j int) bool {
+		return v.fields[i].index < v.fields[j].index
+	})
+
 	for i, field := range v.fields {
 		if (i > 0 && len(field.comment) > 0) || (i == 0 && buf.Len() > 0) {
 			fmt.Fprintf(&buf, "\n")

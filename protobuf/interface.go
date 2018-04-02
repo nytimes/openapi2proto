@@ -27,6 +27,7 @@ var (
 	Int32ValueType  = NewMessage("google.protobuf.Int32Value")
 	Int64ValueType  = NewMessage("google.protobuf.Int64Value")
 	NullValueType   = NewMessage("google.protobuf.NullValue")
+	StringValueType   = NewMessage("google.protobuf.StringValue")
 )
 
 var (
