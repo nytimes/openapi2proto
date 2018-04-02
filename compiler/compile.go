@@ -1,6 +1,7 @@
 package compiler
 
 import (
+	"bytes"
 	"io/ioutil"
 	"log"
 	"os"
@@ -108,6 +109,33 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	return p, nil
+}
+
+func makeComment(summary, description string) string {
+	var buf bytes.Buffer
+
+	summary = strings.TrimSpace(summary)
+	description = strings.TrimSpace(description)
+	if len(summary) > 0 {
+		buf.WriteString(summary)
+	}
+	if len(description) > 0 {
+		if buf.Len() > 0 {
+			buf.WriteString("\n\n")
+		}
+		buf.WriteString(description)
+	}
+	return buf.String()
+}
+
+func extractComment(v interface{}) string {
+	switch v := v.(type) {
+	case *openapi.Schema:
+		return makeComment("", v.Description)
+	case *openapi.Endpoint:
+		return makeComment(v.Summary, v.Description)
+	}
+	return ""
 }
 
 func (c *compileCtx) compileDefinitions(definitions map[string]*openapi.Schema) error {
@@ -228,7 +256,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 		endpointName := compileEndpointName(e)
 		log.Printf("endpoint %s", endpointName)
 		rpc := protobuf.NewRPC(endpointName)
-		if comment := e.Description; len(comment) > 0 {
+		if comment := extractComment(e); len(comment) > 0 {
 			rpc.SetComment(comment)
 		}
 
@@ -346,7 +374,7 @@ func (c *compileCtx) getBoxedType(t protobuf.Type) protobuf.Type {
 		return protobuf.Int32ValueType
 	case protobuf.Int64Type:
 		return protobuf.Int64ValueType
-	case protobuf.StringType:	
+	case protobuf.StringType:
 		return protobuf.StringValueType
 	default:
 		return t
@@ -375,7 +403,7 @@ func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum
 
 	e := protobuf.NewEnum(camelCase(name))
 	for _, enum := range elements {
-		ename := enum
+		ename := normalizeEnumName(enum)
 		if prefix {
 			ename = name + "_" + ename
 		}
@@ -411,7 +439,7 @@ func (c *compileCtx) compileSchemaMultiType(name string, s *openapi.Schema) (pro
 }
 
 func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, error) {
-log.Printf("compileMap %s", name)
+	log.Printf("compileMap %s", name)
 	var typ protobuf.Type
 
 	switch {
@@ -421,7 +449,7 @@ log.Printf("compileMap %s", name)
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to compile reference %s`, s.Ref)
 		}
-log.Printf("typ = %s", typ.Name())
+		log.Printf("typ = %s", typ.Name())
 	case !s.Type.Empty():
 		var err error
 		typ, err = c.getType(s.Type.First())
@@ -438,10 +466,10 @@ log.Printf("typ = %s", typ.Name())
 }
 
 func (c *compileCtx) compileReferenceSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
-log.Printf("compileReferenceSchema %s", name)
+	log.Printf("compileReferenceSchema %s", name)
 	m, err := c.getTypeFromReference(s.Ref)
 	if err == nil {
-log.Printf("got type from reference %s", s.Ref)
+		log.Printf("got type from reference %s", s.Ref)
 		return m, nil
 	}
 	// bummer, we couldn't resolve this reference. But how we treat
@@ -559,7 +587,7 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile property %s`, propName)
 		}
-		log.Printf("---------> property %s, index = %d", name, index)
+		log.Printf("---------> property %s, index = %d %t", name, index, prop.Type.Contains("array"))
 		fields = append(fields, struct {
 			comment  string
 			index    int
@@ -662,12 +690,12 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 	var index int
 
 	if prop.Type.Len() > 1 {
-log.Printf("compile property multi type prop.Type %v", prop.Type)
+		log.Printf("compile property multi type prop.Type %v", prop.Type)
 		typ, err = c.compileSchemaMultiType(name, prop)
 		if err != nil {
 			return "", nil, index, errors.Wrap(err, `failed to compile schema with multiple types`)
 		}
-log.Printf("compile property multi type %s", typ.Name())
+		log.Printf("compile property multi type %s", typ.Name())
 	} else {
 		switch {
 		case prop.Type.Empty() || prop.Type.Contains("object"):

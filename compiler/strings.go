@@ -136,7 +136,7 @@ func compileEndpointName(e *openapi.Endpoint) string {
 
 func pathMethodToName(path, method, operationID string) string {
 	if operationID != "" {
-		return OperationIDToName(operationID)
+		return operationIDToName(operationID)
 	}
 
 	path = strings.TrimSuffix(path, ".json")
@@ -168,26 +168,59 @@ func pathMethodToName(path, method, operationID string) string {
 	return cleanAndTitle(method) + name
 }
 
-func OperationIDToName(operationID string) string {
-	var name string
+func normalizeEnumName(s string) string {
+	var buf bytes.Buffer
 
-	operationID = strings.Replace(operationID, "-", " ", -1)
+	s = strings.Replace(s, "&", " AND ", -1)
 
-	re := regexp.MustCompile(`[\{\}\[\]()/\.]|\?.*`)
-	operationID = re.ReplaceAllString(operationID, "")
-
-	for _, n := range strings.Fields(operationID) {
-		// ignore trailing "json" suffix
-		if strings.ToLower(n) == "json" {
-			continue
+	// remove all non-space, non-alpha-numeric chars
+	var wasSpace bool
+	for _, r := range s {
+		if isAlphaNum(r) {
+			wasSpace = false
+			buf.WriteRune(r)
+		} else if unicode.IsSpace(r) || r == '_' {
+			if !wasSpace {
+				buf.WriteRune('_')
+			}
+			wasSpace = true
 		}
-
-		if strings.ToUpper(n) == n {
-			n = strings.ToLower(n)
-		}
-
-		name += cleanAndTitle(n)
 	}
 
-	return name
+	s = buf.String()
+	buf.Reset()
+
+	var wasNonAlnum bool
+	for _, r := range s {
+		switch {
+		case isAlphaNum(r):
+			if wasNonAlnum {
+				buf.WriteRune('_')
+			}
+			wasNonAlnum = false
+			buf.WriteRune(r)
+		default:
+			wasNonAlnum = true
+		}
+	}
+	return buf.String()
+}
+
+func operationIDToName(s string) string {
+	var buf bytes.Buffer
+	var wasNonAlnum bool
+	for _, r := range s {
+		switch {
+		case isAlphaNum(r):
+			if wasNonAlnum {
+				buf.WriteRune('_')
+			}
+			wasNonAlnum = false
+			buf.WriteRune(unicode.ToLower(r))
+		default:
+			wasNonAlnum = true
+		}
+	}
+
+	return camelCase(strings.TrimSuffix(buf.String(), "_json"))
 }
