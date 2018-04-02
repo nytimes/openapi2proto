@@ -290,12 +290,12 @@ func TestGenerateProto(t *testing.T) {
 			fixturePath: "fixtures/semantic_api.json",
 			wantProto:   "fixtures/semantic_api-options.proto",
 		},
+		{
+			options:     true,
+			fixturePath: "fixtures/most_popular.json",
+			wantProto:   "fixtures/most_popular-options.proto",
+		},
 		/*
-			{
-				options:     true,
-				fixturePath: "fixtures/most_popular.json",
-				wantProto:   "fixtures/most_popular-options.proto",
-			},
 			{
 				options:     true,
 				fixturePath: "fixtures/spec.yaml",
