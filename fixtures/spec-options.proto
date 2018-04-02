@@ -5,6 +5,29 @@ package uberapi;
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
+message Activities {
+    // Total number of items available.
+    int32 count = 1;
+    repeated Activity history = 2;
+
+    // Number of items to retrieve (100 max).
+    int32 limit = 3;
+
+    // Position in pagination.
+    int32 offset = 4;
+}
+
+message Activity {
+    // Unique identifier for the activity
+    string uuid = 1;
+}
+
+message Error {
+    int32 code = 1;
+    string fields = 2;
+    string message = 3;
+}
+
 message GetEstimatesPriceRequest {
     // Latitude component of end location.
     double end_latitude = 1;
@@ -49,10 +72,6 @@ message GetHistoryRequest {
     int32 offset = 2;
 }
 
-message PutMeRequest {
-    Profile profile = 1;
-}
-
 message GetProductsRequest {
     // Latitude component of location.
     double latitude = 1;
@@ -63,29 +82,6 @@ message GetProductsRequest {
 
 message GetProductsResponse {
     repeated Product items = 1;
-}
-
-message Activities {
-    // Total number of items available.
-    int32 count = 1;
-    repeated Activity history = 2;
-
-    // Number of items to retrieve (100 max).
-    int32 limit = 3;
-
-    // Position in pagination.
-    int32 offset = 4;
-}
-
-message Activity {
-    // Unique identifier for the activity
-    string uuid = 1;
-}
-
-message Error {
-    int32 code = 1;
-    string fields = 2;
-    string message = 3;
 }
 
 message PriceEstimate {
@@ -145,6 +141,10 @@ message Profile {
     string promo_code = 5;
 }
 
+message PutMeRequest {
+    Profile profile = 1;
+}
+
 service UberAPIService {
     // Price Estimates
     // 
@@ -157,46 +157,36 @@ service UberAPIService {
     // product, its surge_multiplier will be greater than 1, but the price estimate
     // already factors in this multiplier.
     rpc GetEstimatesPrice(GetEstimatesPriceRequest) returns (GetEstimatesPriceResponse) {
-      option (google.api.http) = {
-        get: "/v1/estimates/price"
-      };
+        option (google.api.http) = {
+            get: "/v1/estimates/price"
+        };
     }
 
     // Time Estimates
     // 
     // The Time Estimates endpoint returns ETAs for all products offered at a given location, with the responses expressed as integers in seconds. We recommend that this endpoint be called every minute to provide the most accurate, up-to-date ETAs.
     rpc GetEstimatesTime(GetEstimatesTimeRequest) returns (GetEstimatesTimeResponse) {
-      option (google.api.http) = {
-        get: "/v1/estimates/time"
-      };
+        option (google.api.http) = {
+            get: "/v1/estimates/time"
+        };
     }
 
     // User Activity
     // 
     // The User Activity endpoint returns data about a user's lifetime activity with Uber. The response will include pickup locations and times, dropoff locations and times, the distance of past requests, and information about which products were requested.<br><br>The history array in the response will have a maximum length based on the limit parameter. The response value count may exceed limit, therefore subsequent API requests may be necessary.
     rpc GetHistory(GetHistoryRequest) returns (Activities) {
-      option (google.api.http) = {
-        get: "/v1/history"
-      };
+        option (google.api.http) = {
+            get: "/v1/history"
+        };
     }
 
     // User Profile
     // 
     // The User Profile endpoint returns information about the Uber user that has authorized with the application.
     rpc GetMe(google.protobuf.Empty) returns (Profile) {
-      option (google.api.http) = {
-        get: "/v1/me"
-      };
-    }
-
-    // Save User Profile
-    // 
-    // The User Profile endpoint returns information about the Uber user that has authorized with the application.
-    rpc PutMe(PutMeRequest) returns (Profile) {
-      option (google.api.http) = {
-        put: "/v1/me"
-        body: "profile"
-      };
+        option (google.api.http) = {
+            get: "/v1/me"
+        };
     }
 
     // Product Types
@@ -206,8 +196,18 @@ service UberAPIService {
     // and other details about each product, and lists the products in the
     // proper display order.
     rpc GetProducts(GetProductsRequest) returns (GetProductsResponse) {
-      option (google.api.http) = {
-        get: "/v1/products"
-      };
+        option (google.api.http) = {
+            get: "/v1/products"
+        };
+    }
+
+    // Save User Profile
+    // 
+    // The User Profile endpoint returns information about the Uber user that has authorized with the application.
+    rpc PutMe(PutMeRequest) returns (Profile) {
+        option (google.api.http) = {
+            put: "/v1/me"
+            body: "profile"
+        };
     }
 }
