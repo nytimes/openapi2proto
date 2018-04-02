@@ -331,12 +331,14 @@ func (e *Encoder) EncodePackage(p *Package) error {
 	fmt.Fprintf(e.dst, "\npackage %s;", p.name)
 	fmt.Fprintf(e.dst, "\n")
 
-	sort.Strings(p.imports)
-	for _, lib := range p.imports {
-		fmt.Fprintf(e.dst, "\nimport %s;", strconv.Quote(lib))
-	}
+	if len(p.imports) > 0 {
+		sort.Strings(p.imports)
+		for _, lib := range p.imports {
+			fmt.Fprintf(e.dst, "\nimport %s;", strconv.Quote(lib))
+		}
 
-	fmt.Fprintf(e.dst, "\n")
+		fmt.Fprintf(e.dst, "\n")
+	}
 
 	if err := e.EncodeType(p); err != nil {
 		return errors.Wrap(err, `failed to encode type definition`)
@@ -373,17 +375,14 @@ func (e *Encoder) encodeChildren(t Type) error {
 		return ci.Priority() < cj.Priority()
 	})
 
-	// Don't recurse if we have already
-	processed := 0
-	for _, child := range children {
-		if processed > 0 {
+	for i, child := range children {
+		if i > 0 {
 			fmt.Fprintf(e.dst, "\n")
 		}
 
 		if err := e.EncodeType(child); err != nil {
 			return errors.Wrapf(err, `failed to encode %s`, child.Name())
 		}
-		processed++
 	}
 
 	return nil

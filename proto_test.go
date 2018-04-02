@@ -305,11 +305,11 @@ func TestGenerateProto(t *testing.T) {
 			fixturePath: "fixtures/spec.json",
 			wantProto:   "fixtures/spec-options.proto",
 		},
-		/*
 
-			{
-				fixturePath: "fixtures/includes_query.json",
-			},
+		{
+			fixturePath: "fixtures/includes_query.json",
+		},
+		/*
 			{
 				fixturePath: "fixtures/lowercase_def.json",
 			},
