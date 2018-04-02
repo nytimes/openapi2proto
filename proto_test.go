@@ -274,10 +274,10 @@ func TestGenerateProto(t *testing.T) {
 		{
 			fixturePath: "fixtures/most_popular.json",
 		},
-/*
 		{
 			fixturePath: "fixtures/spec.yaml",
 		},
+/*
 		{
 			fixturePath: "fixtures/spec.json",
 		},
