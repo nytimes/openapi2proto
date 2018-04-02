@@ -110,8 +110,8 @@ func (e *Encoder) EncodeMessage(v *Message) error {
 		return errors.Wrap(err, `failed to encode message definitions`)
 	}
 
-	for _, field := range v.fields {
-		if len(field.comment) > 0 && buf.Len() > 0 {
+	for i, field := range v.fields {
+		if (i > 0 && len(field.comment) > 0) || (i == 0 && buf.Len() > 0) {
 			fmt.Fprintf(&buf, "\n")
 		}
 
@@ -262,6 +262,10 @@ func (e *Encoder) EncodeEnum(v *Enum) error {
 		fmt.Fprintf(&buf, "\n%s = %d;", elem, i)
 	}
 
+	if len(v.comment) > 0 {
+		fmt.Fprintf(e.dst, "\n")
+		e.comment(v.comment)
+	}
 	if err := e.writeBlock("enum "+v.name, &buf); err != nil {
 		return errors.Wrap(err, `failed to write enum block`)
 	}

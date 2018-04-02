@@ -181,9 +181,10 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 		}, nil
 	default:
 		return snakeCase(param.Name), &openapi.Schema{
-			Type:        openapi.SchemaType{param.Type},
-			Format:      param.Format,
 			Description: param.Description,
+			Enum:        param.Enum,
+			Format:      param.Format,
+			Type:        openapi.SchemaType{param.Type},
 		}, nil
 	}
 }
@@ -346,8 +347,8 @@ func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
 }
 
 func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
-	name = camelCase(name)
-	e := protobuf.NewEnum(name)
+	log.Printf("compileEnum %s", name)
+	e := protobuf.NewEnum(camelCase(name))
 	for _, enum := range elements {
 		e.AddElement(allCaps(name + "_" + enum))
 	}
@@ -595,11 +596,28 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema, index in
 				return nil, errors.Wrap(err, `failed to compile schema with multiple types`)
 			}
 		} else {
-			typ, err = c.getType(prop.Type.First())
-			if err != nil {
-				typ, err = c.compileSchema(name, prop)
+			if len(prop.Enum) > 0 {
+				p := c.parent()
+				enumName := p.Name() + "_" + name
+				typ, err = c.compileEnum(enumName, prop.Enum)
 				if err != nil {
-					return nil, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
+					return nil, errors.Wrapf(err, `failed to compile enum for property %s`, name)
+				}
+				if d := prop.Description; d != "" {
+					if st, ok := typ.(interface {
+						SetComment(string)
+					}); ok {
+						st.SetComment(d)
+					}
+				}
+				c.addType(typ)
+			} else {
+				typ, err = c.getType(prop.Type.First())
+				if err != nil {
+					typ, err = c.compileSchema(name, prop)
+					if err != nil {
+						return nil, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
+					}
 				}
 			}
 		}

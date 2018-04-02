@@ -58,12 +58,13 @@ type Container interface {
 }
 
 type Enum struct {
-	name     string
+	comment  string
 	elements []interface{}
+	name     string
 }
 
 type Map struct {
-	key Type
+	key   Type
 	value Type
 }
 

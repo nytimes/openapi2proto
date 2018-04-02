@@ -18,3 +18,7 @@ func (e *Enum) Name() string {
 func (e *Enum) Priority() int {
 	return priorityEnum
 }
+
+func (e *Enum) SetComment(s string) {
+	e.comment = s
+}
