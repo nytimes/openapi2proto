@@ -6,6 +6,13 @@ import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 
+enum ConceptTypeParam {
+    NYTD_GEO = 0;
+    NYTD_PER = 1;
+    NYTD_ORG = 2;
+    NYTD_DES = 3;
+}
+
 message Concept {
     message ArticleList {
         message Results {
@@ -192,13 +199,6 @@ message GetNameConceptTypeSpecificConceptResponse {
     int32 num_results = 2;
     repeated Concept results = 3;
     string status = 4;
-}
-
-enum ConceptTypeParam {
-    NYTD_GEO = 0;
-    NYTD_PER = 1;
-    NYTD_ORG = 2;
-    NYTD_DES = 3;
 }
 
 message TestModel {

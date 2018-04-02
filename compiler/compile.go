@@ -356,9 +356,20 @@ func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
 
 func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
 	log.Printf("compileEnum %s", name)
+
+	var prefix bool
+	if c.parent() != c.pkg {
+		prefix = true
+	}
+
 	e := protobuf.NewEnum(camelCase(name))
 	for _, enum := range elements {
-		e.AddElement(allCaps(name + "_" + enum))
+		ename := enum
+		if prefix {
+			ename = name + "_" +  ename
+		}
+
+		e.AddElement(allCaps(ename))
 	}
 
 	return e, nil
@@ -494,6 +505,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 			if err != nil {
 				return nil, errors.Wrap(err, `failed to compile enum field of the schema`)
 			}
+			c.addType(t)
 			return t, nil
 		}
 
