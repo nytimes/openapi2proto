@@ -144,6 +144,7 @@ func (e *Encoder) EncodeHTTPAnnotation(a *HTTPAnnotation) error {
 	if err := e.writeBlock("option (google.api.http) =", &buf); err != nil {
 		return errors.Wrap(err, `failed to write http annotation block`)
 	}
+	fmt.Fprintf(e.dst, ";")
 	return nil
 }
 

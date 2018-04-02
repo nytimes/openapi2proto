@@ -339,7 +339,14 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 				}
 			}
 
-			a := protobuf.NewHTTPAnnotation(e.Verb, path)
+			annotationPath := path
+			if len(c.spec.BasePath) > 0 {
+				for strings.HasPrefix(annotationPath, "/") {
+					annotationPath = annotationPath[1:]
+				}
+				annotationPath = c.spec.BasePath + "/" + annotationPath
+			}
+			a := protobuf.NewHTTPAnnotation(e.Verb, annotationPath)
 			if bodyParam != "" {
 				a.SetBody(bodyParam)
 			}
