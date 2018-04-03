@@ -240,6 +240,10 @@ func (e *Encoder) EncodeRPC(r *RPC) error {
 }
 
 func (e *Encoder) EncodeService(s *Service) error {
+	if len(s.rpcs) == 0 {
+		return nil
+	}
+
 	var buf bytes.Buffer
 	subEncoder := e.subEncoder(&buf)
 

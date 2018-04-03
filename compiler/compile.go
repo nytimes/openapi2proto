@@ -50,7 +50,7 @@ func init() {
 
 func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	p := protobuf.New(packageName(spec.Info.Title))
-	svc := protobuf.NewService(serviceName(spec.Info.Title))
+	svc := protobuf.NewService(normalizeServiceName(spec.Info.Title))
 	p.AddType(svc)
 
 	var annotate bool

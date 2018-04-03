@@ -203,12 +203,12 @@ func cleanSpacing(output []byte) []byte {
 func concatSpaces(s string, title bool) string {
 	var buf bytes.Buffer
 	var wasSpace bool
-	for _, r := range s {
+	for i, r := range s {
 		if unicode.IsSpace(r) {
 			wasSpace = true
 			continue
 		}
-		if wasSpace && title {
+		if i == 0 || (wasSpace && title) {
 			r = unicode.ToUpper(r)
 		}
 		buf.WriteRune(r)
@@ -225,7 +225,7 @@ func packageName(s string) string {
 	return cleanCharacters(strings.ToLower(concatSpaces(s, false)))
 }
 
-func serviceName(s string) string {
+func normalizeServiceName(s string) string {
 	return cleanCharacters(concatSpaces(s, true) + "Service")
 }
 
