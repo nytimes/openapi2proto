@@ -253,7 +253,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			continue
 		}
 
-		endpointName := compileEndpointName(e)
+		endpointName := normalizeEndpointName(e)
 		log.Printf("endpoint %s", endpointName)
 		rpc := protobuf.NewRPC(endpointName)
 		if comment := extractComment(e); len(comment) > 0 {
@@ -321,7 +321,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			if resType != nil {
 				m, ok := resType.(*protobuf.Message)
 				if !ok {
-					return errors.Errorf(`got non-message type in response for %s`, endpointName)
+					return errors.Errorf(`got non-message type (%T) in response for %s`, resType, endpointName)
 				}
 				rpc.SetResponse(m)
 				c.addType(resType)
@@ -429,10 +429,11 @@ func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum
 
 	e := protobuf.NewEnum(camelCase(name))
 	for _, enum := range elements {
-		ename := normalizeEnumName(enum)
+		ename := enum
 		if prefix || looksLikeInteger(ename) {
 			ename = name + "_" + ename
 		}
+		ename = normalizeEnumName(ename)
 
 		e.AddElement(allCaps(ename))
 	}
@@ -483,7 +484,11 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 			return nil, errors.Wrapf(err, `failed to get type %s`, s.Type)
 		}
 	default:
-		return nil, errors.New(`invalid schema type for map`)
+		var err error
+		typ, err = c.compileSchema(name, s)
+		if err != nil {
+			return nil, errors.Wrap(err, `failed to compile map type`)
+		}
 	}
 
 	// Note: Map of arrays is not currently supported.
@@ -543,7 +548,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 
 	switch {
 	case s.Type.Empty() || s.Type.Contains("object"):
-		if ap := s.AdditionalProperties; ap != nil {
+		if ap := s.AdditionalProperties; ap != nil && !ap.IsNil() {
 			return c.compileMap(name, ap)
 		}
 
@@ -563,6 +568,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 		return m, nil
 	case s.Type.Contains("array"):
 		// if it's an array, we need to compile the "items" field
+		// but ignore the comments
 		m, err := c.compileSchema(name, s.Items)
 		if err != nil {
 			return nil, errors.Wrap(err, `failed to compile items field of the schema`)
@@ -571,6 +577,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 		return m, nil
 	case s.Type.Contains("string") || s.Type.Contains("integer"):
 		if len(s.Enum) > 0 {
+			name = strings.TrimSuffix(name, "Message")
 			t, err := c.compileEnum(name, s.Enum)
 			if err != nil {
 				return nil, errors.Wrap(err, `failed to compile enum field of the schema`)
@@ -609,7 +616,13 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 	}
 
 	for propName, prop := range props {
-		name, typ, index, err := c.compileProperty(propName, prop)
+		// remove the comment so that we don't duplicate it in the
+		// field section
+		var copy openapi.Schema
+		copy = *prop
+		copy.Description = ""
+
+		name, typ, index, err := c.compileProperty(propName, &copy)
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile property %s`, propName)
 		}
@@ -649,7 +662,7 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 			taken[index] = struct{}{}
 		}
 
-		f := protobuf.NewField(field.typ, snakeCase(field.name), index)
+		f := protobuf.NewField(field.typ, normalizeFieldName(field.name), index)
 		if field.repeated {
 			f.SetRepeated(true)
 		}
@@ -715,9 +728,11 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 	var err error
 	var index int
 
+	var typName = name + "Message"
+
 	if prop.Type.Len() > 1 {
 		log.Printf("compile property multi type prop.Type %v", prop.Type)
-		typ, err = c.compileSchemaMultiType(name, prop)
+		typ, err = c.compileSchemaMultiType(typName, prop)
 		if err != nil {
 			return "", nil, index, errors.Wrap(err, `failed to compile schema with multiple types`)
 		}
@@ -725,13 +740,16 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 	} else {
 		switch {
 		case prop.Type.Empty() || prop.Type.Contains("object"):
-			child, err := c.compileSchema(name, prop)
+			child, err := c.compileSchema(typName, prop)
 			if err != nil {
 				return "", nil, index, errors.Wrapf(err, `failed to compile object property %s`, name)
 			}
 			typ = child
 		case prop.Type.Contains("array"):
-			child, err := c.compileSchema(name, prop.Items)
+			var copy openapi.Schema
+			copy = *(prop.Items)
+			copy.Description = ""
+			child, err := c.compileSchema(typName, &copy)
 			if err != nil {
 				return "", nil, index, errors.Wrapf(err, `failed to compile array property %s`, name)
 			}
@@ -748,14 +766,14 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 			} else {
 				typ, err = c.getType(prop.Type.First())
 				if err != nil {
-					typ, err = c.compileSchema(name, prop)
+					typ, err = c.compileSchema(typName, prop)
 					if err != nil {
 						return "", nil, index, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
 					}
 				}
 			}
 
-			log.Printf("applying builtin format for %s", name)
+			log.Printf("applying builtin format for %s", typName)
 			typ = c.applyBuiltinFormat(typ, prop.Format)
 		}
 	}

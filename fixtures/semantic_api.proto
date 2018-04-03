@@ -14,9 +14,9 @@ enum ConceptTypeParam {
 }
 
 message Concept {
-    message ArticleList {
-        message Results {
-            message Concepts {
+    message ArticleListMessage {
+        message ResultsMessage {
+            message ConceptsMessage {
                 repeated string nytd_des = 1;
                 repeated string nytd_org = 2;
                 repeated string nytd_per = 3;
@@ -24,7 +24,7 @@ message Concept {
 
             string body = 1;
             string byline = 2;
-            Concepts concepts = 3;
+            ConceptsMessage concepts = 3;
             string date = 4;
             string document_type = 5;
             string title = 6;
@@ -32,11 +32,11 @@ message Concept {
             string url = 8;
         }
 
-        repeated Results results = 1;
+        repeated ResultsMessage results = 1;
         int32 total = 2;
     }
 
-    message Combinations {
+    message CombinationsMessage {
         string combination_note = 1;
         int32 combination_source_concept_id = 2;
         string combination_source_concept_name = 3;
@@ -46,7 +46,7 @@ message Concept {
         string combination_target_concept_type = 7;
     }
 
-    message Links {
+    message LinksMessage {
         int32 concept_id = 1;
         string concept_name = 2;
         string concept_status = 3;
@@ -59,13 +59,13 @@ message Concept {
         string relation = 10;
     }
 
-    message ScopeNotes {
+    message ScopeNotesMessage {
         string scope_note = 1;
         string scope_note_name = 2;
         string scope_note_type = 3;
     }
 
-    message Taxonomy {
+    message TaxonomyMessage {
         int32 source_concept_id = 1;
         string source_concept_name = 2;
         string source_concept_type = 3;
@@ -79,8 +79,8 @@ message Concept {
     }
 
     repeated ConceptRelation ancestors = 1;
-    ArticleList article_list = 2;
-    repeated Combinations combinations = 3;
+    ArticleListMessage article_list = 2;
+    repeated CombinationsMessage combinations = 3;
     string concept_created = 4;
     int32 concept_id = 5;
     string concept_name = 6;
@@ -89,19 +89,19 @@ message Concept {
     string concept_updated = 9;
     repeated ConceptRelation descendants = 10;
     int32 is_times_tag = 11;
-    repeated Links links = 12;
-    repeated ScopeNotes scope_notes = 13;
+    repeated LinksMessage links = 12;
+    repeated ScopeNotesMessage scope_notes = 13;
     string search_api_query = 14;
-    repeated Taxonomy taxonomy = 15;
+    repeated TaxonomyMessage taxonomy = 15;
     string vernacular = 16;
 }
 
 message ConceptRelation {
     enum ConceptRelationClass {
-        CONCEPTRELATION_CLASS_NYTD_GEO = 0;
-        CONCEPTRELATION_CLASS_NYTD_PER = 1;
-        CONCEPTRELATION_CLASS_NYTD_ORG = 2;
-        CONCEPTRELATION_CLASS_NYTD_DES = 3;
+        CONCEPT_RELATION_CLASS_NYTD_GEO = 0;
+        CONCEPT_RELATION_CLASS_NYTD_PER = 1;
+        CONCEPT_RELATION_CLASS_NYTD_ORG = 2;
+        CONCEPT_RELATION_CLASS_NYTD_DES = 3;
     }
 
     ConceptRelationClass class = 1;
@@ -117,16 +117,16 @@ message ConceptRelation {
 
 message GetConceptSearchRequest {
     enum GetConceptSearchRequestFields {
-        GETCONCEPTSEARCHREQUEST_FIELDS_ALL = 0;
-        GETCONCEPTSEARCHREQUEST_FIELDS_PAGES = 1;
-        GETCONCEPTSEARCHREQUEST_FIELDS_TICKER_SYMBOL = 2;
-        GETCONCEPTSEARCHREQUEST_FIELDS_LINKS = 3;
-        GETCONCEPTSEARCHREQUEST_FIELDS_TAXONOMY = 4;
-        GETCONCEPTSEARCHREQUEST_FIELDS_COMBINATIONS = 5;
-        GETCONCEPTSEARCHREQUEST_FIELDS_GEOCODES = 6;
-        GETCONCEPTSEARCHREQUEST_FIELDS_ARTICLE_LIST = 7;
-        GETCONCEPTSEARCHREQUEST_FIELDS_SCOPE_NOTES = 8;
-        GETCONCEPTSEARCHREQUEST_FIELDS_SEARCH_API_QUERY = 9;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_ALL = 0;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_PAGES = 1;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_TICKER_SYMBOL = 2;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_LINKS = 3;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_TAXONOMY = 4;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_COMBINATIONS = 5;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_GEOCODES = 6;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_ARTICLE_LIST = 7;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_SCOPE_NOTES = 8;
+        GET_CONCEPT_SEARCH_REQUEST_FIELDS_SEARCH_API_QUERY = 9;
     }
 
     // "all" or comma-separated list of specific optional fields: pages, ticker_symbol, links, taxonomy, combinations, geocodes, article_list, scope_notes, search_api_query
@@ -160,16 +160,16 @@ message GetConceptSearchResponse {
 
 message GetNameConceptTypeSpecificConceptRequest {
     enum GetNameConceptTypeSpecificConceptRequestFields {
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_ALL = 0;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_PAGES = 1;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_TICKER_SYMBOL = 2;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_LINKS = 3;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_TAXONOMY = 4;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_COMBINATIONS = 5;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_GEOCODES = 6;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_ARTICLE_LIST = 7;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_SCOPE_NOTES = 8;
-        GETNAMECONCEPTTYPESPECIFICCONCEPTREQUEST_FIELDS_SEARCH_API_QUERY = 9;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_ALL = 0;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_PAGES = 1;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_TICKER_SYMBOL = 2;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_LINKS = 3;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_TAXONOMY = 4;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_COMBINATIONS = 5;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_GEOCODES = 6;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_ARTICLE_LIST = 7;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_SCOPE_NOTES = 8;
+        GET_NAME_CONCEPT_TYPE_SPECIFIC_CONCEPT_REQUEST_FIELDS_SEARCH_API_QUERY = 9;
     }
 
     ConceptTypeParam concept_type = 1;
@@ -203,18 +203,18 @@ message GetNameConceptTypeSpecificConceptResponse {
 
 message TestModel {
     enum TestModelCategory {
-        TESTMODEL_CATEGORY_NYTD_GEO = 0;
-        TESTMODEL_CATEGORY_NYTD_PER = 1;
-        TESTMODEL_CATEGORY_NYTD_ORG = 2;
-        TESTMODEL_CATEGORY_NYTD_DES = 3;
+        TEST_MODEL_CATEGORY_NYTD_GEO = 0;
+        TEST_MODEL_CATEGORY_NYTD_PER = 1;
+        TEST_MODEL_CATEGORY_NYTD_ORG = 2;
+        TEST_MODEL_CATEGORY_NYTD_DES = 3;
     }
 
-    message Class {
+    message ClassMessage {
         string something = 1;
     }
 
     TestModelCategory category = 1;
-    repeated Class class = 2;
+    repeated ClassMessage class = 2;
     bool test_bool = 3;
     google.protobuf.BoolValue test_bool_value = 4;
     google.protobuf.DoubleValue test_num_value = 5;

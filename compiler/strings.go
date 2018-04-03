@@ -2,12 +2,27 @@ package compiler
 
 import (
 	"bytes"
+	"log"
+	"net/url"
 	"regexp"
 	"strings"
 	"unicode"
 
 	"github.com/NYTimes/openapi2proto/openapi"
 )
+
+func isAllCaps(s string) bool {
+	for _, r := range s {
+		if !isAlphaNum(r) {
+			continue
+		}
+
+		if !unicode.IsUpper(r) {
+			return false
+		}
+	}
+	return true
+}
 
 // since we're not considering unicode here, we're not using unicode.*
 func isAlphaNum(r rune) bool {
@@ -30,22 +45,119 @@ func allCaps(s string) string {
 	return buf.String()
 }
 
-func snakeCase(s string) string {
-	var buf bytes.Buffer
+func normalizeFieldName(s string) string {
 	var wasUnderscore bool
+	var buf bytes.Buffer
 	for _, r := range s {
-		// replace all non-alpha-numeric characters with an underscore
 		if !isAlphaNum(r) {
-			r = '_'
-			wasUnderscore = true
-		} else {
-			if wasUnderscore {
-				r = unicode.ToLower(r)
+			if !wasUnderscore {
+				buf.WriteRune('_')
 			}
-			wasUnderscore = false
+			wasUnderscore = true
+			continue
 		}
+		wasUnderscore = false
 		buf.WriteRune(r)
 	}
+	return buf.String()
+}
+
+func dedupe(s string, r rune) string {
+	var buf bytes.Buffer
+	var wasTarget bool
+	for _, r1 := range s {
+		if r1 == r && !wasTarget {
+			buf.WriteRune(r1)
+			wasTarget = true
+			continue
+		}
+
+		buf.WriteRune(r1)
+	}
+	return buf.String()
+}
+
+func removeNonAlphaNum(s string) string {
+	var buf bytes.Buffer
+	for _, r := range s {
+		if !isAlphaNum(r) {
+			switch r {
+			case '_':
+			case '-':
+				r = '_'
+			default:
+				continue
+			}
+		}
+
+		buf.WriteRune(r)
+	}
+	return buf.String()
+}
+
+func snakeCase(s string) string {
+	var wasUnderscore bool
+	// pass 1: remove all non-alpha-numeric characters EXCEPT for underscore
+	s = removeNonAlphaNum(s)
+	// pass 2: dedupe '_'
+	s = dedupe(s, '_')
+
+	var runes []rune
+	for _, r := range s {
+		if !isAlphaNum(r) {
+			if !wasUnderscore {
+				runes = append(runes, '_')
+			}
+			wasUnderscore = true
+			continue
+		}
+		wasUnderscore = false
+		runes = append(runes, r)
+	}
+
+	for len(runes) > 0 && runes[0] == '_' {
+		runes = runes[1:]
+	}
+	for len(runes) > 0 && runes[len(runes)-1] == '_' {
+		runes = runes[:len(runes)-1]
+	}
+
+	// pass 2: for each consecutive upper case characters, insert
+	// a break between the last upper case character and its
+	// predecessor
+	var wasUpper int
+	var buf bytes.Buffer
+	for i := 0; i < len(runes); i++ {
+		if !isAlphaNum(runes[i]) {
+			if !wasUnderscore {
+				buf.WriteRune('_')
+				wasUnderscore = true
+			}
+			continue
+		}
+
+		// if it's upper cased, check if we have a succession of
+		// uppercase letters.
+		if unicode.IsUpper(runes[i]) {
+			if wasUpper == 0 && buf.Len() > 0 && !wasUnderscore {
+				buf.WriteRune('_')
+			}
+			wasUpper++
+		} else {
+			if wasUpper > 1 && buf.Len() != 1 {
+				if len(runes) > 1 && runes[i-2] != '_' {
+					buf.Truncate(buf.Len() - 1)                // remove last upper case letter
+					buf.WriteRune('_')                         // insert rune
+					buf.WriteRune(unicode.ToLower(runes[i-1])) // re-insert last letter
+				}
+			}
+			wasUpper = 0
+		}
+		wasUnderscore = false
+		buf.WriteRune(unicode.ToLower(runes[i]))
+	}
+
+	log.Printf("snakeCased -> %s", buf.String())
 	return buf.String()
 }
 
@@ -130,16 +242,13 @@ func cleanCharacters(input string) string {
 	return buf.String()
 }
 
-func compileEndpointName(e *openapi.Endpoint) string {
-	return pathMethodToName(e.Path, e.Verb, e.OperationID)
-}
-
-func pathMethodToName(path, method, operationID string) string {
-	if operationID != "" {
-		return operationIDToName(operationID)
+func normalizeEndpointName(e *openapi.Endpoint) string {
+	log.Printf("normalizeEndpointName = %s", e.Path)
+	if opID := e.OperationID; len(opID) > 0 {
+		return operationIDToName(opID)
 	}
 
-	path = strings.TrimSuffix(path, ".json")
+	path := strings.TrimSuffix(e.Path, ".json")
 	// Strip query strings. Note that query strings are illegal
 	// in swagger paths, but some tooling seems to tolerate them.
 	if i := strings.LastIndexByte(path, '?'); i > 0 {
@@ -161,11 +270,9 @@ func pathMethodToName(path, method, operationID string) string {
 		buf.WriteRune(r)
 	}
 
-	var name string
-	for _, v := range strings.Fields(buf.String()) {
-		name += cleanAndTitle(v)
-	}
-	return cleanAndTitle(method) + name
+	log.Printf("before camelCase %s", buf.String())
+	var name = camelCase(buf.String())
+	return camelCase(e.Verb) + name
 }
 
 func looksLikeInteger(s string) bool {
@@ -178,58 +285,19 @@ func looksLikeInteger(s string) bool {
 }
 
 func normalizeEnumName(s string) string {
-	var buf bytes.Buffer
-
+log.Printf("normalizeEnumName %s", s)
 	s = strings.Replace(s, "&", " AND ", -1)
 
-	// remove all non-space, non-alpha-numeric chars
-	var wasSpace bool
-	for _, r := range s {
-		if isAlphaNum(r) {
-			wasSpace = false
-			buf.WriteRune(r)
-		} else if unicode.IsSpace(r) || r == '_' {
-			if !wasSpace {
-				buf.WriteRune('_')
-			}
-			wasSpace = true
-		}
+	// XXX This is a special case for things like
+	// N.Y.%20%2F%20Region
+	if v, err := url.QueryUnescape(s); err == nil {
+		s = v
 	}
-
-	s = buf.String()
-	buf.Reset()
-
-	var wasNonAlnum bool
-	for _, r := range s {
-		switch {
-		case isAlphaNum(r):
-			if wasNonAlnum {
-				buf.WriteRune('_')
-			}
-			wasNonAlnum = false
-			buf.WriteRune(r)
-		default:
-			wasNonAlnum = true
-		}
-	}
-	return buf.String()
+	s = allCaps(snakeCase(s))
+	return s
 }
 
 func operationIDToName(s string) string {
-	var buf bytes.Buffer
-	var wasNonAlnum bool
-	for _, r := range s {
-		switch {
-		case isAlphaNum(r):
-			if wasNonAlnum {
-				buf.WriteRune('_')
-			}
-			wasNonAlnum = false
-			buf.WriteRune(unicode.ToLower(r))
-		default:
-			wasNonAlnum = true
-		}
-	}
-
-	return camelCase(strings.TrimSuffix(buf.String(), "_json"))
+	log.Printf("operationIDToName: %s", s)
+	return camelCase(snakeCase(s))
 }

@@ -270,80 +270,82 @@ func TestGenerateProto(t *testing.T) {
 		{
 			fixturePath: "fixtures/cats.yaml",
 		},
-		{
-			fixturePath: "fixtures/catsanddogs.yaml",
-		},
-		{
-			fixturePath: "fixtures/semantic_api.json",
-		},
-		{
-			fixturePath: "fixtures/most_popular.json",
-		},
-		{
-			fixturePath: "fixtures/spec.yaml",
-		},
-		{
-			fixturePath: "fixtures/spec.json",
-		},
-		{
-			options:     true,
-			fixturePath: "fixtures/semantic_api.json",
-			wantProto:   "fixtures/semantic_api-options.proto",
-		},
-		{
-			options:     true,
-			fixturePath: "fixtures/most_popular.json",
-			wantProto:   "fixtures/most_popular-options.proto",
-		},
-		{
-			options:     true,
-			fixturePath: "fixtures/spec.yaml",
-			wantProto:   "fixtures/spec-options.proto",
-		},
-		{
-			options:     true,
-			fixturePath: "fixtures/spec.json",
-			wantProto:   "fixtures/spec-options.proto",
-		},
-
-		{
-			fixturePath: "fixtures/includes_query.json",
-		},
-		{
-			fixturePath: "fixtures/lowercase_def.json",
-		},
-		{
-			fixturePath: "fixtures/missing_type.json",
-		},
-		/*
 			{
-				fixturePath: "fixtures/kubernetes.json",
+				fixturePath: "fixtures/catsanddogs.yaml",
 			},
 			{
-				fixturePath: "fixtures/accountv1-0.json",
+				fixturePath: "fixtures/semantic_api.json",
 			},
 			{
-				fixturePath: "fixtures/refs.json",
+				fixturePath: "fixtures/most_popular.json",
 			},
 			{
-				fixturePath: "fixtures/refs.yaml",
+				fixturePath: "fixtures/spec.yaml",
 			},
 			{
-				fixturePath: "fixtures/semantic_api.yaml",
-			},
-			{
-				fixturePath: "fixtures/integers.yaml",
-			},
-			{
-				fixturePath: "fixtures/global_options.yaml",
-			},
-			{
-				fixturePath: "fixtures/naming_conversion.yaml",
+				fixturePath: "fixtures/spec.json",
 			},
 			{
 				options:     true,
-				fixturePath: "fixtures/custom_options.yaml",
+				fixturePath: "fixtures/semantic_api.json",
+				wantProto:   "fixtures/semantic_api-options.proto",
 			},
+			{
+				options:     true,
+				fixturePath: "fixtures/most_popular.json",
+				wantProto:   "fixtures/most_popular-options.proto",
+			},
+			{
+				options:     true,
+				fixturePath: "fixtures/spec.yaml",
+				wantProto:   "fixtures/spec-options.proto",
+			},
+			{
+				options:     true,
+				fixturePath: "fixtures/spec.json",
+				wantProto:   "fixtures/spec-options.proto",
+			},
+
+			{
+				fixturePath: "fixtures/includes_query.json",
+			},
+			{
+				fixturePath: "fixtures/lowercase_def.json",
+			},
+			{
+				fixturePath: "fixtures/missing_type.json",
+			},
+		/*
+				{
+					fixturePath: "fixtures/kubernetes.json",
+				},
+*/
+			{
+				fixturePath: "fixtures/accountv1-0.json",
+			},
+/*
+				{
+					fixturePath: "fixtures/refs.json",
+				},
+				{
+					fixturePath: "fixtures/refs.yaml",
+				},
+				{
+					fixturePath: "fixtures/semantic_api.yaml",
+				},
+				{
+					fixturePath: "fixtures/integers.yaml",
+				},
+				{
+					fixturePath: "fixtures/global_options.yaml",
+				},
+				{
+					fixturePath: "fixtures/naming_conversion.yaml",
+				},
+				{
+					options:     true,
+					fixturePath: "fixtures/custom_options.yaml",
+				},
 		*/
 	}
 	testGenProto(t, tests...)

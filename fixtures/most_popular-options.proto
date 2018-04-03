@@ -20,7 +20,7 @@ enum Section {
     MEMBERCENTER = 11;
     MOVIES = 12;
     MULTIMEDIA = 13;
-    NY202F20REGION = 14;
+    NY_REGION = 14;
     NYT_NOW = 15;
     OBITUARIES = 16;
     OPEN = 17;
@@ -41,7 +41,7 @@ enum Section {
     US = 32;
     WORLD = 33;
     YOUR_MONEY = 34;
-    ALLSECTIONS = 35;
+    ALL_SECTIONS = 35;
 }
 
 enum SharedTypes {
@@ -57,9 +57,9 @@ enum SharedTypes {
 }
 
 enum TimePeriod {
-    TIMEPERIOD_1 = 0;
-    TIMEPERIOD_7 = 1;
-    TIMEPERIOD_30 = 2;
+    TIME_PERIOD_1 = 0;
+    TIME_PERIOD_7 = 1;
+    TIME_PERIOD_30 = 2;
 }
 
 message Article {
@@ -79,8 +79,8 @@ message Article {
 }
 
 message ArticleWithCountType {
-    message Media {
-        message MediaMetadata {
+    message MediaMessage {
+        message MediaMetadataMessage {
             string format = 1;
             int32 height = 2;
             string url = 3;
@@ -89,7 +89,7 @@ message ArticleWithCountType {
 
         string caption = 1;
         string copyright = 2;
-        MediaMetadata media_metadata = 3;
+        MediaMetadataMessage media_metadata = 3;
         string subtype = 4;
         string type = 5;
     }
@@ -100,7 +100,7 @@ message ArticleWithCountType {
     string count_type = 4;
     DesFacet des_facet = 5;
     GeoFacet geo_facet = 6;
-    repeated Media media = 7;
+    repeated MediaMessage media = 7;
     OrgFacet org_facet = 8;
     PerFacet per_facet = 9;
     string published_date = 10;
@@ -118,38 +118,38 @@ message GeoFacet {
     string type = 1;
 }
 
-message GetMostemailedSectionTimePeriodRequest {
+message GetMostemailedSectionTimePeriodJsonRequest {
     string Accept = 1;
     string api_key = 2;
     string section = 3;
     string time_period = 4;
 }
 
-message GetMostemailedSectionTimePeriodResponse {
+message GetMostemailedSectionTimePeriodJsonResponse {
     string copyright = 1;
     int32 num_results = 2;
     repeated ArticleWithCountType results = 3;
     string status = 4;
 }
 
-message GetMostsharedSectionTimePeriodRequest {
+message GetMostsharedSectionTimePeriodJsonRequest {
     string api_key = 1;
     string section = 2;
     string time_period = 3;
 }
 
-message GetMostsharedSectionTimePeriodResponse {
+message GetMostsharedSectionTimePeriodJsonResponse {
     string copyright = 1;
     int32 num_results = 2;
     repeated Article results = 3;
     string status = 4;
 }
 
-message GetMostviewedSectionTimePeriodRequest {
+message GetMostviewedSectionTimePeriodJsonRequest {
     string Accept = 1;
 }
 
-message GetMostviewedSectionTimePeriodResponse {
+message GetMostviewedSectionTimePeriodJsonResponse {
     string copyright = 1;
     int32 num_results = 2;
     repeated Article results = 3;
@@ -166,21 +166,21 @@ message PerFacet {
 
 service TheMostPopularAPIService {
     // Most Emailed by Section & Time Period
-    rpc GetMostemailedSectionTimePeriod(GetMostemailedSectionTimePeriodRequest) returns (GetMostemailedSectionTimePeriodResponse) {
+    rpc GetMostemailedSectionTimePeriodJson(GetMostemailedSectionTimePeriodJsonRequest) returns (GetMostemailedSectionTimePeriodJsonResponse) {
         option (google.api.http) = {
             get: "/svc/mostpopular/v2/mostemailed/{section}/{time-period}.json"
         };
     }
 
     // Most Shared by Section & Time Period
-    rpc GetMostsharedSectionTimePeriod(GetMostsharedSectionTimePeriodRequest) returns (GetMostsharedSectionTimePeriodResponse) {
+    rpc GetMostsharedSectionTimePeriodJson(GetMostsharedSectionTimePeriodJsonRequest) returns (GetMostsharedSectionTimePeriodJsonResponse) {
         option (google.api.http) = {
             get: "/svc/mostpopular/v2/mostshared/{section}/{time-period}.json"
         };
     }
 
     // Most Viewed by Section & Time Period
-    rpc GetMostviewedSectionTimePeriod(GetMostviewedSectionTimePeriodRequest) returns (GetMostviewedSectionTimePeriodResponse) {
+    rpc GetMostviewedSectionTimePeriodJson(GetMostviewedSectionTimePeriodJsonRequest) returns (GetMostviewedSectionTimePeriodJsonResponse) {
         option (google.api.http) = {
             get: "/svc/mostpopular/v2/mostviewed/{section}/{time-period}.json"
         };
