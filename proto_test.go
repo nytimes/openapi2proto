@@ -341,12 +341,10 @@ func TestGenerateProto(t *testing.T) {
 		{
 			fixturePath: "fixtures/naming_conversion.yaml",
 		},
-		/*
-			{
-				options:     true,
-				fixturePath: "fixtures/custom_options.yaml",
-			},
-		*/
+		{
+			options:     true,
+			fixturePath: "fixtures/custom_options.yaml",
+		},
 	}
 	testGenProto(t, tests...)
 }

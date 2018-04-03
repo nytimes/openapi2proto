@@ -151,7 +151,7 @@ func (e *Encoder) EncodeHTTPAnnotation(a *HTTPAnnotation) error {
 func stringify(v interface{}) string {
 	switch v := v.(type) {
 	case string:
-		return v
+		return strconv.Quote(v)
 	case int:
 		return strconv.FormatInt(int64(v), 10)
 	case int64:
