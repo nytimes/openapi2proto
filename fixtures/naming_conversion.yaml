@@ -13,4 +13,7 @@ paths:
       responses:
         200:
           schema:
-            type: string
+            type: object
+            properties:
+              message:
+                type: string
