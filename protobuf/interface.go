@@ -39,12 +39,18 @@ type Encoder struct {
 	indent string
 }
 
+type GlobalOption struct {
+	name string
+	value string
+}
+
 // A protocol buffers definition is in itself one big message type,
 // but with extra options.
 type Package struct {
 	name     string
 	imports  []string
 	children []Type
+	options  []*GlobalOption
 }
 
 type Type interface {

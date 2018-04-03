@@ -329,20 +329,38 @@ func (e *Encoder) EncodeExtension(ext *Extension) error {
 	return nil
 }
 
+func (e *Encoder) EncodeGlobalOption(o *GlobalOption) error {
+	fmt.Fprintf(e.dst, "\noption %s = %s;", o.name, strconv.Quote(o.value))
+	return nil
+}
+
 func (e *Encoder) EncodePackage(p *Package) error {
 	fmt.Fprintf(e.dst, "syntax = \"proto3\";")
 	fmt.Fprintf(e.dst, "\n")
 	fmt.Fprintf(e.dst, "\npackage %s;", p.name)
-	fmt.Fprintf(e.dst, "\n")
 
 	if len(p.imports) > 0 {
+		fmt.Fprintf(e.dst, "\n")
 		sort.Strings(p.imports)
 		for _, lib := range p.imports {
 			fmt.Fprintf(e.dst, "\nimport %s;", strconv.Quote(lib))
 		}
+	}
+
+	if len(p.options) > 0 {
+		sort.Slice(p.options, func(i, j int) bool {
+			return p.options[i].name < p.options[j].name
+		})
 
 		fmt.Fprintf(e.dst, "\n")
+		for _, option := range p.options {
+			if err := e.EncodeGlobalOption(option); err != nil {
+				return errors.Wrap(err, `failed to encode global option`)
+			}
+		}
 	}
+
+	fmt.Fprintf(e.dst, "\n")
 
 	if err := e.EncodeType(p); err != nil {
 		return errors.Wrap(err, `failed to encode type definition`)

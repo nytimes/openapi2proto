@@ -78,6 +78,10 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 		c.addImport("google/api/annotations.proto")
 	}
 
+	if err := c.compileGlobalOptions(spec.GlobalOptions); err != nil {
+		return nil, errors.Wrap(err, `failed to compile global options`)
+	}
+
 	// compile all definitions
 	if err := c.compileDefinitions(spec.Definitions); err != nil {
 		return nil, errors.Wrap(err, `failed to compile definitions`)
@@ -109,6 +113,13 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	return p, nil
+}
+
+func (c *compileCtx) compileGlobalOptions(options openapi.GlobalOptions) error {
+	for k, v := range options {
+		c.pkg.AddOption(protobuf.NewGlobalOption(k, v))
+	}
+	return nil
 }
 
 func makeComment(summary, description string) string {

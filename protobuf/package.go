@@ -25,3 +25,22 @@ func (p *Package) AddImport(s string) {
 func (p *Package) AddType(t Type) {
 	p.children = append(p.children, t)
 }
+
+func (p *Package) AddOption(t *GlobalOption) {
+	p.options = append(p.options, t)
+}
+
+func NewGlobalOption(name, value string) *GlobalOption {
+	return &GlobalOption{
+		name:  name,
+		value: value,
+	}
+}
+
+func (o *GlobalOption) Name() string {
+	return o.name
+}
+
+func (o *GlobalOption) Value() string {
+	return o.value
+}
