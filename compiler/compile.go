@@ -68,6 +68,7 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 		externalDefinitions: map[string]map[string]protobuf.Type{},
 		imports:             map[string]struct{}{},
 		pkg:                 p,
+		phase:               phaseInvalid,
 		rpcs:                map[string]*protobuf.RPC{},
 		spec:                spec,
 		service:             svc,

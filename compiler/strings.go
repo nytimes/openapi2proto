@@ -4,25 +4,11 @@ import (
 	"bytes"
 	"log"
 	"net/url"
-	"regexp"
 	"strings"
 	"unicode"
 
 	"github.com/NYTimes/openapi2proto/openapi"
 )
-
-func isAllCaps(s string) bool {
-	for _, r := range s {
-		if !isAlphaNum(r) {
-			continue
-		}
-
-		if !unicode.IsUpper(r) {
-			return false
-		}
-	}
-	return true
-}
 
 // since we're not considering unicode here, we're not using unicode.*
 func isAlphaNum(r rune) bool {
@@ -189,17 +175,6 @@ func camelCase(s string) string {
 	return buf.String()
 }
 
-func cleanSpacing(output []byte) []byte {
-	re := regexp.MustCompile(`}\n*message `)
-	output = re.ReplaceAll(output, []byte("}\n\nmessage "))
-	re = regexp.MustCompile(`}\n*enum `)
-	output = re.ReplaceAll(output, []byte("}\n\nenum "))
-	re = regexp.MustCompile(`;\n*message `)
-	output = re.ReplaceAll(output, []byte(";\n\nmessage "))
-	re = regexp.MustCompile(`}\n*service `)
-	return re.ReplaceAll(output, []byte("}\n\nservice "))
-}
-
 // takes strings like "foo bar baz" and turns it into "foobarbaz"
 // if title is true, then "FooBarBaz"
 func concatSpaces(s string, title bool) string {
@@ -217,10 +192,6 @@ func concatSpaces(s string, title bool) string {
 		wasSpace = false
 	}
 	return buf.String()
-}
-
-func cleanAndTitle(s string) string {
-	return cleanCharacters(strings.Title(s))
 }
 
 func packageName(s string) string {
