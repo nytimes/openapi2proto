@@ -66,12 +66,15 @@ func dedupe(s string, r rune) string {
 	var buf bytes.Buffer
 	var wasTarget bool
 	for _, r1 := range s {
-		if r1 == r && !wasTarget {
-			buf.WriteRune(r1)
-			wasTarget = true
+		if r1 == r {
+			if !wasTarget {
+				buf.WriteRune(r1)
+				wasTarget = true
+			}
 			continue
 		}
 
+		wasTarget = false
 		buf.WriteRune(r1)
 	}
 	return buf.String()
@@ -82,8 +85,7 @@ func removeNonAlphaNum(s string) string {
 	for _, r := range s {
 		if !isAlphaNum(r) {
 			switch r {
-			case '_':
-			case '-':
+			case '_', '-', ' ':
 				r = '_'
 			default:
 				continue
@@ -107,8 +109,8 @@ func snakeCase(s string) string {
 		if !isAlphaNum(r) {
 			if !wasUnderscore {
 				runes = append(runes, '_')
+				wasUnderscore = true
 			}
-			wasUnderscore = true
 			continue
 		}
 		wasUnderscore = false
@@ -145,7 +147,7 @@ func snakeCase(s string) string {
 			wasUpper++
 		} else {
 			if wasUpper > 1 && buf.Len() != 1 {
-				if len(runes) > 1 && runes[i-2] != '_' {
+				if len(runes) > 1 && runes[i-2] != '_' && runes[i-1] != '_' {
 					buf.Truncate(buf.Len() - 1)                // remove last upper case letter
 					buf.WriteRune('_')                         // insert rune
 					buf.WriteRune(unicode.ToLower(runes[i-1])) // re-insert last letter
@@ -285,7 +287,7 @@ func looksLikeInteger(s string) bool {
 }
 
 func normalizeEnumName(s string) string {
-log.Printf("normalizeEnumName %s", s)
+	log.Printf("normalizeEnumName %s", s)
 	s = strings.Replace(s, "&", " AND ", -1)
 
 	// XXX This is a special case for things like

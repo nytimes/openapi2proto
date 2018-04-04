@@ -172,12 +172,6 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-    put:
-      parameters:
-        - name: profile
-          in: body
-          schema:
-            $ref: '#/definitions/Profile'
   /history:
     get:
       summary: User Activity

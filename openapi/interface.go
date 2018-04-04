@@ -1,5 +1,26 @@
 package openapi
 
+import "github.com/NYTimes/openapi2proto/internal/option"
+
+const (
+	optkeyDir = `dir`
+)
+
+type Option = option.Option
+
+type Resolver struct{}
+type resolveCtx struct {
+	// this is used to qualify relative paths
+	dir string
+
+	// this holds the ready-to-be-inserted external references
+	externalReferences map[string]interface{}
+
+	// this holds the decoded content for each URL so we don't
+	// have to keep fetching it
+	cache map[string]interface{}
+}
+
 type Decoder interface {
 	Decode(interface{}) error
 }
@@ -15,15 +36,16 @@ type Spec struct {
 		Description string `yaml:"description" json:"description"`
 		Version     string `yaml:"version" json:"version"`
 	} `yaml:"info" json:"info"`
-	Host          string                `yaml:"host" json:"host"`
-	Schemes       []string              `yaml:"schemes" json:"schemes"`
-	BasePath      string                `yaml:"basePath" json:"basePath"`
-	Produces      []string              `yaml:"produces" json:"produces"`
-	Paths         map[string]*Path      `yaml:"paths" json:"paths"`
-	Definitions   map[string]*Schema    `yaml:"definitions" json:"definitions"`
-	Parameters    map[string]*Parameter `yaml:"parameters" json:"parameters"`
-	Extensions    []*Extension          `yaml:"x-extensions" json:"x-extensions"`
-	GlobalOptions GlobalOptions         `yaml:"x-global-options" json:"x-global-options"`
+	Host               string                `yaml:"host" json:"host"`
+	Schemes            []string              `yaml:"schemes" json:"schemes"`
+	BasePath           string                `yaml:"basePath" json:"basePath"`
+	Produces           []string              `yaml:"produces" json:"produces"`
+	Paths              map[string]*Path      `yaml:"paths" json:"paths"`
+	Definitions        map[string]*Schema    `yaml:"definitions" json:"definitions"`
+	Parameters         map[string]*Parameter `yaml:"parameters" json:"parameters"`
+	Extensions         []*Extension          `yaml:"x-extensions" json:"x-extensions"`
+	ExternalReferences map[string]*Schema    `yaml:"x-external-references" json:"x-external-references"`
+	GlobalOptions      GlobalOptions         `yaml:"x-global-options" json:"x-global-options"`
 }
 
 type Extension struct {

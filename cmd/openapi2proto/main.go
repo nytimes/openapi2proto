@@ -59,12 +59,7 @@ func _main() error {
 		options = append(options, openapi2proto.WithEncoderOptions(encoderOptions...))
 	}
 
-	src, err := os.Open(*specPath)
-	if err != nil {
-		return errors.Wrapf(err, `unable to open file %s`, *specPath)
-	}
-
-	if err := openapi2proto.Transpile(dst, src, options...); err != nil {
+	if err := openapi2proto.Transpile(dst, *specPath, options...); err != nil {
 		return errors.Wrap(err, `failed to transpile`)
 	}
 	return nil

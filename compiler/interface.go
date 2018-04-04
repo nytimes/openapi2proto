@@ -16,15 +16,16 @@ const (
 type Option = option.Option
 
 type compileCtx struct {
-	annotate        bool
-	definitions     map[string]protobuf.Type
-	imports         map[string]struct{}
-	parents         []protobuf.Container
-	phase           int
-	pkg             *protobuf.Package
-	rpcs            map[string]*protobuf.RPC
-	spec            *openapi.Spec
-	service         *protobuf.Service
-	types           map[protobuf.Container]map[protobuf.Type]struct{}
-	unfulfilledRefs map[string]struct{}
+	annotate            bool
+	definitions         map[string]protobuf.Type
+	externalDefinitions map[string]map[string]protobuf.Type
+	imports             map[string]struct{}
+	parents             []protobuf.Container
+	phase               int
+	pkg                 *protobuf.Package
+	rpcs                map[string]*protobuf.RPC
+	spec                *openapi.Spec
+	service             *protobuf.Service
+	types               map[protobuf.Container]map[protobuf.Type]struct{}
+	unfulfilledRefs     map[string]struct{}
 }

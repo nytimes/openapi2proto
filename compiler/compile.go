@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -48,7 +49,7 @@ func init() {
 	}
 }
 
-func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
+func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 	p := protobuf.New(packageName(spec.Info.Title))
 	svc := protobuf.NewService(normalizeServiceName(spec.Info.Title))
 	p.AddType(svc)
@@ -62,17 +63,23 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	c := &compileCtx{
-		annotate:        annotate,
-		definitions:     map[string]protobuf.Type{},
-		imports:         map[string]struct{}{},
-		pkg:             p,
-		rpcs:            map[string]*protobuf.RPC{},
-		spec:            spec,
-		service:         svc,
-		types:           map[protobuf.Container]map[protobuf.Type]struct{}{},
-		unfulfilledRefs: map[string]struct{}{},
+		annotate:            annotate,
+		definitions:         map[string]protobuf.Type{},
+		externalDefinitions: map[string]map[string]protobuf.Type{},
+		imports:             map[string]struct{}{},
+		pkg:                 p,
+		rpcs:                map[string]*protobuf.RPC{},
+		spec:                spec,
+		service:             svc,
+		types:               map[protobuf.Container]map[protobuf.Type]struct{}{},
+		unfulfilledRefs:     map[string]struct{}{},
 	}
-	c.pushParent(p)
+	return c
+}
+
+func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
+	c := newCompileCtx(spec, options...)
+	c.pushParent(c.pkg)
 
 	if c.annotate {
 		c.addImport("google/api/annotations.proto")
@@ -90,11 +97,11 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 		return nil, errors.Wrap(err, `failed to compile parameters`)
 	}
 
-	p2, err := protobuf.Resolve(p, c.getTypeFromReference)
+	p2, err := protobuf.Resolve(c.pkg, c.getTypeFromReference)
 	if err != nil {
 		return nil, errors.Wrap(err, `failed to resolve references`)
 	}
-	*p = *(p2.(*protobuf.Package))
+	*(c.pkg) = *(p2.(*protobuf.Package))
 
 	// compile extensions
 	c.phase = phaseCompileExtensions
@@ -103,7 +110,7 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, `failed to compile extension`)
 		}
-		p.AddType(e)
+		c.pkg.AddType(e)
 	}
 
 	// compile the paths
@@ -112,7 +119,7 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 		return nil, errors.Wrap(err, `failed to compile paths`)
 	}
 
-	return p, nil
+	return c.pkg, nil
 }
 
 func (c *compileCtx) compileGlobalOptions(options openapi.GlobalOptions) error {
@@ -167,23 +174,34 @@ func (c *compileCtx) compileDefinitions(definitions map[string]*openapi.Schema) 
 func (c *compileCtx) compileParameters(parameters map[string]*openapi.Parameter) error {
 	c.phase = phaseCompileDefinitions
 	for ref, param := range parameters {
-		log.Printf("compiling %s", ref)
+		log.Printf("compiling %s %#v", ref, param)
 		_, s, err := c.compileParameterToSchema(param)
 		m, err := c.compileSchema(camelCase(ref), s)
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile #/parameters/%s`, ref)
 		}
 
+		pname := m.Name()
+		repeated := false
+
 		// Now this is really really annoying, but sometimes the values in
 		// #/parameters/* contains a "name" field, which is the name used
 		// for parameters...
-		if pname := param.Name; pname != "" {
-			m = &Parameter{
-				Type:          m,
-				parameterName: pname,
-			}
+		if v := param.Name; v != "" {
+			pname = v
 		}
 
+		// Now this REALLY REALLY sucks, but we need to detect if the parameter
+		// should be "repeated" by detecting if the enclosing type is an array.
+		if param.Items != nil {
+			repeated = true
+		}
+
+		m = &Parameter{
+			Type:          m,
+			parameterName: pname,
+			repeated:      repeated,
+		}
 		c.addDefinition("#/parameters/"+ref, m)
 	}
 	return nil
@@ -217,8 +235,7 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 				name = param.Ref[i+1:]
 			}
 		}
-		log.Printf("param.Name = %s", param.Name)
-		log.Printf("compile parameter to schema #1 (%s)", name)
+		log.Printf("compile parameter to schema #1 (%s) %#v", name, param)
 		return snakeCase(name), &openapi.Schema{
 			ProtoName: name,
 			Ref:       param.Ref,
@@ -301,7 +318,6 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			if !ok {
 				continue
 			}
-
 			resName := endpointName + "Response"
 			if resp.Schema != nil {
 				// Wow, this *sucks*! We need to special-case when resp.Schema
@@ -419,6 +435,7 @@ func (c *compileCtx) getBoxedType(t protobuf.Type) protobuf.Type {
 }
 
 func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
+	fmt.Fprintf(os.Stdout, "resolving %s\n", ref)
 	if t, ok := knownDefinitions[ref]; ok {
 		return t, nil
 	}
@@ -514,6 +531,7 @@ func (c *compileCtx) compileReferenceSchema(name string, s *openapi.Schema) (pro
 		log.Printf("got type from reference %s", s.Ref)
 		return m, nil
 	}
+
 	// bummer, we couldn't resolve this reference. But how we treat
 	// this error is different from 1) during compilation of definitions
 	// and 2) the rest of the spec
@@ -633,11 +651,11 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 		copy = *prop
 		copy.Description = ""
 
-		name, typ, index, err := c.compileProperty(propName, &copy)
+		name, typ, index, repeated, err := c.compileProperty(propName, &copy)
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile property %s`, propName)
 		}
-		log.Printf("---------> property %s, index = %d %t", name, index, prop.Type.Contains("array"))
+		log.Printf("---------> property %s, index = %d %t", name, index, repeated)
 		fields = append(fields, struct {
 			comment  string
 			index    int
@@ -648,7 +666,7 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 			comment:  prop.Description,
 			index:    index,
 			name:     name,
-			repeated: prop.Type.Contains("array"),
+			repeated: repeated,
 			typ:      typ,
 		})
 	}
@@ -733,11 +751,12 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 
 // compiles a single property to a field.
 // local-scoped messages are handled in the compilation for the field type.
-func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string, protobuf.Type, int, error) {
+func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string, protobuf.Type, int, bool, error) {
 	log.Printf("compile property %s %#v", name, prop)
 	var typ protobuf.Type
 	var err error
 	var index int
+	var repeated bool
 
 	var typName = name + "Message"
 
@@ -745,7 +764,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 		log.Printf("compile property multi type prop.Type %v", prop.Type)
 		typ, err = c.compileSchemaMultiType(typName, prop)
 		if err != nil {
-			return "", nil, index, errors.Wrap(err, `failed to compile schema with multiple types`)
+			return "", nil, index, false, errors.Wrap(err, `failed to compile schema with multiple types`)
 		}
 		log.Printf("compile property multi type %s", typ.Name())
 	} else {
@@ -753,7 +772,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 		case prop.Type.Empty() || prop.Type.Contains("object"):
 			child, err := c.compileSchema(typName, prop)
 			if err != nil {
-				return "", nil, index, errors.Wrapf(err, `failed to compile object property %s`, name)
+				return "", nil, index, false, errors.Wrapf(err, `failed to compile object property %s`, name)
 			}
 			typ = child
 		case prop.Type.Contains("array"):
@@ -762,7 +781,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 			copy.Description = ""
 			child, err := c.compileSchema(typName, &copy)
 			if err != nil {
-				return "", nil, index, errors.Wrapf(err, `failed to compile array property %s`, name)
+				return "", nil, index, false, errors.Wrapf(err, `failed to compile array property %s`, name)
 			}
 			typ = child
 		default:
@@ -771,14 +790,14 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 				enumName := p.Name() + "_" + name
 				typ, err = c.compileEnum(enumName, prop.Enum)
 				if err != nil {
-					return "", nil, index, errors.Wrapf(err, `failed to compile enum for property %s`, name)
+					return "", nil, index, false, errors.Wrapf(err, `failed to compile enum for property %s`, name)
 				}
 			} else {
 				typ, err = c.getType(prop.Type.First())
 				if err != nil {
 					typ, err = c.compileSchema(typName, prop)
 					if err != nil {
-						return "", nil, index, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
+						return "", nil, index, false, errors.Wrapf(err, `failed to compile protobuf type for property %s`, name)
 					}
 				}
 			}
@@ -787,17 +806,21 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 			typ = c.applyBuiltinFormat(typ, prop.Format)
 		}
 	}
+
 	if p, ok := typ.(*Parameter); ok {
 		name = p.ParameterName()
 		typ = p.ParameterType()
 		index = p.ParameterNumber()
+		repeated = p.Repeated()
 	} else {
-
 		if v := prop.ProtoName; v != "" {
 			name = v
 		}
 		if v := prop.ProtoTag; v != 0 {
 			index = v
+		}
+		if prop.Type.Contains("array") {
+			repeated = true
 		}
 	}
 
@@ -805,7 +828,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 	case *protobuf.Message, *protobuf.Enum:
 		c.addType(typ)
 	}
-	return name, typ, index, nil
+	return name, typ, index, repeated, nil
 }
 
 func (c *compileCtx) addImportForType(name string) {
@@ -855,6 +878,10 @@ func (c *compileCtx) addType(t protobuf.Type) {
 
 func (c *compileCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
 	if strings.Contains(t.Name(), ".") {
+		return
+	}
+
+	if _, ok := t.(protobuf.Builtin); ok {
 		return
 	}
 

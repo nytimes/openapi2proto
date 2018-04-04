@@ -109,8 +109,8 @@ type Extension struct {
 type RPC struct {
 	comment   string
 	name      string
-	parameter *Message
-	response  *Message
+	parameter Type
+	response  Type
 
 	options []interface{}
 }

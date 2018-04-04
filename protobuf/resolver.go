@@ -1,6 +1,12 @@
 package protobuf
 
-import "github.com/pkg/errors"
+import (
+	"bytes"
+	"fmt"
+	"log"
+
+	"github.com/pkg/errors"
+)
 
 type ResolveFunc func(string) (Type, error)
 
@@ -18,7 +24,7 @@ func Resolve(p *Package, resolver ResolveFunc) (Type, error) {
 }
 
 func (c *resolveCtx) isRegistered(t Type) bool {
-	for i := len(c.parents)-1; i >= 0; i-- {
+	for i := len(c.parents) - 1; i >= 0; i-- {
 		parent := c.parents[i]
 		for _, child := range getChildren(parent) {
 			if child == t {
@@ -57,13 +63,22 @@ func (c *resolveCtx) resolve(t Type) (Type, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, `failed to resolve children`)
 		}
+		childrenTypes := func(typs []Type) string {
+			var buf bytes.Buffer
+			for i, typ := range typs {
+				fmt.Fprintf(&buf, "\n ----------> %d: %T", i, typ)
+			}
+			return buf.String()
+		}
+		log.Printf("before: %s", childrenTypes(p.children))
 		p.children = children
+		log.Printf("after: %s", childrenTypes(p.children))
 		return &p, nil
 	case *Message:
 		c.push(t)
 		defer c.pop()
 		m := *t
-		children, err:= c.resolveChildren(m.children)
+		children, err := c.resolveChildren(m.children)
 		if err != nil {
 			return nil, errors.Wrap(err, `failed to resolve children`)
 		}

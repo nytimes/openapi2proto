@@ -13,7 +13,7 @@ import (
 //   WithCompilerOptions(...)
 //   WithEncoderOptions(...),
 // )
-func Transpile(dst io.Writer, src io.Reader, options ...Option) error {
+func Transpile(dst io.Writer, srcFn string, options ...Option) error {
 	var encoderOptions []protobuf.Option
 	var compilerOptions []compiler.Option
 
@@ -26,7 +26,7 @@ func Transpile(dst io.Writer, src io.Reader, options ...Option) error {
 		}
 	}
 
-	s, err := openapi.Load(src)
+	s, err := openapi.LoadFile(srcFn)
 	if err != nil {
 		return errors.Wrap(err, `failed to load OpenAPI spec`)
 	}

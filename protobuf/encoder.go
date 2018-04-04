@@ -43,7 +43,7 @@ func (e *Encoder) Encode(v interface{}) error {
 			return errors.Wrap(err, `failed to encode protocol buffers package`)
 		}
 	default:
-		return errors.Errorf(`unknown type %T`, v)
+		return errors.Errorf(`unknown type %T (%s)`, v, v)
 	}
 	return nil
 }
@@ -232,7 +232,7 @@ func (e *Encoder) EncodeRPC(r *RPC) error {
 		}
 	}
 
-	name := fmt.Sprintf("rpc %s(%s) returns (%s)", r.name, r.parameter.name, r.response.name)
+	name := fmt.Sprintf("rpc %s(%s) returns (%s)", r.name, r.parameter.Name(), r.response.Name())
 	if err := e.writeBlock(name, &buf); err != nil {
 		return errors.Wrap(err, `failed to write rpc block`)
 	}
@@ -304,7 +304,7 @@ func (e *Encoder) EncodeType(v Type) error {
 			return errors.Wrap(err, `failed to encode extension`)
 		}
 	default:
-		return errors.Errorf(`unknown type %T`, v)
+		return errors.Errorf(`unknown type %T (%s)`, v, v)
 	}
 	return nil
 }
@@ -335,6 +335,7 @@ func (e *Encoder) EncodeGlobalOption(o *GlobalOption) error {
 }
 
 func (e *Encoder) EncodePackage(p *Package) error {
+	log.Printf("Encode package")
 	fmt.Fprintf(e.dst, "syntax = \"proto3\";")
 	fmt.Fprintf(e.dst, "\n")
 	fmt.Fprintf(e.dst, "\npackage %s;", p.name)
@@ -362,7 +363,7 @@ func (e *Encoder) EncodePackage(p *Package) error {
 
 	fmt.Fprintf(e.dst, "\n")
 
-	if err := e.EncodeType(p); err != nil {
+	if err := e.encodeChildren(p); err != nil {
 		return errors.Wrap(err, `failed to encode type definition`)
 	}
 
@@ -402,6 +403,7 @@ func (e *Encoder) encodeChildren(t Type) error {
 			fmt.Fprintf(e.dst, "\n")
 		}
 
+		log.Printf("Encode child %d", i)
 		if err := e.EncodeType(child); err != nil {
 			return errors.Wrapf(err, `failed to encode %s`, child.Name())
 		}

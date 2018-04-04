@@ -12,11 +12,11 @@ func (r *RPC) Name() string {
 	return r.name
 }
 
-func (r *RPC) Parameter() *Message {
+func (r *RPC) Parameter() Type {
 	return r.parameter
 }
 
-func (r *RPC) Response() *Message {
+func (r *RPC) Response() Type {
 	return r.response
 }
 

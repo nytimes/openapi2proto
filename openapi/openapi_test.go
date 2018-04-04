@@ -8,11 +8,16 @@ import (
 )
 
 func TestLoadFile(t *testing.T) {
-	s, err := openapi.LoadFile(filepath.Join(`..`, `fixtures`, `accountv1-0.json`))
-	if err != nil {
-		t.Errorf("%s", err)
-		return
+	files := []string{
+		filepath.Join(`..`, `fixtures`, `petstore`, `swagger.yaml`),
 	}
 
-	t.Logf("%v", s.Paths)
+	for _, file := range files {
+		s, err := openapi.LoadFile(file)
+		if err != nil {
+			t.Errorf("%s", err)
+			return
+		}
+		t.Logf("%v", s.Paths)
+	}
 }

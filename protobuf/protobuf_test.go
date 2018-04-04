@@ -13,10 +13,10 @@ func TestEncoder(t *testing.T) {
 	p.AddImport("google/protobuf/empty.proto")
 
 	m1 := protobuf.NewMessage("Hello")
-	m1.AddField(protobuf.NewField("string", "message", 1))
+	m1.AddField(protobuf.NewField(protobuf.Builtin("string"), "message", 1))
 
 	m2 := protobuf.NewMessage("World")
-	m2.AddField(protobuf.NewField("int32", "count", 1))
+	m2.AddField(protobuf.NewField(protobuf.Builtin("int32"), "count", 1))
 
 	m1.AddType(m2)
 
@@ -57,6 +57,7 @@ message Hello {
     message World {
         int32 count = 1;
     }
+
     string message = 1;
 }
 
@@ -64,13 +65,13 @@ message HelloWorldRequest {}
 
 service HelloWorldService {
     // Says 'Hello, World!'
-    rpc HelloWorld (HelloWorldRequest) returns (HelloWorldResponse) {}
+    rpc HelloWorld(HelloWorldRequest) returns (HelloWorldResponse) {}
 
     // Does absolutely nothing
-    rpc NoOp (google.protobuf.Empty) returns (google.protobuf.Empty) {
+    rpc NoOp(google.protobuf.Empty) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             get: "/v1/hello_world"
-        }
+        };
     }
 }`
 

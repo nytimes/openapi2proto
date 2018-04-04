@@ -6,6 +6,7 @@ type Parameter struct {
 	protobuf.Type
 	parameterName   string
 	parameterNumber int
+	repeated        bool
 }
 
 func (p *Parameter) ParameterType() protobuf.Type {
@@ -18,4 +19,8 @@ func (p *Parameter) ParameterName() string {
 
 func (p *Parameter) ParameterNumber() int {
 	return p.parameterNumber
+}
+
+func (p *Parameter) Repeated() bool {
+	return p.repeated
 }

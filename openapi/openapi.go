@@ -9,7 +9,9 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/pkg/errors"
 	yaml "gopkg.in/yaml.v2"
@@ -82,6 +84,7 @@ func fetchRemoteContent(u string) (io.Reader, error) {
 }
 
 func Load(src io.Reader) (*Spec, error) {
+
 	var spec Spec
 
 	log.Printf("decode attempt #1")
@@ -140,6 +143,7 @@ func Load(src io.Reader) (*Spec, error) {
 
 func LoadFile(fn string) (*Spec, error) {
 	var src io.Reader
+	var options []Option
 	if u, err := url.Parse(fn); err == nil && (u.Scheme == `http` || u.Scheme == `https`) {
 		rdr, err := fetchRemoteContent(u.String())
 		if err != nil {
@@ -153,9 +157,38 @@ func LoadFile(fn string) (*Spec, error) {
 		}
 		defer f.Close()
 		src = f
+		options = append(options, WithDir(filepath.Dir(fn)))
 	}
 
-	return Load(src)
+	// from the file name, guess how we can decode this
+	var v interface{}
+	switch strings.ToLower(path.Ext(fn)) {
+	case ".yaml", ".yml":
+		if err := yaml.NewDecoder(src).Decode(&v); err != nil {
+			return nil, errors.Wrapf(err, `failed to decode file %s`, fn)
+		}
+	default:
+		if err := json.NewDecoder(src).Decode(&v); err != nil {
+			return nil, errors.Wrapf(err, `failed to decode file %s`, fn)
+		}
+	}
+
+	resolved, err := NewResolver().Resolve(v, options...)
+	if err != nil {
+		return nil, errors.Wrap(err, `failed to resolve external references`)
+	}
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(resolved); err != nil {
+		return nil, errors.Wrap(err, `failed to encode resolved schema`)
+	}
+
+	{
+		b, _ := json.MarshalIndent(resolved, "", "  ")
+		fmt.Printf("%s\n", b)
+	}
+
+	return Load(&buf)
 }
 
 func (s *SchemaType) UnmarshalJSON(data []byte) error {
