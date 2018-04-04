@@ -528,6 +528,13 @@ message AccountTransactions {
                 BALANCE_MESSAGE_TYPE_PREVIOUSLY_CLOSED_BOOKED = 9;
             }
 
+            message AmountMessage {
+                string Amount = 1;
+
+                // A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 'Codes for the representation of currencies and funds'
+                string Currency = 2;
+            }
+
             // Amount of money of the cash balance after a transaction entry is applied to the account..
             AmountMessage Amount = 1;
 

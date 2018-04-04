@@ -773,7 +773,6 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 				if err != nil {
 					return "", nil, index, errors.Wrapf(err, `failed to compile enum for property %s`, name)
 				}
-				c.addType(typ)
 			} else {
 				typ, err = c.getType(prop.Type.First())
 				if err != nil {
@@ -802,6 +801,10 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 		}
 	}
 
+	switch typ := typ.(type) {
+	case *protobuf.Message, *protobuf.Enum:
+		c.addType(typ)
+	}
 	return name, typ, index, nil
 }
 
@@ -851,9 +854,14 @@ func (c *compileCtx) addType(t protobuf.Type) {
 }
 
 func (c *compileCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
+	if strings.Contains(t.Name(), ".") {
+		return
+	}
+
 	// check for global references...
 	if g, ok := c.types[c.pkg]; ok {
 		if _, ok := g[t]; ok {
+			log.Printf("%s is declared in the global space", t.Name())
 			return
 		}
 	}
