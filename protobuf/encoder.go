@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -102,8 +101,6 @@ func (e *Encoder) writeBlock(name string, src io.Reader) error {
 }
 
 func (e *Encoder) EncodeMessage(v *Message) error {
-	log.Printf("Encoding %s", v.Name())
-
 	var buf bytes.Buffer
 	subEncoder := e.subEncoder(&buf)
 	if err := subEncoder.encodeChildren(v); err != nil {
@@ -335,7 +332,6 @@ func (e *Encoder) EncodeGlobalOption(o *GlobalOption) error {
 }
 
 func (e *Encoder) EncodePackage(p *Package) error {
-	log.Printf("Encode package")
 	fmt.Fprintf(e.dst, "syntax = \"proto3\";")
 	fmt.Fprintf(e.dst, "\n")
 	fmt.Fprintf(e.dst, "\npackage %s;", p.name)
@@ -403,7 +399,6 @@ func (e *Encoder) encodeChildren(t Type) error {
 			fmt.Fprintf(e.dst, "\n")
 		}
 
-		log.Printf("Encode child %d", i)
 		if err := e.EncodeType(child); err != nil {
 			return errors.Wrapf(err, `failed to encode %s`, child.Name())
 		}

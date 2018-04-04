@@ -2,7 +2,6 @@ package openapi
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -233,7 +232,6 @@ func (c *resolveCtx) loadExternal(s string) (interface{}, error) {
 	var src io.Reader
 	switch u.Scheme {
 	case "":
-		fmt.Fprintf(os.Stdout, "loading local file %s\n", u.Path)
 		f, err := os.Open(c.normalizePath(u.Path))
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to read local file %s`, u.Path)
@@ -241,7 +239,6 @@ func (c *resolveCtx) loadExternal(s string) (interface{}, error) {
 		defer f.Close()
 		src = f
 	case "http", "https":
-		fmt.Fprintf(os.Stdout, "Fetching %s\n", u.String())
 		res, err := http.Get(u.String())
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to fetch remote file %s`, u.String())

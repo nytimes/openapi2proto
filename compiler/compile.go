@@ -2,7 +2,6 @@ package compiler
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -160,7 +159,6 @@ func extractComment(v interface{}) string {
 func (c *compileCtx) compileDefinitions(definitions map[string]*openapi.Schema) error {
 	c.phase = phaseCompileDefinitions
 	for ref, schema := range definitions {
-		log.Printf("compiling %s", ref)
 		m, err := c.compileSchema(camelCase(ref), schema)
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile #/definition/%s`, ref)
@@ -175,7 +173,6 @@ func (c *compileCtx) compileDefinitions(definitions map[string]*openapi.Schema) 
 func (c *compileCtx) compileParameters(parameters map[string]*openapi.Parameter) error {
 	c.phase = phaseCompileDefinitions
 	for ref, param := range parameters {
-		log.Printf("compiling %s %#v", ref, param)
 		_, s, err := c.compileParameterToSchema(param)
 		m, err := c.compileSchema(camelCase(ref), s)
 		if err != nil {
@@ -223,7 +220,6 @@ func (c *compileCtx) compileExtension(ext *openapi.Extension) (*protobuf.Extensi
 
 // compiles one schema into "name" and "schema"
 func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string, *openapi.Schema, error) {
-	log.Printf("%#v", param)
 	switch {
 	case param.Ref != "":
 		_, err := c.getTypeFromReference(param.Ref)
@@ -236,19 +232,16 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 				name = param.Ref[i+1:]
 			}
 		}
-		log.Printf("compile parameter to schema #1 (%s) %#v", name, param)
 		return snakeCase(name), &openapi.Schema{
 			ProtoName: name,
 			Ref:       param.Ref,
 		}, nil
 	case param.Schema != nil:
-		log.Printf("compile parameter to schema #2")
 		s2 := *param.Schema
 		s2.ProtoName = param.Name
 		s2.Description = param.Description
 		return snakeCase(param.Name), &s2, nil
 	default:
-		log.Printf("compile parameter to schema #3")
 		return snakeCase(param.Name), &openapi.Schema{
 			Type:        param.Type,
 			Enum:        param.Enum,
@@ -283,7 +276,6 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 		}
 
 		endpointName := normalizeEndpointName(e)
-		log.Printf("endpoint %s", endpointName)
 		rpc := protobuf.NewRPC(endpointName)
 		if comment := extractComment(e); len(comment) > 0 {
 			rpc.SetComment(comment)
@@ -343,7 +335,6 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 					}
 					resType = typ
 				}
-				log.Printf("compiled response schema as %#v", resType)
 			}
 
 			if resType != nil {
@@ -436,7 +427,6 @@ func (c *compileCtx) getBoxedType(t protobuf.Type) protobuf.Type {
 }
 
 func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
-	fmt.Fprintf(os.Stdout, "resolving %s\n", ref)
 	if t, ok := knownDefinitions[ref]; ok {
 		return t, nil
 	}
@@ -449,8 +439,6 @@ func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
 }
 
 func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
-	log.Printf("compileEnum %s", name)
-
 	var prefix bool
 	if c.parent() != c.pkg {
 		prefix = true
@@ -495,7 +483,6 @@ func (c *compileCtx) compileSchemaMultiType(name string, s *openapi.Schema) (pro
 }
 
 func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, error) {
-	log.Printf("compileMap %s", name)
 	var typ protobuf.Type
 
 	switch {
@@ -505,7 +492,6 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 		if err != nil {
 			return nil, errors.Wrapf(err, `failed to compile reference %s`, s.Ref)
 		}
-		log.Printf("typ = %s", typ.Name())
 	case !s.Type.Empty():
 		var err error
 		typ, err = c.getType(s.Type.First())
@@ -526,10 +512,8 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 }
 
 func (c *compileCtx) compileReferenceSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
-	log.Printf("compileReferenceSchema %s", name)
 	m, err := c.getTypeFromReference(s.Ref)
 	if err == nil {
-		log.Printf("got type from reference %s", s.Ref)
 		return m, nil
 	}
 
@@ -548,8 +532,6 @@ func (c *compileCtx) compileReferenceSchema(name string, s *openapi.Schema) (pro
 }
 
 func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Type, error) {
-	log.Printf("compileSchema %s", name)
-
 	if s.Ref != "" {
 		m, err := c.compileReferenceSchema(name, s)
 		if err != nil {
@@ -563,7 +545,6 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 	// could be a builtin... try as-is once, then the camel cased
 	for _, n := range []string{rawName, name} {
 		if v, err := c.getType(n); err == nil {
-			log.Printf(" -> found pre-compiled type %s", v.Name())
 			return v, nil
 		}
 	}
@@ -625,7 +606,6 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 			c.addType(typ)
 		}
 
-		log.Printf("applying builtin format for %s", name)
 		typ = c.applyBuiltinFormat(typ, s.Format)
 
 		return typ, nil
@@ -635,8 +615,6 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 }
 
 func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[string]*openapi.Schema) error {
-	log.Printf("compileSchemaProperties %#v", props)
-
 	var fields []struct {
 		comment  string
 		index    int
@@ -656,7 +634,6 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 		if err != nil {
 			return errors.Wrapf(err, `failed to compile property %s`, propName)
 		}
-		log.Printf("---------> property %s, index = %d %t", name, index, repeated)
 		fields = append(fields, struct {
 			comment  string
 			index    int
@@ -709,11 +686,6 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 }
 
 func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.Type) {
-	log.Printf("applyBuiltinFormat %s (%s)", t.Name(), f)
-	defer func() {
-		log.Printf("applied format: %s", rt.Name())
-	}()
-
 	switch t.Name() {
 	case "bytes":
 		return protobuf.BytesType
@@ -753,7 +725,6 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 // compiles a single property to a field.
 // local-scoped messages are handled in the compilation for the field type.
 func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string, protobuf.Type, int, bool, error) {
-	log.Printf("compile property %s %#v", name, prop)
 	var typ protobuf.Type
 	var err error
 	var index int
@@ -762,12 +733,10 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 	var typName = name + "Message"
 
 	if prop.Type.Len() > 1 {
-		log.Printf("compile property multi type prop.Type %v", prop.Type)
 		typ, err = c.compileSchemaMultiType(typName, prop)
 		if err != nil {
 			return "", nil, index, false, errors.Wrap(err, `failed to compile schema with multiple types`)
 		}
-		log.Printf("compile property multi type %s", typ.Name())
 	} else {
 		switch {
 		case prop.Type.Empty() || prop.Type.Contains("object"):
@@ -803,7 +772,6 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 				}
 			}
 
-			log.Printf("applying builtin format for %s", typName)
 			typ = c.applyBuiltinFormat(typ, prop.Format)
 		}
 	}
@@ -851,7 +819,6 @@ func (c *compileCtx) addImport(lib string) {
 }
 
 func (c *compileCtx) pushParent(v protobuf.Container) {
-	log.Printf("pushing parent %s", v.Name())
 	c.parents = append(c.parents, v)
 }
 
@@ -860,7 +827,6 @@ func (c *compileCtx) popParent() {
 	if l == 0 {
 		return
 	}
-	log.Printf("popping parent %s", (c.parents[l-1]).Name())
 	c.parents = c.parents[:l-1]
 }
 
@@ -889,7 +855,6 @@ func (c *compileCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
 	// check for global references...
 	if g, ok := c.types[c.pkg]; ok {
 		if _, ok := g[t]; ok {
-			log.Printf("%s is declared in the global space", t.Name())
 			return
 		}
 	}
@@ -901,11 +866,9 @@ func (c *compileCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
 	}
 
 	if _, ok := m[t]; ok {
-		log.Printf("type %s already defined under %s", t.Name(), p.Name())
 		return
 	}
 
-	log.Printf("adding %s under %s", t.Name(), p.Name())
 	m[t] = struct{}{}
 	p.AddType(t)
 }
@@ -914,7 +877,6 @@ func (c *compileCtx) addDefinition(ref string, t protobuf.Type) {
 	if _, ok := c.definitions[ref]; ok {
 		return
 	}
-	log.Printf("adding definition %s: %#v", ref, t)
 	c.definitions[ref] = t
 }
 

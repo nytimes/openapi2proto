@@ -1,7 +1,5 @@
 package protobuf
 
-import "log"
-
 func New(name string) *Package {
 	return &Package{
 		name: name,
@@ -25,10 +23,6 @@ func (p *Package) AddImport(s string) {
 }
 
 func (p *Package) AddType(t Type) {
-if _, ok := t.(Builtin); ok {
-	panic("builtin")
-}
-	log.Printf("----------> Add %T", t)
 	p.children = append(p.children, t)
 }
 

@@ -2,7 +2,6 @@ package compiler
 
 import (
 	"bytes"
-	"log"
 	"net/url"
 	"strings"
 	"unicode"
@@ -145,7 +144,6 @@ func snakeCase(s string) string {
 		buf.WriteRune(unicode.ToLower(runes[i]))
 	}
 
-	log.Printf("snakeCased -> %s", buf.String())
 	return buf.String()
 }
 
@@ -216,7 +214,6 @@ func cleanCharacters(input string) string {
 }
 
 func normalizeEndpointName(e *openapi.Endpoint) string {
-	log.Printf("normalizeEndpointName = %s", e.Path)
 	if opID := e.OperationID; len(opID) > 0 {
 		return operationIDToName(opID)
 	}
@@ -243,7 +240,6 @@ func normalizeEndpointName(e *openapi.Endpoint) string {
 		buf.WriteRune(r)
 	}
 
-	log.Printf("before camelCase %s", buf.String())
 	var name = camelCase(buf.String())
 	return camelCase(e.Verb) + name
 }
@@ -258,7 +254,6 @@ func looksLikeInteger(s string) bool {
 }
 
 func normalizeEnumName(s string) string {
-	log.Printf("normalizeEnumName %s", s)
 	s = strings.Replace(s, "&", " AND ", -1)
 
 	// XXX This is a special case for things like
@@ -271,6 +266,5 @@ func normalizeEnumName(s string) string {
 }
 
 func operationIDToName(s string) string {
-	log.Printf("operationIDToName: %s", s)
 	return camelCase(snakeCase(s))
 }

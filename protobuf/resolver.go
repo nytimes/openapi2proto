@@ -1,10 +1,6 @@
 package protobuf
 
 import (
-	"bytes"
-	"fmt"
-	"log"
-
 	"github.com/pkg/errors"
 )
 
@@ -63,16 +59,7 @@ func (c *resolveCtx) resolve(t Type) (Type, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, `failed to resolve children`)
 		}
-		childrenTypes := func(typs []Type) string {
-			var buf bytes.Buffer
-			for i, typ := range typs {
-				fmt.Fprintf(&buf, "\n ----------> %d: %T", i, typ)
-			}
-			return buf.String()
-		}
-		log.Printf("before: %s", childrenTypes(p.children))
 		p.children = children
-		log.Printf("after: %s", childrenTypes(p.children))
 		return &p, nil
 	case *Message:
 		c.push(t)

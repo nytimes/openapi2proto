@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -84,16 +83,13 @@ func fetchRemoteContent(u string) (io.Reader, error) {
 }
 
 func Load(src io.Reader) (*Spec, error) {
-
 	var spec Spec
 
-	log.Printf("decode attempt #1")
 	dec := NewDecoder(src)
 	if err := dec.Decode(&spec); err != nil {
 		return nil, errors.Wrap(err, `failed to decode content`)
 	}
 
-	log.Printf("decode attempt #2")
 	// no paths or defs declared? check if this is a plain map[name]*Schema (definitions)
 	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
 		var defs map[string]*Schema
@@ -104,7 +100,6 @@ func Load(src io.Reader) (*Spec, error) {
 		}
 	}
 
-	log.Printf("decode attempt #3")
 	// _still_ no defs? try to see if this is a single item
 	// check if its just an *Item
 	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
@@ -181,11 +176,6 @@ func LoadFile(fn string) (*Spec, error) {
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(resolved); err != nil {
 		return nil, errors.Wrap(err, `failed to encode resolved schema`)
-	}
-
-	{
-		b, _ := json.MarshalIndent(resolved, "", "  ")
-		fmt.Printf("%s\n", b)
 	}
 
 	return Load(&buf)
