@@ -2,11 +2,7 @@ package compiler
 
 import (
 	"bytes"
-	"io/ioutil"
-	"log"
-	"os"
 	"sort"
-	"strconv"
 	"strings"
 
 	"github.com/NYTimes/openapi2proto/openapi"
@@ -41,10 +37,6 @@ func init() {
 
 	for msg, lib := range knownImports {
 		knownDefinitions[lib+"#/"+msg] = protobuf.NewMessage(msg)
-	}
-
-	if b, err := strconv.ParseBool(os.Getenv("OPENAPI2PROTO_DEBUG")); err != nil || !b {
-		log.SetOutput(ioutil.Discard)
 	}
 }
 
