@@ -246,6 +246,7 @@ func normalizeEndpointName(e *openapi.Endpoint) string {
 
 func looksLikeInteger(s string) bool {
 	for _, r := range s {
+		// charcter should be between "0" to "9" or else.
 		if 0x30 > r || 0x39 < r {
 			return false
 		}
