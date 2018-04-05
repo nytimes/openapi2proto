@@ -157,15 +157,17 @@ func LoadFile(fn string) (*Spec, error) {
 
 	// from the file name, guess how we can decode this
 	var v interface{}
-	switch strings.ToLower(path.Ext(fn)) {
+	switch ext := strings.ToLower(path.Ext(fn)); ext {
 	case ".yaml", ".yml":
 		if err := yaml.NewDecoder(src).Decode(&v); err != nil {
 			return nil, errors.Wrapf(err, `failed to decode file %s`, fn)
 		}
-	default:
+	case ".json":
 		if err := json.NewDecoder(src).Decode(&v); err != nil {
 			return nil, errors.Wrapf(err, `failed to decode file %s`, fn)
 		}
+	default:
+		return nil, errors.Errorf(`unsupported file extension type %s`, ext)
 	}
 
 	resolved, err := NewResolver().Resolve(v, options...)
