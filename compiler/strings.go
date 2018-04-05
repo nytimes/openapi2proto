@@ -197,7 +197,7 @@ func packageName(s string) string {
 }
 
 func normalizeServiceName(s string) string {
-	return cleanCharacters(concatSpaces(s, true) + "Service")
+	return camelCase(concatSpaces(s, true) + "Service")
 }
 
 func cleanCharacters(input string) string {

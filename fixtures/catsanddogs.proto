@@ -44,7 +44,7 @@ message PutCatsProtojsonRequest {
     string protojson = 2;
 }
 
-service Cats_DogsService {
+service CatsDogsService {
     // View a single `Cat` from the database via JSON or Protobuf
     rpc GetCatIdProtoJSON(GetCatIdProtoJSONRequest) returns (Cat) {}
 
