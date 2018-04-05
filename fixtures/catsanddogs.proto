@@ -20,7 +20,7 @@ message Error {
     string Message = 1;
 }
 
-message GetCatIdProtoJSONRequest {
+message GetCatIdRequest {
     // The transport to respond with (Protobuf or JSON)
     string ProtoJSON = 1;
 
@@ -28,7 +28,7 @@ message GetCatIdProtoJSONRequest {
     int64 id = 2;
 }
 
-message GetCatsProtojsonRequest {
+message GetCatsRequest {
     // Limiting the number of cats
     int64 limit = 1;
 
@@ -36,7 +36,7 @@ message GetCatsProtojsonRequest {
     string protojson = 2;
 }
 
-message PutCatsProtojsonRequest {
+message PutCatsRequest {
     // A batch of cats to save to the db.
     repeated Cat cats = 1;
 
@@ -46,11 +46,11 @@ message PutCatsProtojsonRequest {
 
 service CatsDogsService {
     // View a single `Cat` from the database via JSON or Protobuf
-    rpc GetCatIdProtoJSON(GetCatIdProtoJSONRequest) returns (Cat) {}
+    rpc GetCatId(GetCatIdRequest) returns (Cat) {}
 
     // Lists `Cats` as JSON
-    rpc GetCatsProtojson(GetCatsProtojsonRequest) returns (Cats) {}
+    rpc GetCats(GetCatsRequest) returns (Cats) {}
 
     // Saves a list of `Cats` via JSON or Protobuf
-    rpc PutCatsProtojson(PutCatsProtojsonRequest) returns (google.protobuf.Empty) {}
+    rpc PutCats(PutCatsRequest) returns (google.protobuf.Empty) {}
 }

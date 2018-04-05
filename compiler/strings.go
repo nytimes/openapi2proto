@@ -3,6 +3,7 @@ package compiler
 import (
 	"bytes"
 	"net/url"
+	"path"
 	"strings"
 	"unicode"
 
@@ -218,15 +219,16 @@ func normalizeEndpointName(e *openapi.Endpoint) string {
 		return operationIDToName(opID)
 	}
 
-	path := strings.TrimSuffix(e.Path, ".json")
+	// Strip out file suffix
+	p := strings.TrimSuffix(e.Path, path.Ext(e.Path))
 	// Strip query strings. Note that query strings are illegal
 	// in swagger paths, but some tooling seems to tolerate them.
-	if i := strings.LastIndexByte(path, '?'); i > 0 {
-		path = path[:i]
+	if i := strings.LastIndexByte(p, '?'); i > 0 {
+		p = p[:i]
 	}
 
 	var buf bytes.Buffer
-	for _, r := range path {
+	for _, r := range p {
 		switch r {
 		case '_', '-', '.', '/':
 			// turn these into spaces
