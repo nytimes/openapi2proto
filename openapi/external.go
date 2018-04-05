@@ -21,14 +21,17 @@ var interfaceType = reflect.TypeOf((*interface{})(nil)).Elem()
 var stringType = reflect.TypeOf("")
 var stringInterfaceMapType = reflect.MapOf(stringType, interfaceType)
 
-// YAML serializers are really, really, really annoying in that
-// it decodes maps into map[interface{}]interface{} instead
-// of map[string]interfaace{}
-func restoreSanity(rv reflect.Value) reflect.Value {
-	rv, _ = restoreSanityInternal(rv)
-	return rv
-}
-
+// we may receive maps for arbitrary key types, as various *.Marshal
+// methods may treat things like
+//
+// {
+//   200: { ... }
+// }
+//
+// as a map with an integer key. However, for all of our purposes,
+// we need a string key.
+//
+// This function provides the conversion routine for such cases
 func stringify(v interface{}) string {
 	switch v := v.(type) {
 	case string:
@@ -64,6 +67,29 @@ func stringify(v interface{}) string {
 	return `(invalid)`
 }
 
+// YAML serializers are really, really, really annoying in that
+// it decodes maps into map[interface{}]interface{} instead
+// of map[string]interfaace{}
+//
+// Keys behind the interface{} could be strings, ints, etc, so
+// we convert them into map types that we can actually handle,
+// namely map[string]interface{}
+func restoreSanity(rv reflect.Value) reflect.Value {
+	rv, _ = restoreSanityInternal(rv)
+	return rv
+}
+
+// this function is separated out from the main restoreSanity
+// function, because in certain cases, we should be checking
+// checking if the value has been updated.
+//
+// e.g. when we are dealing with elements in an array, we
+// do not want to swap values unless the value has been
+// changed, as `reflect` operations are pretty costly anyways.
+//
+// the second return value indicates if the operation changed
+// the rv value, and if you should use it, which is only
+// applicable while traversing the nodes.
 func restoreSanityInternal(rv reflect.Value) (reflect.Value, bool) {
 	if rv.Kind() == reflect.Interface {
 		return restoreSanityInternal(rv.Elem())
@@ -71,16 +97,35 @@ func restoreSanityInternal(rv reflect.Value) (reflect.Value, bool) {
 
 	switch rv.Kind() {
 	case reflect.Map:
+		var count int // keep track of how many "restorations" have been applied
+
+		var dst reflect.Value = rv
+
 		// the keys MUST Be strings.
-		if rv.Type().Key().Kind() == reflect.String {
-			return rv, false
+		isStringKey := rv.Type().Key().Kind() == reflect.String
+		if !isStringKey {
+			dst = reflect.MakeMap(stringInterfaceMapType)
+			count++ // if we got here, it's "restored" regardless of the keys being transformed
 		}
-		newMap := reflect.MakeMap(stringInterfaceMapType)
+
 		for _, key := range rv.MapKeys() {
-			newValue, _ := restoreSanityInternal(rv.MapIndex(key))
-			newMap.SetMapIndex(reflect.ValueOf(stringify(key.Elem().Interface())), newValue)
+			newValue, restored := restoreSanityInternal(rv.MapIndex(key))
+			if restored {
+				count++
+			}
+
+			// Keys need special treatment becase we may be re-using the
+			// original map. in that case we can simply re-use the key
+			var newKey reflect.Value
+			if isStringKey {
+				newKey = key
+			} else {
+				newKey = reflect.ValueOf(stringify(key.Elem().Interface()))
+			}
+
+			dst.SetMapIndex(newKey, newValue)
 		}
-		return newMap, true
+		return dst, count > 0
 	case reflect.Slice, reflect.Array:
 		var count int
 		for i := 0; i < rv.Len(); i++ {
