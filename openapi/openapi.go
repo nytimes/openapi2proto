@@ -35,61 +35,8 @@ func fetchRemoteContent(u string) (io.Reader, error) {
 	return &buf, nil
 }
 
-func Load(src io.Reader) (*Spec, error) {
-	var spec Spec
-
-	// Detect the type of spec from its content, or the source
-	var buf bytes.Buffer
-	if _, err := io.Copy(&buf, src); err != nil {
-		return nil, errors.Wrap(err, `failed to read from source`)
-	}
-
-	var unmarshaler func([]byte, interface{}) error = json.Unmarshal
-	switch src := src.(type) {
-	case *os.File:
-		// if it's a file, we can guess the payload formatting
-		// from the name of the file
-		switch filepath.Ext(src.Name()) {
-		case ".yaml", ".yml":
-			unmarshaler = yaml.Unmarshal
-		}
-	default:
-		// Otherwise, we sniff the content.
-		b := bytes.TrimSpace(buf.Bytes())
-		if len(b) > 0 && b[0] != '{' { // if we don't have a JSON map, assume YAML
-			unmarshaler = yaml.Unmarshal
-		}
-	}
-
-	if err := unmarshaler(buf.Bytes(), &spec); err != nil {
-		return nil, errors.Wrap(err, `failed to decode content`)
-	}
-
-	// One last thing: populate some fields that are obvious to
-	// human beings, but required for dumb computers to process
-	// efficiently
-	for path, p := range spec.Paths {
-		if v := p.Get; v != nil {
-			v.Verb = "get"
-			v.Path = path
-		}
-		if v := p.Put; v != nil {
-			v.Verb = "put"
-			v.Path = path
-		}
-		if v := p.Post; v != nil {
-			v.Verb = "post"
-			v.Path = path
-		}
-		if v := p.Delete; v != nil {
-			v.Verb = "delete"
-			v.Path = path
-		}
-	}
-
-	return &spec, nil
-}
-
+// Loads an OpenAPI spec from a file, or a remote HTTP(s) location.
+// This function also resolves any external references.
 func LoadFile(fn string) (*Spec, error) {
 	var src io.Reader
 	var options []Option
@@ -179,7 +126,34 @@ func LoadFile(fn string) (*Spec, error) {
 		return nil, errors.Wrap(err, `failed to encode resolved schema`)
 	}
 
-	return Load(&buf)
+	var spec Spec
+	if err := json.Unmarshal(buf.Bytes(), &spec); err != nil {
+		return nil, errors.Wrap(err, `failed to decode content`)
+	}
+
+	// One last thing: populate some fields that are obvious to
+	// human beings, but required for dumb computers to process
+	// efficiently
+	for path, p := range spec.Paths {
+		if v := p.Get; v != nil {
+			v.Verb = "get"
+			v.Path = path
+		}
+		if v := p.Put; v != nil {
+			v.Verb = "put"
+			v.Path = path
+		}
+		if v := p.Post; v != nil {
+			v.Verb = "post"
+			v.Path = path
+		}
+		if v := p.Delete; v != nil {
+			v.Verb = "delete"
+			v.Path = path
+		}
+	}
+
+	return &spec, nil
 }
 
 func (s *SchemaType) UnmarshalJSON(data []byte) error {

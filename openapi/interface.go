@@ -25,6 +25,8 @@ type resolveCtx struct {
 	cache map[string]interface{}
 }
 
+// GlobalOptions is used to store Protocol Buffers global options,
+// such as package names
 type GlobalOptions map[string]string
 
 // Spec is the base struct for containing OpenAPI spec declarations.
@@ -48,12 +50,14 @@ type Spec struct {
 }
 
 // Extension is used to define Protocol Buffer extensions from
-// within an OpenAPI spec. use `x-extentions` key
+// within an OpenAPI spec. use `x-extentions` key.
 type Extension struct {
 	Base   string            `json:"base" yaml:"base"`
 	Fields []*ExtensionField `json:"fields" yaml:"fields"`
 }
 
+// ExtensionField defines the fields to be added to the
+// base message type
 type ExtensionField struct {
 	Name   string `yaml:"name" json:"name"`
 	Type   string `yaml:"type" json:"type"`
