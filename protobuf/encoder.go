@@ -12,6 +12,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// NewEncoder creates an Encoder object that writes the
+// encoded Protocol Buffers declaration to `dst`
 func NewEncoder(dst io.Writer, options ...Option) *Encoder {
 	indent := `    `
 	for _, o := range options {
@@ -35,6 +37,7 @@ func (e *Encoder) subEncoder(dst io.Writer) *Encoder {
 	return &sub
 }
 
+// Encode takes a protobuf.Package and encodes it to the destination
 func (e *Encoder) Encode(v interface{}) error {
 	switch v.(type) {
 	case *Package:
@@ -72,6 +75,7 @@ func (e *Encoder) comment(c string) (int64, error) {
 	return prefix(e.dst, strings.NewReader(c), `// `, true)
 }
 
+// EncodeField encods the message field
 func (e *Encoder) EncodeField(v *Field) error {
 	if len(v.comment) > 0 {
 		fmt.Fprintf(e.dst, "\n")
@@ -100,6 +104,7 @@ func (e *Encoder) writeBlock(name string, src io.Reader) error {
 	return nil
 }
 
+// EncodeMessage encodes a Message object
 func (e *Encoder) EncodeMessage(v *Message) error {
 	var buf bytes.Buffer
 	subEncoder := e.subEncoder(&buf)
@@ -131,6 +136,7 @@ func (e *Encoder) EncodeMessage(v *Message) error {
 	return nil
 }
 
+// EncodeHTTPAnnotation encods a HTTPAnnotation object
 func (e *Encoder) EncodeHTTPAnnotation(a *HTTPAnnotation) error {
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, "\n%s: %s", a.method, strconv.Quote(a.path))
@@ -180,6 +186,7 @@ func stringify(v interface{}) string {
 	return `(invalid)`
 }
 
+// EncodeRPCOption encodes RPC options
 func (e *Encoder) EncodeRPCOption(v interface{}) error {
 	switch x := v.(type) {
 	case *HTTPAnnotation:
@@ -194,6 +201,7 @@ func (e *Encoder) EncodeRPCOption(v interface{}) error {
 	return nil
 }
 
+// EncodeRPC encodes an RPC object
 func (e *Encoder) EncodeRPC(r *RPC) error {
 	var buf bytes.Buffer
 	subEncoder := e.subEncoder(&buf)
@@ -236,6 +244,7 @@ func (e *Encoder) EncodeRPC(r *RPC) error {
 	return nil
 }
 
+// EncodeService encodes a Service object
 func (e *Encoder) EncodeService(s *Service) error {
 	if len(s.rpcs) == 0 {
 		return nil
@@ -262,6 +271,7 @@ func (e *Encoder) EncodeService(s *Service) error {
 	return nil
 }
 
+// EncodeEnum encodes an Enum object
 func (e *Encoder) EncodeEnum(v *Enum) error {
 	var buf bytes.Buffer
 	for i, elem := range v.elements {
@@ -278,6 +288,8 @@ func (e *Encoder) EncodeEnum(v *Enum) error {
 	return nil
 }
 
+// EncodeType detected Package, Enum, Message, Service, and Extension
+// types and encodes them
 func (e *Encoder) EncodeType(v Type) error {
 	switch x := v.(type) {
 	case *Package:
@@ -306,11 +318,13 @@ func (e *Encoder) EncodeType(v Type) error {
 	return nil
 }
 
+// EncodeExtensionField encodes an ExtensionField object
 func (e *Encoder) EncodeExtensionField(f *ExtensionField) error {
 	fmt.Fprintf(e.dst, "\n%s %s = %d;", f.typ, f.name, f.number)
 	return nil
 }
 
+// EncodeExtension encodes an Extension object
 func (e *Encoder) EncodeExtension(ext *Extension) error {
 	var buf bytes.Buffer
 	subEncoder := e.subEncoder(&buf)
@@ -326,11 +340,13 @@ func (e *Encoder) EncodeExtension(ext *Extension) error {
 	return nil
 }
 
+// EncodeGlobalOption encodes a GlobationOption object
 func (e *Encoder) EncodeGlobalOption(o *GlobalOption) error {
 	fmt.Fprintf(e.dst, "\noption %s = %s;", o.name, strconv.Quote(o.value))
 	return nil
 }
 
+// EncodePackage encodes a Package
 func (e *Encoder) EncodePackage(p *Package) error {
 	fmt.Fprintf(e.dst, "syntax = \"proto3\";")
 	fmt.Fprintf(e.dst, "\n")

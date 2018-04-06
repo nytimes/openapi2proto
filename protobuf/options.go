@@ -6,8 +6,8 @@ const (
 	optkeyIndent = "indent"
 )
 
-type Option = option.Option
-
+// WithIndent creates a new Option to control the indentation
+// for the encoded definition
 func WithIndent(s string) Option {
 	return option.New(optkeyIndent, s)
 }

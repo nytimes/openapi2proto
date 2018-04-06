@@ -518,7 +518,7 @@ func (c *compileCtx) compileReferenceSchema(name string, s *openapi.Schema) (pro
 	// a "promise" to be fulfilled at a later time. Otherwise, it's a
 	// fatal error.
 	if c.phase == phaseCompileDefinitions {
-		r := protobuf.NewReference(s.Ref, c.getTypeFromReference)
+		r := protobuf.NewReference(s.Ref)
 		return r, nil
 	}
 	return nil, errors.Wrapf(err, `failed to resolve reference %s`, s.Ref)

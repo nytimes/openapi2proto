@@ -11,6 +11,7 @@ const (
 	optkeyCompilerOptions = "protobuf-compiler-options"
 )
 
+// Option is used to pass options to several methods
 type Option option.Option
 
 // WithEncoderOptions allows you to specify a list of
