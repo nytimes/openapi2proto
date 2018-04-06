@@ -69,6 +69,7 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 	return c
 }
 
+// Compile takes an OpenAPI spec and compiles it into a protobuf.Package.
 func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	c := newCompileCtx(spec, options...)
 	c.pushParent(c.pkg)

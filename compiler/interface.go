@@ -13,6 +13,7 @@ const (
 	phaseCompilePaths
 )
 
+// Option is used to pass options to several methods
 type Option = option.Option
 
 type compileCtx struct {
