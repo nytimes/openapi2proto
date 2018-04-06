@@ -25,6 +25,7 @@ func init() {
 	schemaProxyType = reflect.StructOf(fields)
 }
 
+// UnmarshalJSON decodes JSON data into a Schema
 func (s *Schema) UnmarshalJSON(data []byte) error {
 	var b bool
 	if err := json.Unmarshal(data, &b); err == nil {
