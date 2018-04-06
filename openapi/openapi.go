@@ -90,27 +90,6 @@ func Load(src io.Reader) (*Spec, error) {
 		return nil, errors.Wrap(err, `failed to decode content`)
 	}
 
-	// no paths or defs declared? check if this is a plain map[name]*Schema (definitions)
-	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
-		var defs map[string]*Schema
-		if err := dec.Decode(&defs); err == nil {
-			if _, nok := defs["type"]; !nok {
-				spec.Definitions = defs
-			}
-		}
-	}
-
-	// _still_ no defs? try to see if this is a single item
-	// check if its just an *Item
-	if len(spec.Paths) == 0 && len(spec.Definitions) == 0 {
-		var item Schema
-		if err := dec.Decode(&item); err == nil {
-			spec.Definitions = map[string]*Schema{
-				"TODO": &item,
-			}
-		}
-	}
-
 	// One last thing: populate some fields that are obvious to
 	// human beings, but required for dumb computers to process
 	// efficiently
