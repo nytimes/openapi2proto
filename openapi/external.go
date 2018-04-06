@@ -162,11 +162,11 @@ func isExternal(s string) bool {
 	return strings.IndexByte(s, '#') != 0
 }
 
-func NewResolver() *Resolver {
-	return &Resolver{}
+func newResolver() *resolver {
+	return &resolver{}
 }
 
-func (r *Resolver) Resolve(v interface{}, options ...Option) (interface{}, error) {
+func (r *resolver) Resolve(v interface{}, options ...Option) (interface{}, error) {
 	var dir string
 	for _, o := range options {
 		switch o.Name() {

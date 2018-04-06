@@ -35,7 +35,7 @@ func fetchRemoteContent(u string) (io.Reader, error) {
 	return &buf, nil
 }
 
-// Loads an OpenAPI spec from a file, or a remote HTTP(s) location.
+// LoadFile loads an OpenAPI spec from a file, or a remote HTTP(s) location.
 // This function also resolves any external references.
 func LoadFile(fn string) (*Spec, error) {
 	var src io.Reader
@@ -71,7 +71,7 @@ func LoadFile(fn string) (*Spec, error) {
 		return nil, errors.Errorf(`unsupported file extension type %s`, ext)
 	}
 
-	resolved, err := NewResolver().Resolve(v, options...)
+	resolved, err := newResolver().Resolve(v, options...)
 	if err != nil {
 		return nil, errors.Wrap(err, `failed to resolve external references`)
 	}

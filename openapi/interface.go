@@ -11,8 +11,8 @@ const (
 // Option is used to pass options to several methods
 type Option = option.Option
 
-// Resolver is used to resolve external references
-type Resolver struct{}
+// resolver is used to resolve external references
+type resolver struct{}
 type resolveCtx struct {
 	// this is used to qualify relative paths
 	dir string
