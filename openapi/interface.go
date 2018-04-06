@@ -44,7 +44,6 @@ type Spec struct {
 	Definitions        map[string]*Schema    `yaml:"definitions" json:"definitions"`
 	Parameters         map[string]*Parameter `yaml:"parameters" json:"parameters"`
 	Extensions         []*Extension          `yaml:"x-extensions" json:"x-extensions"`
-	ExternalReferences map[string]*Schema    `yaml:"x-external-references" json:"x-external-references"`
 	GlobalOptions      GlobalOptions         `yaml:"x-global-options" json:"x-global-options"`
 }
 
