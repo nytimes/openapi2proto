@@ -125,7 +125,6 @@ type SchemaType []string
 
 // Schema represent Model properties in an OpenAPI spec.
 type Schema struct {
-	isEmpty bool
 	isNil   bool
 
 	// if this schema refers to a definition found elsewhere, this value

@@ -99,7 +99,7 @@ func restoreSanityInternal(rv reflect.Value) (reflect.Value, bool) {
 	case reflect.Map:
 		var count int // keep track of how many "restorations" have been applied
 
-		var dst reflect.Value = rv
+		var dst = rv
 
 		// the keys MUST Be strings.
 		isStringKey := rv.Type().Key().Kind() == reflect.String

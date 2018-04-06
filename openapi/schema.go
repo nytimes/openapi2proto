@@ -29,7 +29,7 @@ func (s *Schema) UnmarshalJSON(data []byte) error {
 	var b bool
 	if err := json.Unmarshal(data, &b); err == nil {
 		if b {
-			*s = Schema{isEmpty: true}
+			*s = Schema{}
 		} else {
 			*s = Schema{isNil: true}
 		}
@@ -53,6 +53,7 @@ func (s *Schema) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// IsNil returns true if it's nil schema (e.g.: `additionalProperties: false`)
 func (s Schema) IsNil() bool {
 	return s.isNil
 }
