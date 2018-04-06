@@ -1,13 +1,17 @@
 package openapi
 
-import "github.com/NYTimes/openapi2proto/internal/option"
+import (
+	"github.com/NYTimes/openapi2proto/internal/option"
+)
 
 const (
 	optkeyDir = `dir`
 )
 
+// Option is used to pass options to several methods
 type Option = option.Option
 
+// Resolver is used to resolve external references
 type Resolver struct{}
 type resolveCtx struct {
 	// this is used to qualify relative paths
@@ -19,10 +23,6 @@ type resolveCtx struct {
 	// this holds the decoded content for each URL so we don't
 	// have to keep fetching it
 	cache map[string]interface{}
-}
-
-type Decoder interface {
-	Decode(interface{}) error
 }
 
 type GlobalOptions map[string]string

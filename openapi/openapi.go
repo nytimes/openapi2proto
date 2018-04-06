@@ -3,7 +3,6 @@ package openapi
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -15,52 +14,6 @@ import (
 	"github.com/pkg/errors"
 	yaml "gopkg.in/yaml.v2"
 )
-
-type decoder struct {
-	isYAML bool
-	src    *bytes.Buffer
-}
-
-func NewDecoder(src io.Reader) Decoder {
-	var buf bytes.Buffer
-	_, err := io.Copy(&buf, src)
-	if err != nil {
-		fmt.Printf("io.Copy err = %s\n", err)
-	}
-
-	var isYAML bool
-	switch src := src.(type) {
-	case *os.File:
-		// if it's a file, we can guess the payload formatting
-		// from the name of the file
-		switch filepath.Ext(src.Name()) {
-		case ".yaml", ".yml":
-			isYAML = true
-		}
-	default:
-		// Otherwise, we sniff the content.
-		b := bytes.TrimSpace(buf.Bytes())
-		if len(b) > 0 && b[0] != '{' { // if we don't have a JSON map, assume YAML
-			isYAML = true
-		}
-	}
-
-	return &decoder{
-		src:    &buf,
-		isYAML: isYAML,
-	}
-}
-
-func (d *decoder) Decode(v interface{}) error {
-	if d.src.Len() == 0 {
-		return errors.New(`empty source`)
-	}
-
-	if d.isYAML {
-		return yaml.Unmarshal(d.src.Bytes(), v)
-	}
-	return json.Unmarshal(d.src.Bytes(), v)
-}
 
 func fetchRemoteContent(u string) (io.Reader, error) {
 	res, err := http.Get(u)
@@ -85,8 +38,30 @@ func fetchRemoteContent(u string) (io.Reader, error) {
 func Load(src io.Reader) (*Spec, error) {
 	var spec Spec
 
-	dec := NewDecoder(src)
-	if err := dec.Decode(&spec); err != nil {
+	// Detect the type of spec from its content, or the source
+	var buf bytes.Buffer
+	if _, err := io.Copy(&buf, src); err != nil {
+		return nil, errors.Wrap(err, `failed to read from source`)
+	}
+
+	var unmarshaler func([]byte, interface{}) error = json.Unmarshal
+	switch src := src.(type) {
+	case *os.File:
+		// if it's a file, we can guess the payload formatting
+		// from the name of the file
+		switch filepath.Ext(src.Name()) {
+		case ".yaml", ".yml":
+			unmarshaler = yaml.Unmarshal
+		}
+	default:
+		// Otherwise, we sniff the content.
+		b := bytes.TrimSpace(buf.Bytes())
+		if len(b) > 0 && b[0] != '{' { // if we don't have a JSON map, assume YAML
+			unmarshaler = yaml.Unmarshal
+		}
+	}
+
+	if err := unmarshaler(buf.Bytes(), &spec); err != nil {
 		return nil, errors.Wrap(err, `failed to decode content`)
 	}
 
@@ -175,7 +150,7 @@ func LoadFile(fn string) (*Spec, error) {
 	//
 	// One way we tackle this is to resolve references in a separate pass
 	// than the main compilation. We actually do this in compiler.compileParameters,
-	// and compiler.compileDefinitions, which pre-compiles #/parameters/* 
+	// and compiler.compileDefinitions, which pre-compiles #/parameters/*
 	// and #/definitions/* so that when we encounter references, all we need
 	// to do is to fetch that pre-compiled piece of data and inject accordingly.
 	//
