@@ -4,6 +4,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// ResolveFunc is the function used to resolve `$ref` strings to
+// an actual protobuf.Type
 type ResolveFunc func(string) (Type, error)
 
 type resolveCtx struct {
@@ -11,6 +13,8 @@ type resolveCtx struct {
 	resolveFunc ResolveFunc
 }
 
+// Resolve takes a package, and resolves internal references.
+// Note that you must have external references already resolved.
 func Resolve(p *Package, resolver ResolveFunc) (Type, error) {
 	c := &resolveCtx{
 		resolveFunc: resolver,
