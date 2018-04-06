@@ -57,3 +57,71 @@ func (s *Schema) UnmarshalJSON(data []byte) error {
 func (s Schema) IsNil() bool {
 	return s.isNil
 }
+
+// UnmarshalJSON decodes JSON data into a SchemaType
+func (s *SchemaType) UnmarshalJSON(data []byte) error {
+	var str string
+	if err := json.Unmarshal(data, &str); err == nil {
+		*s = []string{str}
+		return nil
+	}
+
+	var l []string
+	if err := json.Unmarshal(data, &l); err == nil {
+		*s = l
+		return nil
+	}
+
+	return errors.Errorf(`invalid type '%s'`, data)
+}
+
+// UnmarshalYAML decodes YAML data into a SchemaType
+func (s *SchemaType) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var str string
+	if err := unmarshal(&str); err == nil {
+		if str == "" {
+			*s = []string(nil)
+		} else {
+			*s = []string{str}
+		}
+		return nil
+	}
+
+	var l []string
+	if err := unmarshal(&l); err == nil {
+		*s = l
+		return nil
+	}
+
+	return errors.New(`invalid type for schema type`)
+}
+
+// Empty returns true if there was no type specified
+func (s *SchemaType) Empty() bool {
+	return len(*s) == 0
+}
+
+// Contains returns true if the specified type is listed within
+// the list of schema types
+func (s *SchemaType) Contains(t string) bool {
+	for _, v := range *s {
+		if v == t {
+			return true
+		}
+	}
+	return false
+}
+
+// Len returns the number of types listed under this SchemaType
+func (s *SchemaType) Len() int {
+	return len(*s)
+}
+
+// First returns the first type listed under this SchemaType
+func (s *SchemaType) First() string {
+	if !s.Empty() {
+		return (*s)[0]
+	}
+	return ""
+}
+
