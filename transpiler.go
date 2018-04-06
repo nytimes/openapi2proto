@@ -9,10 +9,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Transpile(
-//   WithCompilerOptions(...)
-//   WithEncoderOptions(...),
-// )
+// Transpile is a convenience function that takes an OpenAPI
+// spec file and transpiles it into a Protocol Buffers v3 declaration,
+// which is written to `dst`.
+//
+// Options to the compiler and encoder can be passed using
+// `WithCompilerOptions` and `WithEncoderOptions`, respectively
+//
+// For more control, use `openapi`, `compiler`, and `protobuf`
+// packages directly.
 func Transpile(dst io.Writer, srcFn string, options ...Option) error {
 	var encoderOptions []protobuf.Option
 	var compilerOptions []compiler.Option
