@@ -9,7 +9,7 @@ import (
 )
 
 func TestEncoder(t *testing.T) {
-	p := protobuf.New("helloworld")
+	p := protobuf.NewPackage("helloworld")
 	p.AddImport("google/protobuf/empty.proto")
 
 	m1 := protobuf.NewMessage("Hello")

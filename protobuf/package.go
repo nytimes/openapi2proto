@@ -1,6 +1,7 @@
 package protobuf
 
-func New(name string) *Package {
+// NewPackage creates a Package object
+func NewPackage(name string) *Package {
 	return &Package{
 		name: name,
 	}

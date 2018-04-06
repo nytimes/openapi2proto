@@ -41,7 +41,7 @@ func init() {
 }
 
 func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
-	p := protobuf.New(packageName(spec.Info.Title))
+	p := protobuf.NewPackage(packageName(spec.Info.Title))
 	svc := protobuf.NewService(normalizeServiceName(spec.Info.Title))
 	p.AddType(svc)
 
