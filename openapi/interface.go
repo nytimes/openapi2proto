@@ -48,6 +48,8 @@ type Spec struct {
 	GlobalOptions      GlobalOptions         `yaml:"x-global-options" json:"x-global-options"`
 }
 
+// Extension is used to define Protocol Buffer extensions from
+// within an OpenAPI spec. use `x-extentions` key
 type Extension struct {
 	Base   string            `json:"base" yaml:"base"`
 	Fields []*ExtensionField `json:"fields" yaml:"fields"`
