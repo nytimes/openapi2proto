@@ -175,6 +175,51 @@ func LoadFile(fn string) (*Spec, error) {
 		return nil, errors.Wrap(err, `failed to resolve external references`)
 	}
 
+	// We re-encode the structure here because ... it's easier this way.
+	//
+	// One way to resolve references is to create an openapi.Spec structure
+	// populated with the values from the spec file, and when traverse the
+	// tree and resolve references as we compile this data into protobuf.*
+	//
+	// But when we do resolve a reference -- an external reference, in
+	// particular -- we must be aware of the context in which this piece of
+	// data is being compiled in. For example, compiling parameters is
+	// different from compiling responses. It's also usually the caller
+	// that knows the context of the compilation, not the current method
+	// that is resolving the reference. So in order for the method that
+	// is resolving the reference to know what to do, it must know the context
+	// in which it is being compiled. This means that we need to pass
+	// several bits of hints down the call chain to invokve the correct
+	// processing. But that comes with more complicated code (hey, I know
+	// the code is already complicated enough -- I mean, *more* complicated
+	// code, ok?)
+	//
+	// One way we tackle this is to resolve references in a separate pass
+	// than the main compilation. We actually do this in compiler.compileParameters,
+	// and compiler.compileDefinitions, which pre-compiles #/parameters/* 
+	// and #/definitions/* so that when we encounter references, all we need
+	// to do is to fetch that pre-compiled piece of data and inject accordingly.
+	//
+	// This allows the compilation phase to treat internal references as just
+	// aliases to pre-generated data, but if we do this to external references,
+	// we need to include the steps to fetch, find the context, and compile the
+	// data during the main compile phase, which is not pretty.
+	//
+	// We would almost like to do the same thing for external references, but
+	// the thing with external references is that we can't pre-compile them
+	// based on where they are inserted, because they could potentially insert
+	// bits of completely unregulated data -- for example, if we knew that
+	// external references can only populate #/parameter it would be simple,
+	// but `$ref`s can creep up anywhere, and it's extremely hard to switch
+	// the code to be called based on this context.
+	//
+	// So instead of trying hard, to figure out what we were doing when
+	// we are resolving external references, we just inject the fetched
+	// data blindly into the structure, and re-encode it to look like
+	// that was the initial data -- after re-encoding, we can just treat
+	// the data as a complete, self-contained spec. Bad data will be
+	// weeded out during the deserialization phase, and we know exactly
+	// what we are doing when we are traversing the openapi spec.
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(resolved); err != nil {
 		return nil, errors.Wrap(err, `failed to encode resolved schema`)
