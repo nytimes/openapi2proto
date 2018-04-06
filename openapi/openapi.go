@@ -1,3 +1,5 @@
+// Package openapi contains tools to read in OpenAPI specifications
+// so that they can be passed to the openapi2proto compiler
 package openapi
 
 import (

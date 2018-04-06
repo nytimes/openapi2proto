@@ -1,3 +1,5 @@
+// Package compiler contains tools to take openapi.* definitions and
+// compile them into protobuf.* structures.
 package compiler
 
 import (
