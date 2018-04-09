@@ -708,7 +708,7 @@ func (c *compileCtx) applyBuiltinFormat(t protobuf.Type, f string) (rt protobuf.
 			return protobuf.DoubleType
 		case "int64", "long":
 			return protobuf.Int64Type
-		case "integer":
+		case "integer", "int32":
 			return protobuf.Int32Type
 		default:
 			return protobuf.FloatType
