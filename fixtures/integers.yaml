@@ -27,3 +27,8 @@ definitions:
       intValue:
         type: number
         format: integer
+      intArray:
+        type: array
+        items:
+          type: number
+          format: int32

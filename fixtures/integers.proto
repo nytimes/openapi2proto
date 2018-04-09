@@ -5,8 +5,9 @@ package integers;
 import "google/protobuf/empty.proto";
 
 message Integers {
-    int32 intValue = 1;
-    int64 longValue = 2;
+    repeated int32 intArray = 1;
+    int32 intValue = 2;
+    int64 longValue = 3;
 }
 
 service IntegersService {
