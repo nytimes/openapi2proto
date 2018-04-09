@@ -103,72 +103,117 @@ Will generate:
 ## Example
 
 ```
-╰─➤  openapi2proto -spec swagger.yaml -options
+╰─➤  openapi2proto -spec swagger.yaml -annotate
 syntax = "proto3";
-
-import "google/protobuf/empty.proto";
-
-import "google/api/annotations.proto";
 
 package swaggerpetstore;
 
-message GetPetsRequest {
-    // maximum number of results to return
-    int32 limit = 1;
-    // tags to filter by
-    repeated string tags = 2;
-}
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
-message PostPetsRequest {
+message AddPetRequest {
+    message PetMessage {
+        int64 id = 1;
+        string name = 2;
+        string tag = 3;
+    }
+
     // Pet to add to the store
-    Pet pet = 1;
+    PetMessage pet = 1;
 }
 
-message GetPetsIdRequest {
-    // ID of pet to fetch
-    int64 id = 1;
-}
-
-message DeletePetsIdRequest {
-    // ID of pet to delete
-    int64 id = 1;
-}
-
-message Pet {
+message AddPetResponse {
     int64 id = 1;
     string name = 2;
     string tag = 3;
 }
 
-message Pets {
-    repeated Pet pets = 1;
+message DeletePetRequest {
+    // ID of pet to delete
+    int64 id = 1;
+}
+
+message FindPetByIdRequest {
+    // ID of pet to fetch
+    int64 id = 1;
+}
+
+message FindPetByIdResponse {
+    int64 id = 1;
+    string name = 2;
+    string tag = 3;
+}
+
+message FindPetsByIdsRequest {
+    repeated string ids = 1;
+
+    // maximum number of results to return
+    int32 limit = 2;
+}
+
+message FindPetsByIdsResponse {
+    message PetsMessage {
+        int64 id = 1;
+        string name = 2;
+        string tag = 3;
+    }
+
+    repeated PetsMessage pets = 1;
+}
+
+message FindPetsRequest {
+    // maximum number of results to return
+    int32 limit = 1;
+
+    // tags to filter by
+    repeated string tags = 2;
+}
+
+message FindPetsResponse {
+    message PetsMessage {
+        int64 id = 1;
+        string name = 2;
+        string tag = 3;
+    }
+
+    repeated PetsMessage pets = 1;
 }
 
 service SwaggerPetstoreService {
-    // Returns all pets from the system that the user has access to
-    rpc GetPets(GetPetsRequest) returns (Pets) {
-      option (google.api.http) = {
-        get: "/api/pets"
-      };
-    }
     // Creates a new pet in the store.  Duplicates are allowed
-    rpc PostPets(PostPetsRequest) returns (Pet) {
-      option (google.api.http) = {
-        post: "/api/pets"
-        body: "pet"
-      };
+    rpc AddPet(AddPetRequest) returns (AddPetResponse) {
+        option (google.api.http) = {
+            post: "/api/pets"
+            body: "pet"
+        };
     }
-    // Returns a user based on a single ID, if the user does not have access to the pet
-    rpc GetPetsId(GetPetsIdRequest) returns (Pet) {
-      option (google.api.http) = {
-        get: "/api/pets/{id}"
-      };
-    }
+
     // deletes a single pet based on the ID supplied
-    rpc DeletePetsId(DeletePetsIdRequest) returns (google.protobuf.Empty) {
-      option (google.api.http) = {
-        delete: "/api/pets/{id}"
-      };
+    rpc DeletePet(DeletePetRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/api/pets/{id}"
+        };
+    }
+
+    // Returns a user based on a single ID, if the user does not have access to the pet
+    rpc FindPetById(FindPetByIdRequest) returns (FindPetByIdResponse) {
+        option (google.api.http) = {
+            get: "/api/pets/{id}"
+        };
+    }
+
+    // Returns all pets from the system that the user has access to
+    rpc FindPets(FindPetsRequest) returns (FindPetsResponse) {
+        option (google.api.http) = {
+            get: "/api/pets"
+        };
+    }
+
+    // Returns all pets from the system that the user has access to
+    rpc FindPetsByIds(FindPetsByIdsRequest) returns (FindPetsByIdsResponse) {
+        option (google.api.http) = {
+            get: "/api/pets/{ids}"
+        };
     }
 }
 ```
