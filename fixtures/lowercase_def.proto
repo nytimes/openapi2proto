@@ -4,8 +4,7 @@ package lowercaseapi;
 
 import "google/protobuf/empty.proto";
 
-message Item {
-}
+message Item {}
 
 service LowercaseAPIService {
     // Lowercase Response

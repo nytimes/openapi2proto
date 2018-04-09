@@ -6,11 +6,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/empty.proto";
 
-message PurchaseRequest {
-    // Pet object that needs to be added to the store
-    Purchase body = 1;
-}
-
 message Purchase {
     string deviceKey = 1;
     string paymentInstrumentId = 2;
@@ -20,6 +15,12 @@ message Purchase {
     int32 quantity = 6;
 }
 
+message PurchaseRequest {
+    // Pet object that needs to be added to the store
+    Purchase body = 1;
+}
+
+// response for a purchase
 message PurchaseResponse {
     string orderId = 1;
     double orderTotal = 2;
@@ -36,23 +37,23 @@ service PurchasesService {
     // 
     // some description
     rpc GetPurchase(google.protobuf.Empty) returns (google.protobuf.Empty) {
-      option (google.api.http) = {
-        get: "/purchases/{brand}/users/{userId}/purchases"
-      };
-      option (role) = "end-user";
-      option (timeout) = 5000;
-      option (visibility) = "public, internal";
+        option (google.api.http) = {
+            get: "/purchases/{brand}/users/{userId}/purchases"
+        };
+        option (role) = "end-user";
+        option (timeout) = 5000;
+        option (visibility) = "public, internal";
     }
 
     // Purchase something
     // 
     // description
     rpc Purchase(PurchaseRequest) returns (PurchaseResponse) {
-      option (google.api.http) = {
-        post: "/purchases/{brand}/users/{userId}/purchases"
-        body: "body"
-      };
-      option (role) = "end-user";
-      option (visibility) = "public";
+        option (google.api.http) = {
+            post: "/purchases/{brand}/users/{userId}/purchases"
+            body: "body"
+        };
+        option (role) = "end-user";
+        option (visibility) = "public";
     }
 }

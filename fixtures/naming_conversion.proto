@@ -4,6 +4,10 @@ package namingconversions;
 
 import "google/protobuf/empty.proto";
 
+message PostQueueIdEnqueuePlayerResponse {
+    string message = 1;
+}
+
 service NamingConversionsService {
-    rpc PostQueueIdEnqueuePlayer(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+    rpc PostQueueIdEnqueuePlayer(google.protobuf.Empty) returns (PostQueueIdEnqueuePlayerResponse) {}
 }
