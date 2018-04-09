@@ -13,8 +13,9 @@ go get -u github.com/NYTimes/openapi2proto/cmd/openapi2proto
 
 There are 3 CLI flags for using the tool:
 * `-spec` to point to the appropriate OpenAPI spec file
-* `-options` to include google.api.http options for [grpc-gateway](https://github.com/gengo/grpc-gateway) users. This is disabled by default.
+* `-annotate` to include (google.api.http options) for [grpc-gateway](https://github.com/gengo/grpc-gateway) users. This is disabled by default.
 * `-out` to have the output written to a file rather than `Stdout. Defaults to `Stdout` if this is not specified`
+* `-indent` to override the default indentation for Protobuf specs of 4 spaces.
 
 ## Protobuf Tags
 * To allow for more control over how your protobuf schema evolves, all parameters and property definitions will accept an optional extension parameter, `x-proto-tag`, that will overide the generated tag with the value supplied.
