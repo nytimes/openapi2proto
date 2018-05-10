@@ -154,5 +154,5 @@ type Schema struct {
 	MaxLength int    `yaml:"maxLength,omitempty" json:"max_length,omitempty"`
 	MinLength int    `yaml:"minLength,omitempty" json:"min_length,omitempty"`
 	Maximum   int    `yaml:"maximum,omitempty" json:"maximum,omitempty"`
-	Minimum   int    `yaml:"minimum,omitempty" json:"minumum,omitempty"`
+	Minimum   int    `yaml:"minimum,omitempty" json:"minimum,omitempty"`
 }
