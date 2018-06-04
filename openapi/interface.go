@@ -151,8 +151,8 @@ type Schema struct {
 
 	// validation (regex pattern, max/min length)
 	Pattern   string `yaml:"pattern,omitempty" json:"pattern,omitempty"`
-	MaxLength int    `yaml:"maxLength,omitempty" json:"max_length,omitempty"`
-	MinLength int    `yaml:"minLength,omitempty" json:"min_length,omitempty"`
+	MaxLength int    `yaml:"maxLength,omitempty" json:"maxLength,omitempty"`
+	MinLength int    `yaml:"minLength,omitempty" json:"minLength,omitempty"`
 	Maximum   int    `yaml:"maximum,omitempty" json:"maximum,omitempty"`
 	Minimum   int    `yaml:"minimum,omitempty" json:"minimum,omitempty"`
 }
