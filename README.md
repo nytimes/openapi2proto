@@ -11,7 +11,7 @@ go get -u github.com/NYTimes/openapi2proto/cmd/openapi2proto
 
 ## Run
 
-There are 3 CLI flags for using the tool:
+There are 4 CLI flags for using the tool:
 * `-spec` to point to the appropriate OpenAPI spec file
 * `-annotate` to include (google.api.http options) for [grpc-gateway](https://github.com/gengo/grpc-gateway) users. This is disabled by default.
 * `-out` to have the output written to a file rather than `Stdout. Defaults to `Stdout` if this is not specified`
