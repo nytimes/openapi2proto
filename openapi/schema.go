@@ -125,4 +125,3 @@ func (s *SchemaType) First() string {
 	}
 	return ""
 }
-

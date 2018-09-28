@@ -3,9 +3,9 @@ package protobuf
 // NewRPC creates a new RPC object
 func NewRPC(name string) *RPC {
 	return &RPC{
-		name: name,
+		name:      name,
 		parameter: emptyMessage,
-		response: emptyMessage,
+		response:  emptyMessage,
 	}
 }
 

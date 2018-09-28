@@ -68,7 +68,7 @@ paths:
         "200":
           description: pet response
           schema:
-            $ref: 'https://raw.githubusercontent.com/NYTimes/openapi2proto/master/fixtures/petstore/Pet.yaml'
+            $ref: 'https://raw.githubusercontent.com/nytimes/openapi2proto/master/fixtures/petstore/Pet.yaml'
         default:
           description: unexpected error
           schema:

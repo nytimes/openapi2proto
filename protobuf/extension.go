@@ -25,8 +25,8 @@ func (e *Extension) AddField(f *ExtensionField) {
 // NewExtensionField creates an ExtensionField object
 func NewExtensionField(name, typ string, number int) *ExtensionField {
 	return &ExtensionField{
-		name: name,
-		typ: typ,
+		name:   name,
+		typ:    typ,
 		number: number,
 	}
 }

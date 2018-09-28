@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/NYTimes/openapi2proto"
-	"github.com/NYTimes/openapi2proto/compiler"
+	"github.com/nytimes/openapi2proto"
+	"github.com/nytimes/openapi2proto/compiler"
 	"github.com/pmezard/go-difflib/difflib"
 )
 
@@ -79,7 +79,7 @@ func TestNetwork(t *testing.T) {
 	testGenProto(t, genProtoTestCase{
 		fixturePath: "fixtures/petstore/swagger.yaml",
 		remoteFiles: []string{
-			"https://raw.githubusercontent.com/NYTimes/openapi2proto/master/fixtures/petstore/Pet.yaml",
+			"https://raw.githubusercontent.com/nytimes/openapi2proto/master/fixtures/petstore/Pet.yaml",
 		},
 	})
 }

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/NYTimes/openapi2proto/protobuf"
+	"github.com/nytimes/openapi2proto/protobuf"
 	"github.com/pmezard/go-difflib/difflib"
 )
 
@@ -40,7 +40,7 @@ func TestEncoder(t *testing.T) {
 	svc1.AddRPC(rpc2)
 
 	p.AddType(svc1)
-		
+
 	var buf bytes.Buffer
 	if err := protobuf.NewEncoder(&buf).Encode(p); err != nil {
 		t.Errorf("failed to encode: %s", err)

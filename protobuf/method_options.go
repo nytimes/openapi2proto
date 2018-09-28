@@ -16,7 +16,7 @@ func (a *HTTPAnnotation) SetBody(s string) {
 // NewRPCOption create an RPCOption object
 func NewRPCOption(name string, value interface{}) *RPCOption {
 	return &RPCOption{
-		name: name,
+		name:  name,
 		value: value,
 	}
 }

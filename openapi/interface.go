@@ -1,7 +1,7 @@
 package openapi
 
 import (
-	"github.com/NYTimes/openapi2proto/internal/option"
+	"github.com/nytimes/openapi2proto/internal/option"
 )
 
 const (
@@ -38,15 +38,15 @@ type Spec struct {
 		Description string `yaml:"description" json:"description"`
 		Version     string `yaml:"version" json:"version"`
 	} `yaml:"info" json:"info"`
-	Host               string                `yaml:"host" json:"host"`
-	Schemes            []string              `yaml:"schemes" json:"schemes"`
-	BasePath           string                `yaml:"basePath" json:"basePath"`
-	Produces           []string              `yaml:"produces" json:"produces"`
-	Paths              map[string]*Path      `yaml:"paths" json:"paths"`
-	Definitions        map[string]*Schema    `yaml:"definitions" json:"definitions"`
-	Parameters         map[string]*Parameter `yaml:"parameters" json:"parameters"`
-	Extensions         []*Extension          `yaml:"x-extensions" json:"x-extensions"`
-	GlobalOptions      GlobalOptions         `yaml:"x-global-options" json:"x-global-options"`
+	Host          string                `yaml:"host" json:"host"`
+	Schemes       []string              `yaml:"schemes" json:"schemes"`
+	BasePath      string                `yaml:"basePath" json:"basePath"`
+	Produces      []string              `yaml:"produces" json:"produces"`
+	Paths         map[string]*Path      `yaml:"paths" json:"paths"`
+	Definitions   map[string]*Schema    `yaml:"definitions" json:"definitions"`
+	Parameters    map[string]*Parameter `yaml:"parameters" json:"parameters"`
+	Extensions    []*Extension          `yaml:"x-extensions" json:"x-extensions"`
+	GlobalOptions GlobalOptions         `yaml:"x-global-options" json:"x-global-options"`
 }
 
 // Extension is used to define Protocol Buffer extensions from
@@ -125,7 +125,7 @@ type SchemaType []string
 
 // Schema represent Model properties in an OpenAPI spec.
 type Schema struct {
-	isNil   bool
+	isNil bool
 
 	// if this schema refers to a definition found elsewhere, this value
 	// is used. Note that if present, this takes precedence over other values

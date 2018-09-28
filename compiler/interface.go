@@ -1,9 +1,9 @@
 package compiler
 
 import (
-	"github.com/NYTimes/openapi2proto/internal/option"
-	"github.com/NYTimes/openapi2proto/openapi"
-	"github.com/NYTimes/openapi2proto/protobuf"
+	"github.com/nytimes/openapi2proto/internal/option"
+	"github.com/nytimes/openapi2proto/openapi"
+	"github.com/nytimes/openapi2proto/protobuf"
 )
 
 const (

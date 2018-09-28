@@ -7,9 +7,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/NYTimes/openapi2proto"
-	"github.com/NYTimes/openapi2proto/compiler"
-	"github.com/NYTimes/openapi2proto/protobuf"
+	"github.com/nytimes/openapi2proto"
+	"github.com/nytimes/openapi2proto/compiler"
+	"github.com/nytimes/openapi2proto/protobuf"
 	"github.com/pkg/errors"
 )
 
