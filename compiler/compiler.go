@@ -581,7 +581,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 		}
 		c.addType(m)
 		return m, nil
-	case s.Type.Contains("string") || s.Type.Contains("integer") || s.Type.Contains("number"):
+	case s.Type.Contains("string") || s.Type.Contains("integer") || s.Type.Contains("number") || s.Type.Contains("boolean"):
 		if len(s.Enum) > 0 {
 			name = strings.TrimSuffix(name, "Message")
 			t, err := c.compileEnum(name, s.Enum)
