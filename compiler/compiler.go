@@ -485,7 +485,7 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 		var err error
 		typ, err = c.compileSchema(name, s)
 		if err != nil {
-			return nil, errors.Wrap(err, `failed to compile blah type`)
+			return nil, errors.Wrap(err, `failed to compile array type`)
 		}
 	case s.Ref != "":
 		var err error
