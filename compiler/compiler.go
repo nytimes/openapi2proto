@@ -481,6 +481,12 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 	var typ protobuf.Type
 
 	switch {
+	case s.Type.Contains("array"):
+		var err error
+		typ, err = c.compileSchema(name, s)
+		if err != nil {
+			return nil, errors.Wrap(err, `failed to compile blah type`)
+		}
 	case s.Ref != "":
 		var err error
 		typ, err = c.compileReferenceSchema(name, s)
