@@ -5,23 +5,58 @@
   },
   "definitions": {
     "TestModel": {
-        "type": "object",
-        "properties": {
-            "test_map_object": {
-                "type": "object",
-                "additionalProperties": {
-                    "$ref": "#/definitions/TestModel"
-                },
-                "x-proto-tag": 11
-            },
-            "test_map_scalar": {
-                "type": "object",
-                "additionalProperties": {
-                    "type": "string"
-                },
-                "x-proto-tag": 12
+      "type": "object",
+      "properties": {
+        "test_map_object": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/TestModel"
+          },
+          "x-proto-tag": 11
+        },
+        "test_map_scalar": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-proto-tag": 12
+        },
+        "test_map_array": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/TestModel"
             }
+          },
+          "x-proto-tag": 13
+        },
+        "test_map_array_untyped_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "x-proto-tag": 15
+        },
+        "test_map_array_untyped": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "x-proto-tag": 14
         }
+      }
     }
   }
 }

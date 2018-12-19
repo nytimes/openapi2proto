@@ -2,7 +2,26 @@ syntax = "proto3";
 
 package refs;
 
+import "google/protobuf/struct.proto";
+
+// automatically generated wrapper for a list of TestModel items
+message TestMapArrayList {
+    repeated TestModel test_map_array = 1;
+}
+
 message TestModel {
+    // automatically generated wrapper for a list of TestMapArrayUntypedFieldsMessage items
+    message TestMapArrayUntypedFieldsList {
+        repeated TestMapArrayUntypedFieldsMessage test_map_array_untyped_fields = 1;
+    }
+
+    message TestMapArrayUntypedFieldsMessage {
+        int32 id = 1;
+    }
+
     map<string, TestModel> test_map_object = 11;
     map<string, string> test_map_scalar = 12;
+    map<string, TestMapArrayList> test_map_array = 13;
+    map<string, google.protobuf.ListValue> test_map_array_untyped = 14;
+    map<string, TestMapArrayUntypedFieldsList> test_map_array_untyped_fields = 15;
 }
