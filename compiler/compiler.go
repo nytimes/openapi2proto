@@ -28,6 +28,7 @@ var knownImports = map[string]string{
 	"google.protobuf.NullValue":     "google/protobuf/struct.proto",
 	"google.protobuf.MethodOptions": "google/protobuf/descriptor.proto",
 	"google.protobuf.Timestamp":     "google/protobuf/timestamp.proto",
+	"google.protobuf.ListValue":     "google/protobuf/struct.proto",
 }
 
 var knownDefinitions = map[string]protobuf.Type{}
@@ -48,15 +49,23 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 	p.AddType(svc)
 
 	var annotate bool
+	var skipRpcs bool
+	var namespaceEnums bool
 	for _, o := range options {
 		switch o.Name() {
 		case optkeyAnnotation:
 			annotate = o.Value().(bool)
+		case optkeySkipRpcs:
+			skipRpcs = o.Value().(bool)
+		case optkeyPrefixEnums:
+			namespaceEnums = o.Value().(bool)
 		}
 	}
 
 	c := &compileCtx{
 		annotate:            annotate,
+		skipRpcs:            skipRpcs,
+		namespaceEnums:      namespaceEnums,
 		definitions:         map[string]protobuf.Type{},
 		externalDefinitions: map[string]map[string]protobuf.Type{},
 		imports:             map[string]struct{}{},
@@ -67,6 +76,7 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 		service:             svc,
 		types:               map[protobuf.Container]map[protobuf.Type]struct{}{},
 		unfulfilledRefs:     map[string]struct{}{},
+		messageNames:        map[string]bool{},
 	}
 	return c
 }
@@ -109,9 +119,11 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	}
 
 	// compile the paths
-	c.phase = phaseCompilePaths
-	if err := c.compilePaths(spec.Paths); err != nil {
-		return nil, errors.Wrap(err, `failed to compile paths`)
+	if !c.skipRpcs {
+		c.phase = phaseCompilePaths
+		if err := c.compilePaths(spec.Paths); err != nil {
+			return nil, errors.Wrap(err, `failed to compile paths`)
+		}
 	}
 
 	return c.pkg, nil
@@ -435,7 +447,7 @@ func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
 
 func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
 	var prefix bool
-	if c.parent() != c.pkg {
+	if c.parent() != c.pkg || c.namespaceEnums {
 		prefix = true
 	}
 
@@ -449,7 +461,6 @@ func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum
 
 		e.AddElement(allCaps(ename))
 	}
-
 	return e, nil
 }
 
@@ -477,7 +488,7 @@ func (c *compileCtx) compileSchemaMultiType(name string, s *openapi.Schema) (pro
 	return c.getBoxedType(c.applyBuiltinFormat(v, s.Format)), nil
 }
 
-func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, error) {
+func (c *compileCtx) compileMap(name string, rawName string, s *openapi.Schema) (protobuf.Type, error) {
 	var typ protobuf.Type
 
 	switch {
@@ -489,9 +500,35 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 		}
 	case !s.Type.Empty():
 		var err error
-		typ, err = c.getType(s.Type.First())
-		if err != nil {
-			return nil, errors.Wrapf(err, `failed to get type %s`, s.Type)
+		if s.Type.First() == "array" && s.Items != nil {
+			if s.Items.Ref != "" {
+				// reference schema for array items
+				baseFieldName := camelCase(strings.TrimPrefix(s.Items.Ref, "#/definitions"))
+				typ = c.createListWrapper(name, rawName, baseFieldName, s)
+				// finally, make sure that this type is registered, if need be.
+				c.addTypeToParent(typ, c.grandParent())
+			} else if !s.Items.Type.Empty() && (s.Items.Properties == nil || len(s.Items.Properties) == 0) {
+				// inline object for array of untyped items
+				typ = protobuf.ListValueType
+				c.addImportForType(typ.Name())
+			} else if !s.Items.Type.Empty() && len(s.Items.Properties) > 0 {
+				// inline object for array of typed items
+				baseFieldName := camelCase(name)
+				typ = c.createListWrapper(name, rawName, baseFieldName, s)
+				// finally, make sure that this type is registered, if need be.
+				c.addType(typ)
+				subtyp, err := c.compileSchema(name, s.Items)
+				if err == nil {
+					c.addType(subtyp)
+				}
+			} else {
+				return nil, errors.Errorf(`An array for map types must specify a reference or an object`)
+			}
+		} else {
+			typ, err = c.getType(s.Type.First())
+			if err != nil {
+				return nil, errors.Wrapf(err, `failed to get type %s`, s.Type)
+			}
 		}
 	default:
 		var err error
@@ -501,7 +538,6 @@ func (c *compileCtx) compileMap(name string, s *openapi.Schema) (protobuf.Type, 
 		}
 	}
 
-	// Note: Map of arrays is not currently supported.
 	return protobuf.NewMap(protobuf.StringType, typ), nil
 
 }
@@ -534,7 +570,6 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 		}
 		return m, nil
 	}
-
 	rawName := name
 	name = camelCase(name)
 	// could be a builtin... try as-is once, then the camel cased
@@ -555,7 +590,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 	switch {
 	case s.Type.Empty() || s.Type.Contains("object"):
 		if ap := s.AdditionalProperties; ap != nil && !ap.IsNil() {
-			return c.compileMap(name, ap)
+			return c.compileMap(name, strings.TrimSuffix(rawName, "Message"), ap)
 		}
 
 		m := protobuf.NewMessage(name)
@@ -833,6 +868,15 @@ func (c *compileCtx) parent() protobuf.Container {
 	return c.parents[l-1]
 }
 
+func (c *compileCtx) grandParent() protobuf.Container {
+	switch len(c.parents) {
+	case 0:
+		return c.pkg
+	default:
+		return c.parents[0]
+	}
+}
+
 // adds new type. dedupes, in case of multiple addition
 func (c *compileCtx) addType(t protobuf.Type) {
 	c.addTypeToParent(t, c.parent())
@@ -853,6 +897,22 @@ func (c *compileCtx) addTypeToParent(t protobuf.Type, p protobuf.Container) {
 			return
 		}
 	}
+
+	// hack alert - check for duplicates
+	// I couldn't figure out how to stop map list value wrappers from being specified more than once.
+	// This is generalized here based on the type hierarchy to prevent duplicates of all messages.
+	parentNames := func(vs []protobuf.Container) []string {
+		vsm := make([]string, len(vs))
+		for i, v := range vs {
+			vsm[i] = v.Name()
+		}
+		return vsm
+	}(c.parents)
+	key := strings.Trim(strings.Join(parentNames, "#"), "[]") + "#" + t.Name()
+	if _, ok := c.messageNames[key]; ok {
+		return
+	}
+	c.messageNames[key] = true
 
 	m, ok := c.types[p]
 	if !ok {
@@ -903,9 +963,26 @@ func (c *compileCtx) compilePaths(paths map[string]*openapi.Path) error {
 	return nil
 }
 
+func (c *compileCtx) createListWrapper(name string, rawName string, baseFieldName string, s *openapi.Schema) protobuf.Type {
+	// we need to construct a new statically typed wrapper message that contains a repeated list of items
+	// referenced by the spec
+	mapValueName := strings.TrimSuffix(name, "Message") + "List"
+	m := protobuf.NewMessage(mapValueName)
+	f := protobuf.NewField(protobuf.NewMessage(baseFieldName), rawName, 1)
+	f.SetRepeated(true)
+	if v := s.Description; len(v) > 0 {
+		f.SetComment(v)
+	}
+	m.AddField(f)
+	m.SetComment("automatically generated wrapper for a list of " + baseFieldName + " items")
+	return m
+}
+
 func mergeParameters(p1, p2 openapi.Parameters) openapi.Parameters {
 	var out openapi.Parameters
 	out = append(out, p1...)
 	out = append(out, p2...)
 	return out
 }
+
+

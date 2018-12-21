@@ -15,3 +15,27 @@ definitions:
         additionalProperties:
           type: string
         x-proto-tag: 12
+      test_map_array:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/TestModel'
+        x-proto-tag: 13
+      test_map_array_untyped:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: object
+        x-proto-tag: 14
+      test_map_array_untyped_fields:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+        x-proto-tag: 15

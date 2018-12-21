@@ -18,6 +18,8 @@ type Option = option.Option
 
 type compileCtx struct {
 	annotate            bool
+	skipRpcs            bool
+	namespaceEnums      bool
 	definitions         map[string]protobuf.Type
 	externalDefinitions map[string]map[string]protobuf.Type
 	imports             map[string]struct{}
@@ -29,4 +31,5 @@ type compileCtx struct {
 	service             *protobuf.Service
 	types               map[protobuf.Container]map[protobuf.Type]struct{}
 	unfulfilledRefs     map[string]struct{}
+	messageNames        map[string]bool
 }

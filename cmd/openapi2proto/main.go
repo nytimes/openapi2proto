@@ -22,9 +22,11 @@ func main() {
 
 func _main() error {
 	specPath := flag.String("spec", "../../spec.yaml", "location of the swagger spec file")
-	annotate := flag.Bool("annotate", false, "include (google.api.http) options for grpc-gateway")
+	annotate := flag.Bool("annotate", false, "include (google.api.http) options for grpc-gateway. Defaults to false if not set")
 	outfile := flag.String("out", "", "the file to output the result to. Defaults to stdout if not set")
 	indent := flag.Int("indent", 4, "number of spaces used for indentation")
+	skipRpcs := flag.Bool("skip-rpcs", false, "skip rpc code generation. Defaults to false if not set")
+	namespaceEnums := flag.Bool("namespace-enums", false, "prefix enum values with the enum name to prevent namespace conflicts. Defaults to false if not set")
 	flag.Parse()
 
 	var dst io.Writer = os.Stdout
@@ -42,6 +44,8 @@ func _main() error {
 	var compilerOptions []compiler.Option
 
 	compilerOptions = append(compilerOptions, compiler.WithAnnotation(*annotate))
+	compilerOptions = append(compilerOptions, compiler.WithSkipRpcs(*skipRpcs))
+	compilerOptions = append(compilerOptions, compiler.WithPrefixEnums(*namespaceEnums))
 
 	if *indent > 0 {
 		var indentStr bytes.Buffer
