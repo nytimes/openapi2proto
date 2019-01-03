@@ -32,4 +32,5 @@ type compileCtx struct {
 	types               map[protobuf.Container]map[protobuf.Type]struct{}
 	unfulfilledRefs     map[string]struct{}
 	messageNames        map[string]bool
+	wrapperMessages     map[string]bool
 }

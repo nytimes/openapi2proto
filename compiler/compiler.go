@@ -77,6 +77,7 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 		types:               map[protobuf.Container]map[protobuf.Type]struct{}{},
 		unfulfilledRefs:     map[string]struct{}{},
 		messageNames:        map[string]bool{},
+		wrapperMessages:     map[string]bool{},
 	}
 	return c
 }
@@ -506,7 +507,11 @@ func (c *compileCtx) compileMap(name string, rawName string, s *openapi.Schema) 
 				baseFieldName := camelCase(strings.TrimPrefix(s.Items.Ref, "#/definitions"))
 				typ = c.createListWrapper(name, rawName, baseFieldName, s)
 				// finally, make sure that this type is registered, if need be.
-				c.addTypeToParent(typ, c.grandParent())
+				// hack to prevent duplicate top-level wrapper messages
+				if _, ok := c.wrapperMessages[name]; !ok {
+					c.addTypeToParent(typ, c.grandParent())
+					c.wrapperMessages[name] = true
+				}
 			} else if !s.Items.Type.Empty() && (s.Items.Properties == nil || len(s.Items.Properties) == 0) {
 				// inline object for array of untyped items
 				typ = protobuf.ListValueType
