@@ -5,6 +5,7 @@ package globaloptions;
 import "google/protobuf/empty.proto";
 
 option go_package = "myawesomepackage";
+option java_multiple_files = true;
 
 service GlobalOptionsService {
     rpc GetFoo(google.protobuf.Empty) returns (google.protobuf.Empty) {}

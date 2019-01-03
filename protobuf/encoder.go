@@ -342,7 +342,13 @@ func (e *Encoder) EncodeExtension(ext *Extension) error {
 
 // EncodeGlobalOption encodes a GlobationOption object
 func (e *Encoder) EncodeGlobalOption(o *GlobalOption) error {
-	fmt.Fprintf(e.dst, "\noption %s = %s;", o.name, strconv.Quote(o.value))
+	var value string
+	if o.value == "true" || o.value == "false" {
+		value = o.value
+	} else {
+		value = strconv.Quote(o.value)
+	}
+	fmt.Fprintf(e.dst, "\noption %s = %s;", o.name, value)
 	return nil
 }
 
