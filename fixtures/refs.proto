@@ -25,3 +25,7 @@ message TestModel {
     map<string, google.protobuf.ListValue> test_map_array_untyped = 14;
     map<string, TestMapArrayUntypedFieldsList> test_map_array_untyped_fields = 15;
 }
+
+message TestModel2 {
+    map<string, TestMapArrayList> test_map_array = 16;
+}

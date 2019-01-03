@@ -57,6 +57,21 @@
           "x-proto-tag": 14
         }
       }
+    },
+    "TestModel2": {
+      "type": "object",
+      "properties": {
+        "test_map_array": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/TestModel"
+            }
+          },
+          "x-proto-tag": 16
+        }
+      }
     }
   }
 }
