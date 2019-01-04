@@ -28,6 +28,7 @@ var knownImports = map[string]string{
 	"google.protobuf.NullValue":     "google/protobuf/struct.proto",
 	"google.protobuf.MethodOptions": "google/protobuf/descriptor.proto",
 	"google.protobuf.Timestamp":     "google/protobuf/timestamp.proto",
+	"google.protobuf.Struct":        "google/protobuf/struct.proto",
 	"google.protobuf.ListValue":     "google/protobuf/struct.proto",
 }
 
@@ -595,7 +596,13 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 	switch {
 	case s.Type.Empty() || s.Type.Contains("object"):
 		if ap := s.AdditionalProperties; ap != nil && !ap.IsNil() {
-			return c.compileMap(name, strings.TrimSuffix(rawName, "Message"), ap)
+			// if the spec has additionalProperties: true or additionalProperties: {}, use Any as the type
+			if ap.Type == nil && ap.Ref == "" {
+				c.addImportForType(protobuf.StructType.Name())
+				return protobuf.StructType, nil
+			} else {
+				return c.compileMap(name, strings.TrimSuffix(rawName, "Message"), ap)
+			}
 		}
 
 		m := protobuf.NewMessage(name)
@@ -612,6 +619,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 
 		c.addType(m)
 		return m, nil
+
 	case s.Type.Contains("array"):
 		// if it's an array, we need to compile the "items" field
 		// but ignore the comments

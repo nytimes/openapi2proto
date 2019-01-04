@@ -40,6 +40,11 @@ var (
 	StringValueType = NewMessage("google.protobuf.StringValue")
 )
 
+// value type
+var (
+	StructType = NewMessage("google.protobuf.Struct")
+)
+
 // list type
 var (
 	ListValueType = NewMessage("google.protobuf.ListValue")
