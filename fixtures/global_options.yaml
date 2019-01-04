@@ -7,6 +7,7 @@ info:
 
 x-global-options:
   go_package: myawesomepackage
+  java_multiple_files: "true"
 
 paths:
   /foo:
