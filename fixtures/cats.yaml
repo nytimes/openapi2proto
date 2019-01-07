@@ -118,8 +118,16 @@ definitions:
         type: string
       dateOfBirth:
         $ref: 'google/protobuf/timestamp.proto#/google.protobuf.Timestamp'
+      details:
+        $ref: '#/definitions/GenericMessage'
+      catnip:
+        type: object
+        additionalProperties: true
   Error:
     type: object
     properties:
       Message:
         type: string
+  GenericMessage:
+    type: object
+    additionalProperties: true
