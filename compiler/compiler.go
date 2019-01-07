@@ -51,7 +51,8 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 
 	var annotate bool
 	var skipRpcs bool
-	var namespaceEnums bool
+	var prefixEnums bool
+	var wrapPrimitives bool
 	for _, o := range options {
 		switch o.Name() {
 		case optkeyAnnotation:
@@ -59,14 +60,17 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 		case optkeySkipRpcs:
 			skipRpcs = o.Value().(bool)
 		case optkeyPrefixEnums:
-			namespaceEnums = o.Value().(bool)
+			prefixEnums = o.Value().(bool)
+		case optkeyWrapPrimitives:
+			wrapPrimitives = o.Value().(bool)
 		}
 	}
 
 	c := &compileCtx{
 		annotate:            annotate,
 		skipRpcs:            skipRpcs,
-		namespaceEnums:      namespaceEnums,
+		prefixEnums:      	 prefixEnums,
+		wrapPrimitives:		 wrapPrimitives,
 		definitions:         map[string]protobuf.Type{},
 		externalDefinitions: map[string]map[string]protobuf.Type{},
 		imports:             map[string]struct{}{},
@@ -449,7 +453,7 @@ func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
 
 func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
 	var prefix bool
-	if c.parent() != c.pkg || c.namespaceEnums {
+	if c.parent() != c.pkg || c.prefixEnums {
 		prefix = true
 	}
 
@@ -596,7 +600,7 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 	switch {
 	case s.Type.Empty() || s.Type.Contains("object"):
 		if ap := s.AdditionalProperties; ap != nil && !ap.IsNil() {
-			// if the spec has additionalProperties: true or additionalProperties: {}, use Any as the type
+			// if the spec has additionalProperties: true or additionalProperties: {}, use Struct as the type
 			if ap.Type == nil && ap.Ref == "" {
 				c.addImportForType(protobuf.StructType.Name())
 				return protobuf.StructType, nil
@@ -797,6 +801,10 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 				return "", nil, index, false, errors.Wrapf(err, `failed to compile array property %s`, name)
 			}
 			typ = child
+			// special case where optional array items can be specified as wrapped types
+			if c.wrapPrimitives {
+				typ = c.getBoxedType(typ)
+			}
 		default:
 			if len(prop.Enum) > 0 {
 				p := c.parent()
@@ -815,7 +823,11 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 				}
 			}
 
+			// optionally wrap primitives with wrapper messages
 			typ = c.applyBuiltinFormat(typ, prop.Format)
+			if c.wrapPrimitives {
+				typ = c.getBoxedType(typ)
+			}
 		}
 	}
 

@@ -14,10 +14,11 @@ import (
 )
 
 type genProtoTestCase struct {
-	options     bool
-	fixturePath string
-	wantProto   string
-	remoteFiles []string
+	options        bool
+	fixturePath    string
+	wantProto      string
+	remoteFiles    []string
+	wrapPrimitives bool
 }
 
 func testGenProto(t *testing.T, tests ...genProtoTestCase) {
@@ -36,6 +37,9 @@ func testGenProto(t *testing.T, tests ...genProtoTestCase) {
 			var compilerOptions []compiler.Option
 			if test.options {
 				compilerOptions = append(compilerOptions, compiler.WithAnnotation(true))
+			}
+			if test.wrapPrimitives {
+				compilerOptions = append(compilerOptions, compiler.WithWrapPrimitives(true))
 			}
 			if err := openapi2proto.Transpile(&generated, test.fixturePath, openapi2proto.WithCompilerOptions(compilerOptions...)); err != nil {
 				t.Errorf(`failed to transpile: %s`, err)
@@ -153,6 +157,10 @@ func TestGenerateProto(t *testing.T) {
 		},
 		{
 			fixturePath: "fixtures/integers.yaml",
+		},
+		{
+			wrapPrimitives: true,
+			fixturePath:    "fixtures/integers_required.yaml",
 		},
 		{
 			fixturePath: "fixtures/global_options.yaml",
