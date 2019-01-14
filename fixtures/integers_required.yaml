@@ -22,6 +22,7 @@ definitions:
     type: object
     required:
       - longValue
+      - intValue
       - intArray
     properties:
       longValue:

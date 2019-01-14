@@ -27,6 +27,7 @@ func _main() error {
 	indent := flag.Int("indent", 4, "number of spaces used for indentation")
 	skipRpcs := flag.Bool("skip-rpcs", false, "skip rpc code generation. Defaults to false if not set")
 	namespaceEnums := flag.Bool("namespace-enums", false, "prefix enum values with the enum name to prevent namespace conflicts. Defaults to false if not set")
+	wrapPrimitives := flag.Bool("wrap-primitives", false, "specify primitive values using their wrapper message types instead of their scalar types. Defaults to false if not set")
 	flag.Parse()
 
 	var dst io.Writer = os.Stdout
@@ -46,6 +47,7 @@ func _main() error {
 	compilerOptions = append(compilerOptions, compiler.WithAnnotation(*annotate))
 	compilerOptions = append(compilerOptions, compiler.WithSkipRpcs(*skipRpcs))
 	compilerOptions = append(compilerOptions, compiler.WithPrefixEnums(*namespaceEnums))
+	compilerOptions = append(compilerOptions, compiler.WithWrapPrimitives(*wrapPrimitives))
 
 	if *indent > 0 {
 		var indentStr bytes.Buffer
