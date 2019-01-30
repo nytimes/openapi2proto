@@ -149,6 +149,10 @@ func LoadFile(fn string) (*Spec, error) {
 			v.Verb = "post"
 			v.Path = path
 		}
+		if v := p.Patch; v != nil {
+			v.Verb = "patch"
+			v.Path = path
+		}
 		if v := p.Delete; v != nil {
 			v.Verb = "delete"
 			v.Path = path
