@@ -39,6 +39,14 @@ message GetCatsRequest {
     string protojson = 2;
 }
 
+message PatchCatsRequest {
+    // A batch of cats to update to the db.
+    repeated Cat cats = 1;
+
+    // The transport to respond with (Protobuf or JSON)
+    string protojson = 2;
+}
+
 message PutCatsRequest {
     // A batch of cats to save to the db.
     repeated Cat cats = 1;
@@ -53,6 +61,9 @@ service CatsService {
 
     // Lists `Cats` as JSON
     rpc GetCats(GetCatsRequest) returns (Cats) {}
+
+    // Updates a list of `Cats` via JSON or Protobuf
+    rpc PatchCats(PatchCatsRequest) returns (google.protobuf.Empty) {}
 
     // Saves a list of `Cats` via JSON or Protobuf
     rpc PutCats(PutCatsRequest) returns (google.protobuf.Empty) {}

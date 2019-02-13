@@ -69,8 +69,8 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 	c := &compileCtx{
 		annotate:            annotate,
 		skipRpcs:            skipRpcs,
-		prefixEnums:      	 prefixEnums,
-		wrapPrimitives:		 wrapPrimitives,
+		prefixEnums:         prefixEnums,
+		wrapPrimitives:      wrapPrimitives,
 		definitions:         map[string]protobuf.Type{},
 		externalDefinitions: map[string]map[string]protobuf.Type{},
 		imports:             map[string]struct{}{},
@@ -283,7 +283,7 @@ func (c *compileCtx) compileParametersToSchema(params openapi.Parameters) (*open
 }
 
 func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
-	for _, e := range []*openapi.Endpoint{p.Get, p.Put, p.Post, p.Delete} {
+	for _, e := range []*openapi.Endpoint{p.Get, p.Put, p.Post, p.Patch, p.Delete} {
 		if e == nil {
 			continue
 		}
@@ -1009,5 +1009,3 @@ func mergeParameters(p1, p2 openapi.Parameters) openapi.Parameters {
 	out = append(out, p2...)
 	return out
 }
-
-

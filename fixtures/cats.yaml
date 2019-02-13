@@ -37,6 +37,40 @@ paths:
             $ref: '#/definitions/Error'
 
   /cats.{protojson}:
+    patch:
+      description: |
+        Updates a list of `Cats` via JSON or Protobuf
+      consumes:
+        - application/json
+        - application/octet-stream
+      produces:
+        - application/json
+        - application/octet-stream
+      parameters:
+        - name: protojson
+          in: path
+          required: true
+          description: The transport to respond with (Protobuf or JSON)
+          pattern: (proto|json)
+          type: string
+        - name: cats
+          in: body
+          description: A batch of cats to update to the db.
+          schema: 
+            type: array
+            items:
+              $ref: '#/definitions/Cat'
+      responses:
+        201:
+          description: Successful cat update
+        400:
+          description: You gave us some bad Cats
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server Error
+          schema:
+            $ref: '#/definitions/Error'
     put:
       description: |
         Saves a list of `Cats` via JSON or Protobuf
