@@ -1,4 +1,16 @@
 language: go
-
+cache:
+  directories:
+    - $GOPATH/pkg
+before_install:
+  - export GOCACHE=$GOPATH/pkg/cache
+install:
+  - go mod download
+script:
+  - go test -v ./...
+  - go vet -v ./...
+env:
+  global:
+    - GO111MODULE=on
 go:
-  - tip
+  - 1.x
