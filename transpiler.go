@@ -1,4 +1,4 @@
-package openapi2proto
+package openapi2proto // github.com/NYTimes/openapi2proto
 
 import (
 	"io"
