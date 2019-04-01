@@ -1,6 +1,6 @@
 // Package compiler contains tools to take openapi.* definitions and
 // compile them into protobuf.* structures.
-package compiler
+package compiler // github.com/NYTimes/openapi2proto/compiler
 
 import (
 	"bytes"
