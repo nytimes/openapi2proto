@@ -1,4 +1,4 @@
-# openapi2proto [![Build Status](https://travis-ci.org/NYTimes/openapi2proto.svg?branch=master)](https://travis-ci.org/NYTimes/openapi2proto)
+# openapi2proto [![Build Status](https://travis-ci.org/nytimes/openapi2proto.svg?branch=master)](https://travis-ci.org/nytimes/openapi2proto)
 
 This tool will accept an OpenAPI/Swagger definition (yaml or JSON) and generate a Protobuf v3 schema and gRPC service definition from it.
 
