@@ -81,7 +81,7 @@ type Parameter struct {
 	Name        string     `yaml:"name" json:"name"`
 	Description string     `yaml:"description" json:"description"`
 	Enum        []string   `yaml:"enum,omitempty" json:"enum,omitempty"`
-	Format      string     `yaml:"format,omitempty", json:"format,omitempty"`
+	Format      string     `yaml:"format,omitempty" json:"format,omitempty"`
 	In          string     `yaml:"in,omitempty" json:"in,omitempty"`
 	Items       *Schema    `yaml:"items,omitempty" json:"items,omitempty"`
 	ProtoTag    int        `yaml:"x-proto-tag" json:"x-proto-tag"`
