@@ -246,12 +246,12 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 			}
 		}
 		return snakeCase(name), &openapi.Schema{
-			ProtoName: name,
+			ProtoName: snakeCase(name),
 			Ref:       param.Ref,
 		}, nil
 	case param.Schema != nil:
 		s2 := *param.Schema
-		s2.ProtoName = param.Name
+		s2.ProtoName = snakeCase(param.Name)
 		s2.Description = param.Description
 		return snakeCase(param.Name), &s2, nil
 	default:
@@ -260,7 +260,7 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 			Enum:        param.Enum,
 			Format:      param.Format,
 			Items:       param.Items,
-			ProtoName:   param.Name,
+			ProtoName:   snakeCase(param.Name),
 			ProtoTag:    param.ProtoTag,
 			Description: param.Description,
 		}, nil
@@ -690,7 +690,7 @@ func (c *compileCtx) compileSchemaProperties(m *protobuf.Message, props map[stri
 		}{
 			comment:  prop.Description,
 			index:    index,
-			name:     name,
+			name:     snakeCase(name),
 			repeated: repeated,
 			typ:      typ,
 		})
