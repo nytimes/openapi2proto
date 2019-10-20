@@ -20,6 +20,7 @@ type Option = option.Option
 type compileCtx struct {
 	annotate            bool
 	skipRpcs            bool
+	skipDeprecatedRpcs  bool
 	prefixEnums         bool
 	wrapPrimitives      bool
 	definitions         map[string]protobuf.Type

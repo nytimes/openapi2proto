@@ -1,0 +1,17 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: "Skip deprecated RPCs"
+  description: "Make sure RPCs are not generated for paths marked deprecated (when option is set)"
+
+paths:
+  /operation:
+    get:
+      operationId: operation
+      produces:
+        - application/json
+  /deprecatedOperation:
+    get:
+      operationId: deprecatedOperation
+      deprecated: true

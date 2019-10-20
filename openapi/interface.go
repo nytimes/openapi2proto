@@ -111,6 +111,7 @@ type Endpoint struct {
 	Responses     map[string]*Response   `yaml:"responses" json:"responses"`
 	OperationID   string                 `yaml:"operationId" json:"operationId"`
 	CustomOptions map[string]interface{} `yaml:"x-options" json:"x-options"`
+	Deprecated    bool                   `yaml:"deprecated" json:"deprecated"`
 }
 
 // Model represents a model definition from an OpenAPI spec.

@@ -51,6 +51,7 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 
 	var annotate bool
 	var skipRpcs bool
+	var skipDeprecatedRpcs bool
 	var prefixEnums bool
 	var wrapPrimitives bool
 	for _, o := range options {
@@ -59,6 +60,8 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 			annotate = o.Value().(bool)
 		case optkeySkipRpcs:
 			skipRpcs = o.Value().(bool)
+		case optKeySkipDeprecatedRpcs:
+			skipDeprecatedRpcs = o.Value().(bool)
 		case optkeyPrefixEnums:
 			prefixEnums = o.Value().(bool)
 		case optkeyWrapPrimitives:
@@ -69,6 +72,7 @@ func newCompileCtx(spec *openapi.Spec, options ...Option) *compileCtx {
 	c := &compileCtx{
 		annotate:            annotate,
 		skipRpcs:            skipRpcs,
+		skipDeprecatedRpcs:  skipDeprecatedRpcs,
 		prefixEnums:         prefixEnums,
 		wrapPrimitives:      wrapPrimitives,
 		definitions:         map[string]protobuf.Type{},
@@ -285,6 +289,9 @@ func (c *compileCtx) compileParametersToSchema(params openapi.Parameters) (*open
 func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 	for _, e := range []*openapi.Endpoint{p.Get, p.Put, p.Post, p.Patch, p.Delete} {
 		if e == nil {
+			continue
+		}
+		if c.skipDeprecatedRpcs && e.Deprecated {
 			continue
 		}
 
