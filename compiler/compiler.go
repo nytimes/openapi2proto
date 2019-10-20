@@ -841,7 +841,7 @@ func (c *compileCtx) compileProperty(name string, prop *openapi.Schema) (string,
 			name = v
 		}
 		if v := prop.ProtoTag; v != 0 {
-			index = v
+			index = int(v)
 		}
 		if prop.Type.Contains("array") {
 			repeated = true

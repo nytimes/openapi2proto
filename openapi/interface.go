@@ -84,7 +84,7 @@ type Parameter struct {
 	Format      string     `yaml:"format,omitempty" json:"format,omitempty"`
 	In          string     `yaml:"in,omitempty" json:"in,omitempty"`
 	Items       *Schema    `yaml:"items,omitempty" json:"items,omitempty"`
-	ProtoTag    int        `yaml:"x-proto-tag" json:"x-proto-tag"`
+	ProtoTag    protoTag   `yaml:"x-proto-tag" json:"x-proto-tag"`
 	Ref         string     `yaml:"$ref" json:"$ref"`
 	Required    bool       `yaml:"required,omitempty" json:"required,omitempty"`
 	Schema      *Schema    `yaml:"schema,omitempty" json:"schema,omitempty"` // if in == "body", then schema is present
@@ -139,8 +139,8 @@ type Schema struct {
 	Format string     `yaml:"format,omitempty" json:"format,omitempty"`
 	Enum   []string   `yaml:"enum,omitempty" json:"enum,omitempty"`
 
-	ProtoName string `yaml:"-" json:"-"`
-	ProtoTag  int    `yaml:"x-proto-tag" json:"x-proto-tag"`
+	ProtoName string   `yaml:"-" json:"-"`
+	ProtoTag  protoTag `yaml:"x-proto-tag" json:"x-proto-tag"`
 
 	// objects
 	Required             []string           `yaml:"required" json:"required"`

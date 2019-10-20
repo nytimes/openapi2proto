@@ -172,6 +172,9 @@ func TestGenerateProto(t *testing.T) {
 			options:     true,
 			fixturePath: "fixtures/custom_options.yaml",
 		},
+		{
+			fixturePath: "fixtures/string_proto_tag.yaml",
+		},
 	}
 	testGenProto(t, tests...)
 }
