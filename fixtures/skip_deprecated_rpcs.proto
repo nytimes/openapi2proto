@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package skipdeprecatedrpcs;
+
+import "google/protobuf/empty.proto";
+
+service SkipDeprecatedRPCsService {
+    rpc Operation(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}

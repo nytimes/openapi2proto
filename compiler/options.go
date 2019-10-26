@@ -3,10 +3,11 @@ package compiler
 import "github.com/NYTimes/openapi2proto/internal/option"
 
 const (
-	optkeyAnnotation     = "annotation"
-	optkeySkipRpcs       = "skip-rpcs"
-	optkeyPrefixEnums    = "namespace-enums"
-	optkeyWrapPrimitives = "wrap-primitives"
+	optkeyAnnotation         = "annotation"
+	optkeySkipRpcs           = "skip-rpcs"
+	optKeySkipDeprecatedRpcs = "skip-deprecated-rpcs"
+	optkeyPrefixEnums        = "namespace-enums"
+	optkeyWrapPrimitives     = "wrap-primitives"
 )
 
 // WithAnnotation creates a new Option to specify if we should add
@@ -19,6 +20,12 @@ func WithAnnotation(b bool) Option {
 // generate services and rpcs in addition to messages
 func WithSkipRpcs(b bool) Option {
 	return option.New(optkeySkipRpcs, b)
+}
+
+// WithSkipDeprecatedRpcs creates a new Option to specify if we should
+// skip generating rpcs for endpoints marked as deprecated
+func WithSkipDeprecatedRpcs(b bool) Option {
+	return option.New(optKeySkipDeprecatedRpcs, b)
 }
 
 // prefix enum values with their enum name to prevent protobuf namespacing issues
