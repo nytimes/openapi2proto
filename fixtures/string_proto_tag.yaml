@@ -1,0 +1,30 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: String proto tags
+  description: Make sure x-proto-tag can be specified as an int or string value
+
+paths:
+  /operation:
+    get:
+      parameters:
+        - name: param1
+          type: string
+          in: query
+          x-proto-tag: "3"
+        - name: param2
+          type: string
+          in: query
+          x-proto-tag: 7
+
+definitions:
+  TestModel:
+    type: object
+    properties:
+      prop1:
+        type: string
+        x-proto-tag: 2
+      prop2:
+        type: string
+        x-proto-tag: "5"

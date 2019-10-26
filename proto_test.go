@@ -177,6 +177,9 @@ func TestGenerateProto(t *testing.T) {
 			fixturePath: "fixtures/custom_options.yaml",
 		},
 		{
+			fixturePath: "fixtures/string_proto_tag.yaml",
+		},
+		{      
 			skipDeprecatedRpcs: true,
 			fixturePath:        "fixtures/skip_deprecated_rpcs.yaml",
 		},

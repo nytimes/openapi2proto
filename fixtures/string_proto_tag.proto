@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stringprototags;
+
+import "google/protobuf/empty.proto";
+
+message GetOperationRequest {
+    string param1 = 3;
+    string param2 = 7;
+}
+
+message TestModel {
+    string prop1 = 2;
+    string prop2 = 5;
+}
+
+service StringProtoTagsService {
+    rpc GetOperation(GetOperationRequest) returns (google.protobuf.Empty) {}
+}
