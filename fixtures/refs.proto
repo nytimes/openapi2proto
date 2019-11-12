@@ -19,6 +19,8 @@ message TestModel {
         int32 id = 1;
     }
 
+    // AllOf object
+    string test_allof_object_with_ref = 1;
     map<string, TestModel> test_map_object = 11;
     map<string, string> test_map_scalar = 12;
     map<string, TestMapArrayList> test_map_array = 13;

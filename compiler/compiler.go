@@ -587,6 +587,21 @@ func (c *compileCtx) compileSchema(name string, s *openapi.Schema) (protobuf.Typ
 		}
 		return m, nil
 	}
+
+	if len(s.AllOf) > 0 {
+		if len(s.AllOf) > 1 {
+			return nil, errors.New("allOf with multiple values is not supported")
+		}
+
+		// If there is only a single argument in allOf, then it's probably just for adding description, so just take the
+		// current field
+		m, err := c.compileSchema(name, s.AllOf[0])
+		if err != nil {
+			return nil, errors.Wrap(err, `failed to resolve allOf`)
+		}
+		return m, nil
+	}
+
 	rawName := name
 	name = camelCase(name)
 	// could be a builtin... try as-is once, then the camel cased

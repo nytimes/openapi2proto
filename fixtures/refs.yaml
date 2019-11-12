@@ -39,6 +39,12 @@ definitions:
               id:
                 type: integer
         x-proto-tag: 15
+
+      test_allof_object_with_ref:
+          allOf:
+           - $ref: "#/definitions/TestModel3"
+          description: AllOf object
+
   TestModel2:
     type: object
     properties:
@@ -49,3 +55,6 @@ definitions:
           items:
             $ref: '#/definitions/TestModel'
         x-proto-tag: 16
+
+  TestModel3:
+    type: string

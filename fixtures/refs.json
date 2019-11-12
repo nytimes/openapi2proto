@@ -55,6 +55,14 @@
             }
           },
           "x-proto-tag": 14
+        },
+        "test_allof_object_with_ref": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/TestModel3"
+            }
+          ],
+          "description": "AllOf object"
         }
       }
     },
@@ -72,6 +80,10 @@
           "x-proto-tag": 16
         }
       }
+    },
+    "TestModel3": {
+      "type": "string",
+      "description": "Test string"
     }
   }
 }
