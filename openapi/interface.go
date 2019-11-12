@@ -147,6 +147,7 @@ type Schema struct {
 	Required             []string           `yaml:"required" json:"required"`
 	Properties           map[string]*Schema `yaml:"properties" json:"properties"`
 	AdditionalProperties *Schema            `yaml:"additionalProperties" json:"additionalProperties"`
+	AllOf                []*Schema          `yaml:"allOf" json:"allOf"`
 
 	// is an array
 	Items *Schema `yaml:"items" json:"items"`
