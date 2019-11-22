@@ -18,7 +18,7 @@ func (pt *protoTag) UnmarshalJSON(b []byte) error {
 	}
 
 	i, err := strconv.Atoi(s)
-	if (err != nil) {
+	if err != nil {
 		return err
 	}
 

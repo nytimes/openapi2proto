@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 message GetOperationRequest {
     string param1 = 3;
     string param2 = 7;
+    TestModel param3 = 8;
 }
 
 message TestModel {
