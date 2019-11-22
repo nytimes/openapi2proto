@@ -17,6 +17,11 @@ paths:
           type: string
           in: query
           x-proto-tag: 7
+        - name: param3
+          $ref: '#/definitions/TestModel'
+          in: body
+          x-proto-tag: 8
+
 
 definitions:
   TestModel:

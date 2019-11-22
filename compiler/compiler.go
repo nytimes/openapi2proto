@@ -252,11 +252,13 @@ func (c *compileCtx) compileParameterToSchema(param *openapi.Parameter) (string,
 		return snakeCase(name), &openapi.Schema{
 			ProtoName: name,
 			Ref:       param.Ref,
+			ProtoTag:  param.ProtoTag,
 		}, nil
 	case param.Schema != nil:
 		s2 := *param.Schema
 		s2.ProtoName = param.Name
 		s2.Description = param.Description
+		s2.ProtoTag = param.ProtoTag
 		return snakeCase(param.Name), &s2, nil
 	default:
 		return snakeCase(param.Name), &openapi.Schema{
