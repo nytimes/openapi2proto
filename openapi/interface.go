@@ -44,6 +44,7 @@ type Spec struct {
 	Produces      []string              `yaml:"produces" json:"produces"`
 	Paths         map[string]*Path      `yaml:"paths" json:"paths"`
 	Definitions   map[string]*Schema    `yaml:"definitions" json:"definitions"`
+	Responses     map[string]*Response  `yaml:"responses" json:"responses"`
 	Parameters    map[string]*Parameter `yaml:"parameters" json:"parameters"`
 	Extensions    []*Extension          `yaml:"x-extensions" json:"x-extensions"`
 	GlobalOptions GlobalOptions         `yaml:"x-global-options" json:"x-global-options"`

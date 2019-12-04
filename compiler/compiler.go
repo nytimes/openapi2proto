@@ -111,6 +111,9 @@ func Compile(spec *openapi.Spec, options ...Option) (*protobuf.Package, error) {
 	if err := c.compileParameters(spec.Parameters); err != nil {
 		return nil, errors.Wrap(err, `failed to compile parameters`)
 	}
+	if err := c.compileResponses(spec.Responses); err != nil {
+		return nil, errors.Wrap(err, `failed to compile global responses`)
+	}
 
 	p2, err := protobuf.Resolve(c.pkg, c.getTypeFromReference)
 	if err != nil {
@@ -218,6 +221,24 @@ func (c *compileCtx) compileParameters(parameters map[string]*openapi.Parameter)
 			repeated:      repeated,
 		}
 		c.addDefinition("#/parameters/"+ref, m)
+	}
+	return nil
+}
+
+// Note: compiles GLOBAL responses. not to be used for compiling
+// actual endpoint responses
+func (c *compileCtx) compileResponses(responses map[string]*openapi.Response) error {
+	c.phase = phaseCompileDefinitions
+	for name, response := range responses {
+		if response.Schema == nil {
+			c.addDefinition("#/responses/"+name, protobuf.NewMessage(name))
+			continue
+		}
+		m, err := c.compileSchema(camelCase(name), response.Schema)
+		if err != nil {
+			return errors.Wrapf(err, `failed to compile #/parameters/%s`, name)
+		}
+		c.addDefinition("#/responses/"+name, m)
 	}
 	return nil
 }
