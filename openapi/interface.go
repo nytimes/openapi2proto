@@ -99,6 +99,7 @@ type Parameters []*Parameter
 type Response struct {
 	Description string  `yaml:"description" json:"description"`
 	Schema      *Schema `yaml:"schema" json:"schema"`
+	Ref         string  `yaml:"$ref" json:"$ref"`
 }
 
 // Endpoint represents an endpoint for a path in an OpenAPI spec.

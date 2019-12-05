@@ -354,6 +354,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			if !ok {
 				continue
 			}
+
 			resName := endpointName + "Response"
 			if resp.Schema != nil {
 				// Wow, this *sucks*! We need to special-case when resp.Schema
@@ -378,6 +379,12 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 					}
 					resType = typ
 				}
+			} else if resp.Ref != "" {
+				typ, err := c.getTypeFromReference(resp.Ref)
+				if err != nil {
+					return errors.Wrapf(err, `failed to look up response ref for %s`, endpointName)
+				}
+				resType = typ
 			}
 
 			if resType != nil {
