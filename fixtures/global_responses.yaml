@@ -1,0 +1,39 @@
+swagger: "2.0"
+
+info:
+  title: example
+  description: An example API to demonstrate issue in responses
+  version: 1.0.0
+paths:
+  /example:
+    post:
+      operationId: exampleOperation
+      description: Example operation
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ExampleRequest'
+      responses:
+        200:
+          $ref: '#/responses/ExampleResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+definitions:
+  ExampleRequest:
+    type: object
+    required:
+      - example
+    properties:
+      example:
+        type: string
+responses:
+  ExampleResponse:
+    description: Example response
+    schema:
+      type: object
+      properties:
+        anotherExample:
+          type: string
+  BadRequest:
+    description: Bad request
