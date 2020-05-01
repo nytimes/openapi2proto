@@ -489,15 +489,10 @@ func (c *compileCtx) getTypeFromReference(ref string) (protobuf.Type, error) {
 }
 
 func (c *compileCtx) compileEnum(name string, elements []string) (*protobuf.Enum, error) {
-	var prefix bool
-	if c.parent() != c.pkg || c.prefixEnums {
-		prefix = true
-	}
-
 	e := protobuf.NewEnum(camelCase(name))
 	for _, enum := range elements {
 		ename := enum
-		if prefix || looksLikeInteger(ename) {
+		if c.prefixEnums || looksLikeInteger(ename) {
 			ename = name + "_" + ename
 		}
 		ename = normalizeEnumName(ename)
