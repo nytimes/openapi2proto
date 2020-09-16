@@ -388,6 +388,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			}
 
 			if resType != nil {
+				resType = c.getBoxedType(resType)
 				m, ok := resType.(*protobuf.Message)
 				if !ok {
 					return errors.Errorf(`got non-message type (%T) in response for %s`, resType, endpointName)

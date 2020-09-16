@@ -151,11 +151,9 @@ func TestGenerateProto(t *testing.T) {
 		{
 			fixturePath: "fixtures/missing_type.json",
 		},
-		/*
-			{
-				fixturePath: "fixtures/kubernetes.json",
-			},
-		*/
+		{
+			fixturePath: "fixtures/kubernetes.json",
+		},
 		{
 			fixturePath: "fixtures/accountv1-0.json",
 		},
