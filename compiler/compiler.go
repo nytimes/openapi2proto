@@ -339,6 +339,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			if err != nil {
 				return errors.Wrapf(err, `failed to compile parameters for %s`, endpointName)
 			}
+			reqType = c.getBoxedType(reqType)
 			m, ok := reqType.(*protobuf.Message)
 			if !ok {
 				return errors.Errorf(`type %s is not a message (%T)`, reqName, reqType)
@@ -388,6 +389,7 @@ func (c *compileCtx) compilePath(path string, p *openapi.Path) error {
 			}
 
 			if resType != nil {
+				resType = c.getBoxedType(resType)
 				m, ok := resType.(*protobuf.Message)
 				if !ok {
 					return errors.Errorf(`got non-message type (%T) in response for %s`, resType, endpointName)

@@ -214,7 +214,7 @@ func (c *resolveCtx) resolve(rv reflect.Value) (reflect.Value, error) {
 			refValue = refValue.Elem()
 
 			if refValue.Kind() != reflect.String {
-				return zeroval, errors.Errorf("'$ref' key contains non-string element (%s)", refValue.Type())
+				return rv, nil
 			}
 
 			ref := refValue.String()
