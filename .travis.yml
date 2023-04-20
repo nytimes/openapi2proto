@@ -1,4 +1,5 @@
 language: go
+dist: bionic
 cache:
   directories:
     - $GOPATH/pkg
@@ -7,6 +8,7 @@ before_install:
 install:
   - go mod download
 script:
+  - find fixtures/ -type f -name '*.proto' -print0 | xargs --null --max-args=1 protoc --descriptor_set_out=/dev/null --proto_path=fixtures --proto_path=fixtures/include
   - go test -v ./...
   - go vet -v ./...
 env:
@@ -14,3 +16,7 @@ env:
     - GO111MODULE=on
 go:
   - 1.x
+addons:
+  apt:
+    packages:
+      - protobuf-compiler
