@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/NYTimes/openapi2proto/openapi"
+	"github.com/sanposhiho/openapi2proto/openapi"
 )
 
 func TestLoadFile(t *testing.T) {

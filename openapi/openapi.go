@@ -1,6 +1,6 @@
 // Package openapi contains tools to read in OpenAPI specifications
 // so that they can be passed to the openapi2proto compiler
-package openapi // github.com/NYTimes/openapi2proto/openapi
+package openapi // github.com/sanposhiho/openapi2proto/openapi
 
 import (
 	"bytes"

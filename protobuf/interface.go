@@ -3,7 +3,7 @@ package protobuf
 import (
 	"io"
 
-	"github.com/NYTimes/openapi2proto/internal/option"
+	"github.com/sanposhiho/openapi2proto/internal/option"
 )
 
 const (

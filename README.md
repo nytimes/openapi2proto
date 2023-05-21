@@ -6,12 +6,12 @@ This tool will accept an OpenAPI/Swagger definition (yaml or JSON) and generate 
 
 To install, have Go installed with `$GOPATH/bin` on your `$PATH` and then:
 ```
-go install github.com/NYTimes/openapi2proto/cmd/openapi2proto@latest
+go install github.com/sanposhiho/openapi2proto/cmd/openapi2proto@latest
 ```
 
 On Older versions of Go (<1.15), use:
 ```
-go get -u github.com/NYTimes/openapi2proto/cmd/openapi2proto
+go get -u github.com/sanposhiho/openapi2proto/cmd/openapi2proto
 ```
 
 ## Run
